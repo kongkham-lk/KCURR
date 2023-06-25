@@ -1,28 +1,37 @@
 import React from 'react';
 import { useState } from 'react';
 
-function CurrType({ label = "from", getCurrType, currOption }) {
-    // const [country, setCountry] = useState("");
+// const currOption = [
+//     { type: "", display: "Choose Currency" },
+//     { type: "USD", display: "USD - US Dollar" },
+//     { type: "EUR", display: "EUR - Euro" },
+//     { type: "CAD", display: "CAD - Canadian Dollar" },
+//     { type: "AUD", display: "AUD - Australia Dollar" },
+//     { type: "THB", display: "THB - Thai Baht" },
+//   ];
+const currOption = [
+    { type: "", display: "Choose Currency" },
+    { type: { type: "USD", rate: 1 }, display: "USD - US Dollar" },
+    { type: { type: "EUR", rate: 0.91 }, display: "EUR - Euro" },
+    { type: { type: "CAD", rate: 1.32 }, display: "CAD - Canadian Dollar" },
+    { type: { type: "AUD", rate: 1.5 }, display: "AUD - Australia Dollar" },
+    { type: { type: "THB", rate: 35.32 }, display: "THB - Thai Baht" },
+];
+
+function CurrType({ type, getType, defaultType }) {
+    const [country, setCountry] = useState(defaultType);
     function handleChange(e) {
-        console.log(`${label} - ${e.target.value}`)
-        // setCountry(e.target.value)
-        getCurrType({ method: label, type: e.target.value })
+        const currType = { name: type, value: country };
+        console.log("currType: ", currType.value);
+        getType(currType);
+        setCountry(e.target.value)
     }
     return (
         <>
-            <label className="convertorLabel" htmlFor={label} >{label}</label>
-            <select name={label} id={label} onChange={handleChange} >
-                {/* <option value="USD">USD - US Dollar</option>
-                <option value="EUR">EUR - Euro</option>
-                <option value="CAD">CAD - Canadian Dollar</option>
-                <option value="AUD">AUD - Australia Dollar</option>
-                <option value="THB">THB - Thai Baht</option>
-            </select> */}
-
-            {/* <label htmlFor="from" >From</label> */}
-            {/* <select name="from" id="from" onChange={handleChange} > */}
+            <label htmlFor={type} >{type}</label>
+            <select name={type} id={type} onChange={handleChange} >
                 {currOption.map((curr) => (
-                    <option value={curr.type}>{curr.display}</option>
+                    <option value={curr.type} selected={curr.display.includes(country.type)} >{curr.display}</option>
                 ))}
             </select>
         </>
