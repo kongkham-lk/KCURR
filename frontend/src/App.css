@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
   margin: auto;
 }
 
@@ -36,4 +36,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.paper {
+  margin: 3%;
+  padding: 3%;
+  box-shadow: rgba(35, 55, 80, 0.3) 0px 6px 12px;
 }

@@ -1,18 +1,21 @@
 import { useState } from 'react';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 // import { useState, useEffect } from 'react';
-import axios from 'axios';
-// import CurrType from './CurrType'
+// import axios from 'axios';
+import CurrAmount from './CurrAmount'
+import CurrType from './CurrType'
 
 function Convertor({ getValue }) {
   const [inputs, setInputs] = useState({ amount: 0, from: 'USD', to: 'THB' });
-  const [isSubmit, setIsSubmit] = useState(false);
+  // const [isSubmit, setIsSubmit] = useState(false);
 
   const currOption = [
     { type: "", display: "Choose Currency" },
     { type: "USD", display: "USD - US Dollar" },
     { type: "EUR", display: "EUR - Euro" },
     { type: "CAD", display: "CAD - Canadian Dollar" },
-    { type: "AUD", display: "AUD - Australia Dollar" },
+    { type: "AUD", display: "AUD - Australian Dollar" },
     { type: "THB", display: "THB - Thai Baht" },
   ];
 
@@ -30,34 +33,35 @@ function Convertor({ getValue }) {
   //     fetchCurr();
   //   }, [isSubmit]
   // );
-  const fetchCurr = () => {
-    axios.post('http://localhost:8080/convert', inputs)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+
+  // const fetchCurr = () => {
+  //   axios.post('http://localhost:8080/convert', inputs)
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }
 
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(inputs)
     // setIsSubmit(true);
-    fetchCurr();
-    
+    // fetchCurr();
   };
+
+  // const handleChange = (e) => {
+  //   updateVal(e.target);
+  // };
 
   const handleChange = (e) => {
-    getType(e.target);
-  };
-
-  const getType = (currType) => {
     // tempting for assigning curr type
     setInputs((newInputs) => {
-      setIsSubmit(false);
+      // setIsSubmit(false);
       return {
         ...newInputs,
-        [currType.name]: currType.value,
+        [e.name]: e.value,
       };
     });
   };
@@ -74,24 +78,13 @@ function Convertor({ getValue }) {
 
   return (
     <form onSubmit={onSubmit} >
-      <label htmlFor="amount">Amount</label>
-      <input id="amount" type="text" name="amount" placeholder={inputs.amount} onChange={handleChange} />
-      {/* <CurrType type="from" getType={getType} defaultType={inputs.from} /> */}
-      <label htmlFor="from">From</label>
-      <select name="from" id="from" onChange={handleChange} value={inputs.from} >
-        {currOption.map((curr) => (
-          <option key={curr.type} value={curr.type} >{curr.display}</option>
-        ))}
-      </select>
-      <button type="button" className="swap" onClick={handleSwap} >Swap</button>
-      {/* <CurrType type="to" getType={getType} defaultType={inputs.to} /> */}
-      <label htmlFor="to">To</label>
-      <select name="to" id="to" onChange={handleChange} value={inputs.to} >
-        {currOption.map((curr) => (
-          <option key={curr.type} value={curr.type} >{curr.display}</option>
-        ))}
-      </select>
-      <button>Convert</button>
+      <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
+        <CurrAmount amount={inputs.amount} updateVal={handleChange} />
+        <CurrType type="from" updateVal={handleChange} currOption={currOption} defaultType={inputs.from}/>
+        <Button variant="outlined" type="button" className="swap" onClick={handleSwap} >Swap</Button>
+        <CurrType type="to" updateVal={handleChange} currOption={currOption} defaultType={inputs.to}/>
+      </Stack>
+      <Button variant="contained" type="submit" >Convert</Button>
     </form>
   )
 };
