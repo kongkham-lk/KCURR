@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <MainNav />
       <Container maxWidth="m" sx={{ width: "100%", maxWidth: 1000, bgcolor: "background.paper", marginTop: "50px" }}>
-        <Paper className="paper">
+        <Paper elevation={3} sx={{m:2, p:4}}>
           <Convertor />
         </Paper>
         </Container>
