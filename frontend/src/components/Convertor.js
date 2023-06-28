@@ -1,24 +1,29 @@
 import React from 'react';
 import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
+import Typography from '@mui/material/Typography';
 
 export default function Convertor() {
     const [formData, setFormData] = useState(null);
-    function getValue(inputData, total) {
+    function getValue(inputData, response) {
         setFormData(() => {
             return {
-                ...inputData, total: total
+                ...inputData, total: response.data
             }
         });
     }
     console.log("formData:\n", formData);
     return (
         <>
-            <ConvertorForm getValue={getValue} />
+            <ConvertorForm getValue={getValue} className="CovertForm" />
             {formData !== null && (
                 <>
-                    <h6>1 {formData.from} = {formData.amount} {formData.to} </h6>
-                    <h4>{formData.amount} {formData.from.type} = {formData.amount * formData.to.rate} {formData.to.type} </h4>
+                    <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>
+                        1 {formData.from} = {formData.total / formData.amount} {formData.to}
+                    </Typography>
+                    <Typography variant="h4" >
+                        {formData.amount} {formData.from} = {formData.total.toFixed(2)} {formData.to}
+                    </Typography>
                 </>
             )}
         </>
