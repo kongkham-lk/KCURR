@@ -1,14 +1,46 @@
-// import { useState } from 'react';
 import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+// import CurrOption from './CurrOption'
 
-function currOption({ updateVal, type, currOption, defaultType }) {
+function CurrType({ updateVal, type, defaultType }) {
+    const [currOption, setCurrOption] = useState([]);
+
+    useEffect(
+        function fetchData() {
+            async function fetchCurrOption() {
+                try {
+                    const responseCurrOption = await axios.get('http://localhost:8080/api/exchange-rate');
+                    // console.log("responseCurrOption => ", responseCurrOption);
+                    const currData = getCurrOpt(responseCurrOption.data.supported_codes);
+                    // console.log("currData => ", currData);
+                    setCurrOption([...currData]);
+                } catch (e) {
+                    console.log(e.stack);
+                }
+            }
+            fetchCurrOption();
+        }, []
+    );
+
+    function getCurrOpt(responseCurrOption) {
+        // const [supported_codes] = responseCurrOption.data;
+        // console.log("supported_codes: => ", supported_codes);
+        const option = responseCurrOption.map(el => (
+            { type: el[0], display: `${el[0]} - ${el[1]}` }
+        ))
+        // console.log("getCurrOpt: => ", option)
+        return option;
+    }
 
     function handleChange(e) {
         updateVal({ name: type, value: e.target.value });
     }
+    
+    console.log("MAIN currOption => ", currOption)
 
     return (
         <FormControl sx={{ m: 1, minWidth: 230 }}>
@@ -28,50 +60,4 @@ function currOption({ updateVal, type, currOption, defaultType }) {
     )
 };
 
-export default currOption;
-
-
-
-
-
-// import React from 'react';
-// import { useState } from 'react';
-
-// // const currOption = [
-// //     { type: "", display: "Choose Currency" },
-// //     { type: "USD", display: "USD - US Dollar" },
-// //     { type: "EUR", display: "EUR - Euro" },
-// //     { type: "CAD", display: "CAD - Canadian Dollar" },
-// //     { type: "AUD", display: "AUD - Australia Dollar" },
-// //     { type: "THB", display: "THB - Thai Baht" },
-// //   ];
-// const currOption = [
-//     { type: "", display: "Choose Currency" },
-//     { type: { type: "USD", rate: 1 }, display: "USD - US Dollar" },
-//     { type: { type: "EUR", rate: 0.91 }, display: "EUR - Euro" },
-//     { type: { type: "CAD", rate: 1.32 }, display: "CAD - Canadian Dollar" },
-//     { type: { type: "AUD", rate: 1.5 }, display: "AUD - Australia Dollar" },
-//     { type: { type: "THB", rate: 35.32 }, display: "THB - Thai Baht" },
-// ];
-
-// function CurrType({ type, getType, defaultType }) {
-    // const [country, setCountry] = useState(defaultType);
-    // function handleChange(e) {
-    //     const currType = { name: type, value: country };
-    //     console.log("currType: ", currType.value);
-    //     getType(currType);
-    //     setCountry(e.target.value)
-    // }
-//     return (
-//         <>
-//             <label htmlFor={type} >{type}</label>
-//             <select name={type} id={type} onChange={handleChange} >
-//                 {currOption.map((curr) => (
-//                     <option value={curr.type} selected={curr.display.includes(country.type)} >{curr.display}</option>
-//                 ))}
-//             </select>
-//         </>
-//     )
-// }
-
-// export default CurrType;
+export default CurrType;

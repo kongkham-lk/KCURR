@@ -10,46 +10,27 @@ function Convertor({ getValue }) {
   const [inputs, setInputs] = useState({ amount: 0, from: 'USD', to: 'THB' });
   // const [isSubmit, setIsSubmit] = useState(false);
 
-  const currOption = [
-    { type: "", display: "Choose Currency" },
-    { type: "USD", display: "USD - US Dollar" },
-    { type: "EUR", display: "EUR - Euro" },
-    { type: "CAD", display: "CAD - Canadian Dollar" },
-    { type: "AUD", display: "AUD - Australian Dollar" },
-    { type: "THB", display: "THB - Thai Baht" },
-  ];
-
   // useEffect(
   //   function fetchData() {
-  //     async function fetchCurr() {
+  //     async function fetchCurrOption() {
   //       try {
-  //         const conTotalAmount = await axios.post('localhost:8080/convert', inputs);
-  //         console.log(conTotalAmount)
-  //         getValue(inputs, conTotalAmount);
+  //         const responseCurrOption = await axios.post('localhost:8080/api/exchangerate');
+  //         console.log(responseCurrOption)
+  //         currOption = getCurrOpt(responseCurrOption);
   //       } catch (e) {
   //         console.log(e.stack);
   //       }
   //     }
-  //     fetchCurr();
-  //   }, [isSubmit]
+  //     fetchCurrOption();
+  //   }, []
   // );
 
-  // const fetchCurr = () => {
-  //   axios.post('http://localhost:8080/convert', inputs)
-  //     .then(function (response) {
-  //       console.log(response);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // };
-  
-  const fetchCurr = async () => {
+  const fetchConvert = async () => {
     try {
       const response = await axios.post('http://localhost:8080/convert', inputs);
       console.log("response: ", response)
       getValue(inputs, response);
-    } catch (e) {
+    } catch (e) { 
       console.log(e.code, "\n", e.stack);
     }
   };
@@ -58,27 +39,8 @@ function Convertor({ getValue }) {
     e.preventDefault();
     console.log(inputs)
     // setIsSubmit(true);
-    fetchCurr();
+    fetchConvert();
   };
-
-  // // FETCH DATA
-  // const onSubmit = async (e) => {
-  //   e.preventDefault();
-  //   console.log(inputs)
-  //   try {
-  //     const response = await fetch('http://localhost:8080/convert', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'applicaton/json'
-  //       },
-  //       body: JSON.stringify(inputs)
-  //     });
-  //     const result = await response.json();
-  //     console.log("Success:", result);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   const handleChange = (e) => {
     console.log(e.value, "'s type is: ", typeof e.value)
@@ -108,11 +70,11 @@ function Convertor({ getValue }) {
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
         <CurrAmount amount={inputs.amount} updateVal={handleChange} />
-        <CurrType type="from" updateVal={handleChange} currOption={currOption} defaultType={inputs.from} />
+        <CurrType type="from" updateVal={handleChange} defaultType={inputs.from} />
         <Button variant="outlined" type="button" className="swap" onClick={handleSwap} >Swap</Button>
-        <CurrType type="to" updateVal={handleChange} currOption={currOption} defaultType={inputs.to} />
+        <CurrType type="to" updateVal={handleChange} defaultType={inputs.to} />
       </Stack>
-      <Button variant="contained" type="submit" style={{marginTop: "5px"}}>Convert</Button>
+      <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>
     </form>
   )
 };
