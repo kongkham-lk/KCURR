@@ -7,23 +7,7 @@ import CurrAmount from './CurrAmount'
 import CurrType from './CurrType'
 
 function Convertor({ getValue }) {
-  const [inputs, setInputs] = useState({ amount: 0, from: 'USD', to: 'THB' });
-  // const [isSubmit, setIsSubmit] = useState(false);
-
-  // useEffect(
-  //   function fetchData() {
-  //     async function fetchCurrOption() {
-  //       try {
-  //         const responseCurrOption = await axios.post('localhost:8080/api/exchangerate');
-  //         console.log(responseCurrOption)
-  //         currOption = getCurrOpt(responseCurrOption);
-  //       } catch (e) {
-  //         console.log(e.stack);
-  //       }
-  //     }
-  //     fetchCurrOption();
-  //   }, []
-  // );
+  const [inputs, setInputs] = useState({ amount: 0, sourceCurr: 'USD', targetCurr: 'THB' });
 
   const fetchConvert = async () => {
     try {
@@ -48,6 +32,7 @@ function Convertor({ getValue }) {
     if (e.name === 'amount') {
       convAmountType = parseFloat(e.value);
     }
+    // console.log(convAmountType, "'s type is: ", typeof convAmountType);
     // tempting for assigning curr type
     setInputs((newInputs) => {
       // setIsSubmit(false);
@@ -60,8 +45,8 @@ function Convertor({ getValue }) {
 
   const handleSwap = () => {
     console.log("SWAP!!!");
-    const { amount, from, to } = inputs;
-    const newInput = { amount: amount, from: to, to: from };
+    const { amount, sourceCurr, targetCurr } = inputs;
+    const newInput = { amount: amount, sourceCurr: targetCurr, targetCurr: sourceCurr };
     setInputs(newInput);
   }
   console.log("inputs -> ", inputs);
@@ -70,9 +55,9 @@ function Convertor({ getValue }) {
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
         <CurrAmount amount={inputs.amount} updateVal={handleChange} />
-        <CurrType type="from" updateVal={handleChange} defaultType={inputs.from} />
+        <CurrType type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} />
         <Button variant="outlined" type="button" className="swap" onClick={handleSwap} >Swap</Button>
-        <CurrType type="to" updateVal={handleChange} defaultType={inputs.to} />
+        <CurrType type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} />
       </Stack>
       <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>
     </form>

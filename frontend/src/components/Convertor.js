@@ -20,10 +20,10 @@ export default function Convertor() {
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>
-                        1 {formData.from} = {formData.total / formData.amount} {formData.to}
+                        1 {formData.sourceCurr} = {(formData.total / formData.amount).toFixed(2)} {formData.targetCurr}
                     </Typography>
                     <Typography variant="h4" >
-                        {formData.amount} {formData.from} = {formData.total.toFixed(2)} {formData.to}
+                        {formData.amount} {formData.sourceCurr} = {formData.total.toFixed(2)} {formData.targetCurr}
                     </Typography>
                 </>
             )}

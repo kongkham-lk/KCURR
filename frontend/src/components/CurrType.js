@@ -40,16 +40,16 @@ function CurrType({ updateVal, type, defaultType }) {
         updateVal({ name: type, value: e.target.value });
     }
     
-    console.log("MAIN currOption => ", currOption)
+    // console.log("MAIN currOption => ", currOption)
 
     return (
         <FormControl sx={{ m: 1, minWidth: 230 }}>
-            <InputLabel id="from">{type}</InputLabel>
+            <InputLabel id={type}>{type}</InputLabel>
             <Select
                 labelId={type}
-                id="from"
+                id={type}
                 value={defaultType}
-                label="From"
+                label={type}
                 onChange={handleChange}
             >
                 {currOption.map((curr) => (

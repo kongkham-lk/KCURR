@@ -17,18 +17,19 @@ public class CurrService {
         this.webClient = webClientBuilder.build();
     }
 
-    public double convert(double amount, String sourceCurr, String targetCurr) {
-        return amount * checkRate(sourceCurr, targetCurr);
+    public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
+        return amount * checkRate(sourceCurrCountry, targetCurrCountry);
     }
 
-    private double checkRate(String sourceCurr, String targetCurr) {
+    private double checkRate(String sourceCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeApiResponse exchangeApiResponse = getExchangeRates((sourceCurr));
-
+        ExchangeApiResponse exchangeApiResponse = getExchangeRates(sourceCurrCountry);
+        System.out.println(exchangeApiResponse);
+        double targetRate =  exchangeApiResponse.getConversion_rates().get(targetCurrCountry);
         HashMap<String, Double> rates = new HashMap<String, Double>();
-        rates.put(targetCurr, 35.32);
-        CurrData curr = new CurrData(sourceCurr, rates);
-        return curr.getRates().get(targetCurr);
+        rates.put(targetCurrCountry, targetRate);
+        CurrData curr = new CurrData(sourceCurrCountry, rates);
+        return curr.getRates().get(targetCurrCountry);
     }
 
     public ExchangeApiResponse getExchangeRates(String sourceCurr) {

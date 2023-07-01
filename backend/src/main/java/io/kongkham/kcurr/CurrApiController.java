@@ -29,14 +29,4 @@ public class CurrApiController {
                 .bodyToMono(String.class)
                 .block();
     }
-
-//    @GetMapping("/convert")
-//    public ExchangeApiResponse getExchangeRates(@RequestParam String sourceCurr) {
-//        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr;
-//        return webClient.get()
-//                .uri(url)
-//                .retrieve()
-//                .bodyToMono(ExchangeApiResponse.class)
-//                .block();
-//    }
 }
