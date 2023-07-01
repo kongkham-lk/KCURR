@@ -3,6 +3,7 @@ package io.kongkham.kcurr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -10,12 +11,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequestMapping("/api")
 public class CurrApiController {
     private final WebClient webClient;
-    private WebClient.Builder webClientBuilder;
+//    private WebClient.Builder webClientBuilder;
 
     @Value("${openexchangerates.api.app-id}")
     private String apiKey;
 
-    public CurrApiController() {
+    public CurrApiController(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
     }
 
@@ -29,13 +30,13 @@ public class CurrApiController {
                 .block();
     }
 
-    @GetMapping("/convert")
-    public String getExchangeRates(String sourceCurr) {
-        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr;
-        return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-    }
+//    @GetMapping("/convert")
+//    public ExchangeApiResponse getExchangeRates(@RequestParam String sourceCurr) {
+//        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr;
+//        return webClient.get()
+//                .uri(url)
+//                .retrieve()
+//                .bodyToMono(ExchangeApiResponse.class)
+//                .block();
+//    }
 }
