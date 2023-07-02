@@ -1,16 +1,21 @@
 package io.kongkham.kcurr;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
 public class CurrController {
-
     private final CurrService _currService;
+    private final WebClient webClient;
+
+    @Value("${openexchangerates.api.app-id}")
+    private String apiKey;
 
     // is it a way to create CurrService class object?
-    public CurrController(CurrService currService) {
+    public CurrController(CurrService currService, WebClient.Builder webClientBuilder) {
         this._currService = currService;
+        this.webClient = webClientBuilder.build();
     }
 
     @PostMapping("/convert") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
@@ -20,4 +25,15 @@ public class CurrController {
         String c2 = data.getTargetCurr();
         return _currService.convert(amount, c1, c2);
     }
+
+    @GetMapping("/api/exchange-rate")
+    public String getExchangeRates() {
+        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/codes";
+        return webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+
 }
