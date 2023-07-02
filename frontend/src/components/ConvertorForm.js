@@ -55,9 +55,9 @@ function Convertor({ getValue }) {
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
         <CurrAmount amount={inputs.amount} updateVal={handleChange} />
-        <CurrType type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} />
-        <Button variant="outlined" type="button" className="swap" onClick={handleSwap} >Swap</Button>
-        <CurrType type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} />
+        <CurrType label="From" type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} />
+        <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={{ borderRadius: "32px", width: "50px"}} ><img src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" alt="arrow" style={{objectFit: "cover", height: "40px", mixBlendMode: "multiply"}} /></Button>
+        <CurrType label="To" type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} />
       </Stack>
       <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>
     </form>
