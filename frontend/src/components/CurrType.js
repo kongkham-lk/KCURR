@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 // import CurrOption from './CurrOption'
 
-function CurrType({ updateVal, type, defaultType }) {
+function CurrType({ label, updateVal, type, defaultType }) {
     const [currOption, setCurrOption] = useState([]);
 
     useEffect(
@@ -43,17 +43,24 @@ function CurrType({ updateVal, type, defaultType }) {
     // console.log("MAIN currOption => ", currOption)
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 230 }}>
-            <InputLabel id={type}>{type}</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 200, width: 250 }}  >
+            <InputLabel id={type} >{label}</InputLabel>
             <Select
                 labelId={type}
                 id={type}
                 value={defaultType}
-                label={type}
+                label={label}
                 onChange={handleChange}
             >
                 {currOption.map((curr) => (
-                    <MenuItem key={curr.type} value={curr.type} >{curr.display}</MenuItem>
+                        <MenuItem key={curr.type} value={curr.type}
+                        >
+                            <img 
+                            style={{margin: "0 10px -10px 0px"}} 
+                            src={`https://www.countryflagicons.com/FLAT/32/${curr.type.substring(0,2)}.png`} 
+                            alt="flags" />  
+                            <span >{curr.display}</span>
+                        </MenuItem>
                 ))}
             </Select>
         </FormControl>
