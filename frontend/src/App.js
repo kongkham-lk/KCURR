@@ -8,7 +8,8 @@ import ExchagneRateTable from './components/ExchangeRateTable';
 import CurrOptionApiGetter from './components/CurrOptionApiGetter';
 
 function App() {
-  const currOption = CurrOptionApiGetter();
+  const {currOption, currKeyValue} = CurrOptionApiGetter();
+
   return (
     <div className="App">
       <MainNav />
@@ -19,7 +20,7 @@ function App() {
       </Container>
       <Container maxWidth="m" sx={{ width: "100%", maxWidth: 1000, bgcolor: "background.paper", marginTop: "50px" }}>
         <Paper elevation={3} sx={{m:2, p:4}}>
-          <ExchagneRateTable currOption={currOption} />
+          <ExchagneRateTable currKeyValue={currKeyValue} currOption={currOption} />
         </Paper>
       </Container>
     </div>

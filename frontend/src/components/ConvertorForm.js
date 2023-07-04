@@ -17,6 +17,8 @@ const styleSwapIcon = {
   height: "20%",
 };
 
+const styleCurrType = { m: 1, minWidth: 200, width: 250 };
+
 export default function Convertor({ getValue, currOption }) {
   const [inputs, setInputs] = useState({ amount: 0, sourceCurr: 'USD', targetCurr: 'THB' });
   const [error, setError] = useState(false);
@@ -42,7 +44,6 @@ export default function Convertor({ getValue, currOption }) {
   }
 
   const handleChange = (e) => {
-    console.log("length: ", e.value.length)
     let convAmountType = "";
     if (e.name === 'amount') {
       if (containsOnlyNumbers(e.value) || e.value === "") {
@@ -67,21 +68,21 @@ export default function Convertor({ getValue, currOption }) {
     setInputs(newInput);
   }
 
-  const swapButton = error ?
-    <Button variant="outlined" disabled sx={styleSwapIcon}>{EmbedSwapIcon}</Button> :
-    <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{EmbedSwapIcon}</Button>;
+  const swapButton = error
+    ? <Button variant="outlined" disabled sx={styleSwapIcon}>{EmbedSwapIcon}</Button>
+    : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{EmbedSwapIcon}</Button>;
 
-  const convertButton = error ?
-    <Button variant="outlined" style={{ marginTop: "5px" }} disabled>Convert</Button> :
-    <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>;
+  const convertButton = error
+    ? <Button variant="outlined" style={{ marginTop: "5px" }} disabled>Convert</Button>
+    : <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>;
 
   return (
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
         <CurrAmount amount={inputs.amount} updateVal={handleChange} error={error} />
-        <CurrType label="From" type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} currOption={currOption} />
+        <CurrType styling={styleCurrType} label="From" type="sourceCurr" updateVal={handleChange} defaultVal={inputs.sourceCurr} currOption={currOption} />
         {swapButton}
-        <CurrType label="To" type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} currOption={currOption} />
+        <CurrType styling={styleCurrType} label="To" type="targetCurr" updateVal={handleChange} defaultVal={inputs.targetCurr} currOption={currOption} />
       </Stack>
       {convertButton}
     </form>

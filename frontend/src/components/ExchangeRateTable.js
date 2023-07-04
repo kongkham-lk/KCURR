@@ -9,14 +9,18 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import ExchagneRateTableData from './ExchangeRateTableData';
+import CurrType from './CurrType';
 
 const initialValue = [
   { sourceCurr: "USD", rateDataSet: "lastest" },
   { sourceCurr: "USD", rateDataSet: "hist" },
-]; 
+];
 
-export default function ExchagneRateTable() {
-  const [currData, setCurrData] = useState([]);
+const styleCurrType = {minWidth: 200, width: 250};
+
+export default function ExchagneRateTable({ currKeyValue, currOption }) {
+  const [currDataSet, setCurrDataSet] = useState([]);
+  const [newRow, setNewRow] = useState({baseCurr: "USD", targetCurr:""});
 
   useEffect(
     function fetchData() {
@@ -32,19 +36,15 @@ export default function ExchagneRateTable() {
             // return fake dataSet
             resExchangeRatesHist = {
               data: {
-                conversion_rates: {
-                  "CAD": 1.3168,
-                  "EUR": 0.9013,
-                  "GBP": 0.7679,
-                }
+                conversion_rates: {"CAD": 1.3168, "EUR": 0.9013, "GBP": 0.7679,}
               }
             };
           }
           if (resExchangeRatesHist != null) {
             const histRate = resExchangeRatesHist.data.conversion_rates;
-            setCurrData([lastestRate, histRate]);
+            setCurrDataSet([lastestRate, histRate]);
           } else {
-            setCurrData(lastestRate);
+            setCurrDataSet(lastestRate);
           }
         } catch (e) {
           console.log(e.stack);
@@ -54,11 +54,15 @@ export default function ExchagneRateTable() {
     }, []
   );
 
-  console.log("currData => ", currData);
+  const handleChange = (e) => {
+    setNewRow((newInputs) => {
+      return {[e.name]: e.value};
+    });
+  };
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} style={{ marginBottom: "20px" }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -67,10 +71,10 @@ export default function ExchagneRateTable() {
               <TableCell align="right">Change&nbsp;(24h)</TableCell>
             </TableRow>
           </TableHead>
-          {currData.length > 0 && <ExchagneRateTableData currData={currData} />}
+          {currDataSet.length > 0 && <ExchagneRateTableData currDataSet={currDataSet} newRow={newRow} currKeyValue={currKeyValue} />}
         </Table>
       </TableContainer>
-      <Button variant="contained" type="button" style={{ marginTop: "25px" }}>Add Currency</Button>
+      <CurrType styling={styleCurrType} label="Add Currency" type="targetCurr" updateVal={handleChange} currOption={currOption} sx={{ml: 20}} />
     </>
   );
 }

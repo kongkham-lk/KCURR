@@ -12,8 +12,7 @@ export default function Convertor({currOption}) {
             }
         });
     }
-
-    console.log("formData:\n", formData);
+    
     return (
         <>
             <ConvertorForm getValue={getValue} className="CovertForm" currOption={currOption} />
