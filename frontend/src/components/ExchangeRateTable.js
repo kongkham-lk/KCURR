@@ -10,12 +10,12 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import ExchagneRateTableData from './ExchangeRateTableData';
 
-export default function ExchagneRateTable() {
-  const initialValue = [
-    { sourceCurr: "USD", rateDataSet: "lastest" },
-    { sourceCurr: "USD", rateDataSet: "hist" },
-  ];
+const initialValue = [
+  { sourceCurr: "USD", rateDataSet: "lastest" },
+  { sourceCurr: "USD", rateDataSet: "hist" },
+]; 
 
+export default function ExchagneRateTable() {
   const [currData, setCurrData] = useState([]);
 
   useEffect(
@@ -70,6 +70,7 @@ export default function ExchagneRateTable() {
           {currData.length > 0 && <ExchagneRateTableData currData={currData} />}
         </Table>
       </TableContainer>
+      <Button variant="contained" type="button" style={{ marginTop: "25px" }}>Add Currency</Button>
     </>
   );
 }

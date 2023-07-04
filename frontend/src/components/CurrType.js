@@ -2,7 +2,9 @@ import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import axios from 'axios';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ListItemText from '@mui/material/ListItemText';
 
 function CurrType({ label, updateVal, type, defaultType, currOption }) {
 
@@ -19,14 +21,19 @@ function CurrType({ label, updateVal, type, defaultType, currOption }) {
                 value={defaultType}
                 label={label}
                 onChange={handleChange}
+                style={{height: "56.5px"}}
             >
                 {currOption.map((curr) => (
                     <MenuItem key={curr.type} value={curr.type} >
-                        <img
-                            style={{ margin: "0 10px -10px 0px" }}
-                            src={`https://www.countryflagicons.com/FLAT/32/${curr.type.substring(0, 2)}.png`}
-                            alt="" />
-                        <span >{curr.display}</span>
+                        <div style={{ display: "flex", alignItems: "center", padding: "0" }}>
+                            <img
+                                style={{ margin: "0 10px 0px 0px" }}
+                                src={`https://www.countryflagicons.com/FLAT/32/${curr.type.substring(0, 2)}.png`}
+                                alt="" />
+                            <span style={{
+                                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                            }}>{curr.display}</span>
+                        </div>
                     </MenuItem>
                 ))}
             </Select>

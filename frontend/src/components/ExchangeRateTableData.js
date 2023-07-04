@@ -11,16 +11,14 @@ export default function ExchagneRateTableData({ currData }) {
         createData('USD', 'EUR', currData),
         createData('USD', 'GBP', currData),
     ];
-    
+
     const [rows, setRows] = useState(initialRow);
 
     function createData(baseCurr, targetCurr, currData) {
         let lastestRate;
         let histRate;
         let change;
-        // console.log(baseCurr, " - ", targetCurr)
         if (baseCurr !== targetCurr) {
-            console.log("get targetCur from currData: ", currData)
             lastestRate = currData[0][targetCurr];
             histRate = currData[1][targetCurr];
             change = (lastestRate - histRate) * 100 / histRate;
