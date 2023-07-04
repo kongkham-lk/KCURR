@@ -31,8 +31,6 @@ public class ExchangeRatesGetter {
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday= today.plusDays(-1);  // subtract 1 day
         String formateYesterday = dtf.format(yesterday);
-//        System.out.println(dtf.format(today ));
-//        System.out.println(dtf.format(yesterday));
         String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr + "/" + formateYesterday;
         return webClient.get()
                 .uri(url)
