@@ -4,8 +4,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor';
-
-// import CurrType from './components/CurrType';
+import ExchagneRateTable from './components/ExchangeRateTable';
 
 function App() {
   return (
@@ -15,7 +14,12 @@ function App() {
         <Paper elevation={3} sx={{m:2, p:4}}>
           <Convertor />
         </Paper>
-        </Container>
+      </Container>
+      <Container maxWidth="m" sx={{ width: "100%", maxWidth: 1000, bgcolor: "background.paper", marginTop: "50px" }}>
+        <Paper elevation={3} sx={{m:2, p:4}}>
+          <ExchagneRateTable />
+        </Paper>
+      </Container>
     </div>
   );
 }
