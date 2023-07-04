@@ -6,8 +6,6 @@ function CurrAmount({ updateVal, amount, error }) {
         updateVal(e.target);
     };
 
-    const input = amount.toString();
-
     const isError = (<TextField
         required
         error

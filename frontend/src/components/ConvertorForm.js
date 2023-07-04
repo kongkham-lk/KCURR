@@ -54,9 +54,12 @@ function Convertor({ getValue }) {
     const newInput = { amount: amount, sourceCurr: targetCurr, targetCurr: sourceCurr };
     setInputs(newInput);
   }
-  console.log("inputs -> ", inputs);
 
-  const swapIcon = (<img src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" alt="arrow" style={{ objectFit: "cover", height: "40px", mixBlendMode: "multiply" }} />);
+  const EmbedSwapIcon = (<img 
+    src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" 
+    alt="arrow" 
+    style={{ objectFit: "cover", height: "40px", mixBlendMode: "multiply" }} 
+  />);
 
   const styleSwapIcon = {
     borderRadius: "32px",
@@ -64,7 +67,7 @@ function Convertor({ getValue }) {
     height: "20%",
   };
 
-  const swapButton = error ? <Button variant="outlined" disabled sx={styleSwapIcon}>{swapIcon}</Button> : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{swapIcon}</Button>;
+  const swapButton = error ? <Button variant="outlined" disabled sx={styleSwapIcon}>{EmbedSwapIcon}</Button> : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{EmbedSwapIcon}</Button>;
 
   const convertButton = error ? <Button variant="outlined" style={{ marginTop: "5px" }} disabled>Convert</Button> : <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>;
 
