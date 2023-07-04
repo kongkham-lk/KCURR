@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 
-export default function Convertor() {
+export default function Convertor({currOption}) {
     const [formData, setFormData] = useState(null);
     function getValue(inputData, response) {
         setFormData(() => {
@@ -16,7 +16,7 @@ export default function Convertor() {
     console.log("formData:\n", formData);
     return (
         <>
-            <ConvertorForm getValue={getValue} className="CovertForm" />
+            <ConvertorForm getValue={getValue} className="CovertForm" currOption={currOption} />
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>

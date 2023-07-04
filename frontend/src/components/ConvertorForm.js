@@ -5,7 +5,19 @@ import axios from 'axios';
 import CurrAmount from './CurrAmount'
 import CurrType from './CurrType'
 
-function Convertor({ getValue }) {
+const EmbedSwapIcon = (<img
+  src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg"
+  alt="arrow"
+  style={{ objectFit: "cover", height: "40px", mixBlendMode: "multiply" }}
+/>);
+
+const styleSwapIcon = {
+  borderRadius: "32px",
+  width: "50px",
+  height: "20%",
+};
+
+export default function Convertor({ getValue, currOption }) {
   const [inputs, setInputs] = useState({ amount: 0, sourceCurr: 'USD', targetCurr: 'THB' });
   const [error, setError] = useState(false);
 
@@ -55,34 +67,24 @@ function Convertor({ getValue }) {
     setInputs(newInput);
   }
 
-  const EmbedSwapIcon = (<img 
-    src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" 
-    alt="arrow" 
-    style={{ objectFit: "cover", height: "40px", mixBlendMode: "multiply" }} 
-  />);
+  const swapButton = error ?
+    <Button variant="outlined" disabled sx={styleSwapIcon}>{EmbedSwapIcon}</Button> :
+    <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{EmbedSwapIcon}</Button>;
 
-  const styleSwapIcon = {
-    borderRadius: "32px",
-    width: "50px",
-    height: "20%",
-  };
-
-  const swapButton = error ? <Button variant="outlined" disabled sx={styleSwapIcon}>{EmbedSwapIcon}</Button> : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={styleSwapIcon} >{EmbedSwapIcon}</Button>;
-
-  const convertButton = error ? <Button variant="outlined" style={{ marginTop: "5px" }} disabled>Convert</Button> : <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>;
+  const convertButton = error ?
+    <Button variant="outlined" style={{ marginTop: "5px" }} disabled>Convert</Button> :
+    <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>;
 
   return (
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
         <CurrAmount amount={inputs.amount} updateVal={handleChange} error={error} />
-        <CurrType label="From" type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} />
+        <CurrType label="From" type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} currOption={currOption} />
         {swapButton}
-        <CurrType label="To" type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} />
+        <CurrType label="To" type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} currOption={currOption} />
       </Stack>
       {convertButton}
     </form>
   )
 };
-
-export default Convertor;
 
