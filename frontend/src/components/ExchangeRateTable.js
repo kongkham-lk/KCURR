@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import ExchagneRateTableData from './ExchangeRateTableData';
+import ExchangeRateTableData from './ExchangeRateTableData';
 import CurrType from './CurrType';
 
 const initialValue = [
@@ -71,7 +71,7 @@ export default function ExchagneRateTable({ currKeyValue, currOption }) {
               <TableCell align="right">Change&nbsp;(24h)</TableCell>
             </TableRow>
           </TableHead>
-          {currDataSet.length > 0 && <ExchagneRateTableData currDataSet={currDataSet} newRow={newRow} currKeyValue={currKeyValue} />}
+          {currDataSet.length > 0 && <ExchangeRateTableData currDataSet={currDataSet} newRow={newRow} currKeyValue={currKeyValue} />}
         </Table>
       </TableContainer>
       <CurrType styling={styleCurrType} label="Add Currency" type="targetCurr" updateVal={handleChange} currOption={currOption} sx={{ml: 20}} />

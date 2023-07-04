@@ -17,7 +17,7 @@ function createData(baseCurr, targetCurr, currDataSet) {
     }
 }
 
-export default function ExchagneRateTableData({ currDataSet, newRow, currKeyValue }) {
+export default function ExchangeRateTableData({ currDataSet, newRow, currKeyValue }) {
     const initialRow = [
         createData('USD', 'USD', currDataSet),
         createData('USD', 'CAD', currDataSet),
