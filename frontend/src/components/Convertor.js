@@ -3,9 +3,10 @@ import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 
-export default function Convertor({currOption}) {
+export default function Convertor({currApiArr}) {
     const [formData, setFormData] = useState(null);
-    function getValue(inputData, response) {
+    
+    function getFormData(inputData, response) {
         setFormData(() => {
             return {
                 ...inputData, total: response.data
@@ -15,14 +16,14 @@ export default function Convertor({currOption}) {
     
     return (
         <>
-            <ConvertorForm getValue={getValue} className="CovertForm" currOption={currOption} />
+            <ConvertorForm getFormData={getFormData} className="CovertForm" currApiArr={currApiArr} />
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>
-                        1 {formData.sourceCurr} = {(formData.total / formData.amount).toFixed(2)} {formData.targetCurr}
+                        1 {formData.baseCurr} = {(formData.total / formData.amount).toFixed(2)} {formData.targetCurr}
                     </Typography>
                     <Typography variant="h4" >
-                        {formData.amount} {formData.sourceCurr} = {formData.total.toFixed(2)} {formData.targetCurr}
+                        {formData.amount} {formData.baseCurr} = {formData.total.toFixed(2)} {formData.targetCurr}
                     </Typography>
                 </>
             )}

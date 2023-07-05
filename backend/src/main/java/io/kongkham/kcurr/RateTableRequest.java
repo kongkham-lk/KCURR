@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class RateTableRequest {
-    private String sourceCurr;
+    private String baseCurr;
     private String rateDataSet;
 }

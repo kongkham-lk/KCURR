@@ -6,7 +6,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 
 @RestController
 public class CurrController {
@@ -27,7 +26,7 @@ public class CurrController {
     @PostMapping("/convert") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
     public double getConvertCurr(@RequestBody ConvertRequest data) { // @RequestBody can serve only 1 argument (no duplicated use)
         double amount = data.getAmount();
-        String c1 = data.getSourceCurr();
+        String c1 = data.getBaseCurr();
         String c2 = data.getTargetCurr();
         return currService.convert(amount, c1, c2);
     }
@@ -47,17 +46,17 @@ public class CurrController {
 
     @PostMapping("/api/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
     public String getExchangeRatesHist(@RequestBody RateTableRequest data) {
-        String sourceCurr = data.getSourceCurr();
+        String baseCurr = data.getBaseCurr();
         String dataSet = data.getRateDataSet();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate time = LocalDate.now();  // get the current date
         String url;
         if (dataSet.equals("lastest")) {
-            url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr;
+            url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + baseCurr;
         } else {
             time = time.plusDays(-1);  // subtract 1 day
             String formateTime = dtf.format(time);
-            url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/history/" + sourceCurr + "/" + formateTime;
+            url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/history/" + baseCurr + "/" + formateTime;
         }
         return webClient.get()
                 .uri(url)

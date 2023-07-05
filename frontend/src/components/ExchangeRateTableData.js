@@ -3,13 +3,13 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useState, useEffect } from 'react';
 
-function createData(baseCurr, targetCurr, currDataSet) {
+function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
     let lastestRate;
     let histRate;
     let change;
     if (baseCurr !== targetCurr) {
-        lastestRate = currDataSet[0][targetCurr];
-        histRate = currDataSet[1][targetCurr];
+        lastestRate = currApiDataSet[0][targetCurr];
+        histRate = currApiDataSet[1][targetCurr];
         change = (lastestRate - histRate) * 100 / histRate;
         return { targetCurr, lastestRate, change: change.toFixed(2) };
     } else {
@@ -17,58 +17,66 @@ function createData(baseCurr, targetCurr, currDataSet) {
     }
 }
 
-export default function ExchangeRateTableData({ currDataSet, newRow, currKeyValue }) {
+const style = {
+    div: { display: "flex", alignItems: "center", },
+    img: { margin: "0 10px 0px 0px" },
+    span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px" },
+};
+
+const sxStyle = {
+    TableRow: { '&:last-child td, &:last-child th': { border: 0 } }
+}
+
+export default function ExchangeRateTableData({ currApiDataSet, newCurrList, currApiKeyValuePair }) {
     const initialRow = [
-        createData('USD', 'USD', currDataSet),
-        createData('USD', 'CAD', currDataSet),
-        createData('USD', 'EUR', currDataSet),
-        createData('USD', 'GBP', currDataSet),
+        createCurrLists('USD', 'USD', currApiDataSet),
+        createCurrLists('USD', 'CAD', currApiDataSet),
+        createCurrLists('USD', 'EUR', currApiDataSet),
+        createCurrLists('USD', 'GBP', currApiDataSet),
     ];
 
-    const [rows, setRows] = useState(initialRow);
-    const [fakeChange, setFakeChange] = useState({});
+    const [currLists, setCurrLists] = useState(initialRow);
+    const [fakeRecords, setFakeRecords] = useState({});
 
     useEffect(
         function checkNewRow() {
-            if (newRow.targetCurr !== "" && !rows.includes(newRow.targetCurr)) {
-                const row = createData('USD', newRow.targetCurr, currDataSet);
-                const newRows = [...rows, row];
-                setRows(newRows);
-                setFakeChange((newFake) => {
-                    return { ...newFake, [newRow.targetCurr]: ((Math.random() * 4) - 2).toFixed(2) }
+            if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
+                const currList = createCurrLists('USD', newCurrList.targetCurr, currApiDataSet);
+                const newLists = [...currLists, currList];
+                setCurrLists(newLists);
+                setFakeRecords((newFakeRecords) => {
+                    return { ...newFakeRecords, [newCurrList.targetCurr]: ((Math.random() * 4) - 2).toFixed(2) }
                 });
             }
-        }, [newRow]
+        }, [newCurrList]
     );
 
     return (
         <TableBody>
-            {rows.map((row) => (
+            {currLists.map((row) => (
                 <TableRow
                     key={row.targetCurr}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={sxStyle.TableRow}
                 >
                     <TableCell component="th" scope="row">
-                        <div style={{ display: "flex", alignItems: "center", }}>
+                        <div style={style.div}>
                             <img
-                                style={{ margin: "0 10px 0px 0px" }}
+                                style={style.img}
                                 src={`https://www.countryflagicons.com/SHINY/32/${row.targetCurr.substring(0, 2)}.png`}
                                 alt="" />
-                            <span style={{
-                                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px"
-                            }}>{currKeyValue[row.targetCurr]}</span>
+                            <span style={style.span}>{currApiKeyValuePair[row.targetCurr]}</span>
                         </div>
                     </TableCell>
                     <TableCell align="right">{row.lastestRate}</TableCell>
                     <TableCell
                         align="right"
-                        style={row.change >= 0 || row.change === null || fakeChange[row.targetCurr] >= 0
+                        style={row.change >= 0 || row.change === null || fakeRecords[row.targetCurr] >= 0
                             ? { color: "green" } : { color: "red" }}>
                         {row.change === null ? row.change
                             : row.change >= 0 ? "+" + row.change + "%"
                                 : row.change < 0 ? row.change + "%"
-                                    : fakeChange[row.targetCurr] >= 0 ? "+" + fakeChange[row.targetCurr] + "%"
-                                        : fakeChange[row.targetCurr] + "%"
+                                    : fakeRecords[row.targetCurr] >= 0 ? "+" + fakeRecords[row.targetCurr] + "%"
+                                        : fakeRecords[row.targetCurr] + "%"
                         }
                     </TableCell>
                 </TableRow>

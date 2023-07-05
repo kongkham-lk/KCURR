@@ -26,12 +26,12 @@ public class ExchangeRatesGetter {
                 .bodyToMono(ExchangeApiResponse.class)
                 .block();
     }
-    public ExchangeApiResponse getExchangeRatesHist(String sourceCurr) {
+    public ExchangeApiResponse getExchangeRatesHist(String baseCurr) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday= today.plusDays(-1);  // subtract 1 day
         String formateYesterday = dtf.format(yesterday);
-        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + sourceCurr + "/" + formateYesterday;
+        String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + baseCurr + "/" + formateYesterday;
         return webClient.get()
                 .uri(url)
                 .retrieve()
