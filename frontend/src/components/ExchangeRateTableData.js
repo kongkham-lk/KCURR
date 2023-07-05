@@ -3,30 +3,6 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useState, useEffect } from 'react';
 
-function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
-    let lastestRate;
-    let histRate;
-    let change;
-    if (baseCurr !== targetCurr) {
-        lastestRate = currApiDataSet[0][targetCurr];
-        histRate = currApiDataSet[1][targetCurr];
-        change = (lastestRate - histRate) * 100 / histRate;
-        return { targetCurr, lastestRate, change: change.toFixed(2) };
-    } else {
-        return { targetCurr: baseCurr, lastestRate: 1, change: null };
-    }
-}
-
-const style = {
-    div: { display: "flex", alignItems: "center", },
-    img: { margin: "0 10px 0px 0px" },
-    span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px" },
-};
-
-const sxStyle = {
-    TableRow: { '&:last-child td, &:last-child th': { border: 0 } }
-}
-
 export default function ExchangeRateTableData({ currApiDataSet, newCurrList, currApiKeyValuePair }) {
     const initialRow = [
         createCurrLists('USD', 'USD', currApiDataSet),
@@ -84,3 +60,27 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
         </TableBody>
     )
 };
+
+function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
+    let lastestRate;
+    let histRate;
+    let change;
+    if (baseCurr !== targetCurr) {
+        lastestRate = currApiDataSet[0][targetCurr];
+        histRate = currApiDataSet[1][targetCurr];
+        change = (lastestRate - histRate) * 100 / histRate;
+        return { targetCurr, lastestRate, change: change.toFixed(2) };
+    } else {
+        return { targetCurr: baseCurr, lastestRate: 1, change: null };
+    }
+}
+
+const style = {
+    div: { display: "flex", alignItems: "center", },
+    img: { margin: "0 10px 0px 0px" },
+    span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px" },
+};
+
+const sxStyle = {
+    TableRow: { '&:last-child td, &:last-child th': { border: 0 } }
+}

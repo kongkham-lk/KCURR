@@ -10,13 +10,13 @@ import axios from 'axios';
 import ExchangeRateTableData from './ExchangeRateTableData';
 import CurrCountries from './CurrCountries';
 
-export default function ExchagneRateTable({ currApiKeyValuePair, currApiArr }) {
+export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
   const [newCurrList, setNewCurrList] = useState({baseCurr: "USD", targetCurr:""});
 
   useEffect(
     function fetchData() {
-      async function fetchCurrOption() {
+      async function fetchCurrApiData() {
         try {
           const resExchangeRatesLast = await axios.post('http://localhost:8080/api/rate', initialValue.lastest);
           const lastestRate = resExchangeRatesLast.data.conversion_rates;
@@ -42,7 +42,7 @@ export default function ExchagneRateTable({ currApiKeyValuePair, currApiArr }) {
           console.log(e.stack);
         }
       }
-      fetchCurrOption();
+      fetchCurrApiData();
     }, []
   );
 
@@ -53,7 +53,7 @@ export default function ExchagneRateTable({ currApiKeyValuePair, currApiArr }) {
   return (
     <>
       <TableContainer component={Paper} style={style.TableContainer}>
-        <Table sx={sxStyle.Table} aria-label="simple table">
+        <Table sx={sxStyle.Table} aria-label="Currency table">
           <TableHead>
             <TableRow>
               <TableCell>Country Currency</TableCell>
