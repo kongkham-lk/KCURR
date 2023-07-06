@@ -1,5 +1,6 @@
 package io.kongkham.kcurr;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import lombok.Data;
 
@@ -12,13 +13,17 @@ public class ExchangeRateApiResponse {
 
     // for latest dataset endpoint
     @Nullable
-    private long time_last_update_unix;
+    @JsonProperty("time_last_update_unix")
+    private long timeLastUpdateUnix;
     @Nullable
-    private String time_last_update_utc;
+    @JsonProperty("time_last_update_utc")
+    private String timeLastUpdateUtc;
     @Nullable
-    private long time_next_update_unix;
+    @JsonProperty("time_next_update_unix")
+    private long timeNextUpdateUnix;
     @Nullable
-    private String time_next_update_utc;
+    @JsonProperty("time_next_update_utc")
+    private String timeNextUpdateUtc;
 
     // for historical dataset endpoint
     @Nullable
