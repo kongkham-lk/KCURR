@@ -16,7 +16,7 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
 
     useEffect(
         function checkNewRow() {
-            if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
+            if (newCurrList.targetCurr !== "" && !checkIfExist(currLists, newCurrList.targetCurr)) {
                 const currList = createCurrLists('USD', newCurrList.targetCurr, currApiDataSet);
                 const newLists = [...currLists, currList];
                 setCurrLists(newLists);
@@ -60,6 +60,13 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
         </TableBody>
     )
 };
+
+function checkIfExist(arr, targetCurr) {
+    for (let el of arr) {
+        if (el.targetCurr == targetCurr) return true;
+    }
+    return false;
+}
 
 function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
     let lastestRate;
