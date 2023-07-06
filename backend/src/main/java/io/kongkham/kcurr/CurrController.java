@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @RestController
+@RequestMapping("/curr")
 public class CurrController {
     private final CurrService currService;
     private final WebClient webClient;
@@ -44,7 +45,7 @@ public class CurrController {
 //        return rate;
 //    }
 
-    @PostMapping("/api/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    @PostMapping("/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
     public String getExchangeRatesHist(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
         String dataSet = data.getRateDataSet();
@@ -65,7 +66,7 @@ public class CurrController {
                 .block();
     }
 
-    @GetMapping("/api/exchange-rate")
+    @GetMapping("/curency-country")
     public String getCurrOption() {
         String url = "https://v6.exchangerate-api.com/v6/" + apiKey + "/codes";
         return webClient.get()

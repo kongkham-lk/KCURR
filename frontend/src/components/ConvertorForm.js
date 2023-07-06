@@ -67,7 +67,7 @@ function containsOnlyNumbers(str) {
 
 const fetchConvertVal = async (getFormData, formInputs) => {
   try {
-    const response = await axios.post('http://localhost:8080/convert', formInputs);
+    const response = await axios.post('http://localhost:8080/curr/convert', formInputs);
     getFormData(formInputs, response);
   } catch (e) {
     console.log(e.code, "\n", e.stack);

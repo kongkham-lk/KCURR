@@ -9,7 +9,7 @@ export default function CurrApiGetter() {
         function fetchData() {
             async function fetchCurrOption() {
                 try {
-                    const responseCurrOption = await axios.get('http://localhost:8080/api/exchange-rate');
+                    const responseCurrOption = await axios.get('http://localhost:8080/curr/curency-country');
                     const apiArr = getCurrApiArr(responseCurrOption.data.supported_codes);
                     const apiKeyValuePair = getCurrApiKeyValue(responseCurrOption.data.supported_codes);
                     setCurrApiArr([...apiArr]);

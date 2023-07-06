@@ -18,12 +18,12 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
     function fetchData() {
       async function fetchCurrApiData() {
         try {
-          const resExchangeRatesLast = await axios.post('http://localhost:8080/api/rate', initialValue.lastest);
+          const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate', initialValue.lastest);
           const lastestRate = resExchangeRatesLast.data.conversion_rates;
           let resExchangeRatesHist;
           try {
             // if cannot fetch the api data
-            resExchangeRatesHist = await axios.post('http://localhost:8080/api/rate', initialValue.hist);
+            resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate', initialValue.hist);
           } catch (e) {
             // return fake dataSet
             resExchangeRatesHist = {
