@@ -22,10 +22,7 @@ public class CurrService {
         // get rate from api
         ExchangeRateApiResponse exchangeRateApiResponse = _ExchangeRateApiClient.getExchangeRatesLatest(baseCurrCountry);
         double targetRate =  exchangeRateApiResponse.getConversion_rates().get(targetCurrCountry);
-        HashMap<String, Double> rates = new HashMap<String, Double>();
-        rates.put(targetCurrCountry, targetRate);
-        CurrData curr = new CurrData(baseCurrCountry, rates);
-        return curr.getRates().get(targetCurrCountry);
+        return targetRate;
     }
 
     public ExchangeRateApiResponse getExchangeRate(String baseCurr, String dataSet) {
