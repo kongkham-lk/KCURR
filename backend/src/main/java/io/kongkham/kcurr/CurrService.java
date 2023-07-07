@@ -20,20 +20,21 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateApiResponse exchangeRateApiResponse = _ExchangeRateApiClient.getExchangeRatesLatest(baseCurrCountry);
-        double targetRate =  exchangeRateApiResponse.getConversion_rates().get(targetCurrCountry);
+        ExchangeRateApiResponse latestRateApiResponse = _ExchangeRateApiClient.getLatestExchangeRates(baseCurrCountry);
+        double targetRate =  latestRateApiResponse.getData().get(targetCurrCountry).getValue();
         return targetRate;
     }
 
-    public ExchangeRateApiResponse getExchangeRate(String baseCurr, String dataSet) {
-        if (dataSet.equals("lastest")) {
-            return _ExchangeRateApiClient.getExchangeRatesLatest(baseCurr);
+    public ExchangeRateApiResponse getExchangeRates(String baseCurr, String dataSet) {
+        if (dataSet.equals("latest")) {
+            return _ExchangeRateApiClient.getLatestExchangeRates(baseCurr);
         } else {
-            return _ExchangeRateApiClient.getExchangeRatesHist(baseCurr);
+            return _ExchangeRateApiClient.getHistExchangeRates(baseCurr);
         }
     }
 
-    public ExchangeRateApiResponse getCurrCountry() {
-        return _ExchangeRateApiClient.getCurrCountry();
+    public CurrCountriesApiResponse getCurrCountries() {
+        CurrCountriesApiResponse currCountries = _ExchangeRateApiClient.getCurrCountries();
+        return currCountries;
     }
 }

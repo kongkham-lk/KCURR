@@ -2,6 +2,8 @@ package io.kongkham.kcurr;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/curr")
 public class CurrController {
@@ -20,16 +22,22 @@ public class CurrController {
         return _currService.convert(amount, baseCurr, targetCurr);
     }
 
+//    @PostMapping("/rate-latest") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+//    public ExchangeRateApiResponse getLatestExchangeRates(@RequestBody RateTableRequest data) {
+//        String baseCurr = data.getBaseCurr();
+//        return _currService.getLatestExchangeRates(baseCurr);
+//    }
+
     @PostMapping("/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
-    public ExchangeRateApiResponse getExchangeRatesHist(@RequestBody RateTableRequest data) {
+    public ExchangeRateApiResponse getExchangeRates(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
         String dataSet = data.getRateDataSet();
-        return _currService.getExchangeRate(baseCurr, dataSet);
+        return _currService.getExchangeRates(baseCurr, dataSet);
     }
 
     @GetMapping("/currency-country")
-    public ExchangeRateApiResponse getCurrOption() {
-        return _currService.getCurrCountry();
+    public HashMap<String, CurrCountriesDetailApiResponse> getCurrOption() {
+        return _currService.getCurrCountries().getData();
     }
 
 }

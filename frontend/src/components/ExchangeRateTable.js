@@ -18,7 +18,7 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
     function fetchData() {
       async function fetchCurrApiData() {
         try {
-          const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate', initialValue.lastest);
+          const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate', initialValue.latest);
           const lastestRate = resExchangeRatesLast.data.conversion_rates;
           let resExchangeRatesHist;
           try {
@@ -70,7 +70,7 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
 }
 
 const initialValue = {
-  lastest: { baseCurr: "USD", rateDataSet: "lastest" },
+  lastest: { baseCurr: "USD", rateDataSet: "latest" },
   hist: { baseCurr: "USD", rateDataSet: "hist" },
 };
 
