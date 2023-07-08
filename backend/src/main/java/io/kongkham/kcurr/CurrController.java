@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 public class CurrController {
     private final CurrService _currService;
 
-    // is it a way to create CurrService class object?
     public CurrController(CurrService _currService) {
         this._currService = _currService;
     }
@@ -28,7 +27,7 @@ public class CurrController {
     }
 
     @GetMapping("/currency-country")
-    public ExchangeRateApiResponse getCurrOption() {
+    public ExchangeCurrCountriesApiResponse getCurrOption() {
         return _currService.getCurrCountry();
     }
 

@@ -18,16 +18,16 @@ public class ExchangeRateApiClient {
         this._webClient = webClientBuilder.build();
     }
 
-    public ExchangeRateApiResponse getExchangeRatesLatest(String sourceCurr) {
+    public ExchangeRateLatestApiResponse getExchangeRatesLatest(String sourceCurr) {
         String url = "https://v6.exchangerate-api.com/v6/" + _apiKey + "/latest/" + sourceCurr;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(ExchangeRateApiResponse.class)
+                .bodyToMono(ExchangeRateLatestApiResponse.class)
                 .block();
     }
 
-    public ExchangeRateApiResponse getExchangeRatesHist(String baseCurr) {
+    public ExchangeRateHistApiResponse getExchangeRatesHist(String baseCurr) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday= today.plusDays(-1);  // subtract 1 day
@@ -36,16 +36,16 @@ public class ExchangeRateApiClient {
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(ExchangeRateApiResponse.class)
+                .bodyToMono(ExchangeRateHistApiResponse.class)
                 .block();
     }
 
-    public ExchangeRateApiResponse getCurrCountry() {
+    public ExchangeCurrCountriesApiResponse getCurrCountry() {
         String url = "https://v6.exchangerate-api.com/v6/" + _apiKey + "/codes";
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(ExchangeRateApiResponse.class)
+                .bodyToMono(ExchangeCurrCountriesApiResponse.class)
                 .block();
     }
 }

@@ -2,8 +2,6 @@ package io.kongkham.kcurr;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-
 @Service
 public class CurrService {
 
@@ -20,8 +18,8 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateApiResponse exchangeRateApiResponse = _ExchangeRateApiClient.getExchangeRatesLatest(baseCurrCountry);
-        double targetRate =  exchangeRateApiResponse.getConversion_rates().get(targetCurrCountry);
+        ExchangeRateLatestApiResponse exchangeRateApiResponse = _ExchangeRateApiClient.getExchangeRatesLatest(baseCurrCountry);
+        double targetRate =  exchangeRateApiResponse.getConversionRates().get(targetCurrCountry);
         return targetRate;
     }
 
@@ -33,7 +31,7 @@ public class CurrService {
         }
     }
 
-    public ExchangeRateApiResponse getCurrCountry() {
+    public ExchangeCurrCountriesApiResponse getCurrCountry() {
         return _ExchangeRateApiClient.getCurrCountry();
     }
 }
