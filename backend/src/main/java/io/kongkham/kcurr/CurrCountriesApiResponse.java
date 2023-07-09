@@ -7,6 +7,5 @@ import java.util.HashMap;
 
 @Data
 public class CurrCountriesApiResponse {
-    @JsonProperty("supported_codes")
     private HashMap<String, CurrCountriesDetailApiResponse> data;
 }

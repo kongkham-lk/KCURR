@@ -51,7 +51,7 @@ export default function Convertor({ getFormData, currApiArr }) {
   return (
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
-        <CurrAmount updateVal={handleChange} error={isError} />
+        <CurrAmount updateVal={handleChange} error={isError} baseCurr={formInputs.baseCurr} currApiArr={currApiArr}/>
         <CurrCountries sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleChange} baseCurrVal={formInputs.baseCurr} currApiArr={currApiArr} />
         {swapButton}
         <CurrCountries sxStyle={sxStyle.CurrCountries} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiArr={currApiArr} />

@@ -22,22 +22,23 @@ public class CurrController {
         return _currService.convert(amount, baseCurr, targetCurr);
     }
 
-//    @PostMapping("/rate-latest") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
-//    public ExchangeRateApiResponse getLatestExchangeRates(@RequestBody RateTableRequest data) {
-//        String baseCurr = data.getBaseCurr();
-//        return _currService.getLatestExchangeRates(baseCurr);
-//    }
-
-    @PostMapping("/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
-    public ExchangeRateApiResponse getExchangeRates(@RequestBody RateTableRequest data) {
+    @PostMapping("/rate-latest") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    public HashMap<String, Double> getLatestExchangeRates(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
-        String dataSet = data.getRateDataSet();
-        return _currService.getExchangeRates(baseCurr, dataSet);
+        HashMap<String, Double> result = _currService.getLatestExchangeRates(baseCurr);
+        return result;
+    }
+
+    @PostMapping("/rate-hist") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    public HashMap<String, Double> getExchangeRates(@RequestBody RateTableRequest data) {
+        String baseCurr = data.getBaseCurr();
+//        String dataSet = data.getRateDataSet();
+        HashMap<String, Double> result = _currService.getHistExchangeRates(baseCurr);
+        return result;
     }
 
     @GetMapping("/currency-country")
-    public HashMap<String, CurrCountriesDetailApiResponse> getCurrOption() {
-        return _currService.getCurrCountries().getData();
+    public CurrCountriesApiResponse getCurrOption() {
+        return _currService.getCurrCountries();
     }
-
 }
