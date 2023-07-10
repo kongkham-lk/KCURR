@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import ExchangeRateTableData from './ExchangeRateTableData';
-import CurrCountries from './CurrCountries';
+
+const initialValue = { baseCurr: "USD" };
 
 export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
-  const [newCurrList, setNewCurrList] = useState({baseCurr: "USD", targetCurr:""});
 
   useEffect(
     function fetchData() {
@@ -22,12 +16,7 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
           const resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate-hist', initialValue);
           const latestRates = resExchangeRatesLast.data;
           const histRates = resExchangeRatesHist.data;
-          if (resExchangeRatesHist != null) {
-            const histRate = resExchangeRatesHist.data.conversion_rates;
-            setCurrApiDataSet([latestRates, histRates]);
-          } else {
-            setCurrApiDataSet(latestRates);
-          }
+          setCurrApiDataSet([latestRates, histRates]);
         } catch (e) {
           console.log(e.stack);
         }
@@ -36,40 +25,9 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
     }, []
   );
 
-  const handleChange = (e) => {
-    setNewCurrList({[e.name]: e.value});
-  };
-
-
-  console.log("currApiDataSet =>",currApiDataSet)
-  console.log("currApiDataSet Length =>",currApiDataSet.length)
-
   return (
     <>
-      <TableContainer component={Paper} style={style.TableContainer}>
-        <Table sx={sxStyle.Table} aria-label="Currency table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Country Currency</TableCell>
-              <TableCell align="left">Amount</TableCell>
-              <TableCell align="left">Change&nbsp;(24h)</TableCell>
-            </TableRow>
-          </TableHead>
-          {currApiDataSet.length > 0 &&  <ExchangeRateTableData currApiDataSet={currApiDataSet} newCurrList={newCurrList} currApiKeyValuePair={currApiKeyValuePair} />}
-        </Table>
-      </TableContainer>
-      <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleChange} currApiArr={currApiArr} sx={{ml: 20}} />
+      {currApiDataSet.length > 0 && <ExchangeRateTableData currApiDataSet={currApiDataSet} currApiKeyValuePair={currApiKeyValuePair} currApiArr={currApiArr} />}
     </>
   );
-}
-
-const initialValue = { baseCurr: "USD" };
-
-const sxStyle = {
-  Table: { width: 1 },
-  CurrCountries: {minWidth: 200, width: 250},
-};
-
-const style = {
-  TableContainer: { marginBottom: "20px" }
 }
