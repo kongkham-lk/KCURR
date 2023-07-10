@@ -25,7 +25,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
     const [currLists, setCurrLists] = useState(initialRows);
     const [newCurrList, setNewCurrList] = useState({ baseCurr: "USD", targetCurr: "" });
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('amount');
+    const [orderBy, setOrderBy] = useState('latestRate');
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);

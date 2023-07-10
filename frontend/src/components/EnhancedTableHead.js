@@ -72,7 +72,7 @@ const headCells = [
         label: 'Currency Countries',
     },
     {
-        id: 'amount',
+        id: 'latestRate',
         numeric: true,
         disablePadding: false,
         label: 'Amount',
