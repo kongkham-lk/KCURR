@@ -208,38 +208,6 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
     );
 }
 
-//     return (
-//         <TableBody>
-//             {currLists.map((currList) => (
-//                 <TableRow
-//                     key={currList.targetCurr}
-//                     sx={sxStyle.TableRow}
-//                 >
-//                     <TableCell component="th" scope="row">
-//                         <div style={style.div}>
-//                             <img
-//                                 style={style.img}
-//                                 src={`https://www.countryflagicons.com/SHINY/32/${currList.targetCurr.substring(0, 2)}.png`}
-//                                 alt="" />
-//                             <span style={style.span}>{currApiKeyValuePair[currList.targetCurr]}</span>
-//                         </div>
-//                     </TableCell>
-//                     <TableCell align="left">{currList.latestRate}</TableCell>
-//                     <TableCell
-//                         align="left"
-//                         style={currList.change >= 0 || currList.change === null
-//                             ? { color: "green" } : { color: "red" }}>
-//                         {currList.change === null ? currList.change
-//                             : currList.change >= 0 ? "+" + currList.change + "%"
-//                                 : currList.change + "%"
-//                         }
-//                     </TableCell>
-//                 </TableRow>
-//             ))}
-//         </TableBody>
-//     )
-// };
-
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;

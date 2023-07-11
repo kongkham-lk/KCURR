@@ -7,11 +7,12 @@ import java.util.HashMap;
 @Service
 public class CurrService {
 
-    private final ExchangeRateApiClient _ExchangeRateApiClient;
+    private final CurrencyBeaconApiClient _currencyBeaconApiClient;
+    private final CurrencyApiApiClient _currencyApiApiClient;
 
-
-    public CurrService(ExchangeRateApiClient exchangeRateApiClient) {
-        this._ExchangeRateApiClient = exchangeRateApiClient;
+    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient, CurrencyApiApiClient currencyApiApiClient) {
+        this._currencyBeaconApiClient = currencyBeaconApiClient;
+        this._currencyApiApiClient = currencyApiApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
@@ -20,21 +21,21 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateApiResponse latestRateApiResponse = _ExchangeRateApiClient.getLatestExchangeRates(baseCurrCountry);
-        return latestRateApiResponse.getResponse().getRates().get(targetCurrCountry);
+        ExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
+        return latestRateApiResponse.getRates().get(targetCurrCountry);
     }
 
     public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
-        HashMap<String, Double> rates = _ExchangeRateApiClient.getLatestExchangeRates(baseCurr).getResponse().getRates();
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurr).getRates();
         return rates;
     }
 
     public HashMap<String, Double> getHistExchangeRates(String baseCurr) {
-        HashMap<String, Double> rates = _ExchangeRateApiClient.getHistExchangeRates(baseCurr).getResponse().getRates();
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getHistExchangeRates(baseCurr).getRates();
         return rates;
     }
 
     public CurrCountriesApiResponse getCurrCountries() {
-        return _ExchangeRateApiClient.getCurrCountries();
+        return _currencyApiApiClient.getCurrCountries();
     }
 }
