@@ -8,8 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 
 export default function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-        props;
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };

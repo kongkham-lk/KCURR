@@ -24,8 +24,8 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
 
     const [currLists, setCurrLists] = useState(initialRows);
     const [newCurrList, setNewCurrList] = useState({ baseCurr: "USD", targetCurr: "" });
-    const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('latestRate');
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('targetCurr');
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
@@ -108,10 +108,25 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         });
     };
 
+    const handleDelete = () => {
+        const oldCurrLists = [...currLists];
+        selected.map((targetCurr) => {
+            for (let i in oldCurrLists) {
+                if (oldCurrLists[i].targetCurr === targetCurr) {
+                    oldCurrLists.splice(i, 1)
+                }
+            }
+        })
+        setCurrLists(oldCurrLists);
+    }
+
     return (
         <Box sx={{ width: 1 }}>
             <Paper sx={{ width: 1, mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    handleDelete={handleDelete}
+                />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
