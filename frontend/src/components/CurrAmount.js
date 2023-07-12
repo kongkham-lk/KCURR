@@ -4,7 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 export default function CurrAmount({ updateVal, error, baseCurr, currApiArr }) {
     const handleChange = (e) => { updateVal(e.target) };
     
-    const symbol = currApiArr.map(el => {
+    const symbol = currApiArr?.map(el => {
         if (el.type === baseCurr) {
             return el.symbol;
         }

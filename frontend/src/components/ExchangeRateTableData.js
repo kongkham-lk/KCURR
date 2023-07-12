@@ -22,7 +22,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         createCurrLists('USD', 'GBP', currApiDataSet),
     ];
 
-    const [currLists, setCurrLists] = useState(initialRows);
+    const [currLists, setCurrLists] = useState(initialRows.sort(compare));
     const [newCurrList, setNewCurrList] = useState({ baseCurr: "USD", targetCurr: "" });
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('targetCurr');
@@ -36,7 +36,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
             if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
                 const currList = createCurrLists('USD', newCurrList.targetCurr, currApiDataSet);
                 const newLists = [...currLists, currList];
-                setCurrLists(newLists);
+                setCurrLists(newLists.sort(compare));
             }
         }, [newCurrList]
     );
@@ -220,6 +220,16 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
             <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleAddCurrCountries} currApiArr={currApiArr} passInStyle={{ height: "auto" }} size="small" />
         </Box>
     );
+}
+
+function compare(a, b) {
+    if (a.targetCurr < b.targetCurr) return -1;
+    if (a.targetCurr > b.targetCurr) return 1;
+    return 0;
+}
+
+function sortLists(lists) {
+    lists.sort(compare);
 }
 
 function descendingComparator(a, b, orderBy) {

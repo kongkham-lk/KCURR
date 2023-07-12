@@ -89,5 +89,5 @@ const sxStyle = {
   Stack: { marginBottom: 2, display:"flex", 
   alignItems: "center",
   flexWrap: "nowrap" },
-  swapButton: { borderRadius: "32px", width: "30px", height: "40px" },
+  swapButton: { borderRadius: "32px", width: "30px", height: "40px", borderColor:"#afaeae" },
 }
