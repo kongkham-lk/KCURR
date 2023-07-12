@@ -40,6 +40,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
             }
         }, [newCurrList]
     );
+    
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -121,15 +122,15 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
     }
 
     return (
-        <Box sx={{ width: 1 }}>
-            <Paper sx={{ width: 1, mb: 2 }}>
+        <Box sx={sxStyle.Box}>
+            <Paper sx={sxStyle.Paper}>
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     handleDelete={handleDelete}
                 />
                 <TableContainer>
                     <Table
-                        sx={{ minWidth: 750 }}
+                        sx={{ minWidth: 450 }}
                         aria-labelledby="tableTitle"
                         size={dense ? 'small' : 'medium'}
                     >
@@ -141,10 +142,11 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                             onRequestSort={handleRequestSort}
                             rowCount={currLists.length}
                         />
-                        <TableBody sx={{ width: 1 }}>
+                        <TableBody sx={sxStyle.TableBody}>
                             {visibleRows.map((currList, index) => {
                                 const isItemSelected = isSelected(currList.targetCurr);
                                 const labelId = `enhanced-table-checkbox-${index}`;
+                                const imgEmbbedLink = `https://www.countryflagicons.com/SHINY/32/${currList.targetCurr.substring(0, 2)}.png`;
 
                                 return (
                                     <TableRow
@@ -173,13 +175,10 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                                             padding="none"
                                         >
                                             <div
-                                                style={{
-                                                    display: "flex",
-                                                    alignItems: "center"
-                                                }}>
+                                                style={style.div}>
                                                 <img
                                                     style={style.img}
-                                                    src={`https://www.countryflagicons.com/SHINY/32/${currList.targetCurr.substring(0, 2)}.png`}
+                                                    src={imgEmbbedLink}
                                                     alt="" />
                                                 <span style={style.span}>{currApiKeyValuePair[currList.targetCurr]}</span>
                                             </div>
@@ -218,7 +217,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Dense padding"
             />
-            <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleAddCurrCountries} currApiArr={currApiArr} sx={{ ml: 20 }} passInStyle={{ height: "auto" }} size="small" />
+            <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleAddCurrCountries} currApiArr={currApiArr} passInStyle={{ height: "auto" }} size="small" />
         </Box>
     );
 }
@@ -265,14 +264,17 @@ function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
 }
 
 const style = {
-    div: { display: "flex", alignItems: "center", justifyContent: "space-between" },
+    div: { display: "flex", alignItems: "center" },
     img: { margin: "0px 10px 0px 0px" },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px" },
 };
 
 const sxStyle = {
+    Box: { width: 1 },
+    Paper: { width: 1, mb: 2 },
     Table: { width: 1 },
-    CurrCountries: { minWidth: 150, width: 170, float: "right" },
+    TableBody: { width: 1 },
+    CurrCountries: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } }
 }
 
