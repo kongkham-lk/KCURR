@@ -36,4 +36,13 @@ public class CurrencyBeaconApiClient {
                 .bodyToMono(ExchangeRateApiResponse.class)
                 .block();
     }
+
+    public CurrCountriesApiResponse[] getCurrCountries() {
+        String url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
+        return _webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(CurrCountriesApiResponse[].class)
+                .block();
+    }
 }

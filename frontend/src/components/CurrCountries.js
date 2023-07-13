@@ -3,10 +3,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-export default function CurrCountries({ label, updateVal, stateInputField, baseCurrVal, currApiArr, sxStyle, size, passInStyle= { height: "56.5px" }}) {
+export default function CurrCountries({ label, updateVal, stateInputField, baseCurrVal, currApiKeyValuePair, sxStyle, size, passInStyle= { height: "56.5px" }}) {
     function handleChange(e) {
         updateVal({ name: stateInputField, value: e.target.value });
     }
+
+    const unsortedKeys = Object.keys(currApiKeyValuePair);
+
+    const currKeys = unsortedKeys.sort();
 
     return (
         <FormControl sx={sxStyle} size={size}>
@@ -19,11 +23,11 @@ export default function CurrCountries({ label, updateVal, stateInputField, baseC
                 onChange={handleChange}
                 style={passInStyle}
             >
-                {currApiArr?.map((curr) => (
-                    <MenuItem key={curr.type} value={curr.type} >
+                {currKeys?.map((currKey) => (
+                    <MenuItem key={currApiKeyValuePair[currKey].currCode} value={currApiKeyValuePair[currKey].currCode} >
                         <div style={style.div}>
-                            {getFlag(curr.type)}
-                            <span style={style.span}>{curr.display}</span>
+                            {getFlag(currApiKeyValuePair[currKey].currCode)}
+                            <span style={style.span}>{currApiKeyValuePair[currKey].display}</span>
                         </div>
                     </MenuItem>
                 ))}

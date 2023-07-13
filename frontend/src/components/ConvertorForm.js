@@ -5,7 +5,7 @@ import axios from 'axios';
 import CurrAmount from './CurrAmount'
 import CurrCountries from './CurrCountries'
 
-export default function Convertor({ getFormData, currApiArr }) {
+export default function ConvertorForm({ getFormData, currApiKeyValuePair }) {
   const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
   const [isError, setIsError] = useState(false);
 
@@ -51,10 +51,10 @@ export default function Convertor({ getFormData, currApiArr }) {
   return (
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
-        <CurrAmount updateVal={handleChange} error={isError} baseCurr={formInputs.baseCurr} currApiArr={currApiArr}/>
-        <CurrCountries sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleChange} baseCurrVal={formInputs.baseCurr} currApiArr={currApiArr} />
+        <CurrAmount updateVal={handleChange} error={isError} baseCurr={formInputs.baseCurr} currApiKeyValuePair={currApiKeyValuePair}/>
+        <CurrCountries sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleChange} baseCurrVal={formInputs.baseCurr} currApiKeyValuePair={currApiKeyValuePair} />
         {swapButton}
-        <CurrCountries sxStyle={sxStyle.CurrCountries} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiArr={currApiArr} />
+        <CurrCountries sxStyle={sxStyle.CurrCountries} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiKeyValuePair={currApiKeyValuePair} />
       </Stack>
       {convertButton}
     </form>

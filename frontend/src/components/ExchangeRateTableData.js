@@ -14,7 +14,7 @@ import CurrCountries from './CurrCountries';
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 
-export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValuePair, currApiArr }) {
+export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValuePair }) {
     const initialRows = [
         createCurrLists('USD', 'USD', currApiDataSet),
         createCurrLists('USD', 'CAD', currApiDataSet),
@@ -180,7 +180,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                                                     style={style.img}
                                                     src={imgEmbbedLink}
                                                     alt="" />
-                                                <span style={style.span}>{currApiKeyValuePair[currList.targetCurr]}</span>
+                                                <span style={style.span}>{currApiKeyValuePair[currList.targetCurr].name}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell align="right">{currList.latestRate}</TableCell>
@@ -217,7 +217,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Dense padding"
             />
-            <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleAddCurrCountries} currApiArr={currApiArr} passInStyle={{ height: "auto" }} size="small" />
+            <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleAddCurrCountries} currApiKeyValuePair={currApiKeyValuePair} passInStyle={{ height: "auto" }} size="small" />
         </Box>
     );
 }
@@ -226,10 +226,6 @@ function compare(a, b) {
     if (a.targetCurr < b.targetCurr) return -1;
     if (a.targetCurr > b.targetCurr) return 1;
     return 0;
-}
-
-function sortLists(lists) {
-    lists.sort(compare);
 }
 
 function descendingComparator(a, b, orderBy) {

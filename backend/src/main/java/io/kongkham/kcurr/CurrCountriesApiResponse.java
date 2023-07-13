@@ -7,5 +7,18 @@ import java.util.HashMap;
 
 @Data
 public class CurrCountriesApiResponse {
-    private HashMap<String, CurrCountriesDetailApiResponse> data;
+    private int id;
+    private String name;
+    @JsonProperty("short_code")
+    private String shortCode;
+    private String code;
+    private int precision;
+    private int subunit;
+    private String symbol;
+    @JsonProperty("symbol_first")
+    private boolean symbolFirst;
+    @JsonProperty("decimal_mark")
+    private String decimalMark;
+    @JsonProperty("thousands_separator")
+    private String thousandsSeparator;
 }

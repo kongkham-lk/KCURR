@@ -36,7 +36,7 @@ public class CurrController {
     }
 
     @GetMapping("/currency-country")
-    public CurrCountriesApiResponse getCurrOption() {
+    public HashMap<String, CurrCountryResRestructure> getCurrOption() {
         return _currService.getCurrCountries();
     }
 }
