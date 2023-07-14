@@ -3,10 +3,8 @@ package io.kongkham.kcurr;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.HashMap;
-
 @Data
-public class CurrCountriesApiResponse {
+public class currencyBeaconCountriesApiResponse {
     private int id;
     private String name;
     @JsonProperty("short_code")

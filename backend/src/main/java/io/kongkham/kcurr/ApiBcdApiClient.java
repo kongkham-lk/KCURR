@@ -5,22 +5,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class CurrencyApiApiClient {
+public class ApiBcdApiClient {
     private final WebClient _webClient;
 
-    @Value("${currencyApi.api.app-id}")
-    private String _currCountriesApiKey;
+    @Value("${api-bdc.api.app-id}")
+    private String _apiBdcApiKey;
 
-    public CurrencyApiApiClient(WebClient.Builder webClientBuilder) {
+    public ApiBcdApiClient(WebClient.Builder webClientBuilder) {
         this._webClient = webClientBuilder.build();
     }
-    
-    public currencyBeaconCountriesApiResponse getCurrCountries() {
-        String url = "https://api.currencyapi.com/v3/currencies?apikey=" + _currCountriesApiKey;
+
+    public ApiBcdApiResponse[] getCountriesData() {
+        String url = "https://api-bdc.net/data/countries?localityLanguage=en&key=" + _apiBdcApiKey;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(currencyBeaconCountriesApiResponse.class)
+                .bodyToMono(ApiBcdApiResponse[].class)
                 .block();
     }
 }

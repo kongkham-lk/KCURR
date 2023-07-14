@@ -17,32 +17,32 @@ public class CurrencyBeaconApiClient {
         this._webClient = webClientBuilder.build();
     }
 
-    public ExchangeRateApiResponse getLatestExchangeRates(String baseCurr) {
+    public currencyBeaconExchangeRateApiResponse getLatestExchangeRates(String baseCurr) {
         String url = "https://api.currencybeacon.com/v1/latest?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(ExchangeRateApiResponse.class)
+                .bodyToMono(currencyBeaconExchangeRateApiResponse.class)
                 .block();
     }
 
-    public ExchangeRateApiResponse getHistExchangeRates(String baseCurr) {
+    public currencyBeaconExchangeRateApiResponse getHistExchangeRates(String baseCurr) {
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday = today.plusDays(-1);  // subtract 1 day
         String url = "https://api.currencybeacon.com/v1/historical?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr + "&date=" + yesterday;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(ExchangeRateApiResponse.class)
+                .bodyToMono(currencyBeaconExchangeRateApiResponse.class)
                 .block();
     }
 
-    public CurrCountriesApiResponse[] getCurrCountries() {
+    public currencyBeaconCountriesApiResponse[] getCurrCountries() {
         String url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(CurrCountriesApiResponse[].class)
+                .bodyToMono(currencyBeaconCountriesApiResponse[].class)
                 .block();
     }
 }

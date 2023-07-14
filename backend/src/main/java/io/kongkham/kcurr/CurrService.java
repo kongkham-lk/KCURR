@@ -8,9 +8,11 @@ import java.util.HashMap;
 public class CurrService {
 
     private final CurrencyBeaconApiClient _currencyBeaconApiClient;
+    private final ApiBcdApiClient _apiBcdApiClient;
 
-    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient) {
+    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient, ApiBcdApiClient apiBcdApiClient) {
         this._currencyBeaconApiClient = currencyBeaconApiClient;
+        this._apiBcdApiClient = apiBcdApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
@@ -19,7 +21,7 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
+        currencyBeaconExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
         return latestRateApiResponse.getRates().get(targetCurrCountry);
     }
 
@@ -33,17 +35,18 @@ public class CurrService {
         return rates;
     }
 
-    public HashMap<String, CurrCountryResRestructure> getCurrCountries() {
-        CurrCountriesApiResponse[] countriesDetailRes = _currencyBeaconApiClient.getCurrCountries();
-        HashMap<String, CurrCountryResRestructure> currCountries = new HashMap<String, CurrCountryResRestructure>();
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+        currencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
+        ApiBcdApiResponse[] countriesDetailRes = _apiBcdApiClient.getCountriesData();
+        HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
         for (int i = 0; i < countriesDetailRes.length; i++) {
-            CurrCountriesApiResponse countryDetail = countriesDetailRes[i];
+            currencyBeaconCountriesApiResponse countryDetail = currCountriesRes[i];
             String key = countryDetail.getShortCode();
             String currCode = key;
             String name = countryDetail.getName();
             String display = key + " - " + name;
             String symbol = countryDetail.getSymbol();
-            CurrCountryResRestructure val = new CurrCountryResRestructure(currCode, name, display, symbol);
+            CurrCountryReturnData val = new CurrCountryReturnData(currCode, name, display, symbol);
             currCountries.put(key, val);
         }
         return currCountries;

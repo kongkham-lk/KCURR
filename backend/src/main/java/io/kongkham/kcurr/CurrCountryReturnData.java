@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CurrCountryResRestructure {
+public class CurrCountryReturnData {
     private String currCode;
-//    private String countryCode;
+    private String countryCode;
     private String name;
     private String display;
     private String symbol;
