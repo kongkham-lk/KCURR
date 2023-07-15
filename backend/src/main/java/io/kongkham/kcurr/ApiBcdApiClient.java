@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.HashMap;
+
 @Service
 public class ApiBcdApiClient {
     private final WebClient _webClient;
@@ -22,5 +24,24 @@ public class ApiBcdApiClient {
                 .retrieve()
                 .bodyToMono(ApiBcdApiResponse[].class)
                 .block();
+    }
+
+    public HashMap<String, String> getCountriesCodeAbbrPair() {
+        ApiBcdApiResponse[] countriesDetailRes = getCountriesData();
+        HashMap<String, String> codeAbbrPair = new HashMap<String, String>();
+        HashMap<String, Integer> existCurr = new HashMap<String, Integer>();
+        for (int i = 0; i < countriesDetailRes.length; i++) {
+            ApiBcdApiResponse countryDetail = countriesDetailRes[i];
+            String currCode = countryDetail.getCurrency().getCode();
+            String abbr;
+            if (existCurr.containsKey(currCode)) {
+                abbr = currCode;
+            } else {
+                existCurr.put(currCode, 0);
+                abbr = countryDetail.getIsoAlpha2();
+            }
+            codeAbbrPair.put(currCode, abbr);
+        }
+        return codeAbbrPair;
     }
 }

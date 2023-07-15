@@ -8,8 +8,8 @@ export default function CurrCountriesApiGetter() {
         function fetchData() {
             async function fetchCurrOption() {
                 try {
-                    const responseCurrOption = await axios.get('http://localhost:8080/curr/currency-country');
-                    setCurrApiKeyValuePair(responseCurrOption.data);
+                    const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country');
+                    setCurrApiKeyValuePair(resCurrCountries.data);
                 } catch (e) {
                     console.log(e.stack);
                 }

@@ -37,16 +37,17 @@ public class CurrService {
 
     public HashMap<String, CurrCountryReturnData> getCurrCountries() {
         currencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
-        ApiBcdApiResponse[] countriesDetailRes = _apiBcdApiClient.getCountriesData();
+        HashMap<String, String> countriesCodeAbbrPair = _apiBcdApiClient.getCountriesCodeAbbrPair();
         HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
-        for (int i = 0; i < countriesDetailRes.length; i++) {
-            currencyBeaconCountriesApiResponse countryDetail = currCountriesRes[i];
-            String key = countryDetail.getShortCode();
+        for (int i = 0; i < currCountriesRes.length; i++) {
+            currencyBeaconCountriesApiResponse currCountryDetail = currCountriesRes[i];
+            String key = currCountryDetail.getShortCode();
             String currCode = key;
-            String name = countryDetail.getName();
+            String countryCode = countriesCodeAbbrPair.get(key);
+            String name = currCountryDetail.getName();
             String display = key + " - " + name;
-            String symbol = countryDetail.getSymbol();
-            CurrCountryReturnData val = new CurrCountryReturnData(currCode, name, display, symbol);
+            String symbol = currCountryDetail.getSymbol();
+            CurrCountryReturnData val = new CurrCountryReturnData(currCode, countryCode, name, display, symbol);
             currCountries.put(key, val);
         }
         return currCountries;
