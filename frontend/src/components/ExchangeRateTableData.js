@@ -7,39 +7,47 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import CurrCountries from './CurrCountries';
 import EnhancedTableHead from './EnhancedTableHead';
-import EnhancedTableToolbar from './EnhancedTableToolbar';
+import axios from 'axios';
 
 export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValuePair }) {
+    const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
+
+    const [defaultCurr, setDefaultCurr] = useState("USD");
+
     const initialRows = [
-        createCurrLists('USD', 'USD', currApiDataSet),
-        createCurrLists('USD', 'CAD', currApiDataSet),
-        createCurrLists('USD', 'EUR', currApiDataSet),
-        createCurrLists('USD', 'GBP', currApiDataSet),
+        createCurrLists(defaultCurr, 'USD', currDataSet),
+        createCurrLists(defaultCurr, 'CAD', currDataSet),
+        createCurrLists(defaultCurr, 'EUR', currDataSet),
+        createCurrLists(defaultCurr, 'GBP', currDataSet),
     ];
 
-    const [currLists, setCurrLists] = useState(initialRows.sort(compare));
-    const [newCurrList, setNewCurrList] = useState({ baseCurr: "USD", targetCurr: "" });
+    const [currLists, setCurrLists] = useState(initialRows);
+    const [newCurr, setNewCurr] = useState("");
     const [order, setOrder] = useState('desc');
-    const [orderBy, setOrderBy] = useState('targetCurr');
-    const [selected, setSelected] = useState([]);
+    const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
     useEffect(
         function checkNewRow() {
-            if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
-                const currList = createCurrLists('USD', newCurrList.targetCurr, currApiDataSet);
+            if (newCurr !== "" && !currLists.includes(newCurr)) {
+                const currList = createCurrLists(defaultCurr, newCurr, currDataSet);
                 const newLists = [...currLists, currList];
-                newCurrList.targetCurr = { baseCurr: "USD", targetCurr: "" };
-                setCurrLists(newLists.sort(compare));
+                setNewCurr("");
+                setCurrLists(newLists)
             }
-        }, [newCurrList]
+        }, [newCurr, currLists, currDataSet, defaultCurr]
     );
 
     const handleRequestSort = (event, property) => {
@@ -48,34 +56,29 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelected = currLists.map((n) => n.targetCurr);
-            setSelected(newSelected);
-            return;
+    const handleSetDefault = async (targetCurr) => {
+        const oldLists = [];
+        const newLists = [];
+        const initialValue = { baseCurr: targetCurr };
+        const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate-latest', initialValue);
+        const resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate-hist', initialValue);
+        const newCurrDataSet = [resExchangeRatesLast.data, resExchangeRatesHist.data];
+
+        for (let i in currLists) {
+            if (currLists[i].targetCurr !== targetCurr) {
+                oldLists.push(currLists[i].targetCurr);
+            }
         }
-        setSelected([]);
-    };
+        oldLists.unshift(targetCurr)
 
-    const handleClick = (event, targetCurr) => {
-        const selectedIndex = selected.indexOf(targetCurr);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, targetCurr);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
+        for (let i in oldLists) {
+            newLists[i] = createCurrLists(targetCurr, oldLists[i], newCurrDataSet);
         }
 
-        setSelected(newSelected);
-    };
+        setCurrLists(newLists);
+        setDefaultCurr(targetCurr);
+        setCurrDataSet(newCurrDataSet);
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -90,8 +93,6 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         setDense(event.target.checked);
     };
 
-    const isSelected = (targetCurr) => selected.indexOf(targetCurr) !== -1;
-
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
 
@@ -104,31 +105,40 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
-    const handleAddCurrCountries = (e) => {
-        setNewCurrList((oldLists) => {
-            return { ...oldLists, [e.name]: e.value }
-        });
-    };
+    const handleAddCurrCountries = (e) => setNewCurr(e.value);
 
-    const handleDelete = () => {
+    const handleDelete = (targetCurr) => {
         const oldCurrLists = [...currLists];
-        for (let targetCurr of selected){
-            for (let i in oldCurrLists) {
-                if (oldCurrLists[i].targetCurr === targetCurr) {
-                    oldCurrLists.splice(i, 1)
-                }
+        for (let i in oldCurrLists) {
+            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurr) {
+                oldCurrLists.splice(i, 1)
             }
         }
         setCurrLists(oldCurrLists);
     }
 
+    const handleResetFilter = () => setOrderBy('');
+
+    console.log("currLists => ", currLists)
+
     return (
         <Box sx={sxStyle.Box}>
             <Paper sx={sxStyle.Paper}>
-                <EnhancedTableToolbar
-                    numSelected={selected.length}
-                    handleDelete={handleDelete}
-                />
+                <div style={{ display: "flex" }}>
+                    <Typography
+                        sx={sxStyle.Typography}
+                        variant="h6"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        Exchange Rate Listing
+                    </Typography>
+                    <Tooltip title="Reset Filter" style={{ padding: "16px" }} onClick={handleResetFilter}>
+                        <IconButton>
+                            <FilterListIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 450 }}
@@ -136,69 +146,52 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                         size={dense ? 'small' : 'medium'}
                     >
                         <EnhancedTableHead
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={currLists.length}
                         />
                         <TableBody sx={sxStyle.TableBody}>
                             {visibleRows.map((currList, index) => {
                                 const currKey = currList.targetCurr;
-                                const isItemSelected = isSelected(currKey);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 const imgEmbbedLink = `https://www.countryflagicons.com/SHINY/32/${currKey.substring(0, 2)}.png`;
 
                                 return (
                                     <TableRow
-                                        hover
-                                        onClick={(event) => handleClick(event, currKey)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={currKey}
-                                        selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
+                                        // hover
+                                        key={currKey} style={styleTableRow(currKey, defaultCurr)}
                                     >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                            />
-                                        </TableCell>
                                         <TableCell
                                             component="th"
                                             id={labelId}
                                             scope="row"
                                             padding="none"
                                         >
-                                            <div
-                                                style={style.div}>
+                                            <Button variant="text" style={style.div} onClick={() => handleSetDefault(currKey)} >
                                                 <img
                                                     style={style.img}
                                                     src={imgEmbbedLink}
                                                     alt="" />
-                                                <span style={style.span}>{currApiKeyValuePair[currKey].name}</span> 
-                                            </div>
+                                                <span style={style.span}>{currApiKeyValuePair[currKey].display}</span>
+                                            </Button>
                                         </TableCell>
-                                        <TableCell align="right">{currList.latestRate}</TableCell>
-                                        <TableCell align="right" style={styleTableCell(currList)}>
-                                            {getDisplayList(currList)
-                                            }
-                                        </TableCell>
+                                        <TableCell align="right" >{currList.latestRate}</TableCell>
+                                        <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                            {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                        </TableCell >
+                                        {<TableCell
+                                            align="right"
+                                            style={{ width: "10%", color: currKey !== defaultCurr ? "rgba(0, 0, 0, 0.54)" : "transparent" }}
+                                            onClick={() => handleDelete(currKey)}
+                                        >
+                                            <DeleteIcon />
+                                        </TableCell>}
                                     </TableRow>
                                 );
                             })}
                             {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
-                                    }}
-                                >
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }} >
                                     <TableCell colSpan={6} />
                                 </TableRow>
                             )}
@@ -230,12 +223,6 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
             />
         </Box>
     );
-}
-
-function compare(a, b) {
-    if (a.targetCurr < b.targetCurr) return -1;
-    if (a.targetCurr > b.targetCurr) return 1;
-    return 0;
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -280,9 +267,21 @@ function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
 }
 
 const style = {
-    div: { display: "flex", alignItems: "center" },
+    div: {
+        display: "flex",
+        alignItems: "center",
+        color: "black",
+        fontWeight: 400,
+        marginLeft: "15px"
+    },
     img: { margin: "0px 10px 0px 0px" },
-    span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px" },
+    span: {
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        marginTop: "3px",
+        maxWidth: "200px",
+    },
 };
 
 const sxStyle = {
@@ -291,7 +290,15 @@ const sxStyle = {
     Table: { width: 1 },
     TableBody: { width: 1 },
     CurrCountries: { minWidth: 150, width: 170, float: "right", ml: 20 },
-    TableRow: { '&:last-child td, &:last-child th': { border: 0 } }
+    TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
+    Typography: {
+        flex: '1 1 100%',
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
+        minHeight: "64px",
+        display: "flex",
+        alignItems: "center"
+    },
 }
 
 const styleTableCell = (currList) => {
@@ -301,6 +308,18 @@ const styleTableCell = (currList) => {
         return { color: "red" }
     }
 };
+
+const styleTableRow = (currKey, defaultCurr) => {
+    if (currKey === defaultCurr)  {
+        return {
+            backgroundColor: "#cbeafc",
+            backgroundClip: "border-box",
+            outline: "10px solid white",
+            outlineOffset: "-5px",
+            borderRadius: "13px",
+        }
+    }
+}
 
 const getDisplayList = (currList) => {
     if (currList.change === null) {
