@@ -22,8 +22,6 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
         createCurrLists('USD', 'GBP', currApiDataSet),
     ];
 
-    const currKeyValuePair = { ...currApiKeyValuePair };
-
     const [currLists, setCurrLists] = useState(initialRows.sort(compare));
     const [newCurrList, setNewCurrList] = useState({ baseCurr: "USD", targetCurr: "" });
     const [order, setOrder] = useState('desc');
@@ -184,7 +182,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                                                     style={style.img}
                                                     src={imgEmbbedLink}
                                                     alt="" />
-                                                {/* <span style={style.span}>{currKeyValuePair[currKey].name}</span>  */}
+                                                <span style={style.span}>{currApiKeyValuePair[currKey].name}</span> 
                                             </div>
                                         </TableCell>
                                         <TableCell align="right">{currList.latestRate}</TableCell>

@@ -8,11 +8,9 @@ import java.util.HashMap;
 public class CurrService {
 
     private final CurrencyBeaconApiClient _currencyBeaconApiClient;
-    private final ApiBcdApiClient _apiBcdApiClient;
 
-    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient, ApiBcdApiClient apiBcdApiClient) {
+    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient) {
         this._currencyBeaconApiClient = currencyBeaconApiClient;
-        this._apiBcdApiClient = apiBcdApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
@@ -37,17 +35,15 @@ public class CurrService {
 
     public HashMap<String, CurrCountryReturnData> getCurrCountries() {
         currencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
-        HashMap<String, String> countriesCodeAbbrPair = _apiBcdApiClient.getCountriesCodeAbbrPair();
         HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
         for (int i = 0; i < currCountriesRes.length; i++) {
             currencyBeaconCountriesApiResponse currCountryDetail = currCountriesRes[i];
             String key = currCountryDetail.getShortCode();
             String currCode = key;
-            String countryCode = countriesCodeAbbrPair.get(key);
             String name = currCountryDetail.getName();
             String display = key + " - " + name;
             String symbol = currCountryDetail.getSymbol();
-            CurrCountryReturnData val = new CurrCountryReturnData(currCode, countryCode, name, display, symbol);
+            CurrCountryReturnData val = new CurrCountryReturnData(currCode, name, display, symbol);
             currCountries.put(key, val);
         }
         return currCountries;

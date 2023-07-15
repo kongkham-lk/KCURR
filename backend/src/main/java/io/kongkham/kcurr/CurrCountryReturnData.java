@@ -7,7 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class CurrCountryReturnData {
     private String currCode;
-    private String countryCode;
     private String name;
     private String display;
     private String symbol;
