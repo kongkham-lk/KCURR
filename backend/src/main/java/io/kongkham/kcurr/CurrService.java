@@ -19,7 +19,7 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        currencyBeaconExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
+        CurrencyBeaconExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
         return latestRateApiResponse.getRates().get(targetCurrCountry);
     }
 
@@ -34,10 +34,10 @@ public class CurrService {
     }
 
     public HashMap<String, CurrCountryReturnData> getCurrCountries() {
-        currencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
+        CurrencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
         HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
         for (int i = 0; i < currCountriesRes.length; i++) {
-            currencyBeaconCountriesApiResponse currCountryDetail = currCountriesRes[i];
+            CurrencyBeaconCountriesApiResponse currCountryDetail = currCountriesRes[i];
             String key = currCountryDetail.getShortCode();
             String currCode = key;
             String name = currCountryDetail.getName();

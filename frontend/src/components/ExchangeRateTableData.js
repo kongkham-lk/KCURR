@@ -133,7 +133,7 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                     >
                         Exchange Rate Listing
                     </Typography>
-                    <Tooltip title="Reset Filter" style={{ padding: "16px" }} onClick={handleResetFilter}>
+                    <Tooltip title="Reset Filter" style={{ margin: "16px" }} onClick={handleResetFilter}>
                         <IconButton>
                             <FilterListIcon />
                         </IconButton>
@@ -182,10 +182,10 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
                                         </TableCell >
                                         {<TableCell
                                             align="right"
-                                            style={{ width: "10%", color: currKey !== defaultCurr ? "rgba(0, 0, 0, 0.54)" : "transparent" }}
+                                            style={{width: "10%", color: currKey !== defaultCurr ? "rgba(0, 0, 0, 0.54)" : "transparent" }}
                                             onClick={() => handleDelete(currKey)}
                                         >
-                                            <DeleteIcon />
+                                            <DeleteIcon style={{marginRight: "8px"}}/>
                                         </TableCell>}
                                     </TableRow>
                                 );

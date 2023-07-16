@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class currencyBeaconCountriesApiResponse {
+public class CurrencyBeaconCountriesApiResponse {
     private int id;
     private String name;
     @JsonProperty("short_code")
