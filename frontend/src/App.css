@@ -42,3 +42,30 @@
   margin: 3%;
   padding: 3%;
 }
+
+.loader{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  transition: opacity 0.75s, visibility 0.75s;
+  font-size: 1.3rem;  
+}
+
+.loader::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  border: 6px solid #dddddd;
+  border-top-color: #107be5;
+  border-radius: 50%;
+  animation: loading 1s ease infinite ;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}

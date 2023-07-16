@@ -8,19 +8,21 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 
 export default function App() {
-  const { currApiKeyValuePair } = CurrCountriesApiGetter();
+  const { currApiKeyValuePair, isReady } = CurrCountriesApiGetter();
 
   return (
     <div className="App">
       <MainNav />
       <Container maxWidth="m" sx={sxStyle.container}>
         <Paper elevation={3} sx={sxStyle.paper}>
-          <Convertor currApiKeyValuePair={currApiKeyValuePair} />
+          {isReady ? <Convertor currApiKeyValuePair={currApiKeyValuePair} />
+            : <div class="loader"><div style={{ margin: "0 7px -6px 0" }}>Loading...</div></div>}
         </Paper>
       </Container>
       <Container maxWidth="m" sx={sxStyle.container}>
         <Paper elevation={3} sx={sxStyle.paper}>
-          <ExchangeRateTable currApiKeyValuePair={currApiKeyValuePair} />
+          {isReady ? <ExchangeRateTable currApiKeyValuePair={currApiKeyValuePair} />
+            : <div class="loader"><div style={{ margin: "0 7px -6px 0" }}>Loading...</div></div>}
         </Paper>
       </Container>
     </div>

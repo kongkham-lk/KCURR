@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export default function CurrCountriesApiGetter() {
     const [currApiKeyValuePair, setCurrApiKeyValuePair] = useState({});
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(
         function fetchData() {
@@ -10,6 +11,7 @@ export default function CurrCountriesApiGetter() {
                 try {
                     const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country');
                     setCurrApiKeyValuePair(resCurrCountries.data);
+                    setIsReady(true);
                 } catch (e) {
                     console.log(e.stack);
                 }
@@ -17,5 +19,5 @@ export default function CurrCountriesApiGetter() {
             fetchCurrOption();
         }, []
     );
-    return {currApiKeyValuePair};
+    return {currApiKeyValuePair, isReady};
 };
