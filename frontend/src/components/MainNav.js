@@ -13,17 +13,19 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
+// TODO: Why are some styling property specified as variable and some inline? Why is sx not abstracted out like how it was done in App.js? Practice consistency in codebase
 const drawerWidth = 240;
 const navItems = ['Rate', 'News', 'About', 'Contact'];
 
 function DrawerAppBar(props) {
-  const { window } = props;
+  const { window } = props; // TODO: Doesn't seem to be used?
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  // TODO: Why is this not a separate component?
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -48,6 +50,7 @@ function DrawerAppBar(props) {
 
   return (
     <Box sx={{ display: 'flex', mb: 14 }}>
+      {/* TODO: What does CssBaseline do? */}
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
@@ -95,6 +98,7 @@ function DrawerAppBar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
+            // TODO: Do you know what these lines mean?
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}

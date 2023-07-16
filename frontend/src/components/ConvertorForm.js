@@ -6,9 +6,12 @@ import CurrAmount from './CurrAmount'
 import CurrCountries from './CurrCountries'
 
 export default function Convertor({ getFormData, currApiArr }) {
+  // TODO: Should the useCurrApi be used here instead of passing it down all the way from App.js?
   const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
   const [isError, setIsError] = useState(false);
 
+
+  // TODO: Better to split the handlers of the three fields, rather than putting the handling of three different things in one method
   const handleChange = (e) => {
     let convAmountType = "";
 
@@ -37,9 +40,11 @@ export default function Convertor({ getFormData, currApiArr }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    // TODO: getFormData should not be passed out. Better to mutate state in the components. Functions outside of the components should be pure.
     fetchConvertVal(getFormData, formInputs);
   };
 
+  // TODO: Use isError to toggle the disabled props should be sufficient?
   const swapButton = isError
     ? <Button variant="contained" disabled sx={sxStyle.swapButton}>{EmbedSwapIcon}</Button>
     : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={sxStyle.swapButton} >{EmbedSwapIcon}</Button>;

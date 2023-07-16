@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 export default function Convertor({currApiArr}) {
     const [formData, setFormData] = useState(null);
     
+    // TODO: Function name is saying getFormData, but the logic is setting form data.
     function getFormData(inputData, response) {
         setFormData(() => {
             return {
@@ -16,6 +17,7 @@ export default function Convertor({currApiArr}) {
     
     return (
         <>
+            {/* TODO: Do you need the className? */}
             <ConvertorForm getFormData={getFormData} className="CovertForm" currApiArr={currApiArr} />
             {formData !== null && (
                 <>

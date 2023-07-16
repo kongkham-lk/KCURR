@@ -3,6 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+// TODO: Would be good if component's name suggests that it is an input/select/dropdown
 export default function CurrCountries({ label, updateVal, stateInputField, baseCurrVal, currApiArr, sxStyle}) {
     function handleChange(e) {
         updateVal({ name: stateInputField, value: e.target.value });

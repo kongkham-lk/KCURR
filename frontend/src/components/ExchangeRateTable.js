@@ -12,9 +12,10 @@ import CurrCountries from './CurrCountries';
 
 export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
-  const [newCurrList, setNewCurrList] = useState({baseCurr: "USD", targetCurr:""});
+  const [newCurrList, setNewCurrList] = useState({baseCurr: "USD", targetCurr:""}); // TODO: Variable name is list but object is not a list
 
   useEffect(
+    // TODO: fetchData could be converted to an unnamed function
     function fetchData() {
       async function fetchCurrApiData() {
         try {

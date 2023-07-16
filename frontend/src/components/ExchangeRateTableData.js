@@ -4,6 +4,9 @@ import TableCell from '@mui/material/TableCell';
 import { useState, useEffect } from 'react';
 
 export default function ExchangeRateTableData({ currApiDataSet, newCurrList, currApiKeyValuePair }) {
+
+    // TODO: currApiSet is there since first render?
+    // TODO: Can be extracted into a separate function outside the components
     const initialRow = [
         createCurrLists('USD', 'USD', currApiDataSet),
         createCurrLists('USD', 'CAD', currApiDataSet),
@@ -19,6 +22,7 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
             if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
                 const currList = createCurrLists('USD', newCurrList.targetCurr, currApiDataSet);
                 const newLists = [...currLists, currList];
+                // TODO: I'm a be confused about how you are using currLists and fakeRecords...
                 setCurrLists(newLists);
                 setFakeRecords((newFakeRecords) => {
                     return { ...newFakeRecords, [newCurrList.targetCurr]: ((Math.random() * 4) - 2).toFixed(2) }
@@ -44,6 +48,8 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
                         </div>
                     </TableCell>
                     <TableCell align="right">{row.lastestRate}</TableCell>
+                    
+                    {/* TODO: This is a lot of logic. Abstract into a separate component or function. */}
                     <TableCell
                         align="right"
                         style={row.change >= 0 || row.change === null || fakeRecords[row.targetCurr] >= 0
