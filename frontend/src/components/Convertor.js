@@ -17,8 +17,8 @@ export default function Convertor({currApiArr}) {
     
     return (
         <>
-            {/* TODO: Do you need the className? */}
-            <ConvertorForm getFormData={getFormData} className="CovertForm" currApiArr={currApiArr} />
+            {/* TODO: Do you need the className? className convention is hyphenated lowercase */}
+            <ConvertorForm getFormData={getFormData} currApiArr={currApiArr} />
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>

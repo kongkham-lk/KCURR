@@ -13,6 +13,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
+// TODO: Ignore comments. Rewrite in your own way.
+
 // TODO: Why are some styling property specified as variable and some inline? Why is sx not abstracted out like how it was done in App.js? Practice consistency in codebase
 const drawerWidth = 240;
 const navItems = ['Rate', 'News', 'About', 'Contact'];

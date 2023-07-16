@@ -6,7 +6,7 @@ import CurrAmount from './CurrAmount'
 import CurrCountries from './CurrCountries'
 
 export default function Convertor({ getFormData, currApiArr }) {
-  // TODO: Should the useCurrApi be used here instead of passing it down all the way from App.js?
+  // TODO: Should the useCurrApi be used here instead of passing it down all the way from App.js? This is fine, because currApiArr is used in App.js
   const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
   const [isError, setIsError] = useState(false);
 
