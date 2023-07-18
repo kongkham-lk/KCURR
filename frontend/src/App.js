@@ -1,23 +1,22 @@
 import './App.css';
-import * as React from 'react';
 import MainNav from './components/MainNav';
-import Convertor from './components/Convertor';
-import ExchangeRateTable from './components/ExchangeRateTable';
-import CurrCountriesApiGetter from './components/CurrCountriesApiGetter';
+import Convertor from './components/Convertor/Convertor';
+import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
+import useCurrCountriesApiGetter from './components/Hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
 
 export default function App() {
-  const { currApiKeyValuePair, isReady } = CurrCountriesApiGetter();
+  const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter;
 
   return (
     <div className="App">
       <MainNav />
       <StyledPaperComponent>
-        {isReady ? <Convertor currApiKeyValuePair={currApiKeyValuePair} />
+        {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
           : <div className="loader"><div style={style.div}>Loading...</div></div>}
       </StyledPaperComponent>
       <StyledPaperComponent>
-        {isReady ? <ExchangeRateTable currApiKeyValuePair={currApiKeyValuePair} />
+        {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
           : <div className="loader"><div style={style.div}>Loading...</div></div>}
       </StyledPaperComponent>
     </div>

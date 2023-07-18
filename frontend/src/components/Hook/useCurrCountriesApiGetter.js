@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function CurrCountriesApiGetter() {
-    const [currApiKeyValuePair, setCurrApiKeyValuePair] = useState({});
+export default function useCurrCountriesApiGetter() {
+    const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
     useEffect(
@@ -10,7 +10,7 @@ export default function CurrCountriesApiGetter() {
             async function fetchCurrOption() {
                 try {
                     const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country');
-                    setCurrApiKeyValuePair(resCurrCountries.data);
+                    setCurrCountiesCodeMapDetail(resCurrCountries.data);
                     setIsReady(true);
                 } catch (e) {
                     console.log(e.stack);
@@ -19,5 +19,5 @@ export default function CurrCountriesApiGetter() {
             fetchCurrOption();
         }, []
     );
-    return {currApiKeyValuePair, isReady};
+    return { currCountiesCodeMapDetail, isReady };
 };
