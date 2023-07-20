@@ -35,8 +35,13 @@ public class CurrController {
         return result;
     }
 
-    @GetMapping("/currency-country")
-    public HashMap<String, CurrCountryReturnData> getCurrOption() {
-        return _currService.getCurrCountries();
+    @GetMapping("/currency-country-currencyBeacon")
+    public HashMap<String, CurrCountryReturnData> getCurrCountriesFromCurrencyBeacon() {
+        return _currService.getCurrCountriesFromCurrencyBeacon();
+    }
+
+    @GetMapping("/currency-country-currencyApi")
+    public HashMap<String, CurrCountryReturnData> getCurrCountriesFromCurrencyApi() {
+        return _currService.getCurrCountriesFromCurrencyApi();
     }
 }
