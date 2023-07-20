@@ -2,7 +2,7 @@ import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { getFlag } from '../Util/getFlag';
+import { getFlag } from '../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
     const { label, updateVal, stateInputField, baseCurrVal, currCountiesCodeMapDetail, sxStyle, size, passInStyle = { height: "56.5px" } } = props;

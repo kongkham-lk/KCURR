@@ -17,11 +17,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList } from '../../Util/ExchangeRateTableDataUtil';
-import { checkIfExist } from '../../Util/checkingMethods';
-import { createCurrLists } from '../../Util/createCurrLists';
-import { getFlag } from '../../Util/getFlag';
-import { retrieveExchangeRates } from '../../Util/apiClient';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList } from '../../util/ExchangeRateTableDataUtil';
+import { checkIfExist } from '../../util/checkingMethods';
+import { createCurrLists } from '../../util/createCurrLists';
+import { getFlag } from '../../util/getFlag';
+import { retrieveExchangeRates } from '../../util/apiClient';
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail } = props;

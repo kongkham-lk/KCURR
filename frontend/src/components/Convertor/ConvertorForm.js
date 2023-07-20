@@ -3,8 +3,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CurrAmountInput from './CurrAmountInput';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
-import { checkIfContainsOnlyNumbers } from '../../Util/checkingMethods';
-import { retrieveConvertValue } from '../../Util/apiClient';
+import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
+import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function ConvertorForm(props) {
   const { setFormDataToConvertor, currCountiesCodeMapDetail } = props;

@@ -2,7 +2,7 @@ import './App.css';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
-import useCurrCountriesApiGetter from './Hook/useCurrCountriesApiGetter';
+import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
 
 export default function App() {
