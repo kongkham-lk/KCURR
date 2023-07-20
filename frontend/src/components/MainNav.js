@@ -95,7 +95,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
 const sxStyle = {
   BoxMain: { display: 'flex', mb: 14 },
   IconButton: { mr: 2, display: { sm: 'none' } },
-  Typography: { flexGrow: 1, display: { xs: 'none', sm: 'block' } },
+  Typography: { flexGrow: 1, textAlign: {xs : 'center', sm : 'left'}},
   Link: { color: '#fff', margin: "15px" },
   BoxSub: { display: { xs: 'none', sm: 'block' }, },
   Drawer: {

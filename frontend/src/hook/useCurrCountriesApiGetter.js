@@ -9,7 +9,8 @@ export default function useCurrCountriesApiGetter() {
         function fetchData() {
             async function fetchCurrOption() {
                 try {
-                    const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country');
+                    const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country-currencyApi');
+                    console.log("resCurrCountries => ", resCurrCountries)
                     setCurrCountiesCodeMapDetail(resCurrCountries.data);
                     setIsReady(true);
                 } catch (e) {

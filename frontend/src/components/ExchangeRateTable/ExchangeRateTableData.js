@@ -15,13 +15,13 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import CurrCountriesForm from '../CurrCountriesForm';
+import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList } from '../util/ExchangeRateTableDataUtil';
-import { checkIfExist } from '../util/checkingMethods';
-import { createCurrLists } from '../util/createCurrLists';
-import { getFlag } from '../util/getFlag';
-import { retrieveExchangeRates } from '../util/apiClient';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList } from '../../Util/ExchangeRateTableDataUtil';
+import { checkIfExist } from '../../Util/checkingMethods';
+import { createCurrLists } from '../../Util/createCurrLists';
+import { getFlag } from '../../Util/getFlag';
+import { retrieveExchangeRates } from '../../Util/apiClient';
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail } = props;
@@ -107,7 +107,7 @@ export default function ExchangeRateTableData(props) {
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
-    const handleAddCurrCountriesForm = (e) => setNewCurr(e.value);
+    const handleAddCurrCountry = (e) => setNewCurr(e.value);
 
     const handleDelete = (targetCurr) => {
         const oldCurrLists = [...currLists];
@@ -205,13 +205,13 @@ export default function ExchangeRateTableData(props) {
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Dense padding"
             />
-            <CurrCountriesForm
-                sxStyle={sxStyle.CurrCountriesForm}
+            <CurrCountriesDropDown
+                sxStyle={sxStyle.CurrCountriesDropDown}
                 label="Add Currency"
                 stateInputField="targetCurr"
-                updateVal={handleAddCurrCountriesForm}
+                updateVal={handleAddCurrCountry}
                 currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                passInStyle={style.CurrCountriesForm}
+                passInStyle={style.CurrCountriesDropDown}
                 size="small"
             />
         </Box>
@@ -221,7 +221,7 @@ export default function ExchangeRateTableData(props) {
 const style = {
     div: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
-    CurrCountriesForm: { height: "auto" },
+    CurrCountriesDropDown: { height: "auto" },
 };
 
 const sxStyle = {
@@ -229,7 +229,7 @@ const sxStyle = {
     Paper: { width: 1, mb: 2 },
     Table: { width: 1 },
     TableBody: { width: 1 },
-    CurrCountriesForm: { minWidth: 150, width: 170, float: "right", ml: 20 },
+    CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center" },
 }

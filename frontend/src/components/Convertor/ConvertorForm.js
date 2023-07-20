@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CurrAmountInput from './CurrAmountInput';
-import CurrCountriesForm from '../CurrCountriesForm';
-import { checkIfContainsOnlyNumbers } from '../util/checkingMethods';
-import { retrieveConvertValue } from '../util/apiClient';
+import CurrCountriesDropDown from '../CurrCountriesDropDown';
+import { checkIfContainsOnlyNumbers } from '../../Util/checkingMethods';
+import { retrieveConvertValue } from '../../Util/apiClient';
 
 export default function ConvertorForm(props) {
   const { setFormDataToConvertor, currCountiesCodeMapDetail } = props;
@@ -53,11 +53,11 @@ export default function ConvertorForm(props) {
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
         <CurrAmountInput updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-        <CurrCountriesForm sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+        <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
         <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
           <img src={embedLink.swapArrow} alt="Swap Arrow" style={style.img} />
         </Button>
-        <CurrCountriesForm sxStyle={sxStyle.CurrCountries} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+        <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
       </Stack>
       <Button variant="contained" type="submit" style={style.convertButton} disabled={isError ? true : false} >
         Convert
@@ -74,7 +74,7 @@ const style = {
 };
 
 const sxStyle = {
-  CurrCountries: { m: 1, minWidth: 1 / 4, width: 250 },
+  CurrCountriesDropDown: { m: 1, minWidth: 1 / 4, width: 250 },
   Stack: { marginBottom: 2, display: "flex", alignItems: "center", flexWrap: "nowrap" },
   swapButton: { borderRadius: "32px", width: "30px", height: "40px", borderColor: "#afaeae" },
 };
