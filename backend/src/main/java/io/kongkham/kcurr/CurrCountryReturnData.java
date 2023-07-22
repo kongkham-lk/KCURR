@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CurrCountryReturnData {
     private String currCode;
-    private String name;
+    private String countryName;
     private String display;
-    private String symbol;
+    private String currSymbol;
+    private String flagCode;
 }

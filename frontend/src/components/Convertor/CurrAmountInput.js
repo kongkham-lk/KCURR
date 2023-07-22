@@ -8,7 +8,7 @@ export default function CurrAmountInput(props) {
     const symbol = () => {
         for (let targetCurr of currKeys) {
             if (currCountiesCodeMapDetail[targetCurr].currCode === baseCurr) {
-                return currCountiesCodeMapDetail[targetCurr].symbol;
+                return currCountiesCodeMapDetail[targetCurr].currSymbol;
             }
         }
     }

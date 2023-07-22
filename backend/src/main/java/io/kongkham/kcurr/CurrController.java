@@ -29,19 +29,14 @@ public class CurrController {
     }
 
     @PostMapping("/rate-hist") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
-    public HashMap<String, Double> getExchangeRates(@RequestBody RateTableRequest data) {
+    public HashMap<String, Double> getHistoricalExchangeRates(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
-        HashMap<String, Double> result = _currService.getHistExchangeRates(baseCurr);
+        HashMap<String, Double> result = _currService.getHistoricalExchangeRates(baseCurr);
         return result;
     }
 
-    @GetMapping("/currency-country-currencyBeacon")
+    @GetMapping("/currency-country")
     public HashMap<String, CurrCountryReturnData> getCurrCountriesFromCurrencyBeacon() {
-        return _currService.getCurrCountriesFromCurrencyBeacon();
-    }
-
-    @GetMapping("/currency-country-currencyApi")
-    public HashMap<String, CurrCountryReturnData> getCurrCountriesFromCurrencyApi() {
-        return _currService.getCurrCountriesFromCurrencyApi();
+        return _currService.getCurrCountries();
     }
 }

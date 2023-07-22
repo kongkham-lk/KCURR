@@ -1,9 +1,11 @@
 package io.kongkham.kcurr;
 
+import reactor.core.publisher.Mono;
+
 import java.util.HashMap;
 
 public interface ExchangeRateApiClient {
-    HashMap<String, Double> getLatestExchangeRates(String baseCurr);
-    HashMap<String, Double> getHistExchangeRates(String baseCurr);
-    HashMap<String, CurrCountryReturnData> getCurrCountries();
+    Mono<HashMap<String, Double>> getLatestExchangeRates(String baseCurr);
+    Mono<HashMap<String, Double>> getHistoricalExchangeRates(String baseCurr);
+    Mono<HashMap<String, CurrCountryReturnData>> getCurrCountries();
 }

@@ -6,7 +6,7 @@ import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
 
 export default function App() {
-  const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter;
+  const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
   return (
     <div className="App">
