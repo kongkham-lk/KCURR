@@ -28,7 +28,7 @@ export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
             backgroundColor: "#cbeafc", backgroundClip: "border-box",
-            outline: "10px solid white", outlineOffset: "-5px",
+            outline: "10px solid white", outlineOffset: "-2px",
             borderRadius: "13px",
         }
     }
