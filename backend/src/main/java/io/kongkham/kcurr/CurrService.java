@@ -1,30 +1,48 @@
 package io.kongkham.kcurr;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 
 @Service
 public class CurrService {
 
-    private final ExchangeRatesGetter _ExchangeRatesGetter;
+    private final ExchangeRateApiClient _currencyBeaconApiClient;
+    private final ExchangeRateApiClient _currencyApiApiClient;
+    private final ExchangeRateApiClient _cloudMersiveApiClient;
 
-    public CurrService(ExchangeRatesGetter exchangeRatesGetter) {
-        this._ExchangeRatesGetter = exchangeRatesGetter;
+    public CurrService(@Qualifier("CurrencyBeacon") ExchangeRateApiClient currencyBeaconApiClient, @Qualifier("CurrencyApi") ExchangeRateApiClient currencyApiApiClient, @Qualifier("CloudMersive") ExchangeRateApiClient cloudMersiveApiClient) {
+        this._currencyBeaconApiClient = currencyBeaconApiClient;
+        this._currencyApiApiClient = currencyApiApiClient;
+        this._cloudMersiveApiClient = cloudMersiveApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
         return amount * checkRate(sourceCurrCountry, targetCurrCountry);
     }
 
-    private double checkRate(String sourceCurrCountry, String targetCurrCountry) {
-        // get rate from api
-        ExchangeApiResponse exchangeApiResponse = _ExchangeRatesGetter.getExchangeRates(sourceCurrCountry);
-        double targetRate =  exchangeApiResponse.getConversion_rates().get(targetCurrCountry);
-        HashMap<String, Double> rates = new HashMap<String, Double>();
-        rates.put(targetCurrCountry, targetRate);
-        CurrData curr = new CurrData(sourceCurrCountry, rates);
-        return curr.getRates().get(targetCurrCountry);
+    private double checkRate(String baseCurrCountry, String targetCurrCountry) {
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry).block();
+        return rates.get(targetCurrCountry);
     }
 
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurr).block();
+        return rates;
+    }
+
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getHistoricalExchangeRates(baseCurr).block();
+        return rates;
+    }
+
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+        Mono<HashMap<String, CurrCountryReturnData>> monoData = _currencyBeaconApiClient.getCurrCountries()
+                .onErrorResume(error -> _currencyApiApiClient.getCurrCountries()
+                        .onErrorResume(secondError -> _cloudMersiveApiClient.getCurrCountries()));
+        HashMap<String, CurrCountryReturnData> currCountries = monoData.block();
+        return currCountries;
+    }
 }

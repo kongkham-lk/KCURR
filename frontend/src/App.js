@@ -1,23 +1,24 @@
 import './App.css';
-import * as React from 'react';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
 import MainNav from './components/MainNav';
-import Convertor from './components/Convertor';
+import Convertor from './components/Convertor/Convertor';
+import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
+import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
+import { StyledPaperComponent } from './StyledComponents';
 
-// import CurrType from './components/CurrType';
+export default function App() {
+  const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
-function App() {
   return (
     <div className="App">
       <MainNav />
-      <Container maxWidth="m" sx={{ width: "100%", maxWidth: 1000, bgcolor: "background.paper", marginTop: "50px" }}>
-        <Paper elevation={3} sx={{m:2, p:4}}>
-          <Convertor />
-        </Paper>
-        </Container>
+      <StyledPaperComponent>
+        {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+          : <div className="loader"></div>}
+      </StyledPaperComponent>
+      <StyledPaperComponent>
+        {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+          : <div className="loader"></div>}
+      </StyledPaperComponent>
     </div>
   );
-}
-
-export default App;
+};
