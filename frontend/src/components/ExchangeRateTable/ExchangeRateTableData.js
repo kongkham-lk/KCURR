@@ -61,11 +61,11 @@ export default function ExchangeRateTableData(props) {
         setOrderBy(property);
     };
 
-    const handleSetDefaultCurr = (targetCurr) => {
+    const handleSetDefaultCurr = async (targetCurr) => {
         const oldLists = [];
         const newLists = [];
         const initialValue = { baseCurr: targetCurr };
-        const newAddCurrDataSet = retrieveExchangeRates(initialValue);
+        const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
 
         for (let i in currLists) {
             if (currLists[i].targetCurr !== targetCurr) {
@@ -83,7 +83,7 @@ export default function ExchangeRateTableData(props) {
         setCurrDataSet(newAddCurrDataSet);
     }
 
-    const handleChangePage = (newPage) => {
+    const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
@@ -178,7 +178,7 @@ export default function ExchangeRateTableData(props) {
                                             style={{ width: "10%", color: targetCurr !== defaultCurr ? "rgba(0, 0, 0, 0.54)" : "transparent" }}
                                             onClick={() => handleDelete(targetCurr)}
                                         >
-                                            <DeleteIcon style={{ marginRight: "8px" }} />
+                                            <DeleteIcon style={style.DeleteIcon} />
                                         </TableCell>}
                                     </TableRow>
                                 );
@@ -222,6 +222,7 @@ const style = {
     div: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
+    DeleteIcon: { marginRight: "8px" },
 };
 
 const sxStyle = {

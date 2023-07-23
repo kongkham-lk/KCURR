@@ -54,15 +54,17 @@ export default function ConvertorForm(props) {
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
         <CurrAmountInput updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+        <div style={style.div}>
         <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
           <img src={embedLink.swapArrow} alt="Swap Arrow" style={style.img} />
         </Button>
+        </div>
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
       </Stack>
       <Button variant="contained" type="submit" style={style.convertButton} disabled={isError ? true : false} >
         Convert
       </Button>
-    </form>
+    </form >
   )
 };
 
@@ -71,10 +73,11 @@ const embedLink = { swapArrow: "https://t3.ftcdn.net/jpg/02/69/49/94/360_F_26949
 const style = {
   convertButton: { marginTop: "5px" },
   img: { objectFit: "cover", height: "40px", mixBlendMode: "multiply" },
+  div: {marginTop: "1%"},
 };
 
 const sxStyle = {
   CurrCountriesDropDown: { m: 1, minWidth: 1 / 4, width: 250 },
-  Stack: { marginBottom: 2, display: "flex", alignItems: "center", flexWrap: "nowrap" },
+  Stack: { marginBottom: 1, display: "flex", alignItems: "flex-start", flexWrap: "nowrap" },
   swapButton: { borderRadius: "32px", width: "30px", height: "40px", borderColor: "#afaeae" },
 };

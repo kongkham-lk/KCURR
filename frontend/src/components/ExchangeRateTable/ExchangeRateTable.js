@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import ExchangeRateTableData from './ExchangeRateTableData';
 import { retrieveExchangeRates } from '../../util/apiClient'
 
@@ -11,7 +10,8 @@ export default function ExchangeRateTable(props) {
     function fetchData() {
       async function fetchCurrApiData() {
         try {
-          setCurrApiDataSet(retrieveExchangeRates(initialValue));
+          const currDataSet = await retrieveExchangeRates(initialValue);
+          setCurrApiDataSet(currDataSet);        
         } catch (e) {
           console.log(e.stack);
         }

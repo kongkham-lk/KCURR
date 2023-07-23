@@ -5,8 +5,6 @@ export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
-    console.log("currCountiesCodeMapDetail => ", currCountiesCodeMapDetail)
-
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
