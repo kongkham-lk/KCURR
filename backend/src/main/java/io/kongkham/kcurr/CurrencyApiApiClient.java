@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,16 +21,16 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public Mono<HashMap<String, Double>> getLatestExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
         return null;
     }
 
     @Override
-    public Mono<HashMap<String, Double>> getHistoricalExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
         return null;
     }
 
-    public Mono<HashMap<String, CurrCountryReturnData>> getCurrCountries() {
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
         String url = "https://api.currencyapi.com/v3/currencies?apikey=" + _currencyApiApiKey;
         CurrencyApiApiResponse currCountriesRes = _webClient.get()
                 .uri(url)
@@ -37,7 +38,7 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
                 .bodyToMono(CurrencyApiApiResponse.class)
                 .block();
         HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
-        return Mono.just(currCountries);
+        return currCountries;
     }
 
     private HashMap<String, CurrCountryReturnData> transformedJsonData(CurrencyApiApiResponse currCountriesRes) {

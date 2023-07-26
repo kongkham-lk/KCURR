@@ -24,25 +24,31 @@ public class CurrService {
     }
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
-        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry).block();
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
         return rates.get(targetCurrCountry);
     }
 
     public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
-        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurr).block();
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getLatestExchangeRates(baseCurr);
         return rates;
     }
 
     public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
-        HashMap<String, Double> rates = _currencyBeaconApiClient.getHistoricalExchangeRates(baseCurr).block();
+        HashMap<String, Double> rates = _currencyBeaconApiClient.getHistoricalExchangeRates(baseCurr);
         return rates;
     }
 
     public HashMap<String, CurrCountryReturnData> getCurrCountries() {
-        Mono<HashMap<String, CurrCountryReturnData>> monoData = _currencyBeaconApiClient.getCurrCountries()
-                .onErrorResume(error -> _currencyApiApiClient.getCurrCountries()
-                        .onErrorResume(secondError -> _cloudMersiveApiClient.getCurrCountries()));
-        HashMap<String, CurrCountryReturnData> currCountries = monoData.block();
+        HashMap<String, CurrCountryReturnData> currCountries;
+        try {
+            currCountries = _currencyBeaconApiClient.getCurrCountries();
+        } catch (Exception firstApiError) {
+            try {
+                currCountries = _currencyApiApiClient.getCurrCountries();
+            } catch (Exception secondApiError) {
+                currCountries = _cloudMersiveApiClient.getCurrCountries();
+            }
+        }
         return currCountries;
     }
 }

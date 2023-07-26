@@ -44,8 +44,6 @@ export default function ExchangeRateTableData(props) {
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    console.log("currLists => ", currLists)
-
     useEffect(
         function checkNewRow() {
             if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {

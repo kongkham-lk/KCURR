@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
 
 export default function CurrAmountInput(props) {
     const { updateVal, isError, baseCurr, currCountiesCodeMapDetail } = props;
@@ -25,7 +25,7 @@ export default function CurrAmountInput(props) {
             placeholder="Enter number"
             sx={sxStyle.TextField}
             InputProps={{
-                startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
+                startAdornment: <Box position="start" style={style.Box}>{symbol()}</Box>,
             }}
             helperText="Please input valid number."
             onChange={handleChange}
@@ -34,3 +34,4 @@ export default function CurrAmountInput(props) {
 };
 
 const sxStyle = { TextField: { width: '25ch' } };
+const style = {Box: { marginRight: "10px" }}

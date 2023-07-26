@@ -19,17 +19,17 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
         this._webClient = webClientBuilder.build();
     }
 
-    public Mono<HashMap<String, Double>> getLatestExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
         String url = "https://api.currencybeacon.com/v1/latest?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr;
         CurrencyBeaconExchangeRateApiResponse exchangeRateApiResponse = _webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CurrencyBeaconExchangeRateApiResponse.class)
                 .block();
-        return Mono.just(exchangeRateApiResponse.getResponse().getRates());
+        return exchangeRateApiResponse.getResponse().getRates();
     }
 
-    public Mono<HashMap<String, Double>> getHistoricalExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday = today.plusDays(-1);  // subtract 1 day
         String url = "https://api.currencybeacon.com/v1/historical?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr + "&date=" + yesterday;
@@ -38,10 +38,10 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
                 .retrieve()
                 .bodyToMono(CurrencyBeaconExchangeRateApiResponse.class)
                 .block();
-        return Mono.just(exchangeRateApiResponse.getResponse().getRates());
+        return exchangeRateApiResponse.getResponse().getRates();
     }
 
-    public Mono<HashMap<String, CurrCountryReturnData>> getCurrCountries() {
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
         String url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         CurrencyBeaconCurrCountriesApiResponse currCountriesRes = _webClient.get()
                 .uri(url)
@@ -49,7 +49,7 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
                 .bodyToMono(CurrencyBeaconCurrCountriesApiResponse.class)
                 .block();
         HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
-        return Mono.just(currCountries);
+        return currCountries;
     }
 
     private HashMap<String, CurrCountryReturnData> transformedJsonData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes) {

@@ -21,17 +21,17 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
 
 
     @Override
-    public Mono<HashMap<String, Double>> getLatestExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
         return null;
     }
 
     @Override
-    public Mono<HashMap<String, Double>> getHistoricalExchangeRates(String baseCurr) {
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
         return null;
     }
 
     @Override
-    public Mono<HashMap<String, CurrCountryReturnData>> getCurrCountries() {
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
         String url = "https://api.cloudmersive.com/currency/exchange-rates/list-available";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Apikey", _cloudMersiveApiKey);
@@ -42,7 +42,7 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
                 .bodyToMono(CloudMersiveApiResponse.class)
                 .block();
         HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
-        return Mono.just(currCountries);
+        return currCountries;
     }
 
     private HashMap<String, CurrCountryReturnData> transformedJsonData(CloudMersiveApiResponse currCountriesRes) {
