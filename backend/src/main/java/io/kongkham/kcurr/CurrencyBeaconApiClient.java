@@ -68,4 +68,17 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
         }
         return currCountries;
     }
+
+    public HashMap<String, HashMap<String, Double>> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
+        LocalDate endDate = LocalDate.now();  // get the current date
+        LocalDate startDate  = endDate.plusDays(-6);  // subtract 1 day
+//        https://api.currencybeacon.com/v1/timeseries?api_key=a345103ffbb84fc88701a6dc6d5dc2a5&start_date=2023-07-18&end_date=2023-07-25&base=usd&symbols=cad,thb
+        String url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" + startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
+        CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse = _webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(CurrencyBeaconTimeSeriesApiResponse.class)
+                .block();
+        return exchangeRateApiResponse.getResponse();
+    }
 }

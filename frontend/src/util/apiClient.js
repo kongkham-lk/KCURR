@@ -14,3 +14,8 @@ export async function retrieveExchangeRates (initialValue) {
     const resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate-hist', initialValue);
     return [resExchangeRatesLast.data, resExchangeRatesHist.data];
 } 
+
+export async function retrieveExchangeRatesTimeSeries (baseCurr, targetCurr) {
+    const resExchangeRatesTimeSeries = await axios.post('http://localhost:8080/curr/rate-timeSeries', {baseCurr, targetCurr});
+    return resExchangeRatesTimeSeries;
+}

@@ -2,7 +2,6 @@ package io.kongkham.kcurr;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 
@@ -50,5 +49,10 @@ public class CurrService {
             }
         }
         return currCountries;
+    }
+
+    public HashMap<String, HashMap<String, Double>> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
+        HashMap<String, Double> rateTimeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr);
+        return rateTimeSeries;
     }
 }
