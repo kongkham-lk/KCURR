@@ -4,7 +4,6 @@ import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
-import { LineGraph } from './components/ExchangeRateTable/LineGraph';
 
 export default function App() {
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
@@ -20,7 +19,6 @@ export default function App() {
         {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
           : <div className="loader"></div>}
       </StyledPaperComponent>
-      <LineGraph />
     </div>
   );
 };

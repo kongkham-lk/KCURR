@@ -5,7 +5,7 @@ export function getComparator(order, orderBy) {
 }
 
 export function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
+    const stabilizedThis = array?.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) {
@@ -54,3 +54,14 @@ const descendingComparator = (a, b, orderBy) => {
     return 0;
 }
 
+export function styleTableRowInFile (dense, emptyRows) {
+    return { height: (dense ? 33 : 53) * emptyRows }
+};
+
+export function styleTableCellDelete (targetCurr, defaultCurr) { 
+    if (targetCurr !== defaultCurr) {
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)" };
+    } else {
+        return { width: "10%", color: "transparent" };
+    }
+};

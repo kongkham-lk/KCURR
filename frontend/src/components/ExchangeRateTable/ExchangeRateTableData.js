@@ -17,26 +17,24 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList } from '../../util/ExchangeRateTableDataUtil';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/exchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
-import { createCurrLists } from '../../util/createCurrLists';
+import { CreateCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
+import { LineGraph } from './LineGraph';
+import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
+
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail } = props;
-
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState("USD");
+    const initialTargetCurr = ['USD', 'CAD', 'EUR', 'GBP'];
 
-    const initialRows = [
-        createCurrLists(defaultCurr, 'USD', currDataSet),
-        createCurrLists(defaultCurr, 'CAD', currDataSet),
-        createCurrLists(defaultCurr, 'EUR', currDataSet),
-        createCurrLists(defaultCurr, 'GBP', currDataSet),
-    ];
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurr, currDataSet);
 
-    const [currLists, setCurrLists] = useState(initialRows);
+    const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurr, setNewCurr] = useState("");
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
@@ -44,16 +42,24 @@ export default function ExchangeRateTableData(props) {
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    useEffect(
-        function checkNewRow() {
+    useEffect(() => {
+        if (isReady) {
+            setCurrLists([...initialCurrLists]);
+        }
+    }, [isReady]);
+
+    useEffect(() => {
+        async function checkNewRow() {
             if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {
-                const currList = createCurrLists(defaultCurr, newCurr, currDataSet);
+                const currList = await CreateCurrLists(defaultCurr, newCurr, currDataSet);
                 const newLists = [...currLists, currList];
                 setNewCurr("");
                 setCurrLists(newLists)
             }
-        }, [newCurr, currLists, currDataSet, defaultCurr]
-    );
+        }
+        checkNewRow();
+    }, [newCurr, currLists, currDataSet, defaultCurr]
+    )
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -75,7 +81,7 @@ export default function ExchangeRateTableData(props) {
         oldLists.unshift(targetCurr)
 
         for (let i in oldLists) {
-            newLists[i] = createCurrLists(targetCurr, oldLists[i], newAddCurrDataSet);
+            newLists[i] = await CreateCurrLists(targetCurr, oldLists[i], newAddCurrDataSet);
         }
 
         setCurrLists(newLists);
@@ -122,99 +128,108 @@ export default function ExchangeRateTableData(props) {
     const handleResetFilter = () => setOrderBy('');
 
     return (
-        <Box sx={sxStyle.Box}>
-            <Paper sx={sxStyle.Paper}>
-                <div style={{ display: "flex" }}>
-                    <Typography
-                        sx={sxStyle.Typography}
-                        variant="h6"
-                        id="tableTitle"
-                        component="div"
-                    >
-                        Exchange Rate Listing
-                    </Typography>
-                    <Tooltip title="Reset Filter" style={{ margin: "16px" }} onClick={handleResetFilter}>
-                        <IconButton>
-                            <FilterListIcon />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 450 }}
-                        aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
-                    >
-                        <EnhancedTableHead
-                            order={order}
-                            orderBy={orderBy}
-                            onRequestSort={handleRequestSort}
-                            rowCount={currLists.length}
-                        />
-                        <TableBody sx={sxStyle.TableBody}>
-                            {visibleRows.map((currList, index) => {
-                                const targetCurr = currList.targetCurr;
-                                const labelId = `enhanced-table-checkbox-${index}`;
+        <>
+            {isReady && <Box sx={sxStyle.Box}>
+                <Paper sx={sxStyle.Paper}>
+                    <div style={style.PaperDiv}>
+                        <Typography
+                            sx={sxStyle.Typography}
+                            variant="h6"
+                            id="tableTitle"
+                            component="div"
+                        >
+                            Exchange Rate Listing
+                        </Typography>
+                        <Tooltip title="Reset Filter" style={style.Tooltip} onClick={handleResetFilter}>
+                            <IconButton>
+                                <FilterListIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                    <TableContainer>
+                        <Table
+                            sx={sxStyle.Table}
+                            aria-labelledby="tableTitle"
+                            size={dense ? 'small' : 'medium'}
+                        >
+                            <EnhancedTableHead
+                                order={order}
+                                orderBy={orderBy}
+                                onRequestSort={handleRequestSort}
+                                rowCount={currLists.length}
+                            />
+                            <TableBody sx={sxStyle.TableBody}>
+                                {visibleRows.map((currList, index) => {
+                                    const targetCurr = currList.targetCurr;
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    const timeSeries = currList.timeSeries;
 
-                                return (
-                                    <TableRow key={targetCurr} style={styleTableRow(targetCurr, defaultCurr)} >
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            padding="none"
-                                        >
-                                            <Button variant="text" style={style.div} onClick={() => handleSetDefaultCurr(targetCurr)} >
-                                                {getFlag(targetCurr)}
-                                                <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell align="right" >{currList.latestRate}</TableCell>
-                                        <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
-                                            {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
-                                        </TableCell>
-                                        {<TableCell
-                                            align="right"
-                                            style={{ width: "10%", color: targetCurr !== defaultCurr ? "rgba(0, 0, 0, 0.54)" : "transparent" }}
-                                            onClick={() => handleDelete(targetCurr)}
-                                        >
-                                            <DeleteIcon style={style.DeleteIcon} />
-                                        </TableCell>}
+                                    return (
+                                        <TableRow key={targetCurr} style={styleTableRow(targetCurr, defaultCurr)} >
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                <Button variant="text" style={style.div} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                    {getFlag(targetCurr)}
+                                                    <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell align="right" >{currList.latestRate}</TableCell>
+                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                                {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                            </TableCell>
+                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                                <div style={style.chartDiv}>
+                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell
+                                                align="right"
+                                                style={styleTableCellDelete(targetCurr, defaultCurr)}
+                                                onClick={() => handleDelete(targetCurr)}
+                                            >
+                                                <DeleteIcon style={style.DeleteIcon} />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
+                                    <TableRow style={styleTableRowInFile(dense, emptyRows)} >
+                                        <TableCell colSpan={6} />
                                     </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow style={styleTableRowInFile(dense, emptyRows)} >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={currLists.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={currLists.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
+                <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
                 />
-            </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            />
-            <CurrCountriesDropDown
-                sxStyle={sxStyle.CurrCountriesDropDown}
-                label="Add Currency"
-                stateInputField="targetCurr"
-                updateVal={handleAddCurrCountry}
-                currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                passInStyle={style.CurrCountriesDropDown}
-                size="small"
-            />
-        </Box>
+                <CurrCountriesDropDown
+                    sxStyle={sxStyle.CurrCountriesDropDown}
+                    label="Add Currency"
+                    stateInputField="targetCurr"
+                    updateVal={handleAddCurrCountry}
+                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                    passInStyle={style.CurrCountriesDropDown}
+                    size="small"
+                />
+            </Box >
+            }
+        </>
     );
 };
 
@@ -223,18 +238,17 @@ const style = {
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
+    chartDiv: { width: "70px", float: "right" },
+    Tooltip: { margin: "16px" }, 
+    PaperDiv: { display: "flex" },
 };
 
 const sxStyle = {
     Box: { width: 1 },
     Paper: { width: 1, mb: 2 },
-    Table: { width: 1 },
+    Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center" },
-}
-
-const styleTableRowInFile = (dense, emptyRows) => {
-    return { height: (dense ? 33 : 53) * emptyRows }
-}
+};

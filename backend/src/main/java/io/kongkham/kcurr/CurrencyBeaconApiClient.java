@@ -3,10 +3,10 @@ package io.kongkham.kcurr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service("CurrencyBeacon")
 public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
@@ -41,20 +41,20 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
         return exchangeRateApiResponse.getResponse().getRates();
     }
 
-    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+    public HashMap<String, CurrCountriesReturnData> getCurrCountries() {
         String url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         CurrencyBeaconCurrCountriesApiResponse currCountriesRes = _webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CurrencyBeaconCurrCountriesApiResponse.class)
                 .block();
-        HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
+        HashMap<String, CurrCountriesReturnData> currCountries = transformedCurrCountriesResData(currCountriesRes);
         return currCountries;
     }
 
-    private HashMap<String, CurrCountryReturnData> transformedJsonData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes) {
+    private HashMap<String, CurrCountriesReturnData> transformedCurrCountriesResData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes) {
         CurrencyBeaconCurrCountriesApiResponseResponse[] data = currCountriesRes.getResponse();
-        HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
+        HashMap<String, CurrCountriesReturnData> currCountries = new HashMap<String, CurrCountriesReturnData>();
         for (int i = 0; i < data.length; i++) {
             CurrencyBeaconCurrCountriesApiResponseResponse currCountryDetail = data[i];
             String key = currCountryDetail.getCurrCode();
@@ -63,22 +63,33 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
             String display = currCode + " - " + countryCurrName;
             String currSymbol = currCountryDetail.getCurrSymbol();
             String flagCode = currCode.substring(0, 2);
-            CurrCountryReturnData val = new CurrCountryReturnData(currCode, countryCurrName, display, currSymbol, flagCode);
+            CurrCountriesReturnData val = new CurrCountriesReturnData(currCode, countryCurrName, display, currSymbol, flagCode);
             currCountries.put(key, val);
         }
         return currCountries;
     }
 
-    public HashMap<String, HashMap<String, Double>> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
+    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
         LocalDate endDate = LocalDate.now();  // get the current date
         LocalDate startDate  = endDate.plusDays(-6);  // subtract 1 day
-//        https://api.currencybeacon.com/v1/timeseries?api_key=a345103ffbb84fc88701a6dc6d5dc2a5&start_date=2023-07-18&end_date=2023-07-25&base=usd&symbols=cad,thb
         String url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" + startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
         CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse = _webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CurrencyBeaconTimeSeriesApiResponse.class)
                 .block();
-        return exchangeRateApiResponse.getResponse();
+        HashMap<String, Double> rateTimeSeries = transformedTimeSeriesResData(exchangeRateApiResponse, targetCurr);
+        return rateTimeSeries;
+    }
+
+    private HashMap<String, Double> transformedTimeSeriesResData(CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse, String targetCurr) {
+        HashMap<String, HashMap<String, Double>> data = exchangeRateApiResponse.getResponse();
+        HashMap<String, Double> timeSeries = new HashMap<String, Double>();
+        for (Map.Entry<String,HashMap<String, Double>> element : data.entrySet()) {
+            String date = element.getKey();
+            Double rate = element.getValue().get(targetCurr);
+            timeSeries.put(date, rate);
+        }
+        return timeSeries;
     }
 }

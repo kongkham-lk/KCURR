@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrCountryReturnData {
+public class CurrCountriesReturnData {
     private String currCode;
     private String countryName;
     private String display;

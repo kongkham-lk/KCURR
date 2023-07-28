@@ -39,6 +39,9 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell style={style.TableCell} align="right" >
+                    Chart (7d)
+                </TableCell>
                 <TableCell style={style.TableCellDelete} align="right" >
                     Delete
                 </TableCell>
@@ -73,6 +76,12 @@ const headCells = [
         disablePadding: false,
         label: 'Change (24h)',
     },
+    // {
+    //     id: 'chart',
+    //     numeric: true,
+    //     disablePadding: false,
+    //     label: 'Chart (7d)',
+    // },
 ];
 
 const style = {
