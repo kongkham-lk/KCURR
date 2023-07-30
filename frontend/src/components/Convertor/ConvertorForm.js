@@ -59,7 +59,7 @@ export default function ConvertorForm(props) {
           <img src={embedLink.swapArrow} alt="Swap Arrow" style={style.img} />
         </Button>
         </div>
-        <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+        <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
       </Stack>
       <Button variant="contained" type="submit" style={style.convertButton} disabled={isError ? true : false} >
         Convert

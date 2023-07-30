@@ -52,20 +52,35 @@ public class CurrService {
         return currCountries;
     }
 
-    public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
-        HashMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr);
+    public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
+        HashMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         HashMap<String, RateTimeSeriesResponse> targetCurrTimeSeries = new HashMap<String, RateTimeSeriesResponse>();
-        int rangeSize = 7;
-        String[] dateRange = new String[rangeSize];
-        double[] changingRates = new double[rangeSize];
+        int range;
+        if (timeSeriesRange.toLowerCase() == "week") {
+            range = 7;
+        } else if (timeSeriesRange.toLowerCase() == "month") {
+            range = 31;
+        } else {
+            range = 266;
+        }
+        String[] dateRange = new String[range];
+        double[] changingRates = new double[range];
+        double highest = Integer.MIN_VALUE;
+        double lowest = Integer.MAX_VALUE;
         int i = 0;
         for (Map.Entry<String, Double> element : timeSeries.entrySet()) {
             dateRange[i] = element.getKey();
             double rate = element.getValue();
             changingRates[i] = rate;
+            if (highest < rate) {
+                highest = rate;
+            }
+            if (lowest > rate) {
+                lowest = rate;
+            }
             i++;
         }
-        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dateRange, changingRates);
+        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dateRange, changingRates, highest, lowest);
         targetCurrTimeSeries.put(targetCurr, timeSeriesDetail);
         return targetCurrTimeSeries;
     }

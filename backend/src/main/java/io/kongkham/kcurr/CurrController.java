@@ -44,7 +44,8 @@ public class CurrController {
     public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(@RequestBody RateTimeSeriesRequest data) {
         String baseCurr = data.getBaseCurr();
         String targetCurr = data.getTargetCurr();
-        HashMap<String, RateTimeSeriesResponse> result = _currService.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr);
+        String timeSeriesRange = data.getTimeSeriesRange();
+        HashMap<String, RateTimeSeriesResponse> result = _currService.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         return result;
     }
 }

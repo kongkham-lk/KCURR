@@ -44,7 +44,7 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
+    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, int timeSeriesRange) {
         return null;
     }
 

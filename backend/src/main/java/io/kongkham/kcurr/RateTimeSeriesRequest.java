@@ -6,4 +6,5 @@ import lombok.Data;
 public class RateTimeSeriesRequest {
     private String baseCurr;
     private String targetCurr;
+    private String timeSeriesRange;
 }

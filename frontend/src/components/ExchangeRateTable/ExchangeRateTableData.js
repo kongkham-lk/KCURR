@@ -22,7 +22,7 @@ import { checkIfExist } from '../../util/checkingMethods';
 import { CreateCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
-import { LineGraph } from './LineGraph';
+import { LineGraph } from '../LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 
 
@@ -30,9 +30,10 @@ export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState("USD");
-    const initialTargetCurr = ['USD', 'CAD', 'EUR', 'GBP'];
+    const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
+    const dayRange = 7;
 
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurr, currDataSet);
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, dayRange);
 
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurr, setNewCurr] = useState("");
@@ -129,8 +130,8 @@ export default function ExchangeRateTableData(props) {
 
     return (
         <>
-            {isReady && <Box sx={sxStyle.Box}>
-                <Paper sx={sxStyle.Paper}>
+            {isReady && <Box sx={sxStyle.Box} >
+                <Paper sx={sxStyle.Paper} >
                     <div style={style.PaperDiv}>
                         <Typography
                             sx={sxStyle.Typography}
@@ -238,14 +239,14 @@ const style = {
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
-    chartDiv: { width: "70px", float: "right" },
-    Tooltip: { margin: "16px" }, 
+    chartDiv: { width: "60px", float: "right" },
+    Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
 };
 
 const sxStyle = {
     Box: { width: 1 },
-    Paper: { width: 1, mb: 2 },
+    Paper: { width: 1, mb: 2, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
