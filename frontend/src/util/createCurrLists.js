@@ -1,6 +1,6 @@
 import { retrieveExchangeRatesTimeSeries } from './apiClient';
 
-export async function CreateCurrLists(baseCurr, targetCurr, currApiDataSet, dayRange) {
+export async function CreateCurrLists(baseCurr, targetCurr, currApiDataSet, timeSeriesRange) {
     const latestRates = currApiDataSet[0];
     const histRates = currApiDataSet[1];
 
@@ -10,7 +10,7 @@ export async function CreateCurrLists(baseCurr, targetCurr, currApiDataSet, dayR
         const latestRate = latestRates[targetCurr];
         const histRate = histRates[targetCurr];
         const change = (latestRate - histRate) * 100 / histRate;
-        const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, dayRange);
+        const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         const timeSeries = timeSeriesRes.data[targetCurr];
         return { targetCurr, latestRate: latestRate?.toFixed(4), change: change?.toFixed(2), timeSeries};
     }

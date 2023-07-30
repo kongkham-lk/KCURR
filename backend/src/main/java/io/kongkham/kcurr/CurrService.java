@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class CurrService {
@@ -53,16 +54,9 @@ public class CurrService {
     }
 
     public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
-        HashMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+        TreeMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         HashMap<String, RateTimeSeriesResponse> targetCurrTimeSeries = new HashMap<String, RateTimeSeriesResponse>();
-        int range;
-        if (timeSeriesRange.toLowerCase() == "week") {
-            range = 7;
-        } else if (timeSeriesRange.toLowerCase() == "month") {
-            range = 31;
-        } else {
-            range = 266;
-        }
+        int range = timeSeries.size();
         String[] dateRange = new String[range];
         double[] changingRates = new double[range];
         double highest = Integer.MIN_VALUE;

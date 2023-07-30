@@ -12,7 +12,7 @@ export default function Convertor(props) {
 
     const [formData, setFormData] = useState(null);
     const [timeSeries, setTimeSeries] = useState(null);
-    const [timeSeriesRange, setTimeSeriesRange] = useState(7)
+    const [timeSeriesRange, setTimeSeriesRange] = useState("Week")
 
     let baseCurr;
     let targetCurr;
@@ -70,12 +70,13 @@ export default function Convertor(props) {
                     </Typography>
                     {timeSeries !== null
                         ? <>
-                            <Typography variant="h6" mt={3} fontStyle="italic" fontWeight={400} >
+                            <Typography variant="h5" mt={3} mb={1} fontWeight={400} >
                                 {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span> (1w)
                             </Typography>
                             <LineGraph timeSeries={timeSeries} displayLabel={true} />
-                        </> : <div className="loader"></div>}
-                    <ExchangeRateChartTimeSeriesDropDown updateVal={handleClick} />
+                            <ExchangeRateChartTimeSeriesDropDown updateVal={handleClick} />
+                        </> : <div className="loader"></div>
+                    }
                 </>
             )}
         </>

@@ -31,9 +31,9 @@ export default function ExchangeRateTableData(props) {
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState("USD");
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
-    const dayRange = 7;
+    const timeSeriesRange = "Week";
 
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, dayRange);
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
 
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurr, setNewCurr] = useState("");

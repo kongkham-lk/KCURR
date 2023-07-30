@@ -5,9 +5,6 @@ export function LineGraph(props) {
     const { displayLabel = false, timeSeries } = props;
     const changingRates = timeSeries.changingRates;
     const timeSeriesRange = timeSeries.timeSeriesRange;
-    const min = timeSeries.lowest;
-    const max = timeSeries.highest;
-    const mid = (max + min) / 2;
     const borderColor = () => {
         if (changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
@@ -22,9 +19,7 @@ export function LineGraph(props) {
             return '#0ba50bb0'
         }
     }
-    const borderWidth = displayLabel ? 1.5 : 2.3;
-    const pointRadius = displayLabel ? 3 : 0;
-
+    const borderWidth = displayLabel ? 2 : 2.3;
     const labels = timeSeriesRange;
     const data = {
         labels: labels,
@@ -37,7 +32,6 @@ export function LineGraph(props) {
             tension: 0,
         }]
     };
-
     const plugins = displayLabel ? {
         legend: {
             display: false,
@@ -57,8 +51,10 @@ export function LineGraph(props) {
             return 7;
         } else if (timeSeriesRange.length <= 31) {
             return 4;
+        } else if (timeSeriesRange.length < 31 * 3) {
+            return 4;
         } else {
-            return 12;
+            return 6;
         }
     }
 
@@ -67,25 +63,31 @@ export function LineGraph(props) {
         scales: {
             y: {
                 display: displayLabel, // Hide Y axis labels
-                tickColor: 'black',
+                grid: {
+                    tickColor: '#adadad',
+                },
                 ticks: {
                     // forces step size to be 50 units
                     maxTicksLimit: 4
+                },
+                border: {
+                    dash: [6, 6]
                 }
             },
             x: {
                 display: displayLabel, // Hide X axis labels
                 grid: {
                     color: 'white',
-                    tickColor: 'black',                    
+                    tickColor: '#adadad',
                 },
                 ticks: {
                     maxTicksLimit: maxXAxisLabel,
+                    alwaysShowLastTick: true,
                 },
             },
         },
         borderWidth,
-        pointRadius,
+        pointRadius: 0,
     }
     return (
         <>

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service("CurrencyBeacon")
 public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
@@ -69,27 +69,40 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
         return currCountries;
     }
 
-    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr) {
-        LocalDate endDate = LocalDate.now();  // get the current date
-        LocalDate startDate  = endDate.plusDays(-6);  // subtract 1 day
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String endDate = dateFormat.format(calendar.getTime());
+        if (timeSeriesRange.toLowerCase().equals("week")) {
+            calendar.add(Calendar.DATE, -6);
+        } else if (timeSeriesRange.toLowerCase().equals("month")) {
+            calendar.add(Calendar.MONTH, -1);
+        } else if (timeSeriesRange.toLowerCase().equals("quater")) {
+            calendar.add(Calendar.MONTH, -3);
+        } else if (timeSeriesRange.toLowerCase().equals("half year")) {
+            calendar.add(Calendar.MONTH, -6);
+        }
+        String startDate = dateFormat.format(calendar.getTime());
         String url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" + startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
         CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse = _webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CurrencyBeaconTimeSeriesApiResponse.class)
                 .block();
-        HashMap<String, Double> rateTimeSeries = transformedTimeSeriesResData(exchangeRateApiResponse, targetCurr);
+        TreeMap<String, Double> rateTimeSeries = transformedTimeSeriesResData(exchangeRateApiResponse, targetCurr);
         return rateTimeSeries;
     }
 
-    private HashMap<String, Double> transformedTimeSeriesResData(CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse, String targetCurr) {
+    private TreeMap<String, Double> transformedTimeSeriesResData(CurrencyBeaconTimeSeriesApiResponse exchangeRateApiResponse, String targetCurr) {
         HashMap<String, HashMap<String, Double>> data = exchangeRateApiResponse.getResponse();
-        HashMap<String, Double> timeSeries = new HashMap<String, Double>();
+        Map<String, Double> unsortedTimeSeries = new HashMap<String, Double>();
+        TreeMap<String, Double> sortedTimeSeries = new TreeMap<>();
         for (Map.Entry<String,HashMap<String, Double>> element : data.entrySet()) {
             String date = element.getKey();
             Double rate = element.getValue().get(targetCurr);
-            timeSeries.put(date, rate);
+            unsortedTimeSeries.put(date, rate);
         }
-        return timeSeries;
+        sortedTimeSeries.putAll(unsortedTimeSeries);
+        return sortedTimeSeries;
     }
 }

@@ -76,12 +76,6 @@ const headCells = [
         disablePadding: false,
         label: 'Change (24h)',
     },
-    // {
-    //     id: 'chart',
-    //     numeric: true,
-    //     disablePadding: false,
-    //     label: 'Chart (7d)',
-    // },
 ];
 
 const style = {

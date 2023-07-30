@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 @Service("CloudMersive")
 public class CloudMersiveApiClient implements ExchangeRateApiClient {
@@ -44,7 +45,7 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, int timeSeriesRange) {
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
         return null;
     }
 

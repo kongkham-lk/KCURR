@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Service("CurrencyApi")
 public class CurrencyApiApiClient implements ExchangeRateApiClient {
@@ -40,7 +41,7 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public HashMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, int timeSeriesRange) {
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
         return null;
     }
 

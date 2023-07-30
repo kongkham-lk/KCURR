@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -5,10 +6,13 @@ import Select from '@mui/material/Select';
 
 export default function ExchangeRateChartTimeSeriesDropDown(props) {
     const { updateVal } = props;
+    const [displayValue, setDisplayValue] = useState("Week")
+    const timeSeriesRanges = ["Week", "Month", "Quater", "Half Year"];
 
-    const timeSeriesRanges = ["Week", "Month", "Year"];
-
-    const handleChange = (e) => updateVal({ timeSeriesRange: e.target.value });
+    const handleChange = (e) => {
+        updateVal(e.target.value);
+        setDisplayValue(e.target.value);
+    };
 
     return (
         <FormControl sx={sxStyle.FormControl} size="small" >
@@ -16,10 +20,10 @@ export default function ExchangeRateChartTimeSeriesDropDown(props) {
             <Select
                 labelId="rateHistoricalChart"
                 id="rateHistoricalChart"
-                value="Week"
+                value={displayValue}
                 label="Range"
                 onChange={handleChange}
-                style={{ height: "40px", width:"150px" }}
+                style={style.Select}
             >
                 {timeSeriesRanges?.map((range) => (
                     <MenuItem key={range} value={range} >
@@ -33,4 +37,8 @@ export default function ExchangeRateChartTimeSeriesDropDown(props) {
 
 const sxStyle = {
     FormControl: { mt: 3, minWidth: 1 / 4, width: 250 },
+}
+
+const style = {
+    Select: { height: "40px", width: "150px" },
 }
