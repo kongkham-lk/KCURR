@@ -19,7 +19,7 @@ import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
 import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/exchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
-import { CreateCurrLists } from '../../util/createCurrLists';
+import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../LineGraph';
@@ -52,7 +52,7 @@ export default function ExchangeRateTableData(props) {
     useEffect(() => {
         async function checkNewRow() {
             if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {
-                const currList = await CreateCurrLists(defaultCurr, newCurr, currDataSet);
+                const currList = await createCurrLists(defaultCurr, newCurr, currDataSet, timeSeriesRange);
                 const newLists = [...currLists, currList];
                 setNewCurr("");
                 setCurrLists(newLists)
@@ -82,7 +82,7 @@ export default function ExchangeRateTableData(props) {
         oldLists.unshift(targetCurr)
 
         for (let i in oldLists) {
-            newLists[i] = await CreateCurrLists(targetCurr, oldLists[i], newAddCurrDataSet);
+            newLists[i] = await createCurrLists(targetCurr, oldLists[i], newAddCurrDataSet, timeSeriesRange);
         }
 
         setCurrLists(newLists);
@@ -239,7 +239,7 @@ const style = {
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
-    chartDiv: { width: "60px", float: "right" },
+    chartDiv: { width: "70px", height: "40px", float: "right" },
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
 };

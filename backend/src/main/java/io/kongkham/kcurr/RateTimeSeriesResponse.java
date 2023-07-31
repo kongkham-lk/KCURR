@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class RateTimeSeriesResponse {
-    private String[] timeSeriesRange;
+    private String[] dayRangeIndicator;
+    private String[] monthRangeIndicator;
     private double[] changingRates;
     private double highest;
     private double lowest;

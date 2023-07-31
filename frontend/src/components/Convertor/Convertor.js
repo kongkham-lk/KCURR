@@ -4,7 +4,7 @@ import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 import { LineGraph } from '../LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
-import ExchangeRateChartTimeSeriesDropDown from './ExchangeRateChartTimeSeriesDropDown';
+import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 
 
 export default function Convertor(props) {
@@ -36,7 +36,6 @@ export default function Convertor(props) {
     useEffect(() => {
         if (formData != null) {
             async function timeSeriesGetter() {
-                console.log("## getting timeSeries => ")
                 const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
                 setTimeSeries(timeSeriesRes.data[targetCurr])
             }
@@ -62,20 +61,25 @@ export default function Convertor(props) {
             <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
             {formData !== null && (
                 <>
-                    <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400} >
-                        1 {baseCurr} = {(total / amount).toFixed(2)} {targetCurr}
-                    </Typography>
-                    <Typography variant="h4" >
+                    <Typography variant="h4" mt={3} mb={2} >
                         {amount} {baseCurr} = {total.toFixed(2)} {targetCurr}
                     </Typography>
                     {timeSeries !== null
-                        ? <>
-                            <Typography variant="h5" mt={3} mb={1} fontWeight={400} >
+                        ? <div style={{ borderTop: "1px solid #adadad60" }}>
+                            <Typography variant="h5" mt={2.5} fontWeight={400} >
                                 {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span> (1w)
                             </Typography>
-                            <LineGraph timeSeries={timeSeries} displayLabel={true} />
-                            <ExchangeRateChartTimeSeriesDropDown updateVal={handleClick} />
-                        </> : <div className="loader"></div>
+                            <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} >
+                                1 {baseCurr} = {(total / amount).toFixed(2)} {targetCurr}
+                            </Typography>
+                            <div style={style.divChart} >
+                                <LineGraph timeSeries={timeSeries} displayLabel={true} />
+                                <div style={style.divRangeTimeSeriesSelector}>
+                                <RangeTimeSeriesSelector updateVal={handleClick} />
+                                </div>
+                            </div>
+
+                        </div> : <div className="loader"></div>
                     }
                 </>
             )}
@@ -85,4 +89,9 @@ export default function Convertor(props) {
 
 const styleSpan = (changeRateInPercent) => {
     return { color: changeRateInPercent >= 0 ? "green" : "#cd0000" }
+}
+
+const style = {
+    divRangeTimeSeriesSelector: {marginTop: "2.5%", textAlign:"center"},
+    divChart: { height: "300px", width: "100%", marginBottom: "7.5%"},
 }

@@ -4,7 +4,7 @@ import { Chart as Chartjs } from 'chart.js/auto';
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries } = props;
     const changingRates = timeSeries.changingRates;
-    const timeSeriesRange = timeSeries.timeSeriesRange;
+    const timeSeriesRangeLabel = changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator;
     const borderColor = () => {
         if (changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
@@ -20,7 +20,7 @@ export function LineGraph(props) {
         }
     }
     const borderWidth = displayLabel ? 2 : 2.3;
-    const labels = timeSeriesRange;
+    const labels = timeSeriesRangeLabel;
     const data = {
         labels: labels,
         datasets: [{
@@ -47,14 +47,14 @@ export function LineGraph(props) {
     };
 
     const maxXAxisLabel = () => {
-        if (timeSeriesRange.length <= 7) {
+        if (timeSeriesRangeLabel.length <= 7) {
             return 7;
-        } else if (timeSeriesRange.length <= 31) {
-            return 4;
-        } else if (timeSeriesRange.length < 31 * 3) {
+        } else if (timeSeriesRangeLabel.length <= 31) {
+            return 7;
+        } else if (timeSeriesRangeLabel.length < 31 * 3) {
             return 4;
         } else {
-            return 6;
+            return 7;
         }
     }
 
@@ -88,6 +88,7 @@ export function LineGraph(props) {
         },
         borderWidth,
         pointRadius: 0,
+        maintainAspectRatio: false,
     }
     return (
         <>

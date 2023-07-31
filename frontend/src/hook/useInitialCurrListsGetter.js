@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CreateCurrLists } from '../util/createCurrLists';
+import { createCurrLists } from '../util/createCurrLists';
 
 export default function useInitialCurrListsGetter(defaultCurr, targetCurr, currDataSet, dayRange) {
     const [initialCurrLists, setInitialCurrLists] = useState([]);
@@ -11,7 +11,7 @@ export default function useInitialCurrListsGetter(defaultCurr, targetCurr, currD
                 try {
                     const currLists = [];
                     for (let i in targetCurr) {
-                        currLists[i] = await CreateCurrLists(defaultCurr, targetCurr[i], currDataSet, dayRange)
+                        currLists[i] = await createCurrLists(defaultCurr, targetCurr[i], currDataSet, dayRange)
                     }
                     setInitialCurrLists(currLists);
                     setIsReady(true);

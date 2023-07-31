@@ -3,6 +3,7 @@ package io.kongkham.kcurr;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -57,14 +58,23 @@ public class CurrService {
         TreeMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         HashMap<String, RateTimeSeriesResponse> targetCurrTimeSeries = new HashMap<String, RateTimeSeriesResponse>();
         int range = timeSeries.size();
-        String[] dateRange = new String[range];
+        String[] dayRange = new String[range];
+        String[] monthRange = new String[range];
         double[] changingRates = new double[range];
         double highest = Integer.MIN_VALUE;
         double lowest = Integer.MAX_VALUE;
         int i = 0;
         for (Map.Entry<String, Double> element : timeSeries.entrySet()) {
-            dateRange[i] = element.getKey();
-            double rate = element.getValue();
+            String fullDate = element.getKey(); // return yyyy/MM/dd
+            String year = fullDate.substring(0,4); // get yyyy
+            String monthNum = fullDate.substring(5,7); // get MM
+            Month monthName = Month.of(Integer.parseInt(monthNum)); // get the full name of the month
+            String monthAbbr = monthName.toString().substring(0,3);
+            String formatMonthAbbr = monthAbbr.substring(0,1) + monthAbbr.substring(1).toLowerCase();
+            String day = fullDate.substring(fullDate.length()-2); // get dd
+            dayRange[i] = day + " " + formatMonthAbbr;
+            monthRange[i] = formatMonthAbbr + " " + year;
+            double rate = element.getValue(); // return rate
             changingRates[i] = rate;
             if (highest < rate) {
                 highest = rate;
@@ -74,7 +84,7 @@ public class CurrService {
             }
             i++;
         }
-        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dateRange, changingRates, highest, lowest);
+        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dayRange, monthRange, changingRates, highest, lowest);
         targetCurrTimeSeries.put(targetCurr, timeSeriesDetail);
         return targetCurrTimeSeries;
     }
