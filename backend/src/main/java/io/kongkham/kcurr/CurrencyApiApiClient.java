@@ -45,6 +45,11 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
         return null;
     }
 
+    @Override
+    public FinancialNewsResponse[] getFinancialNews() {
+        return new FinancialNewsResponse[0];
+    }
+
     private HashMap<String, CurrCountriesReturnData> transformedJsonData(CurrencyApiApiResponse currCountriesRes) {
         HashMap<String, CurrencyApiApiResponseData> data = currCountriesRes.getData();
         HashMap<String, CurrCountriesReturnData> currCountries = new HashMap<String, CurrCountriesReturnData>();

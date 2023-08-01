@@ -48,4 +48,9 @@ public class CurrController {
         HashMap<String, RateTimeSeriesResponse> result = _currService.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
         return result;
     }
+
+    @GetMapping("/news")
+    public FinancialNewsResponse[] getNewsFromrapidapi() {
+        return _currService.getNewsFromRapidApi();
+    }
 }

@@ -58,6 +58,9 @@ export default function Convertor(props) {
 
     return (
         <>
+            <Typography variant="h5" color="black" component="div" my={2} style={{marginBottom: "25px"}}>
+                Convertor
+            </Typography>
             <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
             {formData !== null && (
                 <>
@@ -75,7 +78,7 @@ export default function Convertor(props) {
                             <div style={style.divChart} >
                                 <LineGraph timeSeries={timeSeries} displayLabel={true} />
                                 <div style={style.divRangeTimeSeriesSelector}>
-                                <RangeTimeSeriesSelector updateVal={handleClick} />
+                                    <RangeTimeSeriesSelector updateVal={handleClick} />
                                 </div>
                             </div>
 
@@ -92,6 +95,6 @@ const styleSpan = (changeRateInPercent) => {
 }
 
 const style = {
-    divRangeTimeSeriesSelector: {marginTop: "2.5%", textAlign:"center"},
-    divChart: { height: "300px", width: "100%", marginBottom: "7.5%"},
+    divRangeTimeSeriesSelector: { marginTop: "2.5%", textAlign: "center" },
+    divChart: { height: "300px", width: "100%", marginBottom: "7.5%" },
 }

@@ -56,7 +56,7 @@
   width: 18px;
   height: 18px;
   border: 6px solid #dddddd;
-  border-top-color: #107be5;
+  border-top-color: #0060cd;
   border-radius: 50%;
   animation: loading 1s ease infinite ;
 }
@@ -68,4 +68,13 @@
   to {
     transform: rotate(1turn);
   }
+}
+
+.hoverLink:hover {
+  color: #0060cd;
+}
+
+.hoverCard:hover {
+  box-shadow: 0px 0px 12px #644e243f;
+  transition: 0.2s;
 }

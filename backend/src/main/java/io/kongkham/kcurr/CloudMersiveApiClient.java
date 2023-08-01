@@ -49,6 +49,11 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
         return null;
     }
 
+    @Override
+    public FinancialNewsResponse[] getFinancialNews() {
+        return new FinancialNewsResponse[0];
+    }
+
     private HashMap<String, CurrCountriesReturnData> transformedJsonData(CloudMersiveApiResponse currCountriesRes) {
         CloudMersiveApiResponseCurrencies[] data = currCountriesRes.getCurrencies();
         HashMap<String, CurrCountriesReturnData> currCountries = new HashMap<String, CurrCountriesReturnData>();
