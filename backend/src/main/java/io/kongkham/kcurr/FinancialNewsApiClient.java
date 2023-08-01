@@ -1,2 +1,5 @@
-package io.kongkham.kcurr;public class FinancialNewsApiClient {
+package io.kongkham.kcurr;
+
+public interface FinancialNewsApiClient {
+    public FinancialNewsResponse[] getFinancialNews();
 }

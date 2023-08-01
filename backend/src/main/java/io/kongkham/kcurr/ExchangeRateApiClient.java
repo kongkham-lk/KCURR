@@ -8,5 +8,4 @@ public interface ExchangeRateApiClient {
     HashMap<String, Double> getHistoricalExchangeRates(String baseCurr);
     HashMap<String, CurrCountriesReturnData> getCurrCountries();
     TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange);
-    FinancialNewsResponse[] getFinancialNews();
 }

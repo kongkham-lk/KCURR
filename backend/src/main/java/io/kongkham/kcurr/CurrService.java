@@ -14,9 +14,9 @@ public class CurrService {
     private final ExchangeRateApiClient _currencyBeaconApiClient;
     private final ExchangeRateApiClient _currencyApiApiClient;
     private final ExchangeRateApiClient _cloudMersiveApiClient;
-    private final ExchangeRateApiClient _rapidApiApiClient;
+    private final FinancialNewsApiClient _rapidApiApiClient;
 
-    public CurrService(@Qualifier("CurrencyBeacon") ExchangeRateApiClient currencyBeaconApiClient, @Qualifier("CurrencyApi") ExchangeRateApiClient currencyApiApiClient, @Qualifier("CloudMersive") ExchangeRateApiClient cloudMersiveApiClient, @Qualifier("RapidApi") ExchangeRateApiClient rapidApiApiClient) {
+    public CurrService(@Qualifier("CurrencyBeacon") ExchangeRateApiClient currencyBeaconApiClient, @Qualifier("CurrencyApi") ExchangeRateApiClient currencyApiApiClient, @Qualifier("CloudMersive") ExchangeRateApiClient cloudMersiveApiClient, @Qualifier("RapidApi") FinancialNewsApiClient rapidApiApiClient) {
         this._currencyBeaconApiClient = currencyBeaconApiClient;
         this._currencyApiApiClient = currencyApiApiClient;
         this._cloudMersiveApiClient = cloudMersiveApiClient;

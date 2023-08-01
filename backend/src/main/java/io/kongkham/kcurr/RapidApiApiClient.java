@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("RapidApi")
-public class RapidApiApiClient implements ExchangeRateApiClient {
+public class RapidApiApiClient implements FinancialNewsApiClient {
     final private WebClient _webClient;
 
     @Value("${rapidApi.api.app-id}")

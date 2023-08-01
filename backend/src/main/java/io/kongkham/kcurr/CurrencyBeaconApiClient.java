@@ -105,9 +105,4 @@ public class CurrencyBeaconApiClient implements ExchangeRateApiClient {
         sortedTimeSeries.putAll(unsortedTimeSeries);
         return sortedTimeSeries;
     }
-
-    @Override
-    public FinancialNewsResponse[] getFinancialNews() {
-        return new FinancialNewsResponse[0];
-    }
 }
