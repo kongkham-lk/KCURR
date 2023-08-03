@@ -31,7 +31,7 @@ export default function MainNav() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={sxStyle.Typography} >
-            <Link href={mainLogo.link} underline="none" sx={sxStyle.mainLogo} >
+            <Link to={mainLogo.link} underline="none" sx={sxStyle.mainLogo} >
               <div style={{ display: "flex", alignItems: "center", marginLeft: "15px" }}>
                 <img width="60" height="60" src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
                 {mainLogo.label}
@@ -40,7 +40,7 @@ export default function MainNav() {
           </Typography>
           <Box sx={sxStyle.BoxSub}>
             {navItems.map((item) => (
-              <Link href={item.link} underline="none" key={item.label} sx={sxStyle.Link} >
+              <Link to={item.link} underline="none" key={item.label} sx={sxStyle.Link} >
                 {item.label}
               </Link>
             ))}
@@ -65,10 +65,10 @@ export default function MainNav() {
 };
 
 const drawerWidth = 240;
-const mainLogo = { label: 'KCURR', link: "#" }
+const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
-  { label: 'Rate', link: "#" },
-  { label: 'News', link: "#" },
+  { label: 'Convertor', link: "/convertor" },
+  { label: 'Financial News', link: "/financial-news" },
   { label: 'About', link: "#" },
   { label: 'Contact', link: "#" },
 ];
