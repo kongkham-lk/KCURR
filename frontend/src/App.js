@@ -5,7 +5,7 @@ import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable'
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
 import FinancialNewsLists from './components/FinancialNews/FinancialNewsLists';
-import { Switch } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
 
 export default function App() {
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
@@ -13,34 +13,40 @@ export default function App() {
   return (
     <div className="App">
       <MainNav />
-      <StyledPaperComponent>
-        {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-          : <div className="loader"></div>}
-      </StyledPaperComponent>
-      <StyledPaperComponent>
-        {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-          : <div className="loader"></div>}
-      </StyledPaperComponent>
-      <StyledPaperComponent>
-        <FinancialNewsLists />
-      </StyledPaperComponent>
-      <Switch>
-        <Route path="/convertor">
-          <StyledPaperComponent>
-            {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-              : <div className="loader"></div>}
-          </StyledPaperComponent>
-          <StyledPaperComponent>
-            {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-              : <div className="loader"></div>}
-          </StyledPaperComponent>
-        </Route>
-        <Route path="financial-news">
+      <Routes>
+        <Route exact path="/" element={
+          <>
+            <StyledPaperComponent>
+              {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                : <div className="loader"></div>}
+            </StyledPaperComponent>
+            <StyledPaperComponent>
+              {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                : <div className="loader"></div>}
+            </StyledPaperComponent>
+            <StyledPaperComponent>
+              <FinancialNewsLists />
+            </StyledPaperComponent>
+          </>
+        } ></Route>
+        <Route exact path="/convertor" element={
+          <>
+            <StyledPaperComponent>
+              {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                : <div className="loader"></div>}
+            </StyledPaperComponent>
+            <StyledPaperComponent>
+              {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                : <div className="loader"></div>}
+            </StyledPaperComponent>
+          </>
+        } ></Route>
+        <Route exact path="/financial-news" element={
           <StyledPaperComponent>
             <FinancialNewsLists />
           </StyledPaperComponent>
-        </Route>
-      </Switch>
-    </div>
+        } ></Route>
+      </Routes>
+    </div >
   );
 };

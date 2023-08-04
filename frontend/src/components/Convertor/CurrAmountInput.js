@@ -27,7 +27,7 @@ export default function CurrAmountInput(props) {
             InputProps={{
                 startAdornment: <Box position="start" style={style.Box}>{symbol()}</Box>,
             }}
-            helperText="Please input valid number."
+            // helperText="Input valid number."
             onChange={handleChange}
         />
     )

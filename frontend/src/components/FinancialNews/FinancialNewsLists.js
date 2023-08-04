@@ -1,7 +1,6 @@
 import "../../App.css";
 import { useState, useEffect } from "react";
 import { retrieveFinancialNews } from "../../util/apiClient";
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -11,9 +10,6 @@ import Typography from '@mui/material/Typography';
 
 export default function FinancialNewsLists() {
     const [newsLists, setNewsLists] = useState([]);
-    const theme = useTheme();
-
-    console.log("newsLists => ", newsLists)
 
     useEffect(() => {
         async function fetchNewsLists() {
