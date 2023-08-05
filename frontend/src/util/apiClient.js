@@ -21,6 +21,6 @@ export async function retrieveExchangeRatesTimeSeries (baseCurr, targetCurr, tim
 }
 
 export async function retrieveFinancialNews() {
-    const resFinancialNewsLists = await axios.get('http://localhost:8080/curr/news');
+    const resFinancialNewsLists = await axios.get('http://localhost:8080/news');
     return resFinancialNewsLists;
 }
