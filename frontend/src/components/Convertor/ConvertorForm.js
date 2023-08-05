@@ -7,9 +7,9 @@ import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function ConvertorForm(props) {
-  const { setFormDataToConvertor, currCountiesCodeMapDetail } = props;
+  const { setFormDataToConvertor, currCountiesCodeMapDetail, currInput} = props;
 
-  const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
+  const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
   const [isError, setIsError] = useState(false);
 
   const handleAmountInput = (e) => {

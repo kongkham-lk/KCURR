@@ -29,7 +29,7 @@ export default function App() {
             </StyledPaperComponent>
           </>
         } ></Route>
-        <Route exact path="/convertor" element={
+        <Route path="/convertor/:curr?" element={
           <>
             <StyledPaperComponent>
               {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />

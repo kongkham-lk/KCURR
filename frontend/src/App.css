@@ -70,11 +70,11 @@
   }
 }
 
-.hoverLink:hover {
-  color: #0060cd;
-}
-
 .hoverCard:hover {
   box-shadow: 0px 0px 12px #644e243f;
   transition: 0.2s;
+}
+
+.hoverCard:hover .hoverLink {
+  color: #0060cd;
 }

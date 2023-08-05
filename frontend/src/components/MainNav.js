@@ -96,8 +96,8 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
 };
 
 const embbedLogo = {
-  link: "https://img.icons8.com/external-icongeek26-outline-icongeek26/64/external-money-currency-icongeek26-outline-icongeek26-9.png",
-  alt: "external-money-currency-icongeek26-outline-icongeek26-9",
+  link: "https://img.icons8.com/sf-black-filled/500/000/currency-exchange.png",
+  alt: "KCURR App Logo",
 };
 
 const sxStyle = {
@@ -117,7 +117,7 @@ const sxStyle = {
 }
 
 const style = {
-  logo: { width: "42px", height: "42px", filter: "invert(1)", margin: "0 8px 0 0" },
+  logo: { width: "35px", height: "35px", filter: "invert(1)", margin: "0 8px 0 0" },
   Link: {color: "black", textDecoration: "none"},
   logoImg: { display: "flex", alignItems: "center", marginLeft: "15px" },
 }
