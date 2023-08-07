@@ -7,31 +7,70 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import InputTextField from "../InputTextField";
+import { Loading } from '../Loading';
 
-export default function FinancialNewsLists() {
+export default function FinancialNewsLists(props) {
+    const { filter = false } = props;
     const [newsLists, setNewsLists] = useState([]);
+    const [tempTopic, setTempTopic] = useState("");
+    const [newsTopic, setNewsTopic] = useState(["Stock", "Oil", "Gold", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency",]);
 
     useEffect(() => {
         async function fetchNewsLists() {
-            const newsRes = await retrieveFinancialNews();
+            const newsRes = await retrieveFinancialNews(newsTopic);
             setNewsLists(newsRes.data);
         }
         fetchNewsLists();
-    }, []
+    }, [newsTopic]
     )
+
+    const handleAddNewsTopic = (e) => {
+        const updateNewsTopic = [...newsTopic];
+        updateNewsTopic.push(tempTopic);
+        setTempTopic("")
+        setNewsTopic(updateNewsTopic);
+    }
+
+    const handleInput = (e) => {
+        const newTempInput = e.value;
+        setTempTopic(newTempInput);
+    }
+
+    const handleDelete = (index) => {
+        newsTopic.splice(index, 1);
+        const updateNewsTopic = [...newsTopic];
+        setNewsTopic(updateNewsTopic);
+    }
 
     return (
         <div style={style.div}>
             {newsLists.length > 0 ?
                 <>
-                    <Typography
-                        variant="h5"
-                        color="black"
-                        component="div"
-                        my={2}
-                    >
-                        Financial News
-                    </Typography>
+                    <div style={style.subDivHeading}>
+                        <Typography
+                            variant="h5"
+                            color="black"
+                            component="div"
+                            my={2}
+                        >
+                            Financial News
+                        </Typography>
+                        {filter && <div style={style.subDivInputField}>
+                            <InputTextField updateVal={handleInput} inputFieldLabel="Add News Keywords" size="small" displayInput={tempTopic} />
+                            <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
+                                Add
+                            </Button>
+                        </div>}
+                    </div>
+                    {filter && <Stack direction="row" style={style.Stack}>
+                        {newsTopic?.map((topic, index) => (
+                            <Chip label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
+                        ))}
+                    </Stack>}
                     {newsLists.map(news => {
                         return (
                             <Link
@@ -87,7 +126,7 @@ export default function FinancialNewsLists() {
                     })
                     }
                 </>
-                : <div className="loader"></div>
+                : <Loading />
             }
         </div>
     )
@@ -103,4 +142,9 @@ const sxStyle = {
 
 const style = {
     div: { display: 'flex', flexDirection: "column", width: '100%' },
+    subDivHeading: { display: "flex", justifyContent: "space-between", alignItems: "center", },
+    subDivInputField: { display: "flex", alignItems: "center", width: "25%" },
+    Stack: { display: "flex", flexWrap: "wrap", marginBottom: "20px" },
+    Chip: { marginRight: "5px", marginBottom: "5px" },
+    convertButton: { marginLeft: "8px", marginTop: "-1.5px" },
 }

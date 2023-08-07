@@ -14,11 +14,11 @@ public class FinancialNewsService {
         this._financialNewsApiClient = financialNewsApiClient;
     }
 
-    public FinancialNewsResponse[] getFinancialNews() {
+    public FinancialNewsResponse[] getFinancialNews(String newsTopic) {
         FinancialNewsResponse[] news = null;
-        for (FinancialNewsApiClient apiClient: _financialNewsApiClient) {
+        for (FinancialNewsApiClient apiClient : _financialNewsApiClient) {
             try {
-                news = apiClient.getFinancialNews();
+                news = apiClient.getFinancialNews(newsTopic);
             } catch (Exception e) {
                 System.out.println("Cannot retrieve news: " + e);
             }

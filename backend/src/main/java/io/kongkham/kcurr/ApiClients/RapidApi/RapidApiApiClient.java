@@ -21,8 +21,8 @@ public class RapidApiApiClient implements FinancialNewsApiClient {
         this._webClient = webClientBuidler.build();
     }
 
-    public FinancialNewsResponse[] getFinancialNews() {
-        String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?q=Nasdaq, oil, gold, investment, trading, finance, interest, income, bank, tesla, apple, Facebook, cryptocurrency&region=US";
+    public FinancialNewsResponse[] getFinancialNews(String newsTopic) {
+        String url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?q=" + newsTopic + "&region=US";
         String hostNews = "apidojo-yahoo-finance-v1.p.rapidapi.com";
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", _rapidApiApiKey);
@@ -64,7 +64,7 @@ public class RapidApiApiClient implements FinancialNewsApiClient {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm:ss a", Locale.ENGLISH);
         formatter.setTimeZone(TimeZone.getTimeZone("PDT"));
         String formattedDate = formatter.format(date);
-        formattedDate = formattedDate.substring(0, formattedDate.length()-11) + "at" + formattedDate.substring(formattedDate.length()-12) + " PDT";
+        formattedDate = formattedDate.substring(0, formattedDate.length() - 11) + "at" + formattedDate.substring(formattedDate.length() - 12) + " PDT";
         return formattedDate;
     }
 }

@@ -1,10 +1,14 @@
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 
-export default function CurrAmountInput(props) {
-    const { updateVal, isError, baseCurr, currCountiesCodeMapDetail } = props;
+export default function InputTextField(props) {
+    const { updateVal, isError = false, baseCurr, currCountiesCodeMapDetail, inputFieldLabel, placeHolder, size = "large", displayInput } = props;
 
-    const currKeys = Object.keys(currCountiesCodeMapDetail);
+    let currKeys;
+    if (currCountiesCodeMapDetail != null) {
+        currKeys = Object.keys(currCountiesCodeMapDetail);
+    }
+
     const symbol = () => {
         for (let targetCurr of currKeys) {
             if (currCountiesCodeMapDetail[targetCurr].currCode === baseCurr) {
@@ -19,19 +23,21 @@ export default function CurrAmountInput(props) {
         <TextField
             required
             error={isError ? true : false}
-            label="Amount"
-            id="amount"
-            name="amount"
-            placeholder="Enter number"
+            label={inputFieldLabel.charAt(0).toUpperCase() + inputFieldLabel.substring(1)}
+            id={inputFieldLabel}
+            name={inputFieldLabel}
+            placeholder={placeHolder}
             sx={sxStyle.TextField}
-            InputProps={{
+            size={size}
+            InputProps={currCountiesCodeMapDetail != null && {
                 startAdornment: <Box position="start" style={style.Box}>{symbol()}</Box>,
             }}
             // helperText="Input valid number."
             onChange={handleChange}
+            value={displayInput}
         />
     )
 };
 
 const sxStyle = { TextField: { width: '25ch' } };
-const style = {Box: { marginRight: "10px" }}
+const style = { Box: { marginRight: "10px" } };

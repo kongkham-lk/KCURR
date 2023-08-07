@@ -1,9 +1,9 @@
 package io.kongkham.kcurr.Controllers;
 
+import io.kongkham.kcurr.Models.FinancialNewsRequest;
 import io.kongkham.kcurr.Models.FinancialNewsResponse;
 import io.kongkham.kcurr.Services.FinancialNewsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class FinancialNewsController {
@@ -13,8 +13,9 @@ public class FinancialNewsController {
         this._financialNewsService = financialNewsService;
     }
 
-    @GetMapping("/news")
-    public FinancialNewsResponse[] getFinancialNews() {
-        return _financialNewsService.getFinancialNews();
+    @PostMapping("/news")
+    public FinancialNewsResponse[] getFinancialNews(@RequestBody FinancialNewsRequest data) {
+        String newsTopic = data.getNewsTopic();
+        return _financialNewsService.getFinancialNews(newsTopic);
     }
 }

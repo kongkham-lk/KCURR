@@ -27,17 +27,16 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail,currInput } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, currInput } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
-    if (currInput.baseCurr != "USD") {
+    if (currInput.baseCurr !== "USD") {
         initialTargetCurrArray.unshift(currInput.baseCurr);
         initialTargetCurrArray.splice(-1, 1);
     }
 
     const timeSeriesRange = "Week";
-    console.log("table rate basecurr => ", currInput.baseCurr)
 
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
 
@@ -53,7 +52,7 @@ export default function ExchangeRateTableData(props) {
         if (isReady) {
             setCurrLists([...initialCurrLists]);
         }
-    }, [isReady]);
+    }, [isReady, initialCurrLists]);
 
     useEffect(() => {
         async function checkNewRow() {
