@@ -24,13 +24,13 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
 
 
     @Override
-    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
-        return null;
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     @Override
-    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
-        return null;
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     @Override
@@ -49,8 +49,8 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
-        return null;
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     private HashMap<String, CurrCountriesResponse> transformedJsonData(CloudMersiveApiResponse currCountriesRes) {

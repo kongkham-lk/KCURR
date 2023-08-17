@@ -24,13 +24,13 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
-        return null;
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     @Override
-    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) {
-        return null;
+    public HashMap<String, Double> getHistoricalExchangeRates(String baseCurr) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     public HashMap<String, CurrCountriesResponse> getCurrCountries() {
@@ -45,14 +45,14 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
-        return null;
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) throws Exception {
+        throw new Exception("Method not implemented");
     }
 
     private HashMap<String, CurrCountriesResponse> transformedJsonData(CurrencyApiApiResponse currCountriesRes) {
         HashMap<String, CurrencyApiApiResponseData> data = currCountriesRes.getData();
         HashMap<String, CurrCountriesResponse> currCountries = new HashMap<String, CurrCountriesResponse>();
-        for (Map.Entry<String,CurrencyApiApiResponseData> element : data.entrySet()) {
+        for (Map.Entry<String, CurrencyApiApiResponseData> element : data.entrySet()) {
             String key = (String) element.getKey();
             CurrencyApiApiResponseData dataField = (CurrencyApiApiResponseData) element.getValue();
             if (dataField != null) {
