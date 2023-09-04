@@ -13,6 +13,7 @@ export default function ExchangeRateTable(props) {
   const currInput = { baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD" };
 
 
+
   useEffect(
     function fetchData() {
       async function fetchCurrApiData() {

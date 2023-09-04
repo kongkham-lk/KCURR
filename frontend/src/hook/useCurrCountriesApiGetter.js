@@ -8,12 +8,15 @@ export default function useCurrCountriesApiGetter() {
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
+                let resCurrCountries;
                 try {
-                    const resCurrCountries = await axios.get('http://localhost:8080/curr/currency-country');
-                    setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                    setIsReady(true);
+                    resCurrCountries = await axios.get('http://localhost:5268/curr/currency-country');
                 } catch (e) {
                     console.log(e.stack);
+                }
+                if (resCurrCountries !== undefined) {
+                    setCurrCountiesCodeMapDetail(resCurrCountries.data);
+                    setIsReady(true);
                 }
             }
             fetchCurrOption();

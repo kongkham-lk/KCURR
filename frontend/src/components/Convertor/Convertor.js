@@ -28,7 +28,6 @@ export default function Convertor(props) {
     let changeRateInPercent;
 
     if (formData !== null) {
-        console.log("formData => ", formData)
         baseCurr = formData.baseCurr;
         targetCurr = formData.targetCurr;
         amount = formData.amount;
