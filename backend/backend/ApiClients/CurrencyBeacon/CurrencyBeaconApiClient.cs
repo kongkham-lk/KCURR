@@ -7,14 +7,14 @@ namespace backend.ApiClients.CurrencyBeacon;
 public class CurrencyBeaconApiClient : IExchangeRateApiClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ApiKeysProvider _apiKeysProvider;
     private readonly string _currencyBeaconApiKey;
 
-    public CurrencyBeaconApiClient(HttpClient httpClient, IConfiguration configuration)
+    public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {
         _httpClient = httpClient;
-        ApiKeysProvider apiKeysProvider = new ApiKeysProvider();
-        _currencyBeaconApiKey = apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
-        // _currencyBeaconApiKey = configuration["ApiKeys:CurrencyBeaconApiKey"];
+        _apiKeysProvider = apiKeysProvider;
+        _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
     }
 
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)

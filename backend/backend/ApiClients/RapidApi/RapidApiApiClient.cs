@@ -7,13 +7,14 @@ namespace backend.ApiClients.RapidApi;
 public class RapidApiApiClient : IFinancialNewsApiClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ApiKeysProvider _apiKeysProvider;
     private readonly string _rapidApiApiKey;
 
-    public RapidApiApiClient(HttpClient httpClient, IConfiguration configuration)
+    public RapidApiApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {
         _httpClient = httpClient;
-        ApiKeysProvider apiKeysProvider = new ApiKeysProvider();
-        _rapidApiApiKey = apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.RapidApiApiKey);
+        _apiKeysProvider = apiKeysProvider;
+        _rapidApiApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.RapidApiApiKey);
         _httpClient.BaseAddress = new Uri("https://apidojo-yahoo-finance-v1.p.rapidapi.com");
         _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApiApiKey);
         _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com");

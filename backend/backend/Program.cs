@@ -1,4 +1,5 @@
 
+using backend;
 using backend.ApiClients.CurrencyBeacon;
 using backend.ApiClients.RapidApi;
 using backend.Interfaces;
@@ -25,6 +26,7 @@ builder.Services.AddSingleton<CurrService>();
 builder.Services.AddSingleton<FinancialNewsService>();
 builder.Services.AddSingleton<IExchangeRateApiClient, CurrencyBeaconApiClient>();
 builder.Services.AddSingleton<IFinancialNewsApiClient, RapidApiApiClient>();
+builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
