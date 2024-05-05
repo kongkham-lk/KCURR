@@ -17,13 +17,13 @@ public class CurrService {
         return amount * checkRate(sourceCurrCountry, targetCurrCountry);
     }
 
-    private double checkRate(String baseCurrCountry, String targetCurrCountry) {
+    private double checkRate(String sourceCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeApiResponse exchangeApiResponse = _ExchangeRatesGetter.getExchangeRates(baseCurrCountry);
+        ExchangeApiResponse exchangeApiResponse = _ExchangeRatesGetter.getExchangeRates(sourceCurrCountry);
         double targetRate =  exchangeApiResponse.getConversion_rates().get(targetCurrCountry);
         HashMap<String, Double> rates = new HashMap<String, Double>();
         rates.put(targetCurrCountry, targetRate);
-        CurrData curr = new CurrData(baseCurrCountry, rates);
+        CurrData curr = new CurrData(sourceCurrCountry, rates);
         return curr.getRates().get(targetCurrCountry);
     }
 

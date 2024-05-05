@@ -1,40 +1,23 @@
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 
-export default function CurrAmount({ updateVal, error }) {
-    const handleChange = (e) => { updateVal(e.target) };
+function CurrAmount({ updateVal, amount }) {
+    const handleChange = (e) => {
+        updateVal(e.target);
+    };
 
-    const isError = (<TextField
-        required
-        error
-        label="Amount"
-        name="amount"
-        sx={sxStyle.TextField}
-        InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-        }}
-        helperText="Please input valid number."
-        onChange={handleChange}
-    />);
-
-    const nonError = (<TextField
-        required
-        label="Amount"
-        id="amount"
-        name="amount"
-        placeholder="Enter number"
-        sx={sxStyle.TextField}
-        InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-        }}
-        onChange={handleChange}
-    />);
+    const input = amount.toString();
 
     return (
-        <>
-            {error ? isError : nonError}
-        </>
-    )
+        <TextField
+            required
+            id="amount"
+            label="Amount"
+            variant="outlined"
+            name="amount"
+            placeholder={input}
+            onChange={handleChange}
+        />)
 };
 
-const sxStyle = {TextField:{ width: '25ch' }};
+export default CurrAmount;
+

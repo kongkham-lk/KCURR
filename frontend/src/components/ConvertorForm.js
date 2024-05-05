@@ -1,93 +1,68 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+// import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CurrAmount from './CurrAmount'
-import CurrCountries from './CurrCountries'
+import CurrType from './CurrType'
 
-export default function Convertor({ getFormData, currApiArr }) {
-  const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
-  const [isError, setIsError] = useState(false);
+function Convertor({ getValue }) {
+  const [inputs, setInputs] = useState({ amount: 0, sourceCurr: 'USD', targetCurr: 'THB' });
+
+  const fetchConvert = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/convert', inputs);
+      console.log("response: ", response)
+      getValue(inputs, response);
+    } catch (e) { 
+      console.log(e.code, "\n", e.stack);
+    }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(inputs)
+    // setIsSubmit(true);
+    fetchConvert();
+  };
 
   const handleChange = (e) => {
+    console.log(e.value, "'s type is: ", typeof e.value)
     let convAmountType = "";
-
     if (e.name === 'amount') {
-      if (containsOnlyNumbers(e.value) || e.value === "") {
-        setIsError(false);
-      } else {
-        setIsError(true);
-      }
       convAmountType = parseFloat(e.value);
     }
-
-    setFormInputs((oldFormInputs) => {
+    // console.log(convAmountType, "'s type is: ", typeof convAmountType);
+    // tempting for assigning curr type
+    setInputs((newInputs) => {
+      // setIsSubmit(false);
       return {
-        ...oldFormInputs,
+        ...newInputs,
         [e.name]: convAmountType === "" ? e.value : convAmountType,
       };
     });
   };
 
   const handleSwap = () => {
-    const { amount, baseCurr, targetCurr } = formInputs;
-    const newFormInput = { amount: amount, baseCurr: targetCurr, targetCurr: baseCurr };
-    setFormInputs(newFormInput);
+    console.log("SWAP!!!");
+    const { amount, sourceCurr, targetCurr } = inputs;
+    const newInput = { amount: amount, sourceCurr: targetCurr, targetCurr: sourceCurr };
+    setInputs(newInput);
   }
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    fetchConvertVal(getFormData, formInputs);
-  };
-
-  const swapButton = isError
-    ? <Button variant="contained" disabled sx={sxStyle.swapButton}>{EmbedSwapIcon}</Button>
-    : <Button variant="outlined" type="submit" className="swap" onClick={handleSwap} sx={sxStyle.swapButton} >{EmbedSwapIcon}</Button>;
-
-  const convertButton = isError
-    ? <Button variant="contained" style={style.convertButton} disabled>Convert</Button>
-    : <Button variant="contained" type="submit" style={style.convertButton}>Convert</Button>;
+  console.log("inputs -> ", inputs);
 
   return (
     <form onSubmit={onSubmit} >
-      <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
-        <CurrAmount updateVal={handleChange} error={isError} />
-        <CurrCountries sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleChange} baseCurrVal={formInputs.baseCurr} currApiArr={currApiArr} />
-        {swapButton}
-        <CurrCountries sxStyle={sxStyle.CurrCountries} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiArr={currApiArr} />
+      <Stack spacing={3} direction="row" flexWrap="wrap" sx={{ marginBottom: 2 }}>
+        <CurrAmount amount={inputs.amount} updateVal={handleChange} />
+        <CurrType type="sourceCurr" updateVal={handleChange} defaultType={inputs.sourceCurr} />
+        <Button variant="outlined" type="button" className="swap" onClick={handleSwap} >Swap</Button>
+        <CurrType type="targetCurr" updateVal={handleChange} defaultType={inputs.targetCurr} />
       </Stack>
-      {convertButton}
+      <Button variant="contained" type="submit" style={{ marginTop: "5px" }}>Convert</Button>
     </form>
   )
 };
 
-function containsOnlyNumbers(str) {
-  return /^[0-9.]+$/.test(str);
-}
+export default Convertor;
 
-const fetchConvertVal = async (getFormData, formInputs) => {
-  try {
-    const response = await axios.post('http://localhost:8080/convert', formInputs);
-    getFormData(formInputs, response);
-  } catch (e) {
-    console.log(e.code, "\n", e.stack);
-  }
-};
-
-const EmbedSwapIcon = (<img
-  src="https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg"
-  alt="arrow"
-  style={{ objectFit: "cover", height: "40px", mixBlendMode: "multiply" }}
-/>);
-
-const style = {
-  convertButton: { marginTop: "5px" },
-};
-
-const sxStyle = {
-  CurrCountries: { m: 1, minWidth: 1/4, width: 250 },
-  Stack: { marginBottom: 2, display:"flex", 
-  alignItems: "center",
-  flexWrap: "nowrap" },
-  swapButton: { borderRadius: "32px", width: "30px", height: "40px" },
-}
