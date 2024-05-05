@@ -18,25 +18,15 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
     function fetchData() {
       async function fetchCurrApiData() {
         try {
-          const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate', initialValue.lastest);
-          const lastestRate = resExchangeRatesLast.data.conversion_rates;
-          let resExchangeRatesHist;
-          try {
-            // if cannot fetch the api data
-            resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate', initialValue.hist);
-          } catch (e) {
-            // return fake dataSet
-            resExchangeRatesHist = {
-              data: {
-                conversion_rates: {"CAD": 1.3168, "EUR": 0.9013, "GBP": 0.7679,}
-              }
-            };
-          }
+          const resExchangeRatesLast = await axios.post('http://localhost:8080/curr/rate-latest', initialValue);
+          const resExchangeRatesHist = await axios.post('http://localhost:8080/curr/rate-hist', initialValue);
+          const latestRates = resExchangeRatesLast.data;
+          const histRates = resExchangeRatesHist.data;
           if (resExchangeRatesHist != null) {
             const histRate = resExchangeRatesHist.data.conversion_rates;
-            setCurrApiDataSet([lastestRate, histRate]);
+            setCurrApiDataSet([latestRates, histRates]);
           } else {
-            setCurrApiDataSet(lastestRate);
+            setCurrApiDataSet(latestRates);
           }
         } catch (e) {
           console.log(e.stack);
@@ -50,6 +40,10 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
     setNewCurrList({[e.name]: e.value});
   };
 
+
+  console.log("currApiDataSet =>",currApiDataSet)
+  console.log("currApiDataSet Length =>",currApiDataSet.length)
+
   return (
     <>
       <TableContainer component={Paper} style={style.TableContainer}>
@@ -57,11 +51,11 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
           <TableHead>
             <TableRow>
               <TableCell>Country Currency</TableCell>
-              <TableCell align="right">Amount</TableCell>
-              <TableCell align="right">Change&nbsp;(24h)</TableCell>
+              <TableCell align="left">Amount</TableCell>
+              <TableCell align="left">Change&nbsp;(24h)</TableCell>
             </TableRow>
           </TableHead>
-          {currApiDataSet.length > 0 && <ExchangeRateTableData currApiDataSet={currApiDataSet} newCurrList={newCurrList} currApiKeyValuePair={currApiKeyValuePair} />}
+          {currApiDataSet.length > 0 &&  <ExchangeRateTableData currApiDataSet={currApiDataSet} newCurrList={newCurrList} currApiKeyValuePair={currApiKeyValuePair} />}
         </Table>
       </TableContainer>
       <CurrCountries sxStyle={sxStyle.CurrCountries} label="Add Currency" stateInputField="targetCurr" updateVal={handleChange} currApiArr={currApiArr} sx={{ml: 20}} />
@@ -69,10 +63,7 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
   );
 }
 
-const initialValue = {
-  lastest: { baseCurr: "USD", rateDataSet: "lastest" },
-  hist: { baseCurr: "USD", rateDataSet: "hist" },
-};
+const initialValue = { baseCurr: "USD" };
 
 const sxStyle = {
   Table: { width: 1 },

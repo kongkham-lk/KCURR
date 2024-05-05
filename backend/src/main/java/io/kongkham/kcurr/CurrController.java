@@ -2,11 +2,14 @@ package io.kongkham.kcurr;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/curr")
 public class CurrController {
     private final CurrService _currService;
 
+    // is it a way to create CurrService class object?
     public CurrController(CurrService _currService) {
         this._currService = _currService;
     }
@@ -19,16 +22,23 @@ public class CurrController {
         return _currService.convert(amount, baseCurr, targetCurr);
     }
 
-    @PostMapping("/rate") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
-    public ExchangeRateApiResponse getExchangeRatesHist(@RequestBody RateTableRequest data) {
+    @PostMapping("/rate-latest") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    public HashMap<String, Double> getLatestExchangeRates(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
-        String dataSet = data.getRateDataSet();
-        return _currService.getExchangeRate(baseCurr, dataSet);
+        HashMap<String, Double> result = _currService.getLatestExchangeRates(baseCurr);
+        return result;
+    }
+
+    @PostMapping("/rate-hist") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    public HashMap<String, Double> getExchangeRates(@RequestBody RateTableRequest data) {
+        String baseCurr = data.getBaseCurr();
+//        String dataSet = data.getRateDataSet();
+        HashMap<String, Double> result = _currService.getHistExchangeRates(baseCurr);
+        return result;
     }
 
     @GetMapping("/currency-country")
-    public ExchangeCurrCountriesApiResponse getCurrOption() {
-        return _currService.getCurrCountry();
+    public CurrCountriesApiResponse getCurrOption() {
+        return _currService.getCurrCountries();
     }
-
 }

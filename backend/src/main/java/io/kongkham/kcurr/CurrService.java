@@ -2,6 +2,8 @@ package io.kongkham.kcurr;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class CurrService {
 
@@ -18,20 +20,21 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateLatestApiResponse exchangeRateApiResponse = _ExchangeRateApiClient.getExchangeRatesLatest(baseCurrCountry);
-        double targetRate =  exchangeRateApiResponse.getConversionRates().get(targetCurrCountry);
-        return targetRate;
+        ExchangeRateApiResponse latestRateApiResponse = _ExchangeRateApiClient.getLatestExchangeRates(baseCurrCountry);
+        return latestRateApiResponse.getResponse().getRates().get(targetCurrCountry);
     }
 
-    public ExchangeRateApiResponse getExchangeRate(String baseCurr, String dataSet) {
-        if (dataSet.equals("lastest")) {
-            return _ExchangeRateApiClient.getExchangeRatesLatest(baseCurr);
-        } else {
-            return _ExchangeRateApiClient.getExchangeRatesHist(baseCurr);
-        }
+    public HashMap<String, Double> getLatestExchangeRates(String baseCurr) {
+        HashMap<String, Double> rates = _ExchangeRateApiClient.getLatestExchangeRates(baseCurr).getResponse().getRates();
+        return rates;
     }
 
-    public ExchangeCurrCountriesApiResponse getCurrCountry() {
-        return _ExchangeRateApiClient.getCurrCountry();
+    public HashMap<String, Double> getHistExchangeRates(String baseCurr) {
+        HashMap<String, Double> rates = _ExchangeRateApiClient.getHistExchangeRates(baseCurr).getResponse().getRates();
+        return rates;
+    }
+
+    public CurrCountriesApiResponse getCurrCountries() {
+        return _ExchangeRateApiClient.getCurrCountries();
     }
 }
