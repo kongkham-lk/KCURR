@@ -14,6 +14,8 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
     const [currLists, setCurrLists] = useState(initialRow);
     const [fakeRecords, setFakeRecords] = useState({});
 
+    console.log("currLists =>", currLists)
+
     useEffect(
         function checkNewRow() {
             if (newCurrList.targetCurr !== "" && !checkIfExist(currLists, newCurrList.targetCurr)) {
@@ -29,30 +31,28 @@ export default function ExchangeRateTableData({ currApiDataSet, newCurrList, cur
 
     return (
         <TableBody>
-            {currLists.map((row) => (
+            {currLists.map((currList) => (
                 <TableRow
-                    key={row.targetCurr}
+                    key={currList.targetCurr}
                     sx={sxStyle.TableRow}
                 >
                     <TableCell component="th" scope="row">
                         <div style={style.div}>
                             <img
                                 style={style.img}
-                                src={`https://www.countryflagicons.com/SHINY/32/${row.targetCurr.substring(0, 2)}.png`}
+                                src={`https://www.countryflagicons.com/SHINY/32/${currList.targetCurr.substring(0, 2)}.png`}
                                 alt="" />
-                            <span style={style.span}>{currApiKeyValuePair[row.targetCurr]}</span>
+                            <span style={style.span}>{currApiKeyValuePair[currList.targetCurr]}</span>
                         </div>
                     </TableCell>
-                    <TableCell align="right">{row.lastestRate}</TableCell>
+                    <TableCell align="left">{currList.latestRate}</TableCell>
                     <TableCell
-                        align="right"
-                        style={row.change >= 0 || row.change === null || fakeRecords[row.targetCurr] >= 0
+                        align="left"
+                        style={currList.change >= 0 || currList.change === null || fakeRecords[currList.targetCurr] >= 0
                             ? { color: "green" } : { color: "red" }}>
-                        {row.change === null ? row.change
-                            : row.change >= 0 ? "+" + row.change + "%"
-                                : row.change < 0 ? row.change + "%"
-                                    : fakeRecords[row.targetCurr] >= 0 ? "+" + fakeRecords[row.targetCurr] + "%"
-                                        : fakeRecords[row.targetCurr] + "%"
+                        {currList.change === null ? currList.change
+                            : currList.change >= 0 ? "+" + currList.change + "%"
+                                : currList.change + "%"
                         }
                     </TableCell>
                 </TableRow>
@@ -69,16 +69,20 @@ function checkIfExist(arr, targetCurr) {
 }
 
 function createCurrLists(baseCurr, targetCurr, currApiDataSet) {
-    let lastestRate;
-    let histRate;
-    let change;
-    if (baseCurr !== targetCurr) {
-        lastestRate = currApiDataSet[0][targetCurr];
-        histRate = currApiDataSet[1][targetCurr];
-        change = (lastestRate - histRate) * 100 / histRate;
-        return { targetCurr, lastestRate, change: change.toFixed(2) };
+    const latestRates = currApiDataSet[0];
+    const histRates = currApiDataSet[1];
+    if (baseCurr === targetCurr) {
+        return { targetCurr: baseCurr, latestRate: 1, change: null };
     } else {
-        return { targetCurr: baseCurr, lastestRate: 1, change: null };
+        console.log("latestRates => ", latestRates )
+        console.log("histRates => ", histRates)
+        const latestRate = latestRates[targetCurr];
+        const histRate = histRates[targetCurr];
+        console.log("latestRates result => ", latestRate)
+        console.log("histRates result => ", histRate)
+        const change = (latestRate - histRate) * 100 / histRate;
+        console.log("change => ", change)
+        return { targetCurr, latestRate:latestRate.toFixed(4), change: change.toFixed(2) };
     }
 }
 

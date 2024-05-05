@@ -9,9 +9,9 @@ export default function CurrApiGetter() {
         function fetchData() {
             async function fetchCurrOption() {
                 try {
-                    const responseCurrOption = await axios.get('http://localhost:8080/api/exchange-rate');
-                    const apiArr = getCurrApiArr(responseCurrOption.data.supported_codes);
-                    const apiKeyValuePair = getCurrApiKeyValue(responseCurrOption.data.supported_codes);
+                    const responseCurrOption = await axios.get('http://localhost:8080/curr/currency-country');
+                    const apiArr = getCurrApiArr(responseCurrOption.data.data);
+                    const apiKeyValuePair = getCurrApiKeyValue(responseCurrOption.data.data);
                     setCurrApiArr([...apiArr]);
                     setCurrApiKeyValuePair(apiKeyValuePair);
                 } catch (e) {
@@ -21,20 +21,22 @@ export default function CurrApiGetter() {
             fetchCurrOption();
         }, []
     );
-    return {currApiArr, currApiKeyValuePair};
+    return { currApiArr, currApiKeyValuePair };
 };
 
-function getCurrApiArr(responseCurrOption) {
-    const array = responseCurrOption.map(el => (
-        { type: el[0], display: `${el[0]} - ${el[1]}` }
+function getCurrApiArr(resDataForArray) {
+    const keys = Object.keys(resDataForArray);
+    const array = keys.map(key => (
+        { type: key, display: `${key} - ${resDataForArray[key].name}`, symbol: resDataForArray[key].symbol_native }
     ))
     return array;
 }
 
-function getCurrApiKeyValue(responseCurrOption) {
-    const keyValuePair = {};
-    for (let el of responseCurrOption) {
-        keyValuePair[el[0]] = el[1];
+function getCurrApiKeyValue(resDataForAKeyVal) {
+    let keyValuePair = {};
+    const keys = Object.keys(resDataForAKeyVal);
+    for (let key of keys) {
+        keyValuePair[key] = resDataForAKeyVal[key].name;
     }
     return keyValuePair;
 }
