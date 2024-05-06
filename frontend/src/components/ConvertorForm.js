@@ -54,7 +54,7 @@ export default function Convertor({ getFormData, currApiArr }) {
         <CurrAmount updateVal={handleChange} error={isError} baseCurr={formInputs.baseCurr} currApiArr={currApiArr}/>
         <CurrCountries sxStyle={sxStyle.CurrCountries} label="From" stateInputField="baseCurr" updateVal={handleChange} baseCurrVal={formInputs.baseCurr} currApiArr={currApiArr} />
         {swapButton}
-        <CurrCountries sxStyle={sxStyle.CurrCountries} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiArr={currApiArr} />
+        <CurrCountries sxStyle={sxStyle.CurrCountries} passInStyle={style.Select} label="To" stateInputField="targetCurr" updateVal={handleChange} baseCurrVal={formInputs.targetCurr} currApiArr={currApiArr} />
       </Stack>
       {convertButton}
     </form>

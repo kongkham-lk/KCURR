@@ -4,13 +4,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import axios from 'axios';
 
-export default function CurrCountries({ label, updateVal, stateInputField, baseCurrVal, currApiArr, sxStyle }) {
+export default function CurrCountries({ label, updateVal, stateInputField, baseCurrVal, currApiArr, sxStyle, size, passInStyle= { height: "56.5px" }}) {
     function handleChange(e) {
         updateVal({ name: stateInputField, value: e.target.value });
     }
 
     return (
-        <FormControl sx={sxStyle}>
+        <FormControl sx={sxStyle} size={size}>
             <InputLabel id={stateInputField} >{label}</InputLabel>
             <Select
                 labelId={stateInputField}
@@ -18,7 +18,7 @@ export default function CurrCountries({ label, updateVal, stateInputField, baseC
                 value={baseCurrVal}
                 label={label}
                 onChange={handleChange}
-                style={style.select}
+                style={passInStyle}
             >
                 {currApiArr?.map((curr) => (
                     <MenuItem key={curr.type} value={curr.type} >
@@ -34,7 +34,6 @@ export default function CurrCountries({ label, updateVal, stateInputField, baseC
 };
 
 const style = {
-    select: { height: "56.5px" },
     div: { display: "flex", alignItems: "center", padding: "0" },
     image: { margin: "0 10px 0px 0px" },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "1.5px" },

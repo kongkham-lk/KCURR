@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class CurrController {
     private final CurrService _currService;
 
-    // is it a way to create CurrService class object?
     public CurrController(CurrService _currService) {
         this._currService = _currService;
     }
@@ -32,7 +31,6 @@ public class CurrController {
     @PostMapping("/rate-hist") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
     public HashMap<String, Double> getExchangeRates(@RequestBody RateTableRequest data) {
         String baseCurr = data.getBaseCurr();
-//        String dataSet = data.getRateDataSet();
         HashMap<String, Double> result = _currService.getHistExchangeRates(baseCurr);
         return result;
     }
