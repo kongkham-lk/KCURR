@@ -36,3 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 apiKeys.json
+node_modules/
