@@ -31,6 +31,8 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    console.log("currLists =>", currLists)
+
     useEffect(
         function checkNewRow() {
             if (newCurrList.targetCurr !== "" && !currLists.includes(newCurrList.targetCurr)) {
