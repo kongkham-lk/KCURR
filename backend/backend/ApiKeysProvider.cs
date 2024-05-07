@@ -31,6 +31,7 @@ public class ApiKeysProvider
             targetApiName = "CloudMersiveApiKey";
         else if (apiName == ApiName.RapidApiApiKey)
             targetApiName = "RapidApiApiKey";
+        // apiKeys is retrieve from apiKeys.json where is located in the same dir as apiKeys.json
         return _apiKeys[targetApiName];
     }
 
