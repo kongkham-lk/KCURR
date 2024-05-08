@@ -225,6 +225,12 @@ export default function ExchangeRateTableData({ currApiDataSet, currApiKeyValueP
     );
 }
 
+function compare(a, b) {
+    if (a.targetCurr < b.targetCurr) return -1;
+    if (a.targetCurr > b.targetCurr) return 1;
+    return 0;
+}
+
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
