@@ -135,7 +135,7 @@ export default function ExchangeRateTableData(props) {
                     <div style={style.PaperDiv}>
                         <Typography
                             sx={sxStyle.Typography}
-                            variant="h6"
+                            variant="h5"
                             id="tableTitle"
                             component="div"
                         >
@@ -241,7 +241,7 @@ const style = {
     DeleteIcon: { marginRight: "8px" },
     chartDiv: { width: "70px", height: "40px", float: "right" },
     Tooltip: { margin: "16px" },
-    PaperDiv: { display: "flex" },
+    PaperDiv: { display: "flex", marginBottom: "-15px", },
 };
 
 const sxStyle = {
@@ -251,5 +251,5 @@ const sxStyle = {
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
-    Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center" },
+    Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
 };

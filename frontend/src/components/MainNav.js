@@ -31,8 +31,11 @@ export default function MainNav() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={sxStyle.Typography} >
-            <Link href={mainLogo.link} underline="none" sx={sxStyle.Link} >
-              {mainLogo.label}
+            <Link href={mainLogo.link} underline="none" sx={sxStyle.mainLogo} >
+              <div style={{ display: "flex", alignItems: "center", marginLeft: "15px" }}>
+                <img width="60" height="60" src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
+                {mainLogo.label}
+              </div>
             </Link>
           </Typography>
           <Box sx={sxStyle.BoxSub}>
@@ -92,11 +95,17 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
   )
 };
 
+const embbedLogo = {
+  link: "https://img.icons8.com/external-icongeek26-outline-icongeek26/64/external-money-currency-icongeek26-outline-icongeek26-9.png",
+  alt: "external-money-currency-icongeek26-outline-icongeek26-9",
+} ;
+
 const sxStyle = {
   BoxMain: { display: 'flex', mb: 14 },
   IconButton: { mr: 2, display: { sm: 'none' } },
-  Typography: { flexGrow: 1, textAlign: {xs : 'center', sm : 'left'}},
+  Typography: { flexGrow: 1, textAlign: { xs: 'center', sm: 'left' } },
   Link: { color: '#fff', margin: "15px" },
+  mainLogo: { color: '#fff' },
   BoxSub: { display: { xs: 'none', sm: 'block' }, },
   Drawer: {
     display: { xs: 'block', sm: 'none' },
@@ -105,4 +114,8 @@ const sxStyle = {
   BoxPopupSideBar: { textAlign: 'center' },
   TypographyPopupSideBar: { my: 2 },
   ListItemButtonPopupSideBar: { textAlign: 'center' },
+}
+
+const style = {
+  logo: { width: "42px", height: "42px", filter: "invert(1)", margin: "0 8px" },
 }

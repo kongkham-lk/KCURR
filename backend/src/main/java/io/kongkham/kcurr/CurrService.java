@@ -15,11 +15,13 @@ public class CurrService {
     private final ExchangeRateApiClient _currencyBeaconApiClient;
     private final ExchangeRateApiClient _currencyApiApiClient;
     private final ExchangeRateApiClient _cloudMersiveApiClient;
+    private final FinancialNewsApiClient _rapidApiApiClient;
 
-    public CurrService(@Qualifier("CurrencyBeacon") ExchangeRateApiClient currencyBeaconApiClient, @Qualifier("CurrencyApi") ExchangeRateApiClient currencyApiApiClient, @Qualifier("CloudMersive") ExchangeRateApiClient cloudMersiveApiClient) {
+    public CurrService(@Qualifier("CurrencyBeacon") ExchangeRateApiClient currencyBeaconApiClient, @Qualifier("CurrencyApi") ExchangeRateApiClient currencyApiApiClient, @Qualifier("CloudMersive") ExchangeRateApiClient cloudMersiveApiClient, @Qualifier("RapidApi") FinancialNewsApiClient rapidApiApiClient) {
         this._currencyBeaconApiClient = currencyBeaconApiClient;
         this._currencyApiApiClient = currencyApiApiClient;
         this._cloudMersiveApiClient = cloudMersiveApiClient;
+        this._rapidApiApiClient = rapidApiApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
@@ -88,5 +90,10 @@ public class CurrService {
         RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dayRange, monthRange, changingRates, highest, lowest);
         targetCurrTimeSeries.put(targetCurr, timeSeriesDetail);
         return targetCurrTimeSeries;
+    }
+
+    public FinancialNewsResponse[] getNewsFromRapidApi() {
+        FinancialNewsResponse[] newsLists = _rapidApiApiClient.getFinancialNews();
+        return newsLists;
     }
 }
