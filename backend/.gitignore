@@ -36,3 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 node_modules/
+node_modules/
+apiKeys.json
+/backend/obj/
+.DS_Store
