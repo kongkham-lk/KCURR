@@ -39,6 +39,9 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell style={style.TableCell} align="right" >
+                    Chart (7d)
+                </TableCell>
                 <TableCell style={style.TableCellDelete} align="right" >
                     Delete
                 </TableCell>

@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 @Service("CloudMersive")
 public class CloudMersiveApiClient implements ExchangeRateApiClient {
@@ -31,7 +30,7 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
     }
 
     @Override
-    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+    public HashMap<String, CurrCountriesReturnData> getCurrCountries() {
         String url = "https://api.cloudmersive.com/currency/exchange-rates/list-available";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Apikey", _cloudMersiveApiKey);
@@ -41,13 +40,18 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
                 .retrieve()
                 .bodyToMono(CloudMersiveApiResponse.class)
                 .block();
-        HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
+        HashMap<String, CurrCountriesReturnData> currCountries = transformedJsonData(currCountriesRes);
         return currCountries;
     }
 
-    private HashMap<String, CurrCountryReturnData> transformedJsonData(CloudMersiveApiResponse currCountriesRes) {
+    @Override
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
+        return null;
+    }
+
+    private HashMap<String, CurrCountriesReturnData> transformedJsonData(CloudMersiveApiResponse currCountriesRes) {
         CloudMersiveApiResponseCurrencies[] data = currCountriesRes.getCurrencies();
-        HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
+        HashMap<String, CurrCountriesReturnData> currCountries = new HashMap<String, CurrCountriesReturnData>();
         for (int i = 0; i < data.length; i++) {
             String key = data[i].getCurrCode();
             String currCode = key;
@@ -56,10 +60,10 @@ public class CloudMersiveApiClient implements ExchangeRateApiClient {
             String display = currCode + " - " + countryName + " " + currName;
             String currSymbol = data[i].getCurrSymbol();
             String flagCode = data[i].getCurrFlagTwoLetterCode();
-            CurrCountryReturnData currCountryReturnData = new CurrCountryReturnData(currCode, countryName, display, currSymbol, flagCode);
-            currCountries.put(key, currCountryReturnData);
+            CurrCountriesReturnData currCountriesReturnData = new CurrCountriesReturnData(currCode, countryName, display, currSymbol, flagCode);
+            currCountries.put(key, currCountriesReturnData);
         }
-        HashMap<String, CurrCountryReturnData> result = currCountries;
+        HashMap<String, CurrCountriesReturnData> result = currCountries;
         return currCountries;
     }
 }

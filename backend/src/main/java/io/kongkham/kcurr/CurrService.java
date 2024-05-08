@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Month;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class CurrService {
@@ -38,8 +41,8 @@ public class CurrService {
         return rates;
     }
 
-    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
-        HashMap<String, CurrCountryReturnData> currCountries;
+    public HashMap<String, CurrCountriesReturnData> getCurrCountries() {
+        HashMap<String, CurrCountriesReturnData> currCountries;
         try {
             currCountries = _currencyBeaconApiClient.getCurrCountries();
         } catch (Exception firstApiError) {
@@ -50,5 +53,40 @@ public class CurrService {
             }
         }
         return currCountries;
+    }
+
+    public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
+        TreeMap<String, Double> timeSeries = _currencyBeaconApiClient.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+        HashMap<String, RateTimeSeriesResponse> targetCurrTimeSeries = new HashMap<String, RateTimeSeriesResponse>();
+        int range = timeSeries.size();
+        String[] dayRange = new String[range];
+        String[] monthRange = new String[range];
+        double[] changingRates = new double[range];
+        double highest = Integer.MIN_VALUE;
+        double lowest = Integer.MAX_VALUE;
+        int i = 0;
+        for (Map.Entry<String, Double> element : timeSeries.entrySet()) {
+            String fullDate = element.getKey(); // return yyyy/MM/dd
+            String year = fullDate.substring(0,4); // get yyyy
+            String monthNum = fullDate.substring(5,7); // get MM
+            Month monthName = Month.of(Integer.parseInt(monthNum)); // get the full name of the month
+            String monthAbbr = monthName.toString().substring(0,3);
+            String formatMonthAbbr = monthAbbr.substring(0,1) + monthAbbr.substring(1).toLowerCase();
+            String day = fullDate.substring(fullDate.length()-2); // get dd
+            dayRange[i] = day + " " + formatMonthAbbr;
+            monthRange[i] = formatMonthAbbr + " " + year;
+            double rate = element.getValue(); // return rate
+            changingRates[i] = rate;
+            if (highest < rate) {
+                highest = rate;
+            }
+            if (lowest > rate) {
+                lowest = rate;
+            }
+            i++;
+        }
+        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dayRange, monthRange, changingRates, highest, lowest);
+        targetCurrTimeSeries.put(targetCurr, timeSeriesDetail);
+        return targetCurrTimeSeries;
     }
 }

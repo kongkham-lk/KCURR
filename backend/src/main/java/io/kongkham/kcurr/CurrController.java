@@ -36,7 +36,16 @@ public class CurrController {
     }
 
     @GetMapping("/currency-country")
-    public HashMap<String, CurrCountryReturnData> getCurrCountriesFromCurrencyBeacon() {
+    public HashMap<String, CurrCountriesReturnData> getCurrCountriesFromCurrencyBeacon() {
         return _currService.getCurrCountries();
+    }
+
+    @PostMapping("/rate-timeSeries") // how @RequestBody pass those 3 values and store to the ConvertRequest instantiate
+    public HashMap<String, RateTimeSeriesResponse> getExchangeRatesWeekTimeSeries(@RequestBody RateTimeSeriesRequest data) {
+        String baseCurr = data.getBaseCurr();
+        String targetCurr = data.getTargetCurr();
+        String timeSeriesRange = data.getTimeSeriesRange();
+        HashMap<String, RateTimeSeriesResponse> result = _currService.getExchangeRatesWeekTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+        return result;
     }
 }

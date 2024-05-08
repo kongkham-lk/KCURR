@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import ExchangeRateTableData from './ExchangeRateTableData';
-import { retrieveExchangeRates } from '../../util/apiClient'
+import { retrieveExchangeRates } from '../../util/apiClient';
 
 export default function ExchangeRateTable(props) {
   const { currCountiesCodeMapDetail } = props;
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
+  const [isReady, setIsReady] = useState(false);
+
 
   useEffect(
     function fetchData() {
       async function fetchCurrApiData() {
         try {
           const currDataSet = await retrieveExchangeRates(initialValue);
-          setCurrApiDataSet(currDataSet);        
+          setCurrApiDataSet(currDataSet);
+          setIsReady(true);
         } catch (e) {
           console.log(e.stack);
         }
@@ -22,7 +25,7 @@ export default function ExchangeRateTable(props) {
 
   return (
     <>
-      {currApiDataSet.length > 0 && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />}
+      {isReady && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />}
     </>
   );
 }

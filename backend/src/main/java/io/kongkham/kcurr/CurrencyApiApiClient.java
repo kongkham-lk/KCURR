@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Service("CurrencyApi")
 public class CurrencyApiApiClient implements ExchangeRateApiClient {
@@ -30,20 +30,25 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
         return null;
     }
 
-    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+    public HashMap<String, CurrCountriesReturnData> getCurrCountries() {
         String url = "https://api.currencyapi.com/v3/currencies?apikey=" + _currencyApiApiKey;
         CurrencyApiApiResponse currCountriesRes = _webClient.get()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CurrencyApiApiResponse.class)
                 .block();
-        HashMap<String, CurrCountryReturnData> currCountries = transformedJsonData(currCountriesRes);
+        HashMap<String, CurrCountriesReturnData> currCountries = transformedJsonData(currCountriesRes);
         return currCountries;
     }
 
-    private HashMap<String, CurrCountryReturnData> transformedJsonData(CurrencyApiApiResponse currCountriesRes) {
+    @Override
+    public TreeMap<String, Double> getExchangeRatesWeekTimeSeries(String baseCurr, String targetCurr, String timeSeriesRange) {
+        return null;
+    }
+
+    private HashMap<String, CurrCountriesReturnData> transformedJsonData(CurrencyApiApiResponse currCountriesRes) {
         HashMap<String, CurrencyApiApiResponseData> data = currCountriesRes.getData();
-        HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
+        HashMap<String, CurrCountriesReturnData> currCountries = new HashMap<String, CurrCountriesReturnData>();
         for (Map.Entry<String,CurrencyApiApiResponseData> element : data.entrySet()) {
             String key = (String) element.getKey();
             CurrencyApiApiResponseData dataField = (CurrencyApiApiResponseData) element.getValue();
@@ -53,11 +58,11 @@ public class CurrencyApiApiClient implements ExchangeRateApiClient {
                 String display = currCode + " - " + countryCurrName;
                 String currSymbol = dataField.getSymbolNative();
                 String flagCode = currCode.substring(0, 2);
-                CurrCountryReturnData currCountryReturnData = new CurrCountryReturnData(currCode, countryCurrName, display, currSymbol, flagCode);
-                currCountries.put(key, currCountryReturnData);
+                CurrCountriesReturnData currCountriesReturnData = new CurrCountriesReturnData(currCode, countryCurrName, display, currSymbol, flagCode);
+                currCountries.put(key, currCountriesReturnData);
             }
         }
-        HashMap<String, CurrCountryReturnData> result = currCountries;
+        HashMap<String, CurrCountriesReturnData> result = currCountries;
         return currCountries;
     }
 }
