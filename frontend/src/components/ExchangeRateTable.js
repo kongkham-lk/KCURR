@@ -5,7 +5,7 @@ import ExchangeRateTableData from './ExchangeRateTableData';
 
 const initialValue = { baseCurr: "USD" };
 
-export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
+export default function ExchangeRateTable({ currApiKeyValuePair }) {
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
 
   useEffect(
@@ -27,7 +27,7 @@ export default function ExchangeRateTable({ currApiKeyValuePair, currApiArr }) {
 
   return (
     <>
-      {currApiDataSet.length > 0 && <ExchangeRateTableData currApiDataSet={currApiDataSet} currApiKeyValuePair={currApiKeyValuePair} currApiArr={currApiArr} />}
+      {currApiDataSet.length > 0 && <ExchangeRateTableData currApiDataSet={currApiDataSet} currApiKeyValuePair={currApiKeyValuePair} />}
     </>
   );
 }

@@ -12,7 +12,7 @@ export default function CurrApiGetter() {
                     const responseCurrOption = await axios.get('http://localhost:8080/curr/currency-country');
                     const apiArr = getCurrApiArr(responseCurrOption.data.data);
                     const apiKeyValuePair = getCurrApiKeyValue(responseCurrOption.data.data);
-                    setCurrApiArr([...apiArr]);
+                    setCurrApiArr([...apiArr].sort(compare));
                     setCurrApiKeyValuePair(apiKeyValuePair);
                 } catch (e) {
                     console.log(e.stack);
@@ -39,4 +39,10 @@ function getCurrApiKeyValue(resDataForAKeyVal) {
         keyValuePair[key] = resDataForAKeyVal[key].name;
     }
     return keyValuePair;
+}
+
+function compare(a, b) {
+    if (a.type < b.type) return -1;
+    if (a.type > b.type) return 1;
+    return 0;
 }

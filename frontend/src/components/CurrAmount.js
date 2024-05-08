@@ -1,12 +1,14 @@
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
-export default function CurrAmount({ updateVal, error, baseCurr, currApiArr }) {
+export default function CurrAmount({ updateVal, error, baseCurr, currApiKeyValuePair }) {
     const handleChange = (e) => { updateVal(e.target) };
     
-    const symbol = currApiArr.map(el => {
-        if (el.type === baseCurr) {
-            return el.symbol;
+const currKeys = Object.keys(currApiKeyValuePair);
+
+    const symbol = currKeys.map(currKey => {
+        if (currApiKeyValuePair[currKey].currCode === baseCurr) {
+            return currApiKeyValuePair[currKey].symbol;
         }
     })
 

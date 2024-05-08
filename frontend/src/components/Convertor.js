@@ -3,9 +3,9 @@ import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 
-export default function Convertor({currApiArr}) {
+export default function Convertor({ currApiKeyValuePair }) {
     const [formData, setFormData] = useState(null);
-    
+
     function getFormData(inputData, response) {
         setFormData(() => {
             return {
@@ -13,10 +13,10 @@ export default function Convertor({currApiArr}) {
             }
         });
     }
-    
+
     return (
         <>
-            <ConvertorForm getFormData={getFormData} className="CovertForm" currApiArr={currApiArr} />
+            <ConvertorForm getFormData={getFormData} className="CovertForm" currApiKeyValuePair={currApiKeyValuePair} />
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>

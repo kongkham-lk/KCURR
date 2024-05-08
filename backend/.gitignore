@@ -33,4 +33,9 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### VS Code ###
+.vscode/
 node_modules/
+apiKeys.json
+/backend/obj/
+.DS_Store

@@ -8,11 +8,9 @@ import java.util.HashMap;
 public class CurrService {
 
     private final CurrencyBeaconApiClient _currencyBeaconApiClient;
-    private final CurrencyApiApiClient _currencyApiApiClient;
 
-    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient, CurrencyApiApiClient currencyApiApiClient) {
+    public CurrService(CurrencyBeaconApiClient currencyBeaconApiClient) {
         this._currencyBeaconApiClient = currencyBeaconApiClient;
-        this._currencyApiApiClient = currencyApiApiClient;
     }
 
     public double convert(double amount, String sourceCurrCountry, String targetCurrCountry) {
@@ -21,7 +19,7 @@ public class CurrService {
 
     private double checkRate(String baseCurrCountry, String targetCurrCountry) {
         // get rate from api
-        ExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
+        currencyBeaconExchangeRateApiResponse latestRateApiResponse = _currencyBeaconApiClient.getLatestExchangeRates(baseCurrCountry);
         return latestRateApiResponse.getRates().get(targetCurrCountry);
     }
 
@@ -35,7 +33,19 @@ public class CurrService {
         return rates;
     }
 
-    public CurrCountriesApiResponse getCurrCountries() {
-        return _currencyApiApiClient.getCurrCountries();
+    public HashMap<String, CurrCountryReturnData> getCurrCountries() {
+        currencyBeaconCountriesApiResponse[] currCountriesRes = _currencyBeaconApiClient.getCurrCountries();
+        HashMap<String, CurrCountryReturnData> currCountries = new HashMap<String, CurrCountryReturnData>();
+        for (int i = 0; i < currCountriesRes.length; i++) {
+            currencyBeaconCountriesApiResponse currCountryDetail = currCountriesRes[i];
+            String key = currCountryDetail.getShortCode();
+            String currCode = key;
+            String name = currCountryDetail.getName();
+            String display = key + " - " + name;
+            String symbol = currCountryDetail.getSymbol();
+            CurrCountryReturnData val = new CurrCountryReturnData(currCode, name, display, symbol);
+            currCountries.put(key, val);
+        }
+        return currCountries;
     }
 }
