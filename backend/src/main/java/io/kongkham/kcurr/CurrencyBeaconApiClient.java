@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.LocalDate;
 
 @Service
-public class CurrencyBeaconApiClient {
+public class CurrencyBeaconApiClient implements ApiClient {
     private final WebClient _webClient;
 
     @Value("${currencyBeacon.api.app-id}")
@@ -17,32 +17,32 @@ public class CurrencyBeaconApiClient {
         this._webClient = webClientBuilder.build();
     }
 
-    public currencyBeaconExchangeRateApiResponse getLatestExchangeRates(String baseCurr) {
+    public CurrencyBeaconExchangeRateApiResponse getLatestExchangeRates(String baseCurr) {
         String url = "https://api.currencybeacon.com/v1/latest?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(currencyBeaconExchangeRateApiResponse.class)
+                .bodyToMono(CurrencyBeaconExchangeRateApiResponse.class)
                 .block();
     }
 
-    public currencyBeaconExchangeRateApiResponse getHistExchangeRates(String baseCurr) {
+    public CurrencyBeaconExchangeRateApiResponse getHistExchangeRates(String baseCurr) {
         LocalDate today = LocalDate.now();  // get the current date
         LocalDate yesterday = today.plusDays(-1);  // subtract 1 day
         String url = "https://api.currencybeacon.com/v1/historical?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr + "&date=" + yesterday;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(currencyBeaconExchangeRateApiResponse.class)
+                .bodyToMono(CurrencyBeaconExchangeRateApiResponse.class)
                 .block();
     }
 
-    public currencyBeaconCountriesApiResponse[] getCurrCountries() {
+    public CurrencyBeaconCountriesApiResponse[] getCurrCountries() {
         String url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         return _webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(currencyBeaconCountriesApiResponse[].class)
+                .bodyToMono(CurrencyBeaconCountriesApiResponse[].class)
                 .block();
     }
 }
