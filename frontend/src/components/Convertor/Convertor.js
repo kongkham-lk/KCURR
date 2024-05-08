@@ -1,12 +1,13 @@
-import React from 'react';
 import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 
-export default function Convertor({ currApiKeyValuePair }) {
+export default function Convertor(props) {
+    const { currCountiesCodeMapDetail } = props;
+
     const [formData, setFormData] = useState(null);
 
-    function getFormData(inputData, response) {
+    const setFormDataToConvertor = (inputData, response) => {
         setFormData(() => {
             return {
                 ...inputData, total: response.data
@@ -16,7 +17,7 @@ export default function Convertor({ currApiKeyValuePair }) {
 
     return (
         <>
-            <ConvertorForm getFormData={getFormData} className="CovertForm" currApiKeyValuePair={currApiKeyValuePair} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
             {formData !== null && (
                 <>
                     <Typography variant="h6" mt={3} color="grey" fontStyle="italic" fontWeight={400}>
