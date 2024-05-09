@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import CurrAmountInput from './CurrAmountInput';
+import InputTextField from '../InputTextField';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function ConvertorForm(props) {
-  const { setFormDataToConvertor, currCountiesCodeMapDetail } = props;
+  const { setFormDataToConvertor, currCountiesCodeMapDetail, currInput } = props;
 
-  const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: 'USD', targetCurr: 'THB' });
+  const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
   const [isError, setIsError] = useState(false);
 
   const handleAmountInput = (e) => {
@@ -52,12 +52,12 @@ export default function ConvertorForm(props) {
   return (
     <form onSubmit={onSubmit} >
       <Stack spacing={3} direction="row" flexWrap="wrap" sx={sxStyle.Stack}>
-        <CurrAmountInput updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+        <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
         <div style={style.div}>
-        <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
-          <img src={embedLink.swapArrow} alt="Swap Arrow" style={style.img} />
-        </Button>
+          <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
+            <img src={embedLink.swapArrow} alt="Swap Arrow" style={style.img} />
+          </Button>
         </div>
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
       </Stack>
@@ -71,9 +71,9 @@ export default function ConvertorForm(props) {
 const embedLink = { swapArrow: "https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" };
 
 const style = {
-  convertButton: { marginTop: "5px" },
+  convertButton: { marginTop: "18px" },
   img: { objectFit: "cover", height: "40px", mixBlendMode: "multiply" },
-  div: {marginTop: "1%"},
+  div: { marginTop: "1%" },
 };
 
 const sxStyle = {

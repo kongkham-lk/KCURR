@@ -5,10 +5,17 @@ import Typography from '@mui/material/Typography';
 import { LineGraph } from '../LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
+import { useParams } from 'react-router-dom';
 
 
 export default function Convertor(props) {
     const { currCountiesCodeMapDetail } = props;
+    const { curr } = useParams();
+
+    const currInput = {
+        baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD",
+        targetCurr: curr != null ? curr.substring(4).toUpperCase() : "THB",
+    };
 
     const [formData, setFormData] = useState(null);
     const [timeSeries, setTimeSeries] = useState(null);
@@ -58,10 +65,10 @@ export default function Convertor(props) {
 
     return (
         <>
-            <Typography variant="h5" color="black" component="div" my={2} style={{marginBottom: "25px"}}>
+            <Typography variant="h5" color="black" component="div" my={2} style={{ marginBottom: "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} />
             {formData !== null && (
                 <>
                     <Typography variant="h4" mt={3} mb={2} >

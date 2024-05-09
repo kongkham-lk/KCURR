@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/exchangeRateTableDataUtil';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
@@ -27,10 +27,15 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, currInput } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
-    const [defaultCurr, setDefaultCurr] = useState("USD");
+    const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
+    if (currInput.baseCurr !== "USD") {
+        initialTargetCurrArray.unshift(currInput.baseCurr);
+        initialTargetCurrArray.splice(-1, 1);
+    }
+
     const timeSeriesRange = "Week";
 
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
@@ -47,7 +52,7 @@ export default function ExchangeRateTableData(props) {
         if (isReady) {
             setCurrLists([...initialCurrLists]);
         }
-    }, [isReady]);
+    }, [isReady, initialCurrLists]);
 
     useEffect(() => {
         async function checkNewRow() {

@@ -10,7 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 
 export default function MainNav() {
   const [mobileScreen, setMobileScreen] = useState(false);
@@ -31,8 +31,8 @@ export default function MainNav() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={sxStyle.Typography} >
-            <Link href={mainLogo.link} underline="none" sx={sxStyle.mainLogo} >
-              <div style={{ display: "flex", alignItems: "center", marginLeft: "15px" }}>
+            <Link to={mainLogo.link} style={sxStyle.mainLogo}>
+              <div style={style.logoImg}>
                 <img width="60" height="60" src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
                 {mainLogo.label}
               </div>
@@ -40,7 +40,7 @@ export default function MainNav() {
           </Typography>
           <Box sx={sxStyle.BoxSub}>
             {navItems.map((item) => (
-              <Link href={item.link} underline="none" key={item.label} sx={sxStyle.Link} >
+              <Link to={item.link} key={item.label} style={sxStyle.Link} >
                 {item.label}
               </Link>
             ))}
@@ -65,12 +65,12 @@ export default function MainNav() {
 };
 
 const drawerWidth = 240;
-const mainLogo = { label: 'KCURR', link: "#" }
+const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
-  { label: 'Rate', link: "#" },
-  { label: 'News', link: "#" },
-  { label: 'About', link: "#" },
-  { label: 'Contact', link: "#" },
+  { label: 'Convertor', link: "/convertor" },
+  { label: 'Financial News', link: "/financial-news" },
+  { label: 'About', link: "/about" },
+  { label: 'Contact', link: "/contact" },
 ];
 
 const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
@@ -84,7 +84,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
             <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar}>
-              <Link href={item.link} underline="none">
+              <Link href={item.link} underline="none" style={style.Link}>
                 {item.label}
               </Link>
             </ListItemButton>
@@ -96,16 +96,16 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
 };
 
 const embbedLogo = {
-  link: "https://img.icons8.com/external-icongeek26-outline-icongeek26/64/external-money-currency-icongeek26-outline-icongeek26-9.png",
-  alt: "external-money-currency-icongeek26-outline-icongeek26-9",
-} ;
+  link: "https://img.icons8.com/sf-black-filled/500/000/currency-exchange.png",
+  alt: "KCURR App Logo",
+};
 
 const sxStyle = {
   BoxMain: { display: 'flex', mb: 14 },
   IconButton: { mr: 2, display: { sm: 'none' } },
-  Typography: { flexGrow: 1, textAlign: { xs: 'center', sm: 'left' } },
-  Link: { color: '#fff', margin: "15px" },
-  mainLogo: { color: '#fff' },
+  Typography: { flexGrow: 1, display: "flex", justifyContent: { xs: 'center', sm: 'left' }, marginLeft: { xs: '-100px', sm: 'auto' }},
+  Link: { color: '#fff', margin: "15px", textDecoration: "none", },
+  mainLogo: { color: '#fff', textDecoration: "none", },
   BoxSub: { display: { xs: 'none', sm: 'block' }, },
   Drawer: {
     display: { xs: 'block', sm: 'none' },
@@ -117,5 +117,7 @@ const sxStyle = {
 }
 
 const style = {
-  logo: { width: "42px", height: "42px", filter: "invert(1)", margin: "0 8px" },
+  logo: { width: "35px", height: "35px", filter: "invert(1)", margin: "0 8px 0 0" },
+  Link: {color: "black", textDecoration: "none"},
+  logoImg: { display: "flex", alignItems: "center", marginLeft: "15px" },
 }
