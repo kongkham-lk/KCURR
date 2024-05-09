@@ -7,7 +7,7 @@ export function getFlag(currCountry) {
 };
 
 const getBaseUrl = (currCountry) => {
-    return `https://www.countryflagicons.com/SHINY/32/${currCountry.substring(0, 2)}.png`;
+    return `https://flagcdn.com/32x24/${currCountry.substring(0, 2)}.png`;
 }
 
 const style = {
