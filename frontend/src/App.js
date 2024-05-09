@@ -6,10 +6,12 @@ import { StyledPaperComponent } from './StyledComponents';
 import FinancialNewsLists from './components/FinancialNews/FinancialNewsLists';
 import { Routes, Route } from 'react-router-dom';
 import { Loading } from './components/Loading';
+import useCountryFlagApiGetter from './hook/useCountryFlagApiGetter';
 
 export default function App() {
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
-
+  const { validFlagApiEndpoint, isFlagAPIReady } = useCountryFlagApiGetter();
+  console.log("flag url: ", validFlagApiEndpoint)
   return (
     <div className="App">
       <MainNav />
