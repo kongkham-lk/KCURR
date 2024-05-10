@@ -11,7 +11,7 @@
 2. For the backend, require dotNET (ASP.NET):
     - run “dotnet --version” to check
 
-## Start running project:
+## Start running project on local machine:
 1. Navigate to the frontend window, and run "npm start”.
 2. Navigate to the backend window:
     a. navigate into the folder where Program.cs is located
