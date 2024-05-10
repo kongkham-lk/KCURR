@@ -9,12 +9,15 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+var devBaseURL = "http://localhost:3000";
+var prodBaseURL = "https://kcurr.onrender.com";
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy.WithOrigins(prodBaseURL)
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
