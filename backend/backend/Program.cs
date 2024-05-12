@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins(prodBaseURL)
+            policy.WithOrigins(devBaseURL)
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
@@ -33,7 +33,7 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
 app.UseHttpsRedirection();
 

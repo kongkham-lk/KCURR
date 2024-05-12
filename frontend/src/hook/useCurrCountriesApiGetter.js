@@ -13,7 +13,7 @@ export default function useCurrCountriesApiGetter() {
             async function fetchCurrOption() {
                 let resCurrCountries;
                 try {
-                    resCurrCountries = await axios.get(`${prodBaseURL}/curr/currency-country`);
+                    resCurrCountries = await axios.get(`${devBaseURL}/curr/currency-country`);
                 } catch (e) {
                     console.log(e.stack);
                 }

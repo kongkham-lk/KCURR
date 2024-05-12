@@ -1,0 +1,1 @@
+/curr/rate-latest

@@ -7,7 +7,7 @@ module.exports = function(app) {
   app.use(
     '/api', // The endpoint on your frontend to be proxied
     createProxyMiddleware({
-      target: prodBaseURL, // URL of your backend API
+      target: devBaseURL, // URL of your backend API
       changeOrigin: true,
     })
   );
