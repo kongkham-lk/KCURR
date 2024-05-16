@@ -16,12 +16,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins(baseURL)
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
 });
-
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CurrService>();
@@ -34,7 +33,10 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors(MyAllowSpecificOrigins);
 
