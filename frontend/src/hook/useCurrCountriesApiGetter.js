@@ -5,7 +5,7 @@ export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
-    const devBaseURL = "http://localhost:5268";
+    const devBaseURL = "https://localhost:5268";
     const prodBaseURL = "https://kcurr-backend.onrender.com";
 
     useEffect(

@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const devBaseURL = "http://localhost:5268";
+const devBaseURL = "https://localhost:5268";
 const prodBaseURL = "https://kcurr-backend.onrender.com";
 
 module.exports = function(app) {
