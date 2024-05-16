@@ -9,12 +9,14 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+var baseURL = "http://localhost:3000";
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy.WithOrigins(baseURL)
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
@@ -30,7 +32,7 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
 app.UseHttpsRedirection();
 

@@ -5,12 +5,14 @@ export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
+    const baseURL = "https://localhost:5268";
+
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
                 let resCurrCountries;
                 try {
-                    resCurrCountries = await axios.get('http://localhost:5268/curr/currency-country');
+                    resCurrCountries = await axios.get(`${baseURL}/curr/currency-country`);
                 } catch (e) {
                     console.log(e.stack);
                 }

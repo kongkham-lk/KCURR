@@ -69,6 +69,7 @@ C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/obj/Debug/net7.0/backend.p
 C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/obj/Debug/net7.0/backend.genruntimeconfig.cache
 C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/obj/Debug/net7.0/ref/backend.dll
 C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/bin/Debug/net7.0/apiKeys.json
+/Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/apiKeys.json
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/appsettings.Development.json
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/appsettings.json
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/backend
@@ -104,4 +105,3 @@ C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/bin/Debug/net7.0/apiKeys.j
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/obj/Debug/net7.0/backend.pdb
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/obj/Debug/net7.0/backend.genruntimeconfig.cache
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/obj/Debug/net7.0/ref/backend.dll
-/Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/apiKeys.json

@@ -1,10 +1,12 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
+const baseURL = "https://localhost:5268";
+
 module.exports = function(app) {
   app.use(
     '/api', // The endpoint on your frontend to be proxied
     createProxyMiddleware({
-      target: 'http://localhost:5268', // URL of your backend API
+      target: baseURL, // URL of your backend API
       changeOrigin: true,
     })
   );
