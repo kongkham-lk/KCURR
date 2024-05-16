@@ -4,7 +4,11 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+        <UserSecretsId>bb0d4de3-d8e3-40b3-a4e9-1793285a1c45</UserSecretsId>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
