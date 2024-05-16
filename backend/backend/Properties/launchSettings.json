@@ -1,5 +1,4 @@
 {
-  "_comment": "For devEnv: http://localhost:5268 and for proEnv: https://kcurr-backend.onrender.com",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
