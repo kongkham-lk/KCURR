@@ -1,12 +1,10 @@
 import axios from 'axios';
 
-const devBaseURL = "https://localhost:5268";
-const prodBaseURL = "https://kcurr-backend.onrender.com";
-const targetBaseURL = devBaseURL;
+const baseURL = "https://localhost:5268";
 
 export async function retrieveConvertValue(getFormData, formInputs) {
     try {
-        const response = await axios.post(`${targetBaseURL}/curr/convert`, formInputs);
+        const response = await axios.post(`${baseURL}/curr/convert`, formInputs);
         getFormData(formInputs, response);
     } catch (e) {
         console.log(e.code, "\n", e.stack);
@@ -14,13 +12,13 @@ export async function retrieveConvertValue(getFormData, formInputs) {
 };
 
 export async function retrieveExchangeRates(initialValue) {
-    const resExchangeRatesLast = await axios.post(`${targetBaseURL}/curr/rate-latest`, initialValue);
-    const resExchangeRatesHist = await axios.post(`${targetBaseURL}/curr/rate-hist`, initialValue);
+    const resExchangeRatesLast = await axios.post(`${baseURL}/curr/rate-latest`, initialValue);
+    const resExchangeRatesHist = await axios.post(`${baseURL}/curr/rate-hist`, initialValue);
     return [resExchangeRatesLast.data, resExchangeRatesHist.data];
 }
 
 export async function retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange) {
-    const resExchangeRatesTimeSeries = await axios.post(`${targetBaseURL}/curr/rate-timeSeries`, { baseCurr, targetCurr, timeSeriesRange });
+    const resExchangeRatesTimeSeries = await axios.post(`${baseURL}/curr/rate-timeSeries`, { baseCurr, targetCurr, timeSeriesRange });
     return resExchangeRatesTimeSeries;
 }
 
@@ -32,6 +30,6 @@ export async function retrieveFinancialNews(newsTopics) {
             newsTopic += ", "
         }
     }
-    const resFinancialNewsLists = await axios.post(`${targetBaseURL}/news`, { newsTopic: newsTopic });
+    const resFinancialNewsLists = await axios.post(`${baseURL}/news`, { newsTopic: newsTopic });
     return resFinancialNewsLists;
 }
