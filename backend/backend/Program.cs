@@ -9,19 +9,19 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-var baseURL = "http://localhost:3000";
+var devBaseURL = "http://localhost:3000";
+var prodBaseURL = "https://kcurr.onrender.com/";
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins(baseURL)
+            policy.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
 });
-
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CurrService>();
@@ -34,7 +34,10 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors(MyAllowSpecificOrigins);
 
