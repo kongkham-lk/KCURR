@@ -13,6 +13,12 @@
 
 ## Start running project on local machine:
 1. Navigate to the frontend window, and run "npm start”.
-2. Navigate to the backend window:
-    a. navigate into the folder where Program.cs is located
-    b. run “dotnet run”
+2. Navigate to the backend app, Visual Studio IDE:
+    - run with normal dotnet command:
+        a. right click on "backend" project, click "Set as Startup Project".
+        b. compile code which will run "dotnet run".
+    - run with docker:
+        a. right click on "docker-compose" project, click "Set as Startup Project".
+        b. compile code, this will do 2 things:
+            - build docker file, which run command "docker build -t kcurr-backend .”
+            - execute code, which run “docker run -p 5268:80 kcurr-backend” (5268:80 is what we specify in docker-compose.override.yml)
