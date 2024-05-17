@@ -17,8 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.AllowCredentials()
-                .WithOrigins(devBaseURL, prodBaseURL)
+            policy.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
