@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.PRODBASEURL;
+const baseURL = process.env.NODE_ENV === "Development" ? process.env.DEV_BASEURL : process.env.PROD_BASEURL;
 
 export async function retrieveConvertValue(getFormData, formInputs) {
     try {
