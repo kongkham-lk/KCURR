@@ -5,14 +5,15 @@ export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
-    const baseURL = process.env.NODE_ENV === "Development" ? process.env.DEV_BASEURL : process.env.PROD_BASEURL;
+    const baseURL = process.env.NODE_ENV === "development" ? "https://localhost" : "https://kcurr-backend.onrender.com";
+    const port = 5268;
 
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
                 let resCurrCountries;
                 try {
-                    resCurrCountries = await axios.get(`${baseURL}/curr/currency-country`);
+                    resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
                 } catch (e) {
                     console.log(e.stack);
                 }
@@ -22,7 +23,7 @@ export default function useCurrCountriesApiGetter() {
                 }
             }
             fetchCurrOption();
-        }, []
+        }, [baseURL]
     );
     return { currCountiesCodeMapDetail, isReady };
 };
