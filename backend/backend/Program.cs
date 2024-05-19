@@ -10,7 +10,7 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
-var prodBaseURL = "https://kcurr.onrender.com";
+var prodBaseURL = "https://kcurr.onrender.com:443";
 
 var origins = new string[] { devBaseURL, prodBaseURL };
 var methods = new string[] { "GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS", "CONNECT", "TRACE" };
