@@ -1,6 +1,7 @@
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
 
 namespace backend.Controllers;
 
@@ -21,7 +22,8 @@ public class CurrController : ControllerBase
         double amount = data.Amount;
         string baseCurr = data.BaseCurr;
         string targetCurr = data.TargetCurr;
-        return await _currService.Convert(amount, baseCurr, targetCurr);
+        var result = await _currService.Convert(amount, baseCurr, targetCurr);
+        return result;
     }
 
     [HttpPost("rate-latest")]
@@ -43,7 +45,10 @@ public class CurrController : ControllerBase
     [HttpGet("currency-country")]
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountriesFromCurrencyBeacon()
     {
-        return await _currService.GetCurrCountries();
+        Console.WriteLine("Receive request on: .../currency-country");
+        var result = await _currService.GetCurrCountries();
+        Console.WriteLine("Sending back response of currency-country!!!");
+        return result;
     }
 
     [HttpPost("rate-timeSeries")]
