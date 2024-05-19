@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const baseURL = process.env.NODE_ENV === "development" ? "https://localhost" : "https://kcurr-backend.onrender.com";
-const port = 5268;
+const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BASEURL : process.env.REACT_APP_PROD_BASEURL;
+const port = process.env.REACT_APP_TARGET_PORT;
 
 module.exports = function(app) {
   app.use(
