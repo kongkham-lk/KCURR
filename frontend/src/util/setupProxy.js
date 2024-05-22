@@ -4,6 +4,10 @@ const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_D
 const port = process.env.REACT_APP_TARGET_PORT;
 
 module.exports = function(app) {
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+  });
   app.use(
     '/api', // The endpoint on your frontend to be proxied
     createProxyMiddleware({
