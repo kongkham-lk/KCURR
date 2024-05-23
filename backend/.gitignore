@@ -481,6 +481,7 @@ $RECYCLE.BIN/
 
 # Confidential files
 apiKeys.json
+appsettings.ApiKeys.json
 
 # Library / Modules dependencies files
 node_modules/

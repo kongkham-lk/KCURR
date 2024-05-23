@@ -1,63 +1,62 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace backend;
 
 public class ApiKeysProvider
 {
-    private Dictionary<string, string> _apiKeys;
+    private IConfiguration? _apiKeysConfiguration;
 
     public enum ApiName
     {
-        CurrencyBeaconApiKey,
-        CurrencyApiApiKey,
-        CloudMersiveApiKey,
-        RapidApiApiKey
+        Config_CurrencyBeaconApiKey,
+        Config_CurrencyApiApiKey,
+        Config_CloudMersiveApiKey,
+        Config_RapidApiApiKey
     }
 
     public ApiKeysProvider()
     {
-        _apiKeys = ReadApiKeysFromJson();
+        _apiKeysConfiguration = ReadApiKeysFromJson();
     }
 
-    public string GetApiKey(ApiName apiName)
+    public string? GetApiKey(ApiName apiName)
     {
-        string targetApiName = null;
-        if (apiName == ApiName.CurrencyBeaconApiKey)
-            targetApiName = "CurrencyBeaconApiKey";
-        else if (apiName == ApiName.CurrencyApiApiKey)
-            targetApiName = "CurrencyApiApiKey";
-        else if (apiName == ApiName.CloudMersiveApiKey)
-            targetApiName = "CloudMersiveApiKey";
-        else if (apiName == ApiName.RapidApiApiKey)
-            targetApiName = "RapidApiApiKey";
-        // apiKeys is retrieve from apiKeys.json where is located in the same dir as apiKeys.json
-        return _apiKeys[targetApiName];
+        if (_apiKeysConfiguration is null)
+            return "";
+
+        string targetApiKey = "";
+
+        if (apiName == ApiName.Config_CurrencyBeaconApiKey)
+            targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyBeaconApiKey.ToString()];
+        else if (apiName == ApiName.Config_CurrencyApiApiKey)
+            targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
+        else if (apiName == ApiName.Config_CloudMersiveApiKey)
+            targetApiKey = _apiKeysConfiguration[ApiName.Config_CloudMersiveApiKey.ToString()];
+        else if (apiName == ApiName.Config_RapidApiApiKey)
+            targetApiKey = _apiKeysConfiguration[ApiName.Config_RapidApiApiKey.ToString()];
+
+        // apiKeys is retrieve from appsettings.ApiKeys.json where is located under appsettings.json
+        return targetApiKey;
     }
 
-    private Dictionary<string, string> ReadApiKeysFromJson()
+    private IConfiguration? ReadApiKeysFromJson()
     {
-        var apiKeys = new Dictionary<string, string>();
-
+        IConfiguration? configuration = null;
         try
         {
-            using (StreamReader file = File.OpenText("apiKeys.json"))
-            {
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    JObject json = (JObject)JToken.ReadFrom(reader);
-                    foreach (var property in json.Properties())
-                    {
-                        apiKeys[property.Name] = property.Value.ToString();
-                    }
-                }
-            }
+            configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.ApiKeys.json")
+                .AddEnvironmentVariables(prefix: "Config_")
+                .Build();
+            return configuration;
         }
         catch (FileNotFoundException)
         {
             // Handle the case where apiKeys.json is not found
         }
-        return apiKeys;
+        return configuration;
     }
 
 }

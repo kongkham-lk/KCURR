@@ -1,17 +1,26 @@
 {
   "version": 2,
-  "dgSpecHash": "Km3goHhK9+0yLyZfLV6d7maLGtPGz3mqOvmkV/cOAEWINVD7Q8TB6Nu9NVF6BKIPfSQE731mELwtq8tiBMM3tQ==",
+  "dgSpecHash": "H2wUWCTUyQT/VGvfXh+VI4CB8ZOH2IXmKlJyCYrkMaATR6x5nx/N53Vqi20zt11BbL2kUVAxlukpmm6ARvuKXw==",
   "success": true,
   "projectFilePath": "/Users/mjlk/Documents/GitHub/KCURR/backend/backend/backend.csproj",
   "expectedPackageFiles": [
     "/Users/mjlk/.nuget/packages/microsoft.aspnetcore.jsonpatch/3.0.0/microsoft.aspnetcore.jsonpatch.3.0.0.nupkg.sha512",
     "/Users/mjlk/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/3.0.0/microsoft.aspnetcore.mvc.newtonsoftjson.3.0.0.nupkg.sha512",
     "/Users/mjlk/.nuget/packages/microsoft.csharp/4.6.0/microsoft.csharp.4.6.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.configuration/8.0.0/microsoft.extensions.configuration.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.configuration.abstractions/8.0.0/microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.configuration.environmentvariables/8.0.0/microsoft.extensions.configuration.environmentvariables.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.configuration.fileextensions/8.0.0/microsoft.extensions.configuration.fileextensions.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.configuration.json/8.0.0/microsoft.extensions.configuration.json.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.fileproviders.abstractions/8.0.0/microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.fileproviders.physical/8.0.0/microsoft.extensions.fileproviders.physical.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.filesystemglobbing/8.0.0/microsoft.extensions.filesystemglobbing.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "/Users/mjlk/.nuget/packages/newtonsoft.json/12.0.2/newtonsoft.json.12.0.2.nupkg.sha512",
     "/Users/mjlk/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "/Users/mjlk/.nuget/packages/system.net.http.json/8.0.0-preview.7.23375.6/system.net.http.json.8.0.0-preview.7.23375.6.nupkg.sha512",
-    "/Users/mjlk/.nuget/packages/system.text.encodings.web/8.0.0-preview.7.23375.6/system.text.encodings.web.8.0.0-preview.7.23375.6.nupkg.sha512",
-    "/Users/mjlk/.nuget/packages/system.text.json/8.0.0-preview.7.23375.6/system.text.json.8.0.0-preview.7.23375.6.nupkg.sha512"
+    "/Users/mjlk/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
+    "/Users/mjlk/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512"
   ],
   "logs": [
     {

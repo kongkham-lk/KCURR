@@ -22,6 +22,7 @@ builder.Services.AddCors(options =>
                 .AllowAnyHeader();
         });
 });
+
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CurrService>();
