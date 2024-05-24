@@ -10,10 +10,12 @@ namespace backend.Controllers;
 public class CurrController : ControllerBase
 {
     private readonly CurrService _currService;
+    private readonly ILogger<CurrController> _logger;
 
-    public CurrController(CurrService currService)
+    public CurrController(CurrService currService, ILogger<CurrController> logger)
     {
         _currService = currService;
+        _logger = logger;
     }
 
     [HttpPost("convert")]
@@ -45,7 +47,9 @@ public class CurrController : ControllerBase
     [HttpGet("currency-country")]
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountriesFromCurrencyBeacon()
     {
+        _logger.LogInformation("Received request from frontend!!!");
         var result = await _currService.GetCurrCountries();
+        _logger.LogInformation($"Response back data: {result}");
         return result;
     }
 
