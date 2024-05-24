@@ -5,12 +5,10 @@ using backend.ApiClients.RapidApi;
 using backend.Interfaces;
 using backend.Services;
 
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
-var prodBaseURL = "https://kcurr.onrender.com:443";
+var prodBaseURL = "https://kcurr.onrender.com";
 
 builder.Services.AddCors(options =>
 {
@@ -20,7 +18,8 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(new string[] { devBaseURL, prodBaseURL })
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 
@@ -34,12 +33,9 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello From KCURR-Backend!!!");
+app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
 app.UseCors();
 
