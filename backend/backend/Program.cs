@@ -34,9 +34,15 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", corsAllowedOrigins);
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors();
 
