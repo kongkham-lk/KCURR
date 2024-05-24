@@ -114,3 +114,4 @@ C:/Users/achia/OneDrive/Desktop/KCURR/backend/backend/bin/Debug/net7.0/apiKeys.j
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/Microsoft.Extensions.FileSystemGlobbing.dll
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/Microsoft.Extensions.Primitives.dll
 /Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/Microsoft.Extensions.Configuration.EnvironmentVariables.dll
+/Users/mjlk/Documents/GitHub/KCURR/backend/backend/bin/Debug/net7.0/appsettings.Production.json
