@@ -9,7 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
 var prodBaseURL = "https://kcurr.onrender.com";
-var corsAllowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+string corsAllowedOrigins = "";
+
+if (builder.Environment.IsDevelopment())
+    corsAllowedOrigins = devBaseURL;
+else
+    corsAllowedOrigins = prodBaseURL;
 
 builder.Services.AddCors(options =>
 {
