@@ -8,7 +8,7 @@ using backend.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
-var prodBaseURL = "https://kcurr.onrender.com";
+var prodBaseURL = "https://kcurr.onrender.com/";
 string corsAllowedOrigins = "";
 
 if (builder.Environment.IsDevelopment())
