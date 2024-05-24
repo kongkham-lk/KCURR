@@ -14,7 +14,7 @@ var prodBaseURL = "https://kcurr.onrender.com:443";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
         policy  =>
         {
             policy.AllowAnyOrigin()
@@ -40,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 
 app.UseAuthorization();
 
