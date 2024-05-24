@@ -39,10 +39,7 @@ logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", corsAllowed
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.UseHttpsRedirection();
 
 app.UseCors();
 
