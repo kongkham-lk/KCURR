@@ -23,8 +23,8 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins(corsAllowedOrigins)
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
+                .WithMethods("GET", "POST", "PUT") // Specify allowed methods
+                .WithHeaders("Content-Type", "Authorization") // Specify allowed headers
                 .AllowCredentials();
         });
 });
