@@ -9,13 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
 var prodBaseURL = "https://kcurr.onrender.com";
+var corsAllowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.WithOrigins(new string[] { devBaseURL, prodBaseURL })
+            policy.WithOrigins(corsAllowedOrigins)
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
