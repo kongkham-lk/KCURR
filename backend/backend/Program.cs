@@ -4,6 +4,7 @@ using backend.ApiClients.CurrencyBeacon;
 using backend.ApiClients.RapidApi;
 using backend.Interfaces;
 using backend.Services;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +23,9 @@ builder.Services.AddCors(options =>
         policy  =>
         {
             policy.WithOrigins(corsAllowedOrigins)
-                .SetIsOriginAllowedToAllowWildcardSubdomains()
-                .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS") // Specify allowed methods
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .SetPreflightMaxAge(TimeSpan.FromSeconds(3600));
+                .WithHeaders(HeaderNames.ContentType, "x-custom-header")
+                .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS")
+                .AllowCredentials();
         });
 });
 
