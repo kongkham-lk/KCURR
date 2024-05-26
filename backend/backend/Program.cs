@@ -10,19 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 var devBaseURL = "http://localhost:3000";
 var prodBaseURL = "https://kcurr.onrender.com/";
-string corsAllowedOrigins = "";
+//string corsAllowedOrigins = "";
 
-if (builder.Environment.IsDevelopment())
-    corsAllowedOrigins = devBaseURL;
-else
-    corsAllowedOrigins = prodBaseURL;
+//if (builder.Environment.IsDevelopment())
+//    corsAllowedOrigins = devBaseURL;
+//else
+//    corsAllowedOrigins = prodBaseURL;
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.SetIsOriginAllowed(origin => true)
+            policy.WithOrigins(devBaseURL, prodBaseURL)
                 .WithHeaders(HeaderNames.ContentType, "x-custom-header")
                 .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS")
                 .AllowCredentials();
@@ -39,8 +39,8 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", corsAllowedOrigins);
+//var logger = app.Services.GetRequiredService<ILogger<Program>>();
+//logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", corsAllowedOrigins);
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
