@@ -13,18 +13,24 @@ export default function useCurrCountriesApiGetter() {
         function fetchData() {
             async function fetchCurrOption() {
                 let resCurrCountries;
+                console.log(`Fetching currency-country on: ${baseURL}:${port}`); // Debugging frontend request and backend response
+
                 try {
-                    console.log(`Fetching currency-country on: ${baseURL}:${port}`); // Debugging frontend request and backend response
                     resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
                 } catch (e) {
                     console.log(e.stack);
                 }
                 if (resCurrCountries !== undefined) {
-                    setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                    setIsReady(true);
+                    if (Object.keys(resCurrCountries.data).length) {
+                        setCurrCountiesCodeMapDetail(resCurrCountries.data);
+                        setIsReady(true);
+                        console.log(`Successfully received currency-country data!!!`);
+                    }
+                    else {
+                        console.log(`Data not found!!!`);
+                    }
                 }
 
-                console.log(`Successfully received currency-country data!!!`);
             }
             fetchCurrOption();
         }, [baseURL]
