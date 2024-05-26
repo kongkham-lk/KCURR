@@ -15,7 +15,18 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         _httpClient = httpClient;
         _apiKeysProvider = apiKeysProvider;
-        _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.Config_CurrencyBeaconApiKey);
+        var temp = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.Config_CurrencyBeaconApiKey);
+
+        _logger.LogInformation($"The retrieve API key is: {temp}!!!");
+        _logger.LogInformation($"API key's length: {temp.Length}!!!");
+
+        if (temp.Length == 0) 
+        {
+            temp = "backend/backend/appsettings.ApiKeys.json";
+            _logger.LogInformation($"Manually assign new API key!!!");
+        }
+        _currencyBeaconApiKey = temp;
+        _logger.LogInformation($"Check API key: {_currencyBeaconApiKey}!!!");
         _logger = logger;
     }
 
@@ -38,7 +49,6 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
 
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries()
     {
-        _logger.LogInformation($"Fetching Curr Countries Data with API keys: {_currencyBeaconApiKey}!!!");
         string url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         var currCountriesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconCurrCountriesApiResponse>(url);
         Dictionary<string, CurrCountriesResponse> currCountries =  TransformedCurrCountriesResData(currCountriesResponse);
