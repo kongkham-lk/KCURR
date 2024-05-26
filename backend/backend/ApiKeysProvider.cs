@@ -37,6 +37,8 @@ public class ApiKeysProvider
 
         string targetApiKey = "";
 
+        // Determined on how to retrieve API key
+        // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
         if (apiName == ApiName.Config_CurrencyBeaconApiKey)
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_CurrencyBeaconApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_CurrencyBeaconApiKey.ToString());
         else if (apiName == ApiName.Config_CurrencyApiApiKey)
@@ -47,8 +49,10 @@ public class ApiKeysProvider
         else if (apiName == ApiName.Config_RapidApiApiKey)
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_RapidApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_RapidApiApiKey.ToString());
 
+
+        //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
+
         // apiKeys is retrieve from appsettings.ApiKeys.json where is located under appsettings.json
-        _logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!");
         return targetApiKey;
     }
 
