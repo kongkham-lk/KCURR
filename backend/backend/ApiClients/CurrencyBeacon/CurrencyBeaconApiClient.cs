@@ -17,16 +17,17 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         _apiKeysProvider = apiKeysProvider;
         var temp = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.Config_CurrencyBeaconApiKey);
 
-        _logger.LogInformation($"The retrieve API key is: {temp}!!!");
-        _logger.LogInformation($"API key's length: {temp.Length}!!!");
+        logger.LogInformation($"The retrieve API key is: {temp}!!!");
+        if (temp is not null) 
+            logger.LogInformation($"API key's length: {temp.Length}!!!");
 
-        if (temp.Length == 0) 
+        if (temp is null || temp.Length == 0) 
         {
-            temp = "backend/backend/appsettings.ApiKeys.json";
-            _logger.LogInformation($"Manually assign new API key!!!");
+            temp = "a345103ffbb84fc88701a6dc6d5dc2a5";
+            logger.LogInformation($"Manually assign new API key!!!");
         }
         _currencyBeaconApiKey = temp;
-        _logger.LogInformation($"Check API key: {_currencyBeaconApiKey}!!!");
+        logger.LogInformation($"Check API key: {_currencyBeaconApiKey}!!!");
         _logger = logger;
     }
 
