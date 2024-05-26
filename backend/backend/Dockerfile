@@ -7,14 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["backend/backend.csproj", "backend/"]
-RUN dotnet restore "backend/backend.csproj"
+COPY ["backend.csproj", "./"]
+RUN dotnet restore "./backend.csproj"
 COPY . .
 WORKDIR "/src/backend"
-RUN dotnet build "backend.csproj" -c Release -o /app/build
+RUN dotnet build "../backend.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "../backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
