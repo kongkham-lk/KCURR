@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.SetIsOriginAllowed(origin => true)
+            policy.WithOrigins(corsAllowedOrigins)
                 .WithHeaders(HeaderNames.ContentType, "x-custom-header")
                 .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS")
                 .AllowCredentials();
