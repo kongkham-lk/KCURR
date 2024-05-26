@@ -7,6 +7,8 @@ namespace backend;
 public class ApiKeysProvider
 {
     private IConfiguration? _apiKeysConfiguration;
+    private ILogger<ApiKeysProvider> _logger;
+
 
     public enum ApiName
     {
@@ -16,9 +18,10 @@ public class ApiKeysProvider
         Config_RapidApiApiKey
     }
 
-    public ApiKeysProvider()
+    public ApiKeysProvider(ILogger<ApiKeysProvider> logger)
     {
         _apiKeysConfiguration = ReadApiKeysFromJson();
+        _logger = logger;
     }
 
     public string? GetApiKey(ApiName apiName)
@@ -38,6 +41,7 @@ public class ApiKeysProvider
             targetApiKey = _apiKeysConfiguration[ApiName.Config_RapidApiApiKey.ToString()];
 
         // apiKeys is retrieve from appsettings.ApiKeys.json where is located under appsettings.json
+        _logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!");
         return targetApiKey;
     }
 
