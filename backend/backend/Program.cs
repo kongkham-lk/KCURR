@@ -11,10 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var devBaseURL = new string[] { "http://localhost:3000" };
 var prodBaseURL = new string[]
 {
-    "https://kcurr.onrender.com/",
     "https://kcurr.onrender.com",
-    "https://kcurr.onrender.com:443",
-    "http://kcurr.onrender.com:80",
 };
 string[] allowedOrigins = new string[] { };
 
