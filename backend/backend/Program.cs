@@ -8,12 +8,9 @@ using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var devBaseURL = new string[] { "http://localhost:3000" };
-var prodBaseURL = new string[]
-{
-    "https://kcurr.onrender.com",
-};
-string[] allowedOrigins = new string[] { };
+string devBaseURL = "http://localhost:3000";
+string prodBaseURL = "https://kcurr.onrender.com";
+string allowedOrigins = "";
 
 if (builder.Environment.IsDevelopment())
     allowedOrigins = devBaseURL;
