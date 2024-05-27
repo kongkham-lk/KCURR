@@ -4,24 +4,31 @@ using backend.ApiClients.CurrencyBeacon;
 using backend.ApiClients.RapidApi;
 using backend.Interfaces;
 using backend.Services;
-
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var devBaseURL = "http://localhost:3000";
-var prodBaseURL = "https://kcurr.onrender.com/";
+string devBaseURL = "http://localhost:3000";
+string prodBaseURL = "https://kcurr.onrender.com";
+string allowedOrigins = "";
+
+if (builder.Environment.IsDevelopment())
+    allowedOrigins = devBaseURL;
+else
+    allowedOrigins = prodBaseURL;
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
         policy  =>
         {
-            policy.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
+            policy.WithOrigins(allowedOrigins)
+                .WithHeaders(HeaderNames.ContentType, "x-custom-header")
+                .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS")
+                .AllowCredentials();
         });
 });
+
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CurrService>();
@@ -32,14 +39,14 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", allowedOrigins);
+
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 
 app.UseAuthorization();
 
