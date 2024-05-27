@@ -52,7 +52,7 @@ export default function ConvertorForm(props) {
 
   return (
     <form onSubmit={onSubmit} >
-      <div spacing={3} style={isMobileScreen ? sxStyle.FormShrink : sxStyle.FormExpand} flexDirection={isMobileScreen ? "column" : "row"}>
+      <div spacing={3} style={isMobileScreen ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isMobileScreen ? "column" : "row"}>
         <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
           <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
