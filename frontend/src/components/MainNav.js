@@ -6,6 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
@@ -64,7 +65,7 @@ export default function MainNav() {
   );
 };
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
   { label: 'Convertor', link: "/convertor" },
@@ -83,10 +84,8 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
-            <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar}>
-              <Link href={item.link} underline="none" style={style.Link}>
-                {item.label}
-              </Link>
+            <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
+              <ListItemText primary={item.label}/>
             </ListItemButton>
           </ListItem>
         ))}
