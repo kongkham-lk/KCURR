@@ -12,8 +12,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function MainNav() {
+  const isMobileScreen = useMediaQuery('(max-width:414px)');
+
   const [mobileScreen, setMobileScreen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -21,7 +24,7 @@ export default function MainNav() {
   };
 
   return (
-    <Box sx={sxStyle.BoxMain}>
+    <Box display='flex' sx={isMobileScreen ? sxStyle.StarterGapForMobile : sxStyle.StarterGap}>
       <AppBar component="nav">
         <Toolbar>
           <IconButton
@@ -100,7 +103,8 @@ const embbedLogo = {
 };
 
 const sxStyle = {
-  BoxMain: { display: 'flex', mb: 14 },
+  StarterGap: { mb: 14 },
+  StarterGapForMobile: { mb: 12 },
   IconButton: { mr: 2, display: { sm: 'none' } },
   Typography: { flexGrow: 1, display: "flex", justifyContent: { xs: 'center', sm: 'left' }, marginLeft: { xs: '-100px', sm: 'auto' }},
   Link: { color: '#fff', margin: "15px", textDecoration: "none", },
