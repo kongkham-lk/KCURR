@@ -46,9 +46,16 @@ public class ApiKeysProvider
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
         else if (apiName == ApiName.CloudMersiveApiKey)
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CloudMersiveApiKey.ToString());
-        else if (apiName == ApiName.RapidApiApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString());
+        else if (apiName == ApiName.RapidApiApiKey) // for news, only provide 500 per month, provides 3 back up endpoint
+        {
+            DateTime currentTime = DateTime.Now;
+            int currentSecond = currentTime.Second;
+            int num = Convert.ToInt32(currentSecond) % 10;
+            while (num > 2)
+                num /= 2;
 
+            targetApiKey = (_env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num));
+        }
 
         //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
 
