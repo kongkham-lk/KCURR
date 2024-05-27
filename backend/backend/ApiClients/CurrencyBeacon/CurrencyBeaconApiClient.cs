@@ -15,7 +15,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         _httpClient = httpClient;
         _apiKeysProvider = apiKeysProvider;
-        _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.Config_CurrencyBeaconApiKey);
+        _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
         _logger = logger;
     }
 

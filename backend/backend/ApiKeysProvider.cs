@@ -13,10 +13,10 @@ public class ApiKeysProvider
 
     public enum ApiName
     {
-        Config_CurrencyBeaconApiKey,
-        Config_CurrencyApiApiKey,
-        Config_CloudMersiveApiKey,
-        Config_RapidApiApiKey
+        CurrencyBeaconApiKey,
+        CurrencyApiApiKey,
+        CloudMersiveApiKey,
+        RapidApiApiKey
     }
 
     public ApiKeysProvider(ILogger<ApiKeysProvider> logger, IWebHostEnvironment env)
@@ -39,15 +39,15 @@ public class ApiKeysProvider
 
         // Determined on how to retrieve API key
         // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
-        if (apiName == ApiName.Config_CurrencyBeaconApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_CurrencyBeaconApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_CurrencyBeaconApiKey.ToString());
-        else if (apiName == ApiName.Config_CurrencyApiApiKey)
+        if (apiName == ApiName.CurrencyBeaconApiKey)
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyBeaconApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString());
+        else if (apiName == ApiName.CurrencyApiApiKey)
             //targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_CurrencyApiApiKey.ToString());
-        else if (apiName == ApiName.Config_CloudMersiveApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_CloudMersiveApiKey.ToString());
-        else if (apiName == ApiName.Config_RapidApiApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.Config_RapidApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.Config_RapidApiApiKey.ToString());
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
+        else if (apiName == ApiName.CloudMersiveApiKey)
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CloudMersiveApiKey.ToString());
+        else if (apiName == ApiName.RapidApiApiKey)
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString());
 
 
         //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
@@ -63,7 +63,6 @@ public class ApiKeysProvider
         {
             configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.ApiKeys.json")
-                .AddEnvironmentVariables(prefix: "Config_")
                 .Build();
             return configuration;
         }
