@@ -8,21 +8,27 @@ using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var devBaseURL = "http://localhost:3000";
-var prodBaseURL = "https://kcurr.onrender.com/";
-string corsAllowedOrigins = "";
+var devBaseURL = new string[] { "http://localhost:3000" };
+var prodBaseURL = new string[]
+{
+    "https://kcurr.onrender.com/",
+    "https://kcurr.onrender.com",
+    "https://kcurr.onrender.com:443",
+    "http://kcurr.onrender.com:80",
+};
+string[] allowedOrigins = new string[] { };
 
 if (builder.Environment.IsDevelopment())
-    corsAllowedOrigins = devBaseURL;
+    allowedOrigins = devBaseURL;
 else
-    corsAllowedOrigins = prodBaseURL;
+    allowedOrigins = prodBaseURL;
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.WithOrigins(corsAllowedOrigins)
+            policy.WithOrigins(allowedOrigins)
                 .WithHeaders(HeaderNames.ContentType, "x-custom-header")
                 .WithMethods("GET", "PUT", "POST", "DELETE", "OPTIONS")
                 .AllowCredentials();
@@ -40,7 +46,7 @@ builder.Services.AddSingleton<ApiKeysProvider>();
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", corsAllowedOrigins);
+logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", allowedOrigins);
 
 app.MapGet("/", () => "Hello From KCURR-Backend!!!");
 
