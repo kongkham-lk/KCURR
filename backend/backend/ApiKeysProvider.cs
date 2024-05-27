@@ -1,11 +1,15 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace backend;
 
 public class ApiKeysProvider
 {
-    private Dictionary<string, string> _apiKeys;
+    private IConfiguration? _apiKeysConfiguration;
+    private ILogger<ApiKeysProvider> _logger;
+    private IWebHostEnvironment _env;
+
 
     public enum ApiName
     {
@@ -15,49 +19,58 @@ public class ApiKeysProvider
         RapidApiApiKey
     }
 
-    public ApiKeysProvider()
+    public ApiKeysProvider(ILogger<ApiKeysProvider> logger, IWebHostEnvironment env)
     {
-        _apiKeys = ReadApiKeysFromJson();
+        if (env.IsDevelopment())
+            _apiKeysConfiguration = ReadApiKeysFromJson();
+        _logger = logger;
+        _env = env;
     }
 
-    public string GetApiKey(ApiName apiName)
+    public string? GetApiKey(ApiName apiName)
     {
-        string targetApiName = null;
+        if (_env.IsDevelopment() && _apiKeysConfiguration is null)
+        {
+            _logger.LogInformation($"Receive null APIs key from !!!");
+            return "";
+        }
+
+        string targetApiKey = "";
+
+        // Determined on how to retrieve API key
+        // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
         if (apiName == ApiName.CurrencyBeaconApiKey)
-            targetApiName = "CurrencyBeaconApiKey";
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyBeaconApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString());
         else if (apiName == ApiName.CurrencyApiApiKey)
-            targetApiName = "CurrencyApiApiKey";
+            //targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
         else if (apiName == ApiName.CloudMersiveApiKey)
-            targetApiName = "CloudMersiveApiKey";
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CloudMersiveApiKey.ToString());
         else if (apiName == ApiName.RapidApiApiKey)
-            targetApiName = "RapidApiApiKey";
-        // apiKeys is retrieve from apiKeys.json where is located in the same dir as apiKeys.json
-        return _apiKeys[targetApiName];
+            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString());
+
+
+        //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
+
+        // apiKeys is retrieve from appsettings.ApiKeys.json where is located under appsettings.json
+        return targetApiKey;
     }
 
-    private Dictionary<string, string> ReadApiKeysFromJson()
+    private IConfiguration? ReadApiKeysFromJson()
     {
-        var apiKeys = new Dictionary<string, string>();
-
+        IConfiguration? configuration = null;
         try
         {
-            using (StreamReader file = File.OpenText("apiKeys.json"))
-            {
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    JObject json = (JObject)JToken.ReadFrom(reader);
-                    foreach (var property in json.Properties())
-                    {
-                        apiKeys[property.Name] = property.Value.ToString();
-                    }
-                }
-            }
+            configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.ApiKeys.json")
+                .Build();
+            return configuration;
         }
         catch (FileNotFoundException)
         {
             // Handle the case where apiKeys.json is not found
         }
-        return apiKeys;
+        return configuration;
     }
 
 }

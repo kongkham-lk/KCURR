@@ -9,12 +9,14 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     private readonly HttpClient _httpClient;
     private readonly ApiKeysProvider _apiKeysProvider;
     private readonly string _currencyBeaconApiKey;
+    private readonly ILogger<CurrencyBeaconApiClient> _logger;
 
-    public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
+    public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger)
     {
         _httpClient = httpClient;
         _apiKeysProvider = apiKeysProvider;
         _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
+        _logger = logger;
     }
 
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)
