@@ -5,8 +5,10 @@ import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function EnhancedTableHead(props) {
+    const isMobileScreen = useMediaQuery('(max-width:414px)');
     const { order, orderBy, onRequestSort } = props;
 
     const createSortHandler = (property) => (event) => {
@@ -16,13 +18,13 @@ export default function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow style={style.TableRow}>
-                {headCells.map((headCell) => (
+                {(isMobileScreen ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={style.TableCell}
+                        style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -39,7 +41,7 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell style={style.TableCell} align="right" >
+                <TableCell style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen} align="right" >
                     Chart (7d)
                 </TableCell>
                 <TableCell style={style.TableCellDelete} align="right" >
@@ -57,12 +59,12 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const headCells = [
+let headCells = [
     {
         id: 'targetCurr',
         numeric: false,
         disablePadding: true,
-        label: 'Currency Countries',
+        label: 'Countries',
     },
     {
         id: 'latestRate',
@@ -80,6 +82,7 @@ const headCells = [
 
 const style = {
     TableRow: { width: "100%" },
-    TableCell: { width: "20%" },
+    TableCellFullScreen: { width: "20%" },
+    TableCellSmallScreen: { width: "10%" },
     TableCellDelete: { width: "13%" },
 }

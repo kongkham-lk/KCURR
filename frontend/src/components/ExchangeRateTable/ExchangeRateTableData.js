@@ -7,6 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import Pagination from '@mui/material/Pagination';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
@@ -24,9 +25,11 @@ import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 export default function ExchangeRateTableData(props) {
+    const isMobileScreen = useMediaQuery('(max-width:414px)');
     const { currApiDataSet, currCountiesCodeMapDetail, currInput } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
@@ -144,7 +147,7 @@ export default function ExchangeRateTableData(props) {
                             id="tableTitle"
                             component="div"
                         >
-                            Exchange Rate Listing
+                            {isMobileScreen ? "Rate Listing" : "Exchange Rate Listing"}
                         </Typography>
                         <Tooltip title="Reset Filter" style={style.Tooltip} onClick={handleResetFilter}>
                             <IconButton>
@@ -152,9 +155,9 @@ export default function ExchangeRateTableData(props) {
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <TableContainer>
+                    <TableContainer style={isMobileScreen ? {margin: "0"} : style.NoGapTableContainer}>
                         <Table
-                            sx={sxStyle.Table}
+                            sx={isMobileScreen ? {whiteSpace: "nowrap", padding: "0"} : sxStyle.Table}
                             aria-labelledby="tableTitle"
                             size={dense ? 'small' : 'medium'}
                         >
@@ -180,14 +183,14 @@ export default function ExchangeRateTableData(props) {
                                             >
                                                 <Button variant="text" style={style.div} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                     {getFlag(targetCurr)}
-                                                    <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                    <span style={style.span}>{isMobileScreen ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                 </Button>
                                             </TableCell>
                                             <TableCell align="right" >{currList.latestRate}</TableCell>
-                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                            { isMobileScreen ? "" : <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
                                                 {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
-                                            </TableCell>
-                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                            </TableCell>}
+                                            <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
                                                 <div style={style.chartDiv}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
@@ -211,7 +214,7 @@ export default function ExchangeRateTableData(props) {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={isMobileScreen ? [] : [5, 10, 25]}
                         component="div"
                         count={currLists.length}
                         rowsPerPage={rowsPerPage}
@@ -220,10 +223,10 @@ export default function ExchangeRateTableData(props) {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-                <FormControlLabel
+                {isMobileScreen ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
-                />
+                />}
                 <CurrCountriesDropDown
                     sxStyle={sxStyle.CurrCountriesDropDown}
                     label="Add Currency"
@@ -246,15 +249,17 @@ const style = {
     DeleteIcon: { marginRight: "8px" },
     chartDiv: { width: "70px", height: "40px", float: "right" },
     Tooltip: { margin: "16px" },
-    PaperDiv: { display: "flex", marginBottom: "-15px", },
+    PaperDiv: { display: "flex" },
+    NoGapTableContainer: { marginTop: "-15px" }
 };
 
 const sxStyle = {
-    Box: { width: 1 },
+    Box: { width: 1, overflowY: "auto"},
     Paper: { width: 1, mb: 2, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
-    Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
+    Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
+    Pageination: { display: "flex", justifyContent: "space-between" }
 };

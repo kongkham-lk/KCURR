@@ -16,11 +16,12 @@ export function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export function styleTableCell(currList) {
+export function styleTableCell(currList, isMobileScreen) {
+    let paddingVal = isMobileScreen ? "0px" : "16px"
     if (currList.change >= 0 || currList.change === null) {
-        return { color: "green" }
+        return { color: "green", padding: paddingVal }
     } else {
-        return { color: "red" }
+        return { color: "red", padding: paddingVal }
     }
 };
 
