@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Margin } from '@mui/icons-material';
 
 export default function EnhancedTableHead(props) {
     const isMobileScreen = useMediaQuery('(max-width:414px)');
@@ -30,7 +31,9 @@ export default function EnhancedTableHead(props) {
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
-                            style={{ marginLeft: headCell.id === 'targetCurr' && "25px" }}
+                            style={{ marginLeft: headCell.id === 'targetCurr' ? (isMobileScreen ? "0px" : "25px") : "-30px", 
+                                     marginRight: headCell.id === 'targetCurr' && "-20px",
+                                     padding: isMobileScreen && "0px" }}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
@@ -44,8 +47,8 @@ export default function EnhancedTableHead(props) {
                 <TableCell style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen} align="right" >
                     Chart (7d)
                 </TableCell>
-                <TableCell style={style.TableCellDelete} align="right" >
-                    Delete
+                <TableCell style={{padding: isMobileScreen && "0px 8px 8px 0px"}} align="right" >
+                    {isMobileScreen ? "Del" : "Delete"}
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -83,6 +86,6 @@ let headCells = [
 const style = {
     TableRow: { width: "100%" },
     TableCellFullScreen: { width: "20%" },
-    TableCellSmallScreen: { width: "10%" },
-    TableCellDelete: { width: "13%" },
+    TableCellSmallScreen: { width: "10%", padding: "0px 0px 10px 10px" },
+    TableCellDelete: {  },
 }

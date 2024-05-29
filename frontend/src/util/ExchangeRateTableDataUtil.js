@@ -59,10 +59,10 @@ export function styleTableRowInFile (dense, emptyRows) {
     return { height: (dense ? 33 : 53) * emptyRows }
 };
 
-export function styleTableCellDelete (targetCurr, defaultCurr) { 
+export function styleTableCellDelete (targetCurr, defaultCurr, isMobileScreen) { 
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)" };
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isMobileScreen && "5px" , paddingRight: isMobileScreen && "0px" };
     } else {
-        return { width: "10%", color: "transparent" };
+        return { width: "10%", color: "transparent", paddingLeft: isMobileScreen && "5px" ,paddingRight: isMobileScreen && "0px"  };
     }
 };

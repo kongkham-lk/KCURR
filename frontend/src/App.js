@@ -16,8 +16,8 @@ export default function App() {
 
   const Item = styled(Paper)(({ theme }) => ({
     height: 'auto',
-    margin: '32px',
-    padding: '32px'
+    margin: isMobileScreen ? '20px' : '32px',
+    padding: isMobileScreen ? '25px' : '32px'
   }));
 
   const lightTheme = createTheme({ palette: { mode: 'light' } });

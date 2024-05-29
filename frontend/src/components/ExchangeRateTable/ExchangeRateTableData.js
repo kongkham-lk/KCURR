@@ -149,7 +149,7 @@ export default function ExchangeRateTableData(props) {
                         >
                             {isMobileScreen ? "Rate Listing" : "Exchange Rate Listing"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={style.Tooltip} onClick={handleResetFilter}>
+                        <Tooltip title="Reset Filter" style={{margin: isMobileScreen ? "0px" : "16px", /*padding: isMobileScreen ? "0px 8px" : "0"*/}} onClick={handleResetFilter}>
                             <IconButton>
                                 <FilterListIcon />
                             </IconButton>
@@ -181,23 +181,23 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Button variant="text" style={style.div} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                <Button variant="text" style={isMobileScreen ? style.divSmallScreen : style.divFullScreen} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                     {getFlag(targetCurr)}
                                                     <span style={style.span}>{isMobileScreen ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                 </Button>
                                             </TableCell>
-                                            <TableCell align="right" >{currList.latestRate}</TableCell>
+                                            <TableCell align="right" style={{paddingRight: isMobileScreen && "0px"}}>{isMobileScreen ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
                                             { isMobileScreen ? "" : <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
                                                 {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                             </TableCell>}
                                             <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
-                                                <div style={style.chartDiv}>
+                                                <div style={isMobileScreen ? style.chartDivSmallScreen : style.chartDivFullScreen}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
                                             </TableCell>
                                             <TableCell
                                                 align="right"
-                                                style={styleTableCellDelete(targetCurr, defaultCurr)}
+                                                style={styleTableCellDelete(targetCurr, defaultCurr, isMobileScreen)}
                                                 onClick={() => handleDelete(targetCurr)}
                                             >
                                                 <DeleteIcon style={style.DeleteIcon} />
@@ -243,11 +243,13 @@ export default function ExchangeRateTableData(props) {
 };
 
 const style = {
-    div: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
+    divFullScreen: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
+    divSmallScreen: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "10px", padding: "0px" },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
-    chartDiv: { width: "70px", height: "40px", float: "right" },
+    chartDivFullScreen: { width: "70px", height: "40px", float: "right" },
+    chartDivSmallScreen: { width: "60px", height: "40px", float: "right" },
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" }
@@ -255,7 +257,7 @@ const style = {
 
 const sxStyle = {
     Box: { width: 1, overflowY: "auto"},
-    Paper: { width: 1, mb: 2, boxShadow: "none" },
+    Paper: { width: 1, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
