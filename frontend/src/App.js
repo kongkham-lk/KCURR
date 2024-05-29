@@ -3,7 +3,7 @@ import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
-import FinancialNewsLists from './components/FinancialNews/FinancialNewsLists';
+import FinancialNews from './components/FinancialNews/FinancialNews';
 import { Routes, Route } from 'react-router-dom';
 import { Loading } from './components/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -38,8 +38,8 @@ export default function App() {
                 {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
                   : <Loading />}
               </Item>
-              <Item key="FinancialNewsLists" elevation={elevateLevel}>
-                <FinancialNewsLists />
+              <Item key="FinancialNews" elevation={elevateLevel}>
+                <FinancialNews />
               </Item>
             </>
           } ></Route>
@@ -56,8 +56,8 @@ export default function App() {
             </>
           } ></Route>
           <Route exact path="/financial-news" element={
-            <Item key="FinancialNewsLists" elevation={elevateLevel}>
-              <FinancialNewsLists filter="true" />
+            <Item key="FinancialNews" elevation={elevateLevel}>
+              <FinancialNews filter="true" />
             </Item>
           } ></Route>
         </Routes>
