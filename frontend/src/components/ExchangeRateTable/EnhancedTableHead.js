@@ -25,7 +25,7 @@ export default function EnhancedTableHead(props) {
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen}
+                        style={isMobileScreen ? style.TableCell.sm : style.TableCell.lg}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -44,7 +44,7 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen} align="right" >
+                <TableCell style={isMobileScreen ? style.TableCell.sm : style.TableCell.lg} align="right" >
                     Chart (24h)
                 </TableCell>
                 <TableCell style={{padding: isMobileScreen && "0px 8px 8px 0px"}} align="right" >
@@ -85,7 +85,8 @@ let headCells = [
 
 const style = {
     TableRow: { width: "100%" },
-    TableCellFullScreen: { width: "20%" },
-    TableCellSmallScreen: { width: "10%", padding: "0px 0px 10px 10px" },
-    TableCellDelete: {  },
+    TableCell: {
+        lg: { width: "20%" },
+        sm: { width: "10%", padding: "0px 0px 10px 10px" }
+    },
 }

@@ -181,7 +181,7 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Button variant="text" style={isMobileScreen ? style.divSmallScreen : style.divFullScreen} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                <Button variant="text" style={{...style.div.main, ...(isMobileScreen ? style.div.sm : style.div.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                     {getFlag(targetCurr)}
                                                     <span style={style.span}>{isMobileScreen ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                 </Button>
@@ -191,7 +191,7 @@ export default function ExchangeRateTableData(props) {
                                                 {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                             </TableCell>}
                                             <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
-                                                <div style={isMobileScreen ? style.chartDivSmallScreen : style.chartDivFullScreen}>
+                                                <div style={{...style.chartDiv.main, ...(isMobileScreen ? style.chartDiv.sm : style.chartDiv.lg)}}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
                                             </TableCell>
@@ -243,13 +243,19 @@ export default function ExchangeRateTableData(props) {
 };
 
 const style = {
-    divFullScreen: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
-    divSmallScreen: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "10px", padding: "0px" },
+    div: {
+        main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400 },
+        lg: { marginLeft: "15px" },
+        sm: { marginLeft: "10px", padding: "0px" },
+    },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
-    chartDivFullScreen: { width: "70px", height: "40px", float: "right" },
-    chartDivSmallScreen: { width: "60px", height: "40px", float: "right", paddingRight: "5px" },
+    chartDiv: {
+        main: { height: "40px", float: "right" },
+        lg: { width: "70px" },
+        sm: { width: "60px", paddingRight: "5px" },
+    },
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" }
