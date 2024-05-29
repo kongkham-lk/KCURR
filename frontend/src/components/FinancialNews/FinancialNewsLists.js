@@ -38,10 +38,10 @@ export default function FinancialNews(props) {
             <Typography
                 variant="subtitle1"
                 fontSize={14}
-                color="black"
+                color="#858585"
                 component="div"
             >
-                {news.publishTime}
+                {news.diffTimeInHour > 23 ? news.publishTime : news.diffTimeInHour + 'h'}
             </Typography>
         </>
     )
