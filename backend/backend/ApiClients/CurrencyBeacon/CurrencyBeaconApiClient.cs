@@ -60,7 +60,9 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         DateTime offsetToday = default;
         DateTime today = DateTime.Today;
-        if (timeSeriesRange.ToLower().Equals("week"))
+        if (timeSeriesRange.ToLower().Equals("day"))
+            offsetToday = today.AddDays(-1);
+        else if (timeSeriesRange.ToLower().Equals("week"))
             offsetToday = today.AddDays(-6);
         else if (timeSeriesRange.ToLower().Equals("month"))
             offsetToday = today.AddMonths(-1);

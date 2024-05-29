@@ -149,7 +149,7 @@ export default function ExchangeRateTableData(props) {
                         >
                             {isMobileScreen ? "Rate Listing" : "Exchange Rate Listing"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={{margin: isMobileScreen ? "0px" : "16px", /*padding: isMobileScreen ? "0px 8px" : "0"*/}} onClick={handleResetFilter}>
+                        <Tooltip title="Reset Filter" style={{margin: isMobileScreen ? "0px" : "16px"}} onClick={handleResetFilter}>
                             <IconButton>
                                 <FilterListIcon />
                             </IconButton>

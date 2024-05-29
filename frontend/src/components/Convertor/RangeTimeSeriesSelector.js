@@ -4,8 +4,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function RangeTimeSeriesSelector(props) {
   const { updateVal } = props;
-  const [displayValue, setDisplayValue] = useState("Week")
-  const timeSeriesRanges = ["Week", "Month", "Quater", "Half Year"];
+  const [displayValue, setDisplayValue] = useState("Day")
+  const timeSeriesRanges = ["Day", "Week", "Month", "Quater", "Half Year"];
 
   const handleChange = (event, newDisplayValue) => {
     updateVal(newDisplayValue);

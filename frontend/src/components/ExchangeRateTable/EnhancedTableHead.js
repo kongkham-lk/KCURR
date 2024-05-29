@@ -45,7 +45,7 @@ export default function EnhancedTableHead(props) {
                     </TableCell>
                 ))}
                 <TableCell style={isMobileScreen ? style.TableCellSmallScreen : style.TableCellFullScreen} align="right" >
-                    Chart (7d)
+                    Chart (24h)
                 </TableCell>
                 <TableCell style={{padding: isMobileScreen && "0px 8px 8px 0px"}} align="right" >
                     {isMobileScreen ? "Del" : "Delete"}
