@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
 import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/ExchangeRateTableDataUtil';
@@ -151,7 +151,7 @@ export default function ExchangeRateTableData(props) {
                         </Typography>
                         <Tooltip title="Reset Filter" style={{margin: isMobileScreen ? "0px" : "16px"}} onClick={handleResetFilter}>
                             <IconButton>
-                                <FilterListIcon />
+                                <FilterListOffIcon />
                             </IconButton>
                         </Tooltip>
                     </div>
@@ -249,7 +249,7 @@ const style = {
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
     chartDivFullScreen: { width: "70px", height: "40px", float: "right" },
-    chartDivSmallScreen: { width: "60px", height: "40px", float: "right" },
+    chartDivSmallScreen: { width: "60px", height: "40px", float: "right", paddingRight: "5px" },
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" }
