@@ -68,8 +68,7 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     
     private string FormatTimeStructure(long newsPublishTimeRes) {
         var unixTimestamp = DateTimeOffset.FromUnixTimeSeconds(newsPublishTimeRes).ToLocalTime();
-        var formattedDate = unixTimestamp.ToString("ddd, MMM dd, yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-        formattedDate = formattedDate.Insert(formattedDate.Length - 12, " at");
+        var formattedDate = unixTimestamp.ToString("ddd, MMM dd, yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
         return formattedDate;
     }
