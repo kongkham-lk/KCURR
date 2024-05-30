@@ -16,7 +16,6 @@ public class ApiKeysProvider
     {
         CurrencyBeaconApiKey,
         CurrencyApiApiKey,
-        CloudMersiveApiKey,
         RapidApiApiKey
     }
 
@@ -43,8 +42,6 @@ public class ApiKeysProvider
         if (apiName == ApiName.CurrencyApiApiKey)
             //targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
-        else if (apiName == ApiName.CloudMersiveApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CloudMersiveApiKey.ToString());
         else // use different api key based on time (second) since each api has monthly quota
         {
             DateTime currentTime = DateTime.Now;
