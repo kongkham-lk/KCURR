@@ -16,8 +16,8 @@ export function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export function styleTableCell(currList, isMobileScreen) {
-    let paddingVal = isMobileScreen ? "0px" : "16px"
+export function styleTableCell(currList, isDisplaySM) {
+    let paddingVal = isDisplaySM ? "0px" : "16px"
     if (currList.change >= 0 || currList.change === null) {
         return { color: "green", padding: paddingVal }
     } else {
@@ -59,10 +59,10 @@ export function styleTableRowInFile (dense, emptyRows) {
     return { height: (dense ? 33 : 53) * emptyRows }
 };
 
-export function styleTableCellDelete (targetCurr, defaultCurr, isMobileScreen) { 
+export function styleTableCellDelete (targetCurr, defaultCurr, isDisplaySM) { 
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isMobileScreen && "5px" , paddingRight: isMobileScreen && "0px" };
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px" , paddingRight: isDisplaySM && "0px" };
     } else {
-        return { width: "10%", color: "transparent", paddingLeft: isMobileScreen && "5px" ,paddingRight: isMobileScreen && "0px"  };
+        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px" ,paddingRight: isDisplaySM && "0px"  };
     }
 };

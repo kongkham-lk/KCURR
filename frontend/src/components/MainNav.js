@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
 export default function MainNav(props) {
-  const { isMobileScreen } = props;
+  const { isDisplaySM } = props;
 
   const [mobileScreen, setMobileScreen] = useState(false);
 
@@ -23,7 +23,7 @@ export default function MainNav(props) {
   };
 
   return (
-    <Box display='flex' sx={isMobileScreen ? sxStyle.StarterGapForMobile : sxStyle.StarterGap}>
+    <Box display='flex' sx={isDisplaySM ? sxStyle.StarterGapForMobile : sxStyle.StarterGap}>
       <AppBar component="nav">
         <Toolbar>
           <Typography variant="h6" sx={sxStyle.Typography} >

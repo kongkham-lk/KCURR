@@ -14,7 +14,7 @@ import { Loading } from '../Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
 
 export default function FinancialNews(props) {
-    const { filter = false, isMobileScreen } = props;
+    const { filter = false, isDisplaySM } = props;
     const [newsLists, setNewsLists] = useState([]);
     const [tempTopic, setTempTopic] = useState("");
     const [newsTopic, setNewsTopic] = useState(["Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency",]);
@@ -57,10 +57,10 @@ export default function FinancialNews(props) {
                             component="div"
                             style={{margin: filter ? "16px 0px" : "16px 0 0 0"}}
                         >
-                            {isMobileScreen ? "News" : "Financial News"}
+                            {isDisplaySM ? "News" : "Financial News"}
                         </Typography>
-                        {filter && <div style={{...style.subDivInputField.main, ...(isMobileScreen ? style.subDivInputField.sm : style.subDivInputField.lg)}}>
-                            <InputTextField updateVal={handleInput} inputFieldLabel={isMobileScreen ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
+                        {filter && <div style={{...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg)}}>
+                            <InputTextField updateVal={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
                             <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
                                 Add
                             </Button>
@@ -78,19 +78,19 @@ export default function FinancialNews(props) {
                                 href={news.link}
                                 className="hoverCard"
                                 sx={sxStyle.Link}>
-                                {!isMobileScreen ? 
+                                {!isDisplaySM ? 
                                     <Card sx={sxStyle.Card}>
-                                        {news.thumbnail !== null && !isMobileScreen && <CardMedia
+                                        {news.thumbnail !== null && !isDisplaySM && <CardMedia
                                             component="img"
                                             sx={sxStyle.CardMedia}
                                             image={news.thumbnail}
                                             alt="Live from space album cover"
                                         />}
                                         <Box sx={sxStyle.Box}>
-                                            <FinancialNewsLists news={news} isMobileScreen={isMobileScreen} />
+                                            <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />
                                         </Box>
                                     </Card> : 
-                                    <FinancialNewsLists news={news} isMobileScreen={isMobileScreen} />}
+                                    <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />}
                             </Link>
                         )
                     })

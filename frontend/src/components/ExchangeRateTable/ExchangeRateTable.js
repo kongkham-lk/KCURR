@@ -4,7 +4,7 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { useParams } from 'react-router-dom';
 
 export default function ExchangeRateTable(props) {
-  const { currCountiesCodeMapDetail, isMobileScreen } = props;
+  const { currCountiesCodeMapDetail, isDisplaySM } = props;
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -31,7 +31,7 @@ export default function ExchangeRateTable(props) {
 
   return (
     <>
-      {isReady && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isMobileScreen={isMobileScreen} />}
+      {isReady && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />}
     </>
   );
 }

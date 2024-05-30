@@ -2,11 +2,11 @@ import "../../App.css";
 import Typography from '@mui/material/Typography';
 
 export default function FinancialNews(props) {
-    const { news, isMobileScreen } = props;
+    const { news, isDisplaySM } = props;
 
     return (
         <>
-            <div style={{...sxStyle.NewsList.main, ...(isMobileScreen && sxStyle.NewsList.sm)}}>
+            <div style={{...sxStyle.NewsList.main, ...(isDisplaySM && sxStyle.NewsList.sm)}}>
                 <Typography
                     component="div"
                     variant="subtitle1"
@@ -28,7 +28,7 @@ export default function FinancialNews(props) {
                     >
                         {news.title}
                     </Typography>
-                    {isMobileScreen && <span>
+                    {isDisplaySM && <span>
                         <img src={news.thumbnail} alt="News Thumbnail" style={style.smallThumbnamil}/>
                     </span>}
                 </div>

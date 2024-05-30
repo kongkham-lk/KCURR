@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
 
 export default function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort, isMobileScreen } = props;
+    const { order, orderBy, onRequestSort, isDisplaySM } = props;
 
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -16,21 +16,21 @@ export default function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow style={style.TableRow}>
-                {(isMobileScreen ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
+                {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={isMobileScreen ? style.TableCell.sm : style.TableCell.lg}
+                        style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
-                            style={{ marginLeft: headCell.id === 'targetCurr' ? (isMobileScreen ? "0px" : "25px") : "-30px", 
+                            style={{ marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px", 
                                      marginRight: headCell.id === 'targetCurr' && "-20px",
-                                     padding: isMobileScreen && "0px" }}
+                                     padding: isDisplaySM && "0px" }}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
@@ -41,11 +41,11 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell style={isMobileScreen ? style.TableCell.sm : style.TableCell.lg} align="right" >
+                <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
                     Chart (24h)
                 </TableCell>
-                <TableCell style={{padding: isMobileScreen && "0px 8px 8px 0px"}} align="right" >
-                    {isMobileScreen ? "Del" : "Delete"}
+                <TableCell style={{padding: isDisplaySM && "0px 8px 8px 0px"}} align="right" >
+                    {isDisplaySM ? "Del" : "Delete"}
                 </TableCell>
             </TableRow>
         </TableHead>

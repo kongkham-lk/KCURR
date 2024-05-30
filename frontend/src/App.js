@@ -11,13 +11,13 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 export default function App() {
-  const isMobileScreen = useMediaQuery('(max-width:414px)');
+  const isDisplaySM = useMediaQuery('(max-width:414px)');
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
   const Item = styled(Paper)(({ theme }) => ({
     height: 'auto',
-    margin: isMobileScreen ? '20px' : '32px',
-    padding: isMobileScreen ? '25px' : '32px'
+    margin: isDisplaySM ? '20px' : '32px',
+    padding: isDisplaySM ? '25px' : '32px'
   }));
 
   const lightTheme = createTheme({ palette: { mode: 'light' } });
@@ -25,39 +25,39 @@ export default function App() {
 
   return (
     <div className="App">
-      <MainNav isMobileScreen={isMobileScreen} /> 
+      <MainNav isDisplaySM={isDisplaySM} /> 
       <ThemeProvider theme={lightTheme}>
         <Routes>
           <Route exact path="/" element={
             <>
               <Item key="Convertor" elevation={elevateLevel}>
-                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" elevation={elevateLevel}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
               <Item key="FinancialNews" elevation={elevateLevel}>
-                <FinancialNews isMobileScreen={isMobileScreen} />
+                <FinancialNews isDisplaySM={isDisplaySM} />
               </Item>
             </>
           } ></Route>
           <Route path="/convertor/:curr?" element={
             <>
               <Item key="Convertor" elevation={elevateLevel}>
-                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" elevation={elevateLevel}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
             </>
           } ></Route>
           <Route exact path="/financial-news" element={
             <Item key="FinancialNews" elevation={elevateLevel}>
-              <FinancialNews filter="true" isMobileScreen={isMobileScreen} />
+              <FinancialNews filter="true" isDisplaySM={isDisplaySM} />
             </Item>
           } ></Route>
         </Routes>

@@ -8,7 +8,7 @@ import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { useParams } from 'react-router-dom';
 
 export default function Convertor(props) {
-    const { currCountiesCodeMapDetail, isMobileScreen } = props;
+    const { currCountiesCodeMapDetail, isDisplaySM } = props;
     const { curr } = useParams();
 
     const currInput = {
@@ -64,10 +64,10 @@ export default function Convertor(props) {
 
     return (
         <>
-            <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isMobileScreen ? "16px" : "25px" }}>
+            <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isMobileScreen={isMobileScreen} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />
             {formData !== null && (
                 <>
                     <Typography variant="h4" mt={3} mb={2} >

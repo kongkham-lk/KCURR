@@ -28,7 +28,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, currInput, isMobileScreen } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
@@ -145,17 +145,17 @@ export default function ExchangeRateTableData(props) {
                             id="tableTitle"
                             component="div"
                         >
-                            {isMobileScreen ? "Rate Listing" : "Exchange Rate Listing"}
+                            {isDisplaySM ? "Rate Listing" : "Exchange Rate Listing"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={{margin: isMobileScreen ? "0px" : "16px"}} onClick={handleResetFilter}>
+                        <Tooltip title="Reset Filter" style={{margin: isDisplaySM ? "0px" : "16px"}} onClick={handleResetFilter}>
                             <IconButton>
                                 <FilterListOffIcon />
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <TableContainer style={isMobileScreen ? {margin: "0"} : style.NoGapTableContainer}>
+                    <TableContainer style={isDisplaySM ? {margin: "0"} : style.NoGapTableContainer}>
                         <Table
-                            sx={isMobileScreen ? {whiteSpace: "nowrap", padding: "0"} : sxStyle.Table}
+                            sx={isDisplaySM ? {whiteSpace: "nowrap", padding: "0"} : sxStyle.Table}
                             aria-labelledby="tableTitle"
                             size={dense ? 'small' : 'medium'}
                         >
@@ -164,7 +164,7 @@ export default function ExchangeRateTableData(props) {
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
                                 rowCount={currLists.length}
-                                isMobileScreen={isMobileScreen}
+                                isDisplaySM={isDisplaySM}
                             />
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList, index) => {
@@ -180,23 +180,23 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Button variant="text" style={{...style.div.main, ...(isMobileScreen ? style.div.sm : style.div.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                <Button variant="text" style={{...style.div.main, ...(isDisplaySM ? style.div.sm : style.div.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                     {getFlag(targetCurr)}
-                                                    <span style={style.span}>{isMobileScreen ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                    <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                 </Button>
                                             </TableCell>
-                                            <TableCell align="right" style={{paddingRight: isMobileScreen && "0px"}}>{isMobileScreen ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
-                                            { isMobileScreen ? "" : <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
+                                            <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>{isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
+                                            { isDisplaySM ? "" : <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                             </TableCell>}
-                                            <TableCell align="right" style={styleTableCell(currList, isMobileScreen)}>
-                                                <div style={{...style.chartDiv.main, ...(isMobileScreen ? style.chartDiv.sm : style.chartDiv.lg)}}>
+                                            <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
                                             </TableCell>
                                             <TableCell
                                                 align="right"
-                                                style={styleTableCellDelete(targetCurr, defaultCurr, isMobileScreen)}
+                                                style={styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM)}
                                                 onClick={() => handleDelete(targetCurr)}
                                             >
                                                 <DeleteIcon style={style.DeleteIcon} />
@@ -213,7 +213,7 @@ export default function ExchangeRateTableData(props) {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={isMobileScreen ? [] : [5, 10, 25]}
+                        rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
                         component="div"
                         count={currLists.length}
                         rowsPerPage={rowsPerPage}
@@ -222,7 +222,7 @@ export default function ExchangeRateTableData(props) {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-                {isMobileScreen ? "" : <FormControlLabel
+                {isDisplaySM ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
                 />}
