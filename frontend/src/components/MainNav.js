@@ -27,17 +27,10 @@ export default function MainNav() {
     <Box display='flex' sx={isMobileScreen ? sxStyle.StarterGapForMobile : sxStyle.StarterGap}>
       <AppBar component="nav">
         <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={handleDrawerToggle}
-            sx={sxStyle.IconButton}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" sx={sxStyle.Typography} >
             <Link to={mainLogo.link} style={sxStyle.mainLogo}>
               <div style={style.logoImg}>
-                <img width="60" height="60" src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
+                <img src={embbedLogo.link} alt={embbedLogo.alt} style={{...style.logo, filter: 'saturate(0) brightness(100)'}} />
                 {mainLogo.label}
               </div>
             </Link>
@@ -49,6 +42,13 @@ export default function MainNav() {
               </Link>
             ))}
           </Box>
+          <IconButton
+            color="inherit"
+            onClick={handleDrawerToggle}
+            sx={sxStyle.IconButton}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box>
@@ -56,6 +56,7 @@ export default function MainNav() {
           variant="temporary"
           open={mobileScreen}
           onClose={handleDrawerToggle}
+          anchor="right"
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
@@ -81,6 +82,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
   return (
     <Box onClick={handleDrawerToggle} sx={sxStyle.BoxPopupSideBar}>
       <Typography variant="h6" sx={sxStyle.TypographyPopupSideBar}>
+        <img src={embbedLogo.link} alt={embbedLogo.alt} style={{...style.logo, filter: "none"}} />
         {mainLogo.label}
       </Typography>
       <Divider />
@@ -98,7 +100,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
 };
 
 const embbedLogo = {
-  link: "https://img.icons8.com/sf-black-filled/500/000/currency-exchange.png",
+  link: "https://img.icons8.com/sf-regular-filled/48/1976d2/currency-exchange.png",
   alt: "KCURR App Logo",
 };
 
@@ -106,7 +108,7 @@ const sxStyle = {
   StarterGap: { mb: 14 },
   StarterGapForMobile: { mb: 12 },
   IconButton: { mr: 2, display: { sm: 'none' } },
-  Typography: { flexGrow: 1, display: "flex", justifyContent: { xs: 'center', sm: 'left' }, marginLeft: { xs: '-100px', sm: 'auto' }},
+  Typography: { flexGrow: 1, display: "flex", justifyContent: 'left' },
   Link: { color: '#fff', margin: "15px", textDecoration: "none", },
   mainLogo: { color: '#fff', textDecoration: "none", },
   BoxSub: { display: { xs: 'none', sm: 'block' }, },
@@ -114,13 +116,13 @@ const sxStyle = {
     display: { xs: 'block', sm: 'none' },
     '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
   },
-  BoxPopupSideBar: { textAlign: 'center' },
-  TypographyPopupSideBar: { my: 2 },
+  BoxPopupSideBar: { textAlign: 'center', color: '#1976d2' },
+  TypographyPopupSideBar: { my: 2, display: 'flex', justifyContent: 'center' },
   ListItemButtonPopupSideBar: { textAlign: 'center' },
 }
 
 const style = {
   logo: { width: "35px", height: "35px", filter: "invert(1)", margin: "0 8px 0 0" },
-  Link: {color: "black", textDecoration: "none"},
+  Link: {color: "black", textDecoration: "none" },
   logoImg: { display: "flex", alignItems: "center", marginLeft: "15px" },
 }
