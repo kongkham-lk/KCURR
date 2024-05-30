@@ -4,7 +4,6 @@ import { retrieveFinancialNews } from "../../util/apiClient";
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
@@ -58,7 +57,7 @@ export default function FinancialNews(props) {
                             variant="h5"
                             color="black"
                             component="div"
-                            my={2}
+                            style={{margin: filter ? "16px 0px" : "16px 0 0 0"}}
                         >
                             {isMobileScreen ? "News" : "Financial News"}
                         </Typography>

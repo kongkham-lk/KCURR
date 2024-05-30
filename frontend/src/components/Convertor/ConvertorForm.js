@@ -5,6 +5,8 @@ import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import { retrieveConvertValue } from '../../util/apiClient';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
   const isMobileScreen = useMediaQuery('(max-width:414px)');
@@ -56,7 +58,7 @@ export default function ConvertorForm(props) {
         <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
           <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
-            <img src={embedLink.swapArrow} alt="Swap Arrow" style={isMobileScreen ? style.imgTransform : style.img} />
+            {isMobileScreen ? <SwapVertIcon/> : <SwapHorizIcon/>}
           </Button>
         <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
       </div>
@@ -67,12 +69,8 @@ export default function ConvertorForm(props) {
   )
 };
 
-const embedLink = { swapArrow: "https://t3.ftcdn.net/jpg/02/69/49/94/360_F_269499484_66ndPqItHQ5NEt7TBeaDAJgCukBlQzPN.jpg" };
-
 const style = {
   convertButton: { marginTop: "18px" },
-  img: { objectFit: "cover", height: "40px", mixBlendMode: "multiply" },
-  imgTransform: { objectFit: "cover", height: "40px", mixBlendMode: "multiply", transform: "rotate(90deg)"},
   div: { marginTop: "1%" },
 };
 
@@ -82,5 +80,5 @@ const sxStyle = {
                   gap: "10px", padding: "0", },
   FormShrink: { display: "flex", flexWrap: "nowrap", flexDirection:"column", justifyContent: "space-between",
                   gap: "20px", padding: "0", },
-  swapButton: { borderRadius: "32px", width: "30px", height: "40px", borderColor: "#afaeae" },
+  swapButton: { borderRadius: "32px", width: "50px", height: "50px", borderColor: "#afaeae", minWidth: "50px" },
 };
