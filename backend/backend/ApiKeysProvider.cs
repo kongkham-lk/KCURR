@@ -39,22 +39,21 @@ public class ApiKeysProvider
 
         // Determined on how to retrieve API key
         // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
-        if (apiName == ApiName.CurrencyBeaconApiKey)
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyBeaconApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString());
-        else if (apiName == ApiName.CurrencyApiApiKey)
+        if (apiName == ApiName.CurrencyApiApiKey)
             //targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
         else if (apiName == ApiName.CloudMersiveApiKey)
             targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CloudMersiveApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CloudMersiveApiKey.ToString());
-        else if (apiName == ApiName.RapidApiApiKey) // for news, only provide 500 per month, provides 3 back up endpoint
+        else // only provide 500 per month, provides 3 back up endpoint
         {
             DateTime currentTime = DateTime.Now;
             int currentSecond = currentTime.Second;
-            int num = Convert.ToInt32(currentSecond) % 10;
-            while (num > 2)
-                num /= 2;
+            int num = (Convert.ToInt32(currentSecond) % 10) % 3;
 
-            targetApiKey = (_env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num));
+            if (apiName == ApiName.CurrencyBeaconApiKey)
+                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyBeaconApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString() + num);
+            else if (apiName == ApiName.RapidApiApiKey)
+                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num);
         }
 
         //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
