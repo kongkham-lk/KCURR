@@ -1,10 +1,8 @@
 import "../../App.css";
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function FinancialNews(props) {
-    const isMobileScreen = useMediaQuery('(max-width:414px)');
-    const { news } = props;
+    const { news, isMobileScreen } = props;
 
     return (
         <>

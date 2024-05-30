@@ -11,12 +11,10 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import InputTextField from "../InputTextField";
 import { Loading } from '../Loading';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import FinancialNewsLists from "./FinancialNewsLists";
 
 export default function FinancialNews(props) {
-    const isMobileScreen = useMediaQuery('(max-width:414px)');
-    const { filter = false } = props;
+    const { filter = false, isMobileScreen } = props;
     const [newsLists, setNewsLists] = useState([]);
     const [tempTopic, setTempTopic] = useState("");
     const [newsTopic, setNewsTopic] = useState(["Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency",]);
@@ -89,10 +87,10 @@ export default function FinancialNews(props) {
                                             alt="Live from space album cover"
                                         />}
                                         <Box sx={sxStyle.Box}>
-                                            <FinancialNewsLists news={news} />
+                                            <FinancialNewsLists news={news} isMobileScreen={isMobileScreen} />
                                         </Box>
                                     </Card> : 
-                                    <FinancialNewsLists news={news} />}
+                                    <FinancialNewsLists news={news} isMobileScreen={isMobileScreen} />}
                             </Link>
                         )
                     })

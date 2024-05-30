@@ -25,12 +25,10 @@ import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 export default function ExchangeRateTableData(props) {
-    const isMobileScreen = useMediaQuery('(max-width:414px)');
-    const { currApiDataSet, currCountiesCodeMapDetail, currInput } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, currInput, isMobileScreen } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
@@ -166,6 +164,7 @@ export default function ExchangeRateTableData(props) {
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
                                 rowCount={currLists.length}
+                                isMobileScreen={isMobileScreen}
                             />
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList, index) => {

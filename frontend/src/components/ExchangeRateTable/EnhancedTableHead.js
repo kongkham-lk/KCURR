@@ -5,12 +5,9 @@ import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Margin } from '@mui/icons-material';
 
 export default function EnhancedTableHead(props) {
-    const isMobileScreen = useMediaQuery('(max-width:414px)');
-    const { order, orderBy, onRequestSort } = props;
+    const { order, orderBy, onRequestSort, isMobileScreen } = props;
 
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);

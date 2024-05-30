@@ -4,13 +4,11 @@ import InputTextField from '../InputTextField';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import { retrieveConvertValue } from '../../util/apiClient';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-  const isMobileScreen = useMediaQuery('(max-width:414px)');
-  const { setFormDataToConvertor, currCountiesCodeMapDetail, currInput } = props;
+  const { setFormDataToConvertor, currCountiesCodeMapDetail, currInput, isMobileScreen } = props;
 
   const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
   const [isError, setIsError] = useState(false);

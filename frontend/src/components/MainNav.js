@@ -12,10 +12,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
-export default function MainNav() {
-  const isMobileScreen = useMediaQuery('(max-width:414px)');
+export default function MainNav(props) {
+  const { isMobileScreen } = props;
 
   const [mobileScreen, setMobileScreen] = useState(false);
 

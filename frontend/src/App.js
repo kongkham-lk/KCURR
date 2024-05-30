@@ -25,39 +25,39 @@ export default function App() {
 
   return (
     <div className="App">
-      <MainNav /> 
+      <MainNav isMobileScreen={isMobileScreen} /> 
       <ThemeProvider theme={lightTheme}>
         <Routes>
           <Route exact path="/" element={
             <>
               <Item key="Convertor" elevation={elevateLevel}>
-                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" elevation={elevateLevel}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
                   : <Loading />}
               </Item>
               <Item key="FinancialNews" elevation={elevateLevel}>
-                <FinancialNews />
+                <FinancialNews isMobileScreen={isMobileScreen} />
               </Item>
             </>
           } ></Route>
           <Route path="/convertor/:curr?" element={
             <>
               <Item key="Convertor" elevation={elevateLevel}>
-                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" elevation={elevateLevel}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isMobileScreen={isMobileScreen} />
                   : <Loading />}
               </Item>
             </>
           } ></Route>
           <Route exact path="/financial-news" element={
             <Item key="FinancialNews" elevation={elevateLevel}>
-              <FinancialNews filter="true" />
+              <FinancialNews filter="true" isMobileScreen={isMobileScreen} />
             </Item>
           } ></Route>
         </Routes>

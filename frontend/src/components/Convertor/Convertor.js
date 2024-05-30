@@ -6,11 +6,9 @@ import { LineGraph } from '../LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { useParams } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function Convertor(props) {
-    const isMobileScreen = useMediaQuery('(max-width:414px)');
-    const { currCountiesCodeMapDetail } = props;
+    const { currCountiesCodeMapDetail, isMobileScreen } = props;
     const { curr } = useParams();
 
     const currInput = {
@@ -66,10 +64,10 @@ export default function Convertor(props) {
 
     return (
         <>
-            <Typography variant="h5" color="black" component="div" my={2} style={isMobileScreen ? { marginBottom: "16px" } : { marginBottom: "25px" }}>
+            <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isMobileScreen ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isMobileScreen={isMobileScreen} />
             {formData !== null && (
                 <>
                     <Typography variant="h4" mt={3} mb={2} >
