@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace backend;
 
@@ -51,9 +52,9 @@ public class ApiKeysProvider
             int num = (Convert.ToInt32(currentSecond) % 10) % 3;
 
             if (apiName == ApiName.CurrencyBeaconApiKey)
-                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyBeaconApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString() + num);
+                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[$"{ApiName.CurrencyBeaconApiKey.ToString()}:{num}"] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString() + num);
             else if (apiName == ApiName.RapidApiApiKey)
-                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.RapidApiApiKey.ToString() + num] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num);
+                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[$"{ApiName.RapidApiApiKey.ToString()}:{num}"] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num);
         }
 
         //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
