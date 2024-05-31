@@ -60,16 +60,18 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         DateTime offsetToday = default;
         DateTime today = DateTime.Today;
-        if (timeSeriesRange.ToLower().Equals("day"))
+        if (timeSeriesRange.ToLower().Equals("1d"))
             offsetToday = today.AddDays(-1);
-        else if (timeSeriesRange.ToLower().Equals("week"))
+        else if (timeSeriesRange.ToLower().Equals("1w"))
             offsetToday = today.AddDays(-6);
-        else if (timeSeriesRange.ToLower().Equals("month"))
+        else if (timeSeriesRange.ToLower().Equals("1m"))
             offsetToday = today.AddMonths(-1);
-        else if (timeSeriesRange.ToLower().Equals("quater"))
+        else if (timeSeriesRange.ToLower().Equals("3m"))
             offsetToday = today.AddMonths(-3);
-        else if (timeSeriesRange.ToLower().Equals("half year"))
+        else if (timeSeriesRange.ToLower().Equals("6m"))
             offsetToday = today.AddMonths(-6);
+        else if (timeSeriesRange.ToLower().Equals("1y"))
+            offsetToday = today.AddYears(-1);
 
         var startDate = offsetToday.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"));
         return startDate;
