@@ -14,8 +14,9 @@ export default function useCurrCountriesApiGetter() {
             async function fetchCurrOption() {
                 let resCurrCountries;
                 let isValidResponse = false;
+                let retryFetching = 5;
           
-                while (!isValidResponse) {
+                while (!isValidResponse && retryFetching > 0) {
                     console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
 
                     try {
@@ -38,6 +39,7 @@ export default function useCurrCountriesApiGetter() {
                     if (!isValidResponse) {
                         // Optionally, you can add a delay before retrying
                         await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay before retrying
+                        retryFetching--;
                     }
                 }
             }
