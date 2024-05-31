@@ -2,14 +2,14 @@ export function getFlag(currCountry) {
     if (currCountry == null || currCountry.substring(0, 1) === "X") {
         return <div style={style.divGetFlag} >{currCountry}</div>
     } else {
-        return <img style={style.img} src={getBaseUrl(currCountry)} alt="" />
+        return <img style={style.flagImg} src={getBaseUrl(currCountry)} alt="" />
     }
 };
 
 const getBaseUrl = (currCountry) => {
-    return `https://flagcdn.com/32x24/${currCountry.substring(0, 2).toLowerCase()}.png`;
+    return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${currCountry.substring(0, 2).toUpperCase()}.svg`;
 }
 
 const style = {
-    img: { margin: "0 10px 0px 0px" },
+    flagImg: { margin: "0 10px 0px 0px", width: '35px' },
 }
