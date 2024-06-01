@@ -37,7 +37,7 @@ export default function ExchangeRateTableData(props) {
         initialTargetCurrArray.splice(-1, 1);
     }
 
-    const timeSeriesRange = "Week";
+    const timeSeriesRange = "1w";
 
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
 
@@ -191,7 +191,7 @@ export default function ExchangeRateTableData(props) {
                                             </TableCell>}
                                             <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
-                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} isDisplaySM={isDisplaySM} />}
                                                 </div>
                                             </TableCell>
                                             <TableCell

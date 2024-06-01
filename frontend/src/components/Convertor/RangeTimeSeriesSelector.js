@@ -6,9 +6,9 @@ import ToggleButtonGroup, {
 } from '@mui/material/ToggleButtonGroup';
 
 export default function RangeTimeSeriesSelector(props) {
-  const { updateVal } = props;
-  const [displayValue, setDisplayValue] = useState("1D")
-  const timeSeriesRanges = ["1D", "1W", "1M", "3M", "6M", "1Y"];
+  const { updateVal, isDisplaySM } = props;
+  const [displayValue, setDisplayValue] = useState("1d")
+  const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m"];
 
   const handleChange = (event, newDisplayValue) => {
     updateVal(newDisplayValue);
@@ -29,15 +29,16 @@ export default function RangeTimeSeriesSelector(props) {
     // </ToggleButtonGroup>
     <div>
         <StyledToggleButtonGroup
-          size="small"
+          size={isDisplaySM ? "small" : "big"}
           value={displayValue}
           exclusive
           onChange={handleChange}
           aria-label="time series"
           color="primary"
+          style={{borderTop: "1px solid #00000030", borderBottom: "1px solid #00000030"}}
         >
           {timeSeriesRanges?.map((range) => (
-            <ToggleButton key={range} value={range} aria-label={range}>{range}</ToggleButton>
+            <ToggleButton key={range} value={range} aria-label={range}>{range.toUpperCase()}</ToggleButton>
           ))}
         </StyledToggleButtonGroup>
     </div>

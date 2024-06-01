@@ -1,9 +1,12 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
+import { Box } from '@mui/material';
 
 export function LineGraph(props) {
-    const { displayLabel = false, timeSeries } = props;
+    const { displayLabel = false, timeSeries, isDisplaySM } = props;
+    console.log("log timeseries: ", timeSeries);
     const changingRates = timeSeries.changingRates;
+    console.log("log changingRates: ", changingRates);
     const timeSeriesRangeLabel = changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator;
     const borderColor = () => {
         if (changingRates[0] > changingRates[changingRates.length - 1]) {
@@ -91,11 +94,9 @@ export function LineGraph(props) {
         maintainAspectRatio: false,
     }
     return (
-        <>
-            <Line
-                data={data}
-                options={options}
-            />
-        </>
+        <Line
+            data={data}
+            options={options}
+        />
     )
 }

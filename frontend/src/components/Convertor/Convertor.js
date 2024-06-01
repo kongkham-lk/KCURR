@@ -6,6 +6,7 @@ import { LineGraph } from '../LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 export default function Convertor(props) {
     const { currCountiesCodeMapDetail, isDisplaySM } = props;
@@ -18,7 +19,7 @@ export default function Convertor(props) {
 
     const [formData, setFormData] = useState(null);
     const [timeSeries, setTimeSeries] = useState(null);
-    const [timeSeriesRange, setTimeSeriesRange] = useState("Week")
+    const [timeSeriesRange, setTimeSeriesRange] = useState("1d")
 
     let baseCurr;
     let targetCurr;
@@ -70,21 +71,23 @@ export default function Convertor(props) {
             <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />
             {formData !== null && (
                 <>
-                    <Typography variant="h4" mt={3} mb={2} >
+                    <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} >
                         {amount} {baseCurr} = {total.toFixed(2)} {targetCurr}
                     </Typography>
                     {timeSeries !== null
                         ? <div style={{ borderTop: "1px solid #adadad60" }}>
-                            <Typography variant="h5" mt={2.5} fontWeight={400} >
-                                {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span> (1w)
+                            <Typography variant={isDisplaySM ? "h6" : "h5"} mt={isDisplaySM ? 1 : 2.5} fontWeight={400} >
+                                {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
                             </Typography>
                             <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} >
                                 1 {baseCurr} = {(total / amount).toFixed(2)} {targetCurr}
                             </Typography>
                             <div style={style.divChart} >
-                                <LineGraph timeSeries={timeSeries} displayLabel={true} />
-                                <div style={style.divRangeTimeSeriesSelector}>
-                                    <RangeTimeSeriesSelector updateVal={handleClick} />
+                                <Box sx={{...sxStyle.lineGraph, height: !isDisplaySM && "300px"}}>
+                                    <LineGraph timeSeries={timeSeries} displayLabel={true} isDisplaySM={isDisplaySM} />
+                                </Box>
+                                <div style={{...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%"}}>
+                                    <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                                 </div>
                             </div>
 
@@ -101,6 +104,10 @@ const styleSpan = (changeRateInPercent) => {
 }
 
 const style = {
-    divRangeTimeSeriesSelector: { marginTop: "2.5%", textAlign: "center" },
-    divChart: { height: "300px", width: "100%", marginBottom: "7.5%" },
+    divRangeTimeSeriesSelector: { textAlign: "center" },
+    divChart: { height: "auto", width: "100%"},
+}
+
+const sxStyle = {
+    lineGraph: { width: "-webkit-fill-available" }
 }
