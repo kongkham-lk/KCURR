@@ -39,5 +39,5 @@ export default function InputTextField(props) {
     )
 };
 
-const sxStyle = { TextField: { width: '25ch' } };
+const sxStyle = { TextField: { width: 'auto', width: '-webkit-fill-available' } };
 const style = { Box: { marginRight: "10px" } };

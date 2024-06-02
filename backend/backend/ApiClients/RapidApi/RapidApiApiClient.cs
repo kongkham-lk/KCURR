@@ -53,7 +53,9 @@ public class RapidApiApiClient : IFinancialNewsApiClient
             string newsTitle = news.Title;
             string newsPublisher = news.Publisher;
             string newsLink = news.Link;
-            var newsPublishTime = FormatTimeStructure(news.PublishTime);
+            DateTime newsPublishTime = GetActualDateTime(news.PublishTime);
+            int diffTimeInHour = GetDiffTimeBetweenCurrentAndPublishTime(newsPublishTime);
+            string formatePublishTime = FormatDateTime(newsPublishTime);
             string newsThumbnail;
             try {
                 newsThumbnail = news.GetThumbnail();
@@ -61,16 +63,24 @@ public class RapidApiApiClient : IFinancialNewsApiClient
                 newsThumbnail = null!;
             }
 
-            newsLists[i] = new FinancialNewsResponse(newsTitle, newsLink, newsPublisher, newsPublishTime, newsThumbnail);
+            newsLists[i] = new FinancialNewsResponse(newsTitle, newsLink, newsPublisher, formatePublishTime, diffTimeInHour, newsThumbnail);
         }
         return newsLists;
     }
-    
-    private string FormatTimeStructure(long newsPublishTimeRes) {
-        var unixTimestamp = DateTimeOffset.FromUnixTimeSeconds(newsPublishTimeRes).ToLocalTime();
-        var formattedDate = unixTimestamp.ToString("ddd, MMM dd, yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-        formattedDate = formattedDate.Insert(formattedDate.Length - 12, " at");
 
-        return formattedDate;
+    private DateTime GetActualDateTime(long newsPublishTimeRes)
+    {
+        return DateTimeOffset.FromUnixTimeSeconds(newsPublishTimeRes).UtcDateTime;
+    }
+
+    private int GetDiffTimeBetweenCurrentAndPublishTime(DateTime publishTime)
+    {
+        DateTime utcNow = DateTime.UtcNow;
+        return utcNow.Subtract(publishTime).Hours;
+    }
+
+    private string FormatDateTime(DateTime newsPublishTime)
+    {
+        return newsPublishTime.ToString("ddd, MMM dd, yyyy HH:mm", CultureInfo.InvariantCulture);
     }
 }

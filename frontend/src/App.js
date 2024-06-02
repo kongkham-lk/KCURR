@@ -3,50 +3,65 @@ import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import { StyledPaperComponent } from './StyledComponents';
-import FinancialNewsLists from './components/FinancialNews/FinancialNewsLists';
+import FinancialNews from './components/FinancialNews/FinancialNews';
 import { Routes, Route } from 'react-router-dom';
 import { Loading } from './components/Loading';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Paper from '@mui/material/Paper';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 export default function App() {
+  const isDisplaySM = useMediaQuery('(max-width:414px)');
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
+
+  const Item = styled(Paper)(({ theme }) => ({
+    height: 'auto',
+    margin: isDisplaySM ? '20px' : '32px',
+    padding: isDisplaySM ? '25px' : '32px'
+  }));
+
+  const lightTheme = createTheme({ palette: { mode: 'light' } });
+  const elevateLevel = 8;
 
   return (
     <div className="App">
-      <MainNav />
-      <Routes>
-        <Route exact path="/" element={
-          <>
-            <StyledPaperComponent>
-              {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-                : <Loading />}
-            </StyledPaperComponent>
-            <StyledPaperComponent>
-              {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-                : <Loading />}
-            </StyledPaperComponent>
-            <StyledPaperComponent>
-              <FinancialNewsLists />
-            </StyledPaperComponent>
-          </>
-        } ></Route>
-        <Route path="/convertor/:curr?" element={
-          <>
-            <StyledPaperComponent>
-              {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-                : <Loading />}
-            </StyledPaperComponent>
-            <StyledPaperComponent>
-              {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
-                : <Loading />}
-            </StyledPaperComponent>
-          </>
-        } ></Route>
-        <Route exact path="/financial-news" element={
-          <StyledPaperComponent>
-            <FinancialNewsLists filter="true" />
-          </StyledPaperComponent>
-        } ></Route>
-      </Routes>
+      <MainNav isDisplaySM={isDisplaySM} /> 
+      <ThemeProvider theme={lightTheme}>
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              <Item key="Convertor" elevation={elevateLevel}>
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                  : <Loading />}
+              </Item>
+              <Item key="ExchangeRateTable" elevation={elevateLevel}>
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                  : <Loading />}
+              </Item>
+              <Item key="FinancialNews" elevation={elevateLevel}>
+                <FinancialNews isDisplaySM={isDisplaySM} />
+              </Item>
+            </>
+          } ></Route>
+          <Route path="/convertor/:curr?" element={
+            <>
+              <Item key="Convertor" elevation={elevateLevel}>
+                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                  : <Loading />}
+              </Item>
+              <Item key="ExchangeRateTable" elevation={elevateLevel}>
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                  : <Loading />}
+              </Item>
+            </>
+          } ></Route>
+          <Route exact path="/financial-news" element={
+            <Item key="FinancialNews" elevation={elevateLevel}>
+              <FinancialNews filter="true" isDisplaySM={isDisplaySM} />
+            </Item>
+          } ></Route>
+        </Routes>
+      </ThemeProvider>
     </div >
   );
 };

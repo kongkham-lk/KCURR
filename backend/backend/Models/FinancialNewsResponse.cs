@@ -13,16 +13,19 @@ public class FinancialNewsResponse
     public string Publisher {set; get;}
     [JsonPropertyName("publishTime")]
     public string PublishTime {set; get;}
+    [JsonPropertyName("diffTimeInHour")]
+    public int DiffTimeInHour { set; get;}
     [JsonPropertyName("thumbnail")]
     public string Thumbnail {set; get;}
 
 
-    public FinancialNewsResponse(string title, string link, string publisher, string publishTime, string thumbnail)
+    public FinancialNewsResponse(string title, string link, string publisher, string publishTime, int diffTimeInHour, string thumbnail)
     {
         Title = title;
         Link = link;
         Publisher = publisher;
         PublishTime = publishTime;
+        DiffTimeInHour = diffTimeInHour;
         Thumbnail = thumbnail;
     }
 }

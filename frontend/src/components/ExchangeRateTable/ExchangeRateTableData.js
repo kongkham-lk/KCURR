@@ -7,6 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import Pagination from '@mui/material/Pagination';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
@@ -14,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
 import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/ExchangeRateTableDataUtil';
@@ -27,7 +28,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, currInput } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
     const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
@@ -36,7 +37,7 @@ export default function ExchangeRateTableData(props) {
         initialTargetCurrArray.splice(-1, 1);
     }
 
-    const timeSeriesRange = "Week";
+    const timeSeriesRange = "1w";
 
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
 
@@ -144,17 +145,17 @@ export default function ExchangeRateTableData(props) {
                             id="tableTitle"
                             component="div"
                         >
-                            Exchange Rate Listing
+                            {isDisplaySM ? "Rate Listing" : "Exchange Rate Listing"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={style.Tooltip} onClick={handleResetFilter}>
+                        <Tooltip title="Reset Filter" style={{margin: isDisplaySM ? "0px" : "16px"}} onClick={handleResetFilter}>
                             <IconButton>
-                                <FilterListIcon />
+                                <FilterListOffIcon />
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <TableContainer>
+                    <TableContainer style={isDisplaySM ? {margin: "0"} : style.NoGapTableContainer}>
                         <Table
-                            sx={sxStyle.Table}
+                            sx={isDisplaySM ? {whiteSpace: "nowrap", padding: "0"} : sxStyle.Table}
                             aria-labelledby="tableTitle"
                             size={dense ? 'small' : 'medium'}
                         >
@@ -163,6 +164,7 @@ export default function ExchangeRateTableData(props) {
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
                                 rowCount={currLists.length}
+                                isDisplaySM={isDisplaySM}
                             />
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList, index) => {
@@ -178,23 +180,23 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Button variant="text" style={style.div} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                <Button variant="text" style={{...style.div.main, ...(isDisplaySM ? style.div.sm : style.div.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                     {getFlag(targetCurr)}
-                                                    <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                    <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                 </Button>
                                             </TableCell>
-                                            <TableCell align="right" >{currList.latestRate}</TableCell>
-                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
+                                            <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>{isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
+                                            { isDisplaySM ? "" : <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
-                                            </TableCell>
-                                            <TableCell align="right" style={styleTableCell(currList, defaultCurr)}>
-                                                <div style={style.chartDiv}>
-                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                            </TableCell>}
+                                            <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
+                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} isDisplaySM={isDisplaySM} />}
                                                 </div>
                                             </TableCell>
                                             <TableCell
                                                 align="right"
-                                                style={styleTableCellDelete(targetCurr, defaultCurr)}
+                                                style={styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM)}
                                                 onClick={() => handleDelete(targetCurr)}
                                             >
                                                 <DeleteIcon style={style.DeleteIcon} />
@@ -211,7 +213,7 @@ export default function ExchangeRateTableData(props) {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
                         component="div"
                         count={currLists.length}
                         rowsPerPage={rowsPerPage}
@@ -220,10 +222,10 @@ export default function ExchangeRateTableData(props) {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-                <FormControlLabel
+                {isDisplaySM ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
-                />
+                />}
                 <CurrCountriesDropDown
                     sxStyle={sxStyle.CurrCountriesDropDown}
                     label="Add Currency"
@@ -240,21 +242,31 @@ export default function ExchangeRateTableData(props) {
 };
 
 const style = {
-    div: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, marginLeft: "15px" },
+    div: {
+        main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400 },
+        lg: { marginLeft: "15px" },
+        sm: { marginLeft: "10px", padding: "0px" },
+    },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
-    chartDiv: { width: "70px", height: "40px", float: "right" },
+    chartDiv: {
+        main: { height: "40px", float: "right" },
+        lg: { width: "70px" },
+        sm: { width: "60px", paddingRight: "5px" },
+    },
     Tooltip: { margin: "16px" },
-    PaperDiv: { display: "flex", marginBottom: "-15px", },
+    PaperDiv: { display: "flex" },
+    NoGapTableContainer: { marginTop: "-15px" }
 };
 
 const sxStyle = {
-    Box: { width: 1 },
-    Paper: { width: 1, mb: 2, boxShadow: "none" },
+    Box: { width: 1, overflowY: "auto"},
+    Paper: { width: 1, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
-    Typography: { flex: '1 1 100%', pl: { sm: 2 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
+    Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
+    Pageination: { display: "flex", justifyContent: "space-between" }
 };

@@ -6,13 +6,16 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
-export default function MainNav() {
+export default function MainNav(props) {
+  const { isDisplaySM } = props;
+
   const [mobileScreen, setMobileScreen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -20,20 +23,13 @@ export default function MainNav() {
   };
 
   return (
-    <Box sx={sxStyle.BoxMain}>
-      <AppBar component="nav">
+    <Box display='flex' sx={isDisplaySM ? sxStyle.StarterGapForMobile : sxStyle.StarterGap}>
+      <AppBar component="nav" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={handleDrawerToggle}
-            sx={sxStyle.IconButton}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" sx={sxStyle.Typography} >
             <Link to={mainLogo.link} style={sxStyle.mainLogo}>
               <div style={style.logoImg}>
-                <img width="60" height="60" src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
+                <img src={embbedLogo.link} alt={embbedLogo.alt} style={{...style.logo, filter: 'saturate(0) brightness(100)'}} />
                 {mainLogo.label}
               </div>
             </Link>
@@ -45,6 +41,13 @@ export default function MainNav() {
               </Link>
             ))}
           </Box>
+          <IconButton
+            color="inherit"
+            onClick={handleDrawerToggle}
+            sx={sxStyle.IconButton}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box>
@@ -52,6 +55,7 @@ export default function MainNav() {
           variant="temporary"
           open={mobileScreen}
           onClose={handleDrawerToggle}
+          anchor="right"
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
@@ -64,7 +68,7 @@ export default function MainNav() {
   );
 };
 
-const drawerWidth = 240;
+const drawerWidth = "-webkit-fill-available";
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
   { label: 'Convertor', link: "/convertor" },
@@ -75,18 +79,12 @@ const navItems = [
 
 const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
   return (
-    <Box onClick={handleDrawerToggle} sx={sxStyle.BoxPopupSideBar}>
-      <Typography variant="h6" sx={sxStyle.TypographyPopupSideBar}>
-        {mainLogo.label}
-      </Typography>
-      <Divider />
-      <List>
+    <Box onClick={handleDrawerToggle}>
+      <List sx={sxStyle.ListPopupSideBar}>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
-            <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar}>
-              <Link href={item.link} underline="none" style={style.Link}>
-                {item.label}
-              </Link>
+            <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
+              <ListItemText primary={item.label} sx={{}}/>
             </ListItemButton>
           </ListItem>
         ))}
@@ -96,14 +94,15 @@ const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
 };
 
 const embbedLogo = {
-  link: "https://img.icons8.com/sf-black-filled/500/000/currency-exchange.png",
+  link: "https://img.icons8.com/sf-regular-filled/48/1976d2/currency-exchange.png",
   alt: "KCURR App Logo",
 };
 
 const sxStyle = {
-  BoxMain: { display: 'flex', mb: 14 },
+  StarterGap: { mb: 14 },
+  StarterGapForMobile: { mb: 12 },
   IconButton: { mr: 2, display: { sm: 'none' } },
-  Typography: { flexGrow: 1, display: "flex", justifyContent: { xs: 'center', sm: 'left' }, marginLeft: { xs: '-100px', sm: 'auto' }},
+  Typography: { flexGrow: 1, display: "flex", justifyContent: 'left' },
   Link: { color: '#fff', margin: "15px", textDecoration: "none", },
   mainLogo: { color: '#fff', textDecoration: "none", },
   BoxSub: { display: { xs: 'none', sm: 'block' }, },
@@ -111,13 +110,14 @@ const sxStyle = {
     display: { xs: 'block', sm: 'none' },
     '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
   },
-  BoxPopupSideBar: { textAlign: 'center' },
-  TypographyPopupSideBar: { my: 2 },
-  ListItemButtonPopupSideBar: { textAlign: 'center' },
+  BoxPopupSideBar: { color: '#1976d2' },
+  ListPopupSideBar: { my: 8 },
+  ListItemPopupSideBar: {  },
+  ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
 }
 
 const style = {
   logo: { width: "35px", height: "35px", filter: "invert(1)", margin: "0 8px 0 0" },
-  Link: {color: "black", textDecoration: "none"},
+  Link: {color: "black", textDecoration: "none" },
   logoImg: { display: "flex", alignItems: "center", marginLeft: "15px" },
 }

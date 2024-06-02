@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
 
 export default function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
+    const { order, orderBy, onRequestSort, isDisplaySM } = props;
 
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -16,19 +16,21 @@ export default function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow style={style.TableRow}>
-                {headCells.map((headCell) => (
+                {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={style.TableCell}
+                        style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
-                            style={{ marginLeft: headCell.id === 'targetCurr' && "25px" }}
+                            style={{ marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px", 
+                                     marginRight: headCell.id === 'targetCurr' && "-20px",
+                                     padding: isDisplaySM && "0px" }}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
@@ -39,11 +41,11 @@ export default function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell style={style.TableCell} align="right" >
-                    Chart (7d)
+                <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
+                    Chart (24h)
                 </TableCell>
-                <TableCell style={style.TableCellDelete} align="right" >
-                    Delete
+                <TableCell style={{padding: isDisplaySM && "0px 8px 8px 0px"}} align="right" >
+                    {isDisplaySM ? "Del" : "Delete"}
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -57,12 +59,12 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const headCells = [
+let headCells = [
     {
         id: 'targetCurr',
         numeric: false,
         disablePadding: true,
-        label: 'Currency Countries',
+        label: 'Countries',
     },
     {
         id: 'latestRate',
@@ -80,6 +82,8 @@ const headCells = [
 
 const style = {
     TableRow: { width: "100%" },
-    TableCell: { width: "20%" },
-    TableCellDelete: { width: "13%" },
+    TableCell: {
+        lg: { width: "20%" },
+        sm: { width: "10%", padding: "0px 0px 10px 10px" }
+    },
 }

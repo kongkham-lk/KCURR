@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButtonGroup, {
+  toggleButtonGroupClasses,
+} from '@mui/material/ToggleButtonGroup';
 
 export default function RangeTimeSeriesSelector(props) {
-  const { updateVal } = props;
-  const [displayValue, setDisplayValue] = useState("Week")
-  const timeSeriesRanges = ["Week", "Month", "Quater", "Half Year"];
+  const { updateVal, isDisplaySM } = props;
+  const [displayValue, setDisplayValue] = useState("1d")
+  const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m"];
 
   const handleChange = (event, newDisplayValue) => {
     updateVal(newDisplayValue);
@@ -13,20 +16,47 @@ export default function RangeTimeSeriesSelector(props) {
   };
 
   return (
-    <ToggleButtonGroup
-      size="small"
-      color="primary"
-      value={displayValue}
-      exclusive
-      onChange={handleChange}
-    >
-      {timeSeriesRanges?.map((range) => (
-        <ToggleButton key={range} value={range} sx={sxStyle.ToggleButton}>{range}</ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+    // <ToggleButtonGroup
+    //   size="small"
+    //   color="primary"
+    //   value={displayValue}
+    //   exclusive
+    //   onChange={handleChange}
+    // >
+      // {timeSeriesRanges?.map((range) => (
+      //   <ToggleButton key={range} value={range} sx={sxStyle.ToggleButton}>{range}</ToggleButton>
+      // ))}
+    // </ToggleButtonGroup>
+    <div>
+        <StyledToggleButtonGroup
+          size={isDisplaySM ? "small" : "big"}
+          value={displayValue}
+          exclusive
+          onChange={handleChange}
+          aria-label="time series"
+          color="primary"
+          style={{borderTop: "1px solid #00000030", borderBottom: "1px solid #00000030"}}
+        >
+          {timeSeriesRanges?.map((range) => (
+            <ToggleButton key={range} value={range} aria-label={range}>{range.toUpperCase()}</ToggleButton>
+          ))}
+        </StyledToggleButtonGroup>
+    </div>
   );
 };
 
-const sxStyle = {
-  ToggleButton: {px: 2},
-}
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  [`& .${toggleButtonGroupClasses.grouped}`]: {
+    margin: theme.spacing(1),
+    border: 0,
+    borderRadius: theme.shape.borderRadius,
+    [`&.${toggleButtonGroupClasses.disabled}`]: {
+      border: 0,
+    },
+  },
+  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]:
+    {
+      marginLeft: -1,
+      borderLeft: '1px solid transparent',
+    },
+}));
