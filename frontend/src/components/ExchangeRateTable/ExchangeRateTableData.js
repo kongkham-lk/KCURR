@@ -48,6 +48,8 @@ export default function ExchangeRateTableData(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [displayNewLiveRate, setdisplayNewLiveRate] = useState(true);
+
 
     useEffect(() => {
         if (isReady) {
@@ -64,8 +66,12 @@ export default function ExchangeRateTableData(props) {
                 setCurrLists(newLists)
             }
         }
-        checkNewRow();
-    }, [newCurr, currLists, currDataSet, defaultCurr]
+        if (displayNewLiveRate) {
+            setdisplayNewLiveRate(false);
+            checkNewRow();
+            console.log("update new live data!!!");
+        }
+    }, [newCurr, currLists, currDataSet, defaultCurr, displayNewLiveRate]
     )
 
     const handleRequestSort = (event, property) => {
@@ -106,7 +112,8 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleChangeDense = (event) => {
-        setDense(event.target.checked);
+        //setDense(event.target.checked);
+        setdisplayNewLiveRate(true);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
