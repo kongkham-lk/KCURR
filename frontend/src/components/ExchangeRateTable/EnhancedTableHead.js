@@ -81,7 +81,7 @@ let headCells = [
 ];
 
 const style = {
-    TableRow: { width: "100%" },
+    TableRow: { width: "100%", whiteSpace: "nowrap" },
     TableCell: {
         lg: { width: "20%" },
         sm: { width: "10%", padding: "0px 0px 10px 10px" }
