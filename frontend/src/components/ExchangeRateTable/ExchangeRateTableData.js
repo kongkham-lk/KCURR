@@ -180,10 +180,12 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Button variant="text" style={{...style.div.main, ...(isDisplaySM ? style.div.sm : style.div.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
-                                                    {getFlag(targetCurr)}
-                                                    <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
-                                                </Button>
+                                                <Box sx={sxStyle.hoverButton}>
+                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                        {getFlag(targetCurr)}
+                                                        <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                    </Button>
+                                                </Box>
                                             </TableCell>
                                             <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>{isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
                                             { isDisplaySM ? "" : <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
@@ -199,7 +201,9 @@ export default function ExchangeRateTableData(props) {
                                                 style={styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM)}
                                                 onClick={() => handleDelete(targetCurr)}
                                             >
-                                                <DeleteIcon style={style.DeleteIcon} />
+                                                <IconButton aria-label="delete" style={{ display: targetCurr === defaultCurr && "none" }}>
+                                                    <DeleteIcon />
+                                                </IconButton>
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -242,11 +246,6 @@ export default function ExchangeRateTableData(props) {
 };
 
 const style = {
-    div: {
-        main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400 },
-        lg: { marginLeft: "15px" },
-        sm: { marginLeft: "10px", padding: "0px" },
-    },
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
@@ -268,5 +267,12 @@ const sxStyle = {
     CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { display: "flex", justifyContent: "space-between" }
+    Pageination: { display: "flex", justifyContent: "space-between" },
+    Button: {
+        main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
+        lg: { marginLeft: "15px" },
+        sm: { marginLeft: "10px", padding: "0px" },
+    },
+    hoverButton: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
+                    '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }, }
 };
