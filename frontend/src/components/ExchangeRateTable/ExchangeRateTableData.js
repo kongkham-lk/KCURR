@@ -59,18 +59,16 @@ export default function ExchangeRateTableData(props) {
 
     useEffect(() => {
         async function checkNewRow() {
-            if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {
+            if (newCurr !== "" && !checkIfExist(currLists, newCurr) && displayNewLiveRate) {
+                console.log("update new live data!!!");
                 const currList = await createCurrLists(defaultCurr, newCurr, currDataSet, timeSeriesRange);
                 const newLists = [...currLists, currList];
                 setNewCurr("");
-                setCurrLists(newLists)
+                setCurrLists(newLists);
+                setdisplayNewLiveRate(false);
             }
         }
-        if (displayNewLiveRate) {
-            setdisplayNewLiveRate(false);
-            checkNewRow();
-            console.log("update new live data!!!");
-        }
+        checkNewRow();
     }, [newCurr, currLists, currDataSet, defaultCurr, displayNewLiveRate]
     )
 
