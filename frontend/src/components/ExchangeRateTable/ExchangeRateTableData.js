@@ -198,7 +198,7 @@ export default function ExchangeRateTableData(props) {
                                             </TableCell>}
                                             <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
-                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} isDisplaySM={isDisplaySM} />}
+                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
                                             </TableCell>
                                             <TableCell
