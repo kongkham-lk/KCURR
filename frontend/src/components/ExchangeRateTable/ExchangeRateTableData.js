@@ -141,6 +141,11 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleDelete = (targetCurr) => {
+        if (targetCurr === currCodeArray[0]) {
+            console.log("Attempting to delete default currency row, Exit!!!");
+            return;
+        }
+            
         console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
         const oldTargetCurrCodeArray = [...currCodeArray];
