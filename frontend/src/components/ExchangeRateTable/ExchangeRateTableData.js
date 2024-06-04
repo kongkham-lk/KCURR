@@ -35,6 +35,7 @@ export default function ExchangeRateTableData(props) {
 
     const timeSeriesRange = "1w";
 
+    // retrieved initial exchange rate table list
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
 
     const [currLists, setCurrLists] = useState(initialCurrLists);
@@ -44,7 +45,6 @@ export default function ExchangeRateTableData(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
 
     useEffect(() => {
         if (isReady) {
@@ -63,11 +63,11 @@ export default function ExchangeRateTableData(props) {
                 setNewCurr("");
                 setCurrLists(newLists);
             }
-            console.log("check currlists: ", currLists);
+            console.log("Check Curr Lists after refresh page: ", currLists);
+            console.log("Check Curr Array after refresh page: ", initialTargetCurrArray);
         }
         checkNewRow();
-    }, [newCurr, currLists, currDataSet, defaultCurr]
-    )
+    }, [newCurr, currLists, currDataSet, defaultCurr]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -75,44 +75,44 @@ export default function ExchangeRateTableData(props) {
         setOrderBy(property);
     };
 
-    const handleSetDefaultCurr = async (targetCurr, displayNewLiveRate) => {
-        // this will be triggered by timmer, refetch new update rate from beacon api
-        if (displayNewLiveRate) {
-            console.log("check if displayNewLiveRate:  ", displayNewLiveRate);
-            const newLists = [];
-            const initialValue = { baseCurr: targetCurr };
-            const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
-    
-            for (let i in initialTargetCurrArray) {
-                newLists[i] = await createCurrLists(targetCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
-            }
-    
-            console.log("check oldLists:  ", newLists);
-            setCurrLists(newLists);
-            setCurrDataSet(newAddCurrDataSet);
-        } else {
-            console.log("Rearrage list!!!");
+    const handleSetDefaultCurr = async (targetCurr) => {
+        console.log("Rearrage list!!!");
 
-            const oldLists = [...currLists];
-            const newLists = [];
-            const oldTargetCurrArray = [...initialTargetCurrArray];
-    
-            // Re-arrange curr list order
-            const targetCurrIndex = oldLists.findIndex(curr => curr.targetCurr === targetCurr);
-            
-            if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
-                const [targetCurrItem] = oldLists.splice(targetCurrIndex, 1);
-                oldLists.unshift(targetCurrItem);
-                const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
-                oldTargetCurrArray.unshift(targetCurr);
-            }
+        const oldLists = [...currLists];
+        const oldTargetCurrArray = [...initialTargetCurrArray];
 
-            console.log("check oldLists:  ", oldLists);
-            setDefaultCurr(targetCurr);
-            setCurrLists(oldLists);
-            setInitialTargetCurrArray([...oldTargetCurrArray]);
+        // Re-arrange curr list order
+        const targetCurrIndex = oldLists.findIndex(curr => curr.targetCurr === targetCurr);
+        
+        if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
+            const [targetCurrItem] = oldLists.splice(targetCurrIndex, 1);
+            oldLists.unshift(targetCurrItem);
+            const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
+            oldTargetCurrArray.unshift(targetCurr);
         }
-    }
+
+        console.log("Check List after re-arrange:  ", oldLists);
+        console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
+        setDefaultCurr(targetCurr);
+        setCurrLists(oldLists);
+        setInitialTargetCurrArray([...oldTargetCurrArray]);
+    };
+
+    // this will be triggered by timmer, refetch new update rate from beacon api
+    const handleUpdateNewLiveRate = async (baseCurr) => {
+        console.log("Fetching latest rate from API!!!")
+        const newLists = [];
+        const initialValue = { baseCurr: baseCurr };
+        const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
+
+        for (let i in initialTargetCurrArray) {
+            newLists[i] = await createCurrLists(baseCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
+        }
+
+        console.log("check response list of latest rate:  ", newLists);
+        setCurrLists(newLists);
+        setCurrDataSet(newAddCurrDataSet);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -126,7 +126,7 @@ export default function ExchangeRateTableData(props) {
     const handleChangeDense = (event) => {
         //setDense(event.target.checked);
         console.log("Timer trigger!!!")
-        handleSetDefaultCurr(defaultCurr, true);
+        handleUpdateNewLiveRate(defaultCurr);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
@@ -141,11 +141,13 @@ export default function ExchangeRateTableData(props) {
     );
 
     const handleAddCurrCountry = (e) => {
+        console.log("Add new item to list: ", e.value);
         setNewCurr(e.value);
         setInitialTargetCurrArray([...initialTargetCurrArray, e.value])
     };
 
     const handleDelete = (targetCurr) => {
+        console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
         const oldTargetCurrArray = [...initialTargetCurrArray];
 
@@ -155,7 +157,7 @@ export default function ExchangeRateTableData(props) {
                 oldTargetCurrArray.splice(i, 1);
             }
         }
-        console.log("check oldCurrLists:  ", oldCurrLists);
+        console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
         setInitialTargetCurrArray(oldTargetCurrArray);
     }
@@ -209,7 +211,7 @@ export default function ExchangeRateTableData(props) {
                                                 padding="none"
                                             >
                                                 <Box sx={sxStyle.hoverButton}>
-                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr, false)} >
+                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
                                                         {getFlag(targetCurr)}
                                                         <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                     </Button>
