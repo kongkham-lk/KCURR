@@ -25,7 +25,8 @@ import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
-
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
@@ -246,29 +247,62 @@ export default function ExchangeRateTableData(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
-                        component="div"
-                        count={currLists.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+                    {
+                        !isDisplaySM ? <>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px'}}>
+                                <CurrCountriesDropDown
+                                    sxStyle={sxStyle.CurrCountriesDropDown}
+                                    label="Add Currency"
+                                    stateInputField="targetCurr"
+                                    updateVal={handleAddCurrCountry}
+                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                    passInStyle={style.CurrCountriesDropDown}
+                                    size="small"
+                                />
+                                <TablePagination
+                                    rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
+                                    component="div"
+                                    count={currLists.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                                <Box>
+                                    <CircularProgressWithLabel isDisplaySM={isDisplaySM}/>
+                                </Box>
+                            </Box>
+                        </> : <>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px'}}>
+                                <CurrCountriesDropDown
+                                    sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                    label="Add Currency"
+                                    stateInputField="targetCurr"
+                                    updateVal={handleAddCurrCountry}
+                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                    passInStyle={style.CurrCountriesDropDown}
+                                    size="small"
+                                />
+                                <TablePagination
+                                    rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
+                                    component="div"
+                                    count={currLists.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </Box>
+                            <Box sx={sxStyle.CircularProgressWithLabel}>
+                                <CircularProgressWithLabel isDisplaySM={isDisplaySM} />
+                            </Box>
+                        </>
+                    }
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
                 />}
-                <CurrCountriesDropDown
-                    sxStyle={sxStyle.CurrCountriesDropDown}
-                    label="Add Currency"
-                    stateInputField="targetCurr"
-                    updateVal={handleAddCurrCountry}
-                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                    passInStyle={style.CurrCountriesDropDown}
-                    size="small"
-                />
             </Box >
             }
         </>
@@ -294,15 +328,20 @@ const sxStyle = {
     Paper: { width: 1, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
-    CurrCountriesDropDown: { minWidth: 150, width: 170, float: "right", ml: 20 },
+    CurrCountriesDropDown: { 
+        lg: { minWidth: 150, width: 170,},
+        sm: { width: '80px',},
+    },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { display: "flex", justifyContent: "space-between" },
+    Pageination: { display: "flex", justifyContent: "space-between", flexWrap: 'wrap' },
     Button: {
         main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },
         sm: { marginLeft: "10px", padding: "0px" },
     },
     hoverButton: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
-                    '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }, }
+                    '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }, },
+    Pagination: { display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' },
+    CircularProgressWithLabel: { float: 'right', marginRight: '10px' },
 };
