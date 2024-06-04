@@ -31,11 +31,7 @@ export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
-    const initialTargetCurrArray = ['USD', 'CAD', 'EUR', 'GBP'];
-    if (currInput.baseCurr !== "USD") {
-        initialTargetCurrArray.unshift(currInput.baseCurr);
-        initialTargetCurrArray.splice(-1, 1);
-    }
+    const [initialTargetCurrArray, setInitialTargetCurrArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
 
     const timeSeriesRange = "1w";
 
@@ -125,16 +121,24 @@ export default function ExchangeRateTableData(props) {
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
-    const handleAddCurrCountry = (e) => setNewCurr(e.value);
+    const handleAddCurrCountry = (e) => {
+        setNewCurr(e.value);
+        setInitialTargetCurrArray([...initialTargetCurrArray, e.value])
+    };
 
     const handleDelete = (targetCurr) => {
         const oldCurrLists = [...currLists];
+        const oldTargetCurrArray = [...initialTargetCurrArray];
+
         for (let i in oldCurrLists) {
             if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurr) {
-                oldCurrLists.splice(i, 1)
+                oldCurrLists.splice(i, 1);
+                oldTargetCurrArray.splice(i, 1);
             }
         }
+        console.log("check oldCurrLists:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
+        setInitialTargetCurrArray(oldTargetCurrArray);
     }
 
     const handleResetFilter = () => setOrderBy('');
