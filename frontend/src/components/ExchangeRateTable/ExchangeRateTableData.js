@@ -30,12 +30,12 @@ export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
-    const [targetCurrCodeArray, setTargetCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
+    const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
 
     const timeSeriesRangeLength = "1w";
 
     // retrieved initial exchange rate table list
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, targetCurrCodeArray, currDataSet, timeSeriesRangeLength);
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
 
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
@@ -63,7 +63,7 @@ export default function ExchangeRateTableData(props) {
                 setCurrLists(newLists);
             }
             console.log("Check Curr Lists after refresh page: ", currLists);
-            console.log("Check Curr Array after refresh page: ", targetCurrCodeArray);
+            console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
     }, [newCurrCode, currLists, currDataSet, defaultCurrCode]);
@@ -74,38 +74,34 @@ export default function ExchangeRateTableData(props) {
         setOrderBy(property);
     };
 
+    // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
         console.log("Rearrage list!!!");
-
-        const oldLists = [...currLists];
-        const oldTargetCurrArray = [...targetCurrCodeArray];
-
-        // Re-arrange curr list order
-        const targetCurrIndex = oldLists.findIndex(curr => curr.targetCurr === targetCurr);
+        
+        const oldTargetCurrArray = [...currCodeArray];
+        const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
         
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
-            const [targetCurrItem] = oldLists.splice(targetCurrIndex, 1);
-            oldLists.unshift(targetCurrItem);
             const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
             oldTargetCurrArray.unshift(targetCurr);
         }
 
-        console.log("Check List after re-arrange:  ", oldLists);
         console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
+        await handleUpdateNewLiveRate(oldTargetCurrArray); // Refetch new update rate from beacon api
+
         setDefaultCurrCode(targetCurr);
-        setCurrLists(oldLists);
-        setTargetCurrCodeArray([...oldTargetCurrArray]);
+        setCurrCodeArray([...oldTargetCurrArray]);
     };
 
-    // this will be triggered by timmer, refetch new update rate from beacon api
-    const handleUpdateNewLiveRate = async () => {
+    // Refetch new update rate from api
+    const handleUpdateNewLiveRate = async (currCodeArray) => {
         console.log("Fetching latest rate from API!!!")
         const newLists = [];
-        const initialValue = { baseCurr: defaultCurrCode };
+        const initialValue = { baseCurr: currCodeArray[0] };
         const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
 
-        for (let i in targetCurrCodeArray) {
-            newLists[i] = await createCurrLists(defaultCurrCode, targetCurrCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
+        for (let i in currCodeArray) {
+            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
         }
 
         console.log("check response list of latest rate:  ", newLists);
@@ -124,7 +120,7 @@ export default function ExchangeRateTableData(props) {
 
     const updateNewLiveRate = (event) => {
         console.log("Timer trigger!!!")
-        handleUpdateNewLiveRate();
+        handleUpdateNewLiveRate(currCodeArray);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
@@ -141,23 +137,23 @@ export default function ExchangeRateTableData(props) {
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e.value);
         setNewCurrCode(e.value);
-        setTargetCurrCodeArray([...targetCurrCodeArray, e.value])
+        setCurrCodeArray([...currCodeArray, e.value])
     };
 
     const handleDelete = (targetCurr) => {
         console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
-        const oldTargetCurrCodeArray = [...targetCurrCodeArray];
+        const oldTargetCurrCodeArray = [...currCodeArray];
 
         for (let i in oldCurrLists) {
-            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
+            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== targetCurr) {
                 oldCurrLists.splice(i, 1);
                 oldTargetCurrCodeArray.splice(i, 1);
             }
         }
         console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
-        setTargetCurrCodeArray(oldTargetCurrCodeArray);
+        setCurrCodeArray(oldTargetCurrCodeArray);
     }
 
     const handleResetFilter = () => setOrderBy('');
