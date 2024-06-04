@@ -44,7 +44,6 @@ export default function ExchangeRateTableData(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [displayNewLiveRate, setdisplayNewLiveRate] = useState(true);
 
 
     useEffect(() => {
@@ -55,17 +54,18 @@ export default function ExchangeRateTableData(props) {
 
     useEffect(() => {
         async function checkNewRow() {
-            if (newCurr !== "" && !checkIfExist(currLists, newCurr) && displayNewLiveRate) {
-                console.log("update new live data!!!");
+            console.log("refresh page!!!");
+            
+            if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {
+                console.log("Create new curr list!!!");
                 const currList = await createCurrLists(defaultCurr, newCurr, currDataSet, timeSeriesRange);
                 const newLists = [...currLists, currList];
                 setNewCurr("");
                 setCurrLists(newLists);
-                setdisplayNewLiveRate(false);
             }
         }
         checkNewRow();
-    }, [newCurr, currLists, currDataSet, defaultCurr, displayNewLiveRate]
+    }, [newCurr, currLists, currDataSet, defaultCurr]
     )
 
     const handleRequestSort = (event, property) => {
@@ -107,7 +107,6 @@ export default function ExchangeRateTableData(props) {
 
     const handleChangeDense = (event) => {
         //setDense(event.target.checked);
-        setdisplayNewLiveRate(true);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
