@@ -9,7 +9,7 @@ function CircularProgressWithLabel(props) {
     <Box sx={sxStyle.Box}>
       <CircularProgress
           variant="determinate"
-          sx={{ ...sxStyle.CircularGrey, ...sxStyle.CenterPos}}
+          sx={{ ...sxStyle.CircularGrey, ...sxStyle.CenterPos }}
           size={40}
           thickness={4}
           {...props}
@@ -38,12 +38,12 @@ CircularProgressWithLabel.propTypes = {
 
 export default function CircularWithValueLabel(props) {
   const [progress, setProgress] = useState(60);
-  const { updateNewLiveRate } = props;
+  const { onUpdateNewLiveRate } = props;
 
   const checkTimer = (prevProgress) => {
     if (prevProgress <= 0) {
       console.log('Reset timer and Refresh lives rate!!!');
-      updateNewLiveRate();
+      onUpdateNewLiveRate();
       prevProgress = 100;
     } else {
       prevProgress -= 1.667;
@@ -54,7 +54,7 @@ export default function CircularWithValueLabel(props) {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => checkTimer(prevProgress));
-    }, 500);
+    }, 1000);
     return () => {
       clearInterval(timer);
     };
@@ -65,18 +65,7 @@ export default function CircularWithValueLabel(props) {
 
 const sxStyle = {
   Box: { position: 'relative', display: 'inline-flex', float: 'right' },
-  CircularGrey: {
-    color: (theme) =>
-      theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-  },
-  CenterPos: {
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    position: 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+  CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800] },
+  CenterPos: { top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center', 
+                justifyContent: 'center' }
 }

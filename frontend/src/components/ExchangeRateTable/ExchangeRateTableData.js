@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import Pagination from '@mui/material/Pagination';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
@@ -25,22 +24,21 @@ import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
-    const [defaultCurr, setDefaultCurr] = useState(currInput.baseCurr);
-    const [initialTargetCurrArray, setInitialTargetCurrArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
+    const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
+    const [targetCurrCodeArray, setTargetCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
 
-    const timeSeriesRange = "1w";
+    const timeSeriesRangeLength = "1w";
 
     // retrieved initial exchange rate table list
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurr, initialTargetCurrArray, currDataSet, timeSeriesRange);
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, targetCurrCodeArray, currDataSet, timeSeriesRangeLength);
 
     const [currLists, setCurrLists] = useState(initialCurrLists);
-    const [newCurr, setNewCurr] = useState("");
+    const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
@@ -57,18 +55,18 @@ export default function ExchangeRateTableData(props) {
         async function checkNewRow() {
             console.log("refresh page!!!");
             
-            if (newCurr !== "" && !checkIfExist(currLists, newCurr)) {
+            if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 console.log("Create new curr list!!!");
-                const currList = await createCurrLists(defaultCurr, newCurr, currDataSet, timeSeriesRange);
+                const currList = await createCurrLists(defaultCurrCode, newCurrCode, currDataSet, timeSeriesRangeLength);
                 const newLists = [...currLists, currList];
-                setNewCurr("");
+                setNewCurrCode("");
                 setCurrLists(newLists);
             }
             console.log("Check Curr Lists after refresh page: ", currLists);
-            console.log("Check Curr Array after refresh page: ", initialTargetCurrArray);
+            console.log("Check Curr Array after refresh page: ", targetCurrCodeArray);
         }
         checkNewRow();
-    }, [newCurr, currLists, currDataSet, defaultCurr]);
+    }, [newCurrCode, currLists, currDataSet, defaultCurrCode]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -80,7 +78,7 @@ export default function ExchangeRateTableData(props) {
         console.log("Rearrage list!!!");
 
         const oldLists = [...currLists];
-        const oldTargetCurrArray = [...initialTargetCurrArray];
+        const oldTargetCurrArray = [...targetCurrCodeArray];
 
         // Re-arrange curr list order
         const targetCurrIndex = oldLists.findIndex(curr => curr.targetCurr === targetCurr);
@@ -94,20 +92,20 @@ export default function ExchangeRateTableData(props) {
 
         console.log("Check List after re-arrange:  ", oldLists);
         console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
-        setDefaultCurr(targetCurr);
+        setDefaultCurrCode(targetCurr);
         setCurrLists(oldLists);
-        setInitialTargetCurrArray([...oldTargetCurrArray]);
+        setTargetCurrCodeArray([...oldTargetCurrArray]);
     };
 
     // this will be triggered by timmer, refetch new update rate from beacon api
     const handleUpdateNewLiveRate = async () => {
         console.log("Fetching latest rate from API!!!")
         const newLists = [];
-        const initialValue = { baseCurr: defaultCurr };
+        const initialValue = { baseCurr: defaultCurrCode };
         const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
 
-        for (let i in initialTargetCurrArray) {
-            newLists[i] = await createCurrLists(defaultCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
+        for (let i in targetCurrCodeArray) {
+            newLists[i] = await createCurrLists(defaultCurrCode, targetCurrCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
         }
 
         console.log("check response list of latest rate:  ", newLists);
@@ -142,24 +140,24 @@ export default function ExchangeRateTableData(props) {
 
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e.value);
-        setNewCurr(e.value);
-        setInitialTargetCurrArray([...initialTargetCurrArray, e.value])
+        setNewCurrCode(e.value);
+        setTargetCurrCodeArray([...targetCurrCodeArray, e.value])
     };
 
     const handleDelete = (targetCurr) => {
         console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
-        const oldTargetCurrArray = [...initialTargetCurrArray];
+        const oldTargetCurrCodeArray = [...targetCurrCodeArray];
 
         for (let i in oldCurrLists) {
-            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurr) {
+            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
                 oldCurrLists.splice(i, 1);
-                oldTargetCurrArray.splice(i, 1);
+                oldTargetCurrCodeArray.splice(i, 1);
             }
         }
         console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
-        setInitialTargetCurrArray(oldTargetCurrArray);
+        setTargetCurrCodeArray(oldTargetCurrCodeArray);
     }
 
     const handleResetFilter = () => setOrderBy('');
@@ -198,12 +196,12 @@ export default function ExchangeRateTableData(props) {
                             />
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList, index) => {
-                                    const targetCurr = currList.targetCurr;
+                                    const targetCurrCode = currList.targetCurr;
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const timeSeries = currList.timeSeries;
 
                                     return (
-                                        <TableRow key={targetCurr} style={styleTableRow(targetCurr, defaultCurr)} >
+                                        <TableRow key={targetCurrCode} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
                                             <TableCell
                                                 component="th"
                                                 id={labelId}
@@ -211,16 +209,24 @@ export default function ExchangeRateTableData(props) {
                                                 padding="none"
                                             >
                                                 <Box sx={sxStyle.hoverButton}>
-                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
-                                                        {getFlag(targetCurr)}
-                                                        <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
+                                                    <Button variant="text" onClick={() => handleSetDefaultCurr(targetCurrCode)} 
+                                                            sx={{
+                                                                    ...sxStyle.defaultCurrSetterButton.main, 
+                                                                    ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
+                                                                }} >
+                                                        {getFlag(targetCurrCode)}
+                                                        <span style={style.span}>{isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}</span>
                                                     </Button>
                                                 </Box>
                                             </TableCell>
-                                            <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>{isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}</TableCell>
-                                            { isDisplaySM ? "" : <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
-                                                {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
-                                            </TableCell>}
+                                            <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>
+                                                {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
+                                            </TableCell>
+                                            { isDisplaySM ? "" : 
+                                                <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                    {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                </TableCell>
+                                            }
                                             <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
@@ -228,10 +234,10 @@ export default function ExchangeRateTableData(props) {
                                             </TableCell>
                                             <TableCell
                                                 align="right"
-                                                style={styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM)}
-                                                onClick={() => handleDelete(targetCurr)}
+                                                style={styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}
+                                                onClick={() => handleDelete(targetCurrCode)}
                                             >
-                                                <IconButton aria-label="delete" style={{ display: targetCurr === defaultCurr && "none" }}>
+                                                <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </TableCell>
@@ -239,7 +245,7 @@ export default function ExchangeRateTableData(props) {
                                     );
                                 })}
                                 {emptyRows > 0 && (
-                                    <TableRow style={styleTableRowInFile(dense, emptyRows)} >
+                                    <TableRow style={styleTableRowInFile(false, emptyRows)} >
                                         <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
@@ -250,8 +256,8 @@ export default function ExchangeRateTableData(props) {
                         <CurrCountriesDropDown
                             sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                             label="Add Currency"
-                            stateInputField="targetCurr"
-                            updateVal={handleAddCurrCountry}
+                            inputCurrType="targetCurr"
+                            onAddCurrCountry={handleAddCurrCountry}
                             currCountiesCodeMapDetail={currCountiesCodeMapDetail}
                             passInStyle={style.CurrCountriesDropDown}
                             size="small"
@@ -265,15 +271,16 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
-                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} updateNewLiveRate={updateNewLiveRate} />}
+                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} />}
                     </Box>
                     {isDisplaySM && <Box sx={sxStyle.progressBarContainer}>
-                        <CircularProgressWithLabel sx={sxStyle.progressBar} updateNewLiveRate={updateNewLiveRate} />
+                        <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} />
                     </Box>}
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
-                    control={<Switch checked={dense} onChange={updateNewLiveRate} />}
+                    control={<Switch checked={dense} onChange={updateNewLiveRate}/>}
                     label="Dense padding"
+                    sx={{display: 'none'}}
                 />}
             </Box >
             }
@@ -307,7 +314,7 @@ const sxStyle = {
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
     Pageination: { display: "flex", justifyContent: "space-between", flexWrap: 'wrap' },
-    Button: {
+    defaultCurrSetterButton: {
         main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },
         sm: { marginLeft: "10px", padding: "0px" },
