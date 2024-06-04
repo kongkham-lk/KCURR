@@ -63,6 +63,7 @@ export default function ExchangeRateTableData(props) {
                 setNewCurr("");
                 setCurrLists(newLists);
             }
+            console.log("check currlists: ", currLists);
         }
         checkNewRow();
     }, [newCurr, currLists, currDataSet, defaultCurr]
@@ -74,26 +75,43 @@ export default function ExchangeRateTableData(props) {
         setOrderBy(property);
     };
 
-    const handleSetDefaultCurr = async (targetCurr) => {
-        const oldLists = [];
-        const newLists = [];
-        const initialValue = { baseCurr: targetCurr };
-        const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
-
-        for (let i in currLists) {
-            if (currLists[i].targetCurr !== targetCurr) {
-                oldLists.push(currLists[i].targetCurr);
+    const handleSetDefaultCurr = async (targetCurr, displayNewLiveRate) => {
+        // this will be triggered by timmer, refetch new update rate from beacon api
+        if (displayNewLiveRate) {
+            console.log("check if displayNewLiveRate:  ", displayNewLiveRate);
+            const newLists = [];
+            const initialValue = { baseCurr: targetCurr };
+            const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
+    
+            for (let i in initialTargetCurrArray) {
+                newLists[i] = await createCurrLists(targetCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
             }
-        }
-        oldLists.unshift(targetCurr)
+    
+            console.log("check oldLists:  ", newLists);
+            setCurrLists(newLists);
+            setCurrDataSet(newAddCurrDataSet);
+        } else {
+            console.log("Rearrage list!!!");
 
-        for (let i in oldLists) {
-            newLists[i] = await createCurrLists(targetCurr, oldLists[i], newAddCurrDataSet, timeSeriesRange);
-        }
+            const oldLists = [...currLists];
+            const newLists = [];
+            const oldTargetCurrArray = [...initialTargetCurrArray];
+    
+            // Re-arrange curr list order
+            const targetCurrIndex = oldLists.findIndex(curr => curr.targetCurr === targetCurr);
+            
+            if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
+                const [targetCurrItem] = oldLists.splice(targetCurrIndex, 1);
+                oldLists.unshift(targetCurrItem);
+                const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
+                oldTargetCurrArray.unshift(targetCurr);
+            }
 
-        setCurrLists(newLists);
-        setDefaultCurr(targetCurr);
-        setCurrDataSet(newAddCurrDataSet);
+            console.log("check oldLists:  ", oldLists);
+            setDefaultCurr(targetCurr);
+            setCurrLists(oldLists);
+            setInitialTargetCurrArray([...oldTargetCurrArray]);
+        }
     }
 
     const handleChangePage = (event, newPage) => {
@@ -107,6 +125,8 @@ export default function ExchangeRateTableData(props) {
 
     const handleChangeDense = (event) => {
         //setDense(event.target.checked);
+        console.log("Timer trigger!!!")
+        handleSetDefaultCurr(defaultCurr, true);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
@@ -189,7 +209,7 @@ export default function ExchangeRateTableData(props) {
                                                 padding="none"
                                             >
                                                 <Box sx={sxStyle.hoverButton}>
-                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr)} >
+                                                    <Button variant="text" sx={{...sxStyle.Button.main, ...(isDisplaySM ? sxStyle.Button.sm : sxStyle.Button.lg)}} onClick={() => handleSetDefaultCurr(targetCurr, false)} >
                                                         {getFlag(targetCurr)}
                                                         <span style={style.span}>{isDisplaySM ? targetCurr : currCountiesCodeMapDetail[targetCurr].display}</span>
                                                     </Button>
