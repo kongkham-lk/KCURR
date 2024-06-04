@@ -174,7 +174,7 @@ export default function ExchangeRateTableData(props) {
                             id="tableTitle"
                             component="div"
                         >
-                            {isDisplaySM ? "Rate Listing" : "Exchange Rate Listing"}
+                            {isDisplaySM ? "Live Rates" : "Live Exchange Rates"}
                         </Typography>
                         <Tooltip title="Reset Filter" style={{margin: isDisplaySM ? "0px" : "16px"}} onClick={handleResetFilter}>
                             <IconButton>
