@@ -53,7 +53,7 @@ export default function CircularWithValueLabel() {
 }
 
 const sxStyle = {
-  Box: { position: 'relative', display: 'inline-flex' },
+  Box: { position: 'relative', display: 'inline-flex', float: 'right' },
   CircularGrey: {
     color: (theme) =>
       theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],

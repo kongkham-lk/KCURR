@@ -247,57 +247,30 @@ export default function ExchangeRateTableData(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {
-                        !isDisplaySM ? <>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px'}}>
-                                <CurrCountriesDropDown
-                                    sxStyle={sxStyle.CurrCountriesDropDown}
-                                    label="Add Currency"
-                                    stateInputField="targetCurr"
-                                    updateVal={handleAddCurrCountry}
-                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                    passInStyle={style.CurrCountriesDropDown}
-                                    size="small"
-                                />
-                                <TablePagination
-                                    rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
-                                    component="div"
-                                    count={currLists.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                                <Box>
-                                    <CircularProgressWithLabel isDisplaySM={isDisplaySM}/>
-                                </Box>
-                            </Box>
-                        </> : <>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px'}}>
-                                <CurrCountriesDropDown
-                                    sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                    label="Add Currency"
-                                    stateInputField="targetCurr"
-                                    updateVal={handleAddCurrCountry}
-                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                    passInStyle={style.CurrCountriesDropDown}
-                                    size="small"
-                                />
-                                <TablePagination
-                                    rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
-                                    component="div"
-                                    count={currLists.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </Box>
-                            <Box sx={sxStyle.CircularProgressWithLabel}>
-                                <CircularProgressWithLabel isDisplaySM={isDisplaySM} />
-                            </Box>
-                        </>
-                    }
+                    <Box sx={{...sxStyle.PaginationSubContainer.main, ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)}}>
+                        <CurrCountriesDropDown
+                            sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                            label="Add Currency"
+                            stateInputField="targetCurr"
+                            updateVal={handleAddCurrCountry}
+                            currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                            passInStyle={style.CurrCountriesDropDown}
+                            size="small"
+                        />
+                        <TablePagination
+                            rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
+                            component="div"
+                            count={currLists.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} />}
+                    </Box>
+                    {isDisplaySM && <Box sx={sxStyle.progressBarContainer}>
+                        <CircularProgressWithLabel sx={sxStyle.progressBar} />
+                    </Box>}
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
@@ -342,6 +315,15 @@ const sxStyle = {
     },
     hoverButton: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
                     '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }, },
-    Pagination: { display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' },
-    CircularProgressWithLabel: { float: 'right', marginRight: '10px' },
+    PaginationMainContainer: {
+        main: { display: 'flex', justifyContent: 'space-between' },
+        lg: { flexDirection: 'row', alignItems: 'center' },
+        sm: { flexDirection: 'column', alignItems: 'flex-end' },
+    },
+    PaginationSubContainer: {
+        main: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+        lg: { margin: '10px' },
+        sm: { marginTop: '10px', width: '-webkit-fill-available' },
+    },
+    progressBarContainer: { marginRight: '15px' },
 };
