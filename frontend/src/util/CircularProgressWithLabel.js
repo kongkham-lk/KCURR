@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
-  const { isDisplaySM } = props;
   return (
     <Box sx={sxStyle.Box}>
       <CircularProgress
@@ -37,17 +36,29 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function CircularWithValueLabel() {
+export default function CircularWithValueLabel(props) {
   const [progress, setProgress] = useState(60);
+  const { updateNewLiveRate } = props;
+
+  const checkTimer = (prevProgress) => {
+    if (prevProgress <= 0) {
+      console.log('Reset timer and Refresh lives rate!!!');
+      updateNewLiveRate();
+      prevProgress = 100;
+    } else {
+      prevProgress -= 1.667;
+    }
+    return prevProgress;
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress <= 0 ? 100 : prevProgress - 1.667));
-    }, 1000);
+      setProgress((prevProgress) => checkTimer(prevProgress));
+    }, 500);
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [progress]);
 
   return <CircularProgressWithLabel value={progress} thickness={5} size={40} />;
 }

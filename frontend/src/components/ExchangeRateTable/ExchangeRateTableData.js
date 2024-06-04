@@ -100,14 +100,14 @@ export default function ExchangeRateTableData(props) {
     };
 
     // this will be triggered by timmer, refetch new update rate from beacon api
-    const handleUpdateNewLiveRate = async (baseCurr) => {
+    const handleUpdateNewLiveRate = async () => {
         console.log("Fetching latest rate from API!!!")
         const newLists = [];
-        const initialValue = { baseCurr: baseCurr };
+        const initialValue = { baseCurr: defaultCurr };
         const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
 
         for (let i in initialTargetCurrArray) {
-            newLists[i] = await createCurrLists(baseCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
+            newLists[i] = await createCurrLists(defaultCurr, initialTargetCurrArray[i], newAddCurrDataSet, timeSeriesRange);
         }
 
         console.log("check response list of latest rate:  ", newLists);
@@ -124,10 +124,9 @@ export default function ExchangeRateTableData(props) {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-        //setDense(event.target.checked);
+    const updateNewLiveRate = (event) => {
         console.log("Timer trigger!!!")
-        handleUpdateNewLiveRate(defaultCurr);
+        handleUpdateNewLiveRate();
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
@@ -266,14 +265,14 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
-                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} />}
+                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} updateNewLiveRate={updateNewLiveRate} />}
                     </Box>
                     {isDisplaySM && <Box sx={sxStyle.progressBarContainer}>
-                        <CircularProgressWithLabel sx={sxStyle.progressBar} />
+                        <CircularProgressWithLabel sx={sxStyle.progressBar} updateNewLiveRate={updateNewLiveRate} />
                     </Box>}
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
-                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    control={<Switch checked={dense} onChange={updateNewLiveRate} />}
                     label="Dense padding"
                 />}
             </Box >
