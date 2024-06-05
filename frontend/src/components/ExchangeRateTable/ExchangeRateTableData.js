@@ -78,7 +78,8 @@ export default function ExchangeRateTableData(props) {
 
     const handleUpdateRateTime = () => {
         const newDate = new Date();
-        const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", " + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0,-3);
+        const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", " 
+                            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0,-3);
         setLastUpdateRateTime(updateTime);
     }
 
@@ -219,13 +220,18 @@ export default function ExchangeRateTableData(props) {
                                                 padding="none"
                                             >
                                                 <Box sx={sxStyle.hoverButton}>
-                                                    <Button variant="text" onClick={() => handleSetDefaultCurr(targetCurrCode)} 
-                                                            sx={{
-                                                                    ...sxStyle.defaultCurrSetterButton.main, 
-                                                                    ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
-                                                                }} >
+                                                    <Button 
+                                                        variant="text" 
+                                                        onClick={() => handleSetDefaultCurr(targetCurrCode)} 
+                                                        sx={{
+                                                                ...sxStyle.defaultCurrSetterButton.main, 
+                                                                ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
+                                                            }} 
+                                                    >
                                                         {getFlag(targetCurrCode)}
-                                                        <span style={style.span}>{isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}</span>
+                                                        <span style={style.span}>
+                                                            {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
+                                                        </span>
                                                     </Button>
                                                 </Box>
                                             </TableCell>
@@ -262,7 +268,12 @@ export default function ExchangeRateTableData(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Box sx={{...sxStyle.PaginationSubContainer.main, ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)}}>
+                    <Box 
+                        sx={{
+                            ...sxStyle.PaginationSubContainer.main, 
+                            ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)
+                        }}
+                    >
                         {!isDisplaySM && <CurrCountriesDropDown
                             sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                             label="Add Currency"
@@ -283,28 +294,42 @@ export default function ExchangeRateTableData(props) {
                             labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
                             sx={{margin: isDisplaySM && '0px -13px', width: 'auto'}}
                         />
-                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />}
+                        {!isDisplaySM && 
+                            <CircularProgressWithLabel 
+                                sx={sxStyle.progressBar} 
+                                onUpdateNewLiveRate={updateNewLiveRate} 
+                                lastUpdateRateTime={lastUpdateRateTime} 
+                                isDisplaySM={isDisplaySM} 
+                            />
+                        }
                     </Box>
                     {isDisplaySM && 
-                    <Box sx={sxStyle.progressBarContainer}>
-                        <CurrCountriesDropDown
-                            sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                            label="Add Currency"
-                            inputCurrType="targetCurr"
-                            onAddCurrCountry={handleAddCurrCountry}
-                            currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                            passInStyle={style.CurrCountriesDropDown}
-                            size="small"
-                        />
-                        <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />
-                    </Box>
+                        <Box sx={sxStyle.progressBarContainer}>
+                            <CurrCountriesDropDown
+                                sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                label="Add Currency"
+                                inputCurrType="targetCurr"
+                                onAddCurrCountry={handleAddCurrCountry}
+                                currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                passInStyle={style.CurrCountriesDropDown}
+                                size="small"
+                            />
+                            <CircularProgressWithLabel 
+                                sx={sxStyle.progressBar} 
+                                onUpdateNewLiveRate={updateNewLiveRate} 
+                                lastUpdateRateTime={lastUpdateRateTime} 
+                                isDisplaySM={isDisplaySM} 
+                            />
+                        </Box>
                     }
                 </Paper>
-                {isDisplaySM ? "" : <FormControlLabel
-                    control={<Switch checked={dense} onChange={updateNewLiveRate}/>}
-                    label="Dense padding"
-                    sx={{display: 'none'}}
-                />}
+                {isDisplaySM ? "" : 
+                    <FormControlLabel
+                        control={<Switch checked={dense} onChange={updateNewLiveRate}/>}
+                        label="Dense padding"
+                        sx={{display: 'none'}}
+                    />
+                }
             </Box >
             }
         </>
