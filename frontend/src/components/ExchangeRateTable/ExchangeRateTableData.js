@@ -273,7 +273,7 @@ export default function ExchangeRateTableData(props) {
                             size="small"
                         />
                         <TablePagination
-                            rowsPerPageOptions={isDisplaySM ? [] : [5, 10, 25]}
+                            rowsPerPageOptions={[5, 10, 25]}
                             component="div"
                             count={currLists.length}
                             rowsPerPage={rowsPerPage}
