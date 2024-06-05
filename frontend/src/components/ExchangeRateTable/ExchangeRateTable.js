@@ -7,18 +7,15 @@ export default function ExchangeRateTable(props) {
   const { currCountiesCodeMapDetail, isDisplaySM } = props;
   const [currApiDataSet, setCurrApiDataSet] = useState([]);
   const [isReady, setIsReady] = useState(false);
-
   const { curr } = useParams();
 
-  const currInput = { baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD" };
-
-
+  const initialDefaultCurr = { baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD" };
 
   useEffect(
     function fetchData() {
       async function fetchCurrApiData() {
         try {
-          const currDataSet = await retrieveExchangeRates(initialValue);
+          const currDataSet = await retrieveExchangeRates(initialDefaultCurr);
           setCurrApiDataSet(currDataSet);
           setIsReady(true);
         } catch (e) {
@@ -31,9 +28,8 @@ export default function ExchangeRateTable(props) {
 
   return (
     <>
-      {isReady && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />}
+      {isReady && <ExchangeRateTableData currApiDataSet={currApiDataSet} currCountiesCodeMapDetail={currCountiesCodeMapDetail} 
+          initialDefaultCurr={initialDefaultCurr} isDisplaySM={isDisplaySM} />}
     </>
   );
 }
-
-const initialValue = { baseCurr: "USD" };
