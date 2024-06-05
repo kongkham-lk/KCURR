@@ -31,6 +31,7 @@ export default function ExchangeRateTableData(props) {
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
+    const [lastUpdateRateTime, setLastUpdateRateTime] = useState("");
 
     const timeSeriesRangeLength = "1w";
 
@@ -48,6 +49,7 @@ export default function ExchangeRateTableData(props) {
     useEffect(() => {
         if (isReady) {
             setCurrLists([...initialCurrLists]);
+            handleUpdateRateTime();
         }
     }, [isReady, initialCurrLists]);
 
@@ -73,6 +75,12 @@ export default function ExchangeRateTableData(props) {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    const handleUpdateRateTime = () => {
+        const newDate = new Date();
+        const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", " + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0,-3);
+        setLastUpdateRateTime(updateTime);
+    }
 
     // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
@@ -107,6 +115,7 @@ export default function ExchangeRateTableData(props) {
         console.log("check response list of latest rate:  ", newLists);
         setCurrLists(newLists);
         setCurrDataSet(newAddCurrDataSet);
+        handleUpdateRateTime();
     };
 
     const handleChangePage = (event, newPage) => {
