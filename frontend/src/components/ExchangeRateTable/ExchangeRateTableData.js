@@ -281,10 +281,10 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
-                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} />}
+                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />}
                     </Box>
                     {isDisplaySM && <Box sx={sxStyle.progressBarContainer}>
-                        <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} />
+                        <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />
                     </Box>}
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
@@ -341,5 +341,6 @@ const sxStyle = {
         lg: { margin: '10px' },
         sm: { marginTop: '10px', width: '-webkit-fill-available' },
     },
-    progressBarContainer: { marginRight: '15px' },
+    progressBarContainer: { marginRight: '15px', display: 'flex', alignItems: 'center'},
+    progressBar: { minWidth: '190px', display: 'flex' }
 };
