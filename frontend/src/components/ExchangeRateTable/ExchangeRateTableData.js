@@ -263,6 +263,30 @@ export default function ExchangeRateTableData(props) {
                         </Table>
                     </TableContainer>
                     <Box sx={{...sxStyle.PaginationSubContainer.main, ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)}}>
+                        {!isDisplaySM && <CurrCountriesDropDown
+                            sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                            label="Add Currency"
+                            inputCurrType="targetCurr"
+                            onAddCurrCountry={handleAddCurrCountry}
+                            currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                            passInStyle={style.CurrCountriesDropDown}
+                            size="small"
+                        />}
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={currLists.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
+                            sx={{margin: isDisplaySM && '0px -13px', width: 'auto'}}
+                        />
+                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />}
+                    </Box>
+                    {isDisplaySM && 
+                    <Box sx={sxStyle.progressBarContainer}>
                         <CurrCountriesDropDown
                             sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                             label="Add Currency"
@@ -272,20 +296,9 @@ export default function ExchangeRateTableData(props) {
                             passInStyle={style.CurrCountriesDropDown}
                             size="small"
                         />
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={currLists.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                        {!isDisplaySM && <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />}
-                    </Box>
-                    {isDisplaySM && <Box sx={sxStyle.progressBarContainer}>
                         <CircularProgressWithLabel sx={sxStyle.progressBar} onUpdateNewLiveRate={updateNewLiveRate} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />
-                    </Box>}
+                    </Box>
+                    }
                 </Paper>
                 {isDisplaySM ? "" : <FormControlLabel
                     control={<Switch checked={dense} onChange={updateNewLiveRate}/>}
@@ -341,6 +354,6 @@ const sxStyle = {
         lg: { margin: '10px' },
         sm: { marginTop: '10px', width: '-webkit-fill-available' },
     },
-    progressBarContainer: { marginRight: '15px', display: 'flex', alignItems: 'center'},
+    progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center'},
     progressBar: { minWidth: '190px', display: 'flex' }
 };

@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 function CircularProgressWithLabel(props) {
   const { lastUpdateRateTime, isDisplaySM } = props
   return (
-    <Box sx={{...sxStyle.Container, margin: isDisplaySM && '10px 0px'}}>
+    <Box sx={{...sxStyle.Container, justifyContent: isDisplaySM && 'flex-end'}}>
       <Box sx={sxStyle.Box}>
         <CircularProgress
             variant="determinate"
@@ -27,14 +27,14 @@ function CircularProgressWithLabel(props) {
         </Box>
       </Box>
 
-      <Typography variant="body2" ml={2} sx={{display: 'flex', flexDirection: isDisplaySM ? 'row' : 'column', }}>
-        <span>
+      <Box ml={2} sx={{display: 'flex', flexDirection: 'column', width: isDisplaySM ? '50%' : '100%'}}>
+        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
             {"Last Update "}
-        </span>
-        <span>
+        </Typography>
+        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
             {lastUpdateRateTime}
-        </span>
-      </Typography>
+        </Typography>
+      </Box>
     </Box>
   );
 }
