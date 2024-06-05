@@ -274,15 +274,17 @@ export default function ExchangeRateTableData(props) {
                             ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)
                         }}
                     >
-                        {!isDisplaySM && <CurrCountriesDropDown
-                            sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                            label="Add Currency"
-                            inputCurrType="targetCurr"
-                            onAddCurrCountry={handleAddCurrCountry}
-                            currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                            passInStyle={style.CurrCountriesDropDown}
-                            size="small"
-                        />}
+                        {!isDisplaySM && 
+                            <CurrCountriesDropDown
+                                sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                label="Add Currency"
+                                inputCurrType="targetCurr"
+                                onAddCurrCountry={handleAddCurrCountry}
+                                currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                passInStyle={style.CurrCountriesDropDown}
+                                size="small"
+                            />
+                        }
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
