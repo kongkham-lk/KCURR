@@ -70,7 +70,7 @@ export default function CircularWithValueLabel(props) {
     return () => {
       clearInterval(timer);
     };
-  }, [progress]);
+  }, [progress, lastUpdateRateTime]);
 
   return <CircularProgressWithLabel value={progress} thickness={3} size={45} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />;
 }
