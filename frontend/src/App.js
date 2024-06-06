@@ -22,7 +22,16 @@ export default function App() {
   }));
 
   const lightTheme = createTheme({ palette: { mode: 'light' } });
-  const elevateLevel = 8;
+
+  const outlinedProps = {
+    variant: 'outlined',
+    square: true,
+  };
+
+  const elevationProps = {
+    variant: 'elevation',
+    elevation: 8,
+  };
 
   return (
     <div className="App">
@@ -31,33 +40,33 @@ export default function App() {
         <Routes>
           <Route exact path="/" element={
             <>
-              <Item key="Convertor" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+              <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                 {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
-              <Item key="ExchangeRateTable" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+              <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                 {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
-              <Item key="FinancialNews" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+              <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                 <FinancialNews isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
               </Item>
             </>
           } ></Route>
           <Route path="/convertor/:curr?" element={
             <>
-              <Item key="Convertor" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+              <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                 {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
-              <Item key="ExchangeRateTable" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+              <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                 {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
                   : <Loading />}
               </Item>
             </>
           } ></Route>
           <Route exact path="/financial-news" element={
-            <Item key="FinancialNews" variant={isOutLineTheme ? "outlined" : "elevation"} sx={{borderRadius: isOutLineTheme ? 0 : 1}} elevation={elevateLevel}>
+            <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
               <FinancialNews filter="true" isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
             </Item>
           } ></Route>
@@ -66,4 +75,3 @@ export default function App() {
     </div >
   );
 };
-
