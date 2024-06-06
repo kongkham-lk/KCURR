@@ -14,7 +14,7 @@ import { Loading } from '../Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme } = props;
     const [newsLists, setNewsLists] = useState([]);
     const [tempTopic, setTempTopic] = useState("");
     const [newsTopic, setNewsTopic] = useState(["Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency",]);
@@ -27,6 +27,10 @@ export default function FinancialNews(props) {
         fetchNewsLists();
     }, [newsTopic]
     )
+
+    useEffect(() => {
+
+    }, [isOutLineTheme])
 
     const handleAddNewsTopic = (e) => {
         const updateNewsTopic = [...newsTopic];
@@ -77,24 +81,33 @@ export default function FinancialNews(props) {
                                 key={news.title}
                                 href={news.link}
                                 className="hoverCard"
-                                sx={sxStyle.Link}>
+                                sx={isOutLineTheme ? {margin: 0, textDecoration: 'none'} : sxStyle.Link}>
                                 {!isDisplaySM ? 
-                                    <Card sx={sxStyle.Card}>
+                                    <Card 
+                                        variant={isOutLineTheme ? "outlined" : "elevation"} 
+                                        sx={{
+                                            ...sxStyle.Card, borderRadius: isOutLineTheme ? 0 : 1,
+                                            border: isOutLineTheme && 0,
+                                            borderBottom: isOutLineTheme && '1px solid rgba(0, 0, 0, 0.12)',
+                                            padding: isOutLineTheme && '15px 0px',
+                                            '&:hover': !isOutLineTheme && { boxShadow: '0px 0px 12px #644e243f', transition: '0.2s' }, 
+                                            '&:hover .hoverLink': !isOutLineTheme && {color: '#0060cd'}
+                                        }}
+                                    >
                                         {news.thumbnail !== null && !isDisplaySM && <CardMedia
                                             component="img"
                                             sx={sxStyle.CardMedia}
                                             image={news.thumbnail}
                                             alt="Live from space album cover"
                                         />}
-                                        <Box sx={sxStyle.Box}>
+                                        <Box sx={{...sxStyle.Box, '&:hover': isOutLineTheme && {borderRight: '8px solid #00afff48'}}}>
                                             <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />
                                         </Box>
                                     </Card> : 
                                     <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />}
                             </Link>
-                        )
-                    })
-                    }
+                        )}
+                    )}
                 </>
                 : <Loading />
             }
@@ -106,7 +119,7 @@ const sxStyle = {
     Box: { display: 'flex', flexDirection: 'column', width: "100%", flex: '1 0 auto', justifyContent: "space-between", 
             width: "min-content", padding: "20px" },
     Link: { width: '100%', textDecoration: "none", margin: "7px 0" },
-    Card: { display: 'flex', width: '100%' },
+    Card: { display: 'flex', width: '100%', },
     CardMedia: { width: 240, height: 180, objectFit: "cover" },
 }
 
