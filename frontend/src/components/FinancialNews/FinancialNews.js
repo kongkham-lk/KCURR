@@ -100,7 +100,7 @@ export default function FinancialNews(props) {
                                             image={news.thumbnail}
                                             alt="Live from space album cover"
                                         />}
-                                        <Box sx={{...sxStyle.Box, '&:hover': isOutLineTheme && {borderRight: '8px solid #00afff48'}}}>
+                                        <Box sx={{...sxStyle.Box, '&:hover': isOutLineTheme && {borderRight: '8px solid #1876d2'}}}>
                                             <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />
                                         </Box>
                                     </Card> : 
