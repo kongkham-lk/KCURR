@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
-  const { lastupdateratetime, isdisplay_sm, isdisplay_md } = props
+  const { lastUpdateRateTime, isDisplaySM, isDisplayMD } = props
   return (
-    <Box sx={{...sxStyle.Container, justifyContent: isdisplay_sm && 'flex-end'}}>
+    <Box sx={{...sxStyle.Container, justifyContent: isDisplaySM && 'flex-end'}}>
       <Box sx={sxStyle.Box}>
         <CircularProgress
             variant="determinate"
@@ -27,12 +27,12 @@ function CircularProgressWithLabel(props) {
         </Box>
       </Box>
 
-      <Box ml={2} sx={{display: 'flex', flexDirection: 'column', width: isdisplay_sm ? '50%' : '100%', marginRight: isdisplay_md && '30px'}}>
-        <Typography variant="body2" sx={{fontSize: isdisplay_sm && '0.78rem'}}>
+      <Box ml={2} sx={{display: 'flex', flexDirection: 'column', width: isDisplaySM ? '50%' : '100%', marginRight: isDisplayMD && '30px'}}>
+        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
             {"Last Update "}
         </Typography>
-        <Typography variant="body2" sx={{fontSize: isdisplay_sm && '0.78rem'}}>
-            {lastupdateratetime}
+        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
+            {lastUpdateRateTime}
         </Typography>
       </Box>
     </Box>
@@ -50,7 +50,7 @@ CircularProgressWithLabel.propTypes = {
 
 export default function CircularWithValueLabel(props) {
   const [progress, setProgress] = useState(60);
-  const { onUpdateNewLiveRate, lastUpdateRateTime: lastupdateratetime, isDisplaySM: isdisplay_sm, isDisplayMD: isdisplay_md } = props;
+  const { onUpdateNewLiveRate, lastUpdateRateTime, isDisplaySM, isDisplayMD } = props;
 
   const checkTimer = (prevProgress) => {
     if (prevProgress <= 0) {
@@ -70,9 +70,9 @@ export default function CircularWithValueLabel(props) {
     return () => {
       clearInterval(timer);
     };
-  }, [progress, lastupdateratetime, isdisplay_sm, isdisplay_md]);
+  }, [progress, lastUpdateRateTime, isDisplaySM, isDisplayMD]);
 
-  return <CircularProgressWithLabel value={progress} thickness={3} size={45} lastupdateratetime={lastupdateratetime} isdisplay_sm={isdisplay_sm} isdisplay_md={isdisplay_md} />;
+  return <CircularProgressWithLabel value={progress} thickness={3} size={45} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />;
 }
 
 const sxStyle = {
