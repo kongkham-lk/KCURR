@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -12,27 +11,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import FlipToFrontIcon from '@mui/icons-material/FlipToFront';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 export default function MainNav(props) {
   const { isDisplaySM, isOutLineTheme, onChangeTheme } = props;
-  
-  const Theme = {
-    Outline: 'outline',
-    Elevate: 'elevate',
-  }
 
-  const [mobileScreen, setMobileScreen] = useState(false);  
-  const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline : Theme.Elevate);
+  const [mobileScreen, setMobileScreen] = useState(false);
+  const [state, setState] = useState(isOutLineTheme);
 
-  const handleChange = (event, newAlignment) => {
-    if (newAlignment === null || newAlignment === alignment)
-      return;
-
-    setAlignment(newAlignment);
-    onChangeTheme(newAlignment);
+  const handleChange = () => {
+    setState(!state);
+    onChangeTheme(!state);
   };
 
   const handleDrawerToggle = () => {
@@ -52,19 +43,26 @@ export default function MainNav(props) {
           <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
             <Link to={mainLogo.link} style={sxStyle.mainLogo}>
               <div style={style.logoImg}>
-                <img src={embbedLogo.link} alt={embbedLogo.alt} style={{...style.logo, }} />
+                <img src={embbedLogo.link} alt={embbedLogo.alt} style={style.logo} />
                 {mainLogo.label}
               </div>
             </Link>
           </Typography>
           <Box sx={sxStyle.BoxSub}>
             {navItems.map((item) => (
-                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, display: 'flex', alignItems: 'center', margin: '0px' }} >
-                  <Box sx={{...sxStyle.Link, display: 'flex', alignItems: 'center' }}>
+                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, margin: '0px' }} >
+                  <Box sx={sxStyle.Link}>
                     {item.label}
                   </Box>
                 </Link>
             ))}
+            <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
+              <FormControlLabel
+                control={
+                  <Switch checked={state.gilad} onChange={handleChange} defaultChecked/>
+                }
+              />
+            </FormControl>
           </Box>
           <IconButton
             color="inherit"
@@ -73,16 +71,6 @@ export default function MainNav(props) {
           >
             <MenuIcon />
           </IconButton>
-          <ToggleButtonGroup
-            color="primary"
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton value={Theme.Elevate}>{Theme.Elevate}</ToggleButton>
-            <ToggleButton value={Theme.Outline}>{Theme.Outline}</ToggleButton>
-          </ToggleButtonGroup>
         </Toolbar>
       </AppBar>
       <Box>
@@ -140,7 +128,7 @@ const sxStyle = {
   StarterGapForMobile: { mb: 12 },
   IconButton: { mr: 2, display: { sm: 'none' } },
   Typography: { flexGrow: 1, display: "flex", justifyContent: 'left', alignItems: 'center' },
-  Link: { color: 'inherit', margin: "15px", textDecoration: "none", },
+  Link: { color: 'inherit', margin: "15px", textDecoration: "none", display: 'flex', alignItems: 'center'},
   mainLogo: { color: 'inherit', textDecoration: "none", },
   BoxSub: { display: { xs: 'none', sm: 'flex' }, alignItems: 'stretch' },
   Drawer: {
@@ -162,7 +150,7 @@ const sxStyle = {
                 '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, '& #navPage:hover div': {marginBottom: '12px'},
              },
   },
-
+  themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'}
 }
 
 const style = {

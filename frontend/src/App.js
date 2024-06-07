@@ -35,7 +35,7 @@ export default function App() {
   };
 
   const handleThemeChange = (event) => {
-    setIsOutLineTheme(() => event === 'outline');
+    setIsOutLineTheme(event);
   }
 
   return (
