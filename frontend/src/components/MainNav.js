@@ -38,8 +38,8 @@ export default function MainNav(props) {
         ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate)
         }}
     >
-      <AppBar component="nav" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: 'inherit' }}>
-        <Toolbar id="subNav" sx={{display: 'flex', alignItems: 'stretch'}}>
+      <AppBar component="nav" sx={{ ...sxStyle.bringToTop, color: 'inherit' }}>
+        <Toolbar id="subNav">
           <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
             <Link to={mainLogo.link} style={sxStyle.mainLogo}>
               <div style={style.logoImg}>
@@ -58,6 +58,7 @@ export default function MainNav(props) {
             ))}
             <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
               <FormControlLabel
+                mx={0}
                 control={
                   <Switch checked={state.gilad} onChange={handleChange} defaultChecked/>
                 }
@@ -124,9 +125,9 @@ const embbedLogo = {
 };
 
 const sxStyle = {
-  StarterGap: { mb: 14 },
+  StarterGap: { mb: 14, '& #subNav': {display: 'flex', alignItems: 'stretch'} },
   StarterGapForMobile: { mb: 12 },
-  IconButton: { mr: 2, display: { sm: 'none' } },
+  IconButton: { mr: 1, display: { sm: 'none' } },
   Typography: { flexGrow: 1, display: "flex", justifyContent: 'left', alignItems: 'center' },
   Link: { color: 'inherit', margin: "15px", textDecoration: "none", display: 'flex', alignItems: 'center'},
   mainLogo: { color: 'inherit', textDecoration: "none", },
@@ -150,7 +151,8 @@ const sxStyle = {
                 '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, '& #navPage:hover div': {marginBottom: '12px'},
              },
   },
-  themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'}
+  themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'},
+  bringToTop: {zIndex: (theme) => theme.zIndex.drawer + 1},
 }
 
 const style = {

@@ -294,7 +294,7 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
-                            sx={{...(isDisplaySM && {padding: 0, display: 'flex', flex: 'auto', justifyContent: 'center'})}}
+                            sx={{...(isDisplaySM && sxStyle.Pageination)}}
                         />
                         {!isDisplayMD && 
                             <CircularProgressWithLabel 
@@ -366,7 +366,7 @@ const sxStyle = {
     },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { display: "flex", justifyContent: "space-between", flexWrap: 'wrap' },
+    Pageination: { padding: 0, display: 'flex', flex: 'auto', justifyContent: 'center' },
     defaultCurrSetterButton: {
         main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },
