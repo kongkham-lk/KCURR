@@ -294,7 +294,7 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
-                            sx={isDisplaySM && {padding: 0, display: 'flex', flex: 'auto', justifyContent: 'center'}}
+                            sx={{...(isDisplaySM && {padding: 0, display: 'flex', flex: 'auto', justifyContent: 'center'})}}
                         />
                         {!isDisplayMD && 
                             <CircularProgressWithLabel 
