@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 export default function App() {
-  const [isOutLineTheme, setIsOutLineTheme] = useState(true); // setting theme
+  const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
   const isDisplaySM = useMediaQuery('(max-width:414px)');
   const isDisplayMD = useMediaQuery('(max-width:920px)');
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
@@ -34,9 +34,13 @@ export default function App() {
     elevation: 8,
   };
 
+  const handleThemeChange = (event) => {
+    setIsOutLineTheme(() => event === 'outline');
+  }
+
   return (
     <div className="App">
-      <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} /> 
+      <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange}/> 
       <ThemeProvider theme={lightTheme}>
         <Routes>
           <Route exact path="/" element={

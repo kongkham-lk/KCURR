@@ -12,11 +12,28 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import FlipToFrontIcon from '@mui/icons-material/FlipToFront';
 
 export default function MainNav(props) {
-  const { isDisplaySM, isOutLineTheme } = props;
+  const { isDisplaySM, isOutLineTheme, onChangeTheme } = props;
+  
+  const Theme = {
+    Outline: 'outline',
+    Elevate: 'elevate',
+  }
 
-  const [mobileScreen, setMobileScreen] = useState(false);
+  const [mobileScreen, setMobileScreen] = useState(false);  
+  const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline : Theme.Elevate);
+
+  const handleChange = (event, newAlignment) => {
+    if (newAlignment === null || newAlignment === alignment)
+      return;
+
+    setAlignment(newAlignment);
+    onChangeTheme(newAlignment);
+  };
 
   const handleDrawerToggle = () => {
     setMobileScreen((horizontalScreen) => !horizontalScreen);
@@ -56,6 +73,16 @@ export default function MainNav(props) {
           >
             <MenuIcon />
           </IconButton>
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value={Theme.Elevate}>{Theme.Elevate}</ToggleButton>
+            <ToggleButton value={Theme.Outline}>{Theme.Outline}</ToggleButton>
+          </ToggleButtonGroup>
         </Toolbar>
       </AppBar>
       <Box>
