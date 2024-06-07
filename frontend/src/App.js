@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 export default function App() {
   const [isOutLineTheme, setIsOutLineTheme] = useState(true); // setting theme
   const isDisplaySM = useMediaQuery('(max-width:414px)');
+  const isDisplayMD = useMediaQuery('(max-width:920px)');
   const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -45,7 +46,7 @@ export default function App() {
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
                   : <Loading />}
               </Item>
               <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
@@ -60,7 +61,7 @@ export default function App() {
                   : <Loading />}
               </Item>
               <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
                   : <Loading />}
               </Item>
             </>
