@@ -306,7 +306,7 @@ export default function ExchangeRateTableData(props) {
                         }
                     </Box>
                     {isDisplayMD && 
-                        <Box sx={{...sxStyle.progressBarContainer, justifyContent: !isDisplaySM && 'flex-end'}}>
+                        <Box sx={{...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end'}}>
                             {isDisplaySM && 
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
@@ -366,7 +366,7 @@ const sxStyle = {
     },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { padding: 0, display: 'flex', flex: 'auto', justifyContent: 'center' },
+    Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': {padding: 0} },
     defaultCurrSetterButton: {
         main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },

@@ -26,15 +26,20 @@ function CircularProgressWithLabel(props) {
           </Typography>
         </Box>
       </Box>
-
-      <Box ml={2} sx={{display: 'flex', flexDirection: 'column', width: isDisplaySM ? '50%' : '100%', marginRight: isDisplayMD && '30px'}}>
-        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
-            {"Last Update "}
-        </Typography>
-        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
-            {lastUpdateRateTime}
-        </Typography>
-      </Box>
+      <Typography variant="body2" fontSize={isDisplaySM && '0.78rem'}
+        flex 
+        flexDirection={'column'} 
+        ml={2} 
+        mr={isDisplayMD && !isDisplaySM && '30px'} 
+        width={isDisplaySM ? '50%' : '100%'}
+      >
+        <Box>
+          {"Last Update "}
+        </Box>
+        <Box>
+          {lastUpdateRateTime}
+        </Box>
+      </Typography>
     </Box>
   );
 }
