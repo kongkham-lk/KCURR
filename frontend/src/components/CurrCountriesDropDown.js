@@ -5,13 +5,13 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, onAddCurrCountry, inputCurrType, baseCurrVal, currCountiesCodeMapDetail, sxStyle, size, passInStyle = { height: "56.5px" } } = props;
+    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sxStyle, size, passInStyle = { height: "56.5px" } } = props;
 
     const unsortedKeys = Object.keys(currCountiesCodeMapDetail);
     const targetCurrs = unsortedKeys.sort();
 
     const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
-
+    
     return (
         <FormControl sx={sxStyle} size={size}>
             <InputLabel id={inputCurrType} >{label}</InputLabel>
