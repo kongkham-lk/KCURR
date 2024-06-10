@@ -5,9 +5,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
-  const { lastUpdateRateTime, isDisplaySM, isDisplayMD } = props
   return (
-    <Box sx={{...sxStyle.Container, justifyContent: isDisplaySM && 'flex-end'}}>
+    <Box sx={{...sxStyle.Container, justifyContent: displaySM && 'flex-end'}}>
       <Box sx={sxStyle.Box}>
         <CircularProgress
             variant="determinate"
@@ -30,14 +29,14 @@ function CircularProgressWithLabel(props) {
         flex 
         flexDirection={'column'} 
         ml={2} 
-        mr={isDisplayMD && !isDisplaySM && '30px'} 
-        width={isDisplaySM ? '50%' : '100%'}
+        mr={displayMD && !displaySM && '30px'} 
+        width={displaySM ? '50%' : '100%'}
       >
-        <Typography variant="body2" fontSize={isDisplaySM && '0.78rem'}>
+        <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
           {"Last Update "}
         </Typography>
-        <Typography variant="body2" fontSize={isDisplaySM && '0.78rem'}>
-          {lastUpdateRateTime}
+        <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
+          {updateTime}
         </Typography>
       </Box>
     </Box>
@@ -77,7 +76,19 @@ export default function CircularWithValueLabel(props) {
     };
   }, [progress, lastUpdateRateTime, isDisplaySM, isDisplayMD]);
 
-  return <CircularProgressWithLabel value={progress} thickness={3} size={45} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />;
+  useEffect(() => {
+    getUpdateTime(lastUpdateRateTime);
+  }, [lastUpdateRateTime]);
+
+  useEffect(() => {
+    CheckDisplaySM(isDisplaySM);
+  }, [isDisplaySM]);
+
+  useEffect(() => {
+    CheckDisplayMD(isDisplayMD);
+  }, [isDisplayMD]);
+
+  return <CircularProgressWithLabel value={progress} thickness={3} size={45} />;
 }
 
 const sxStyle = {
@@ -86,4 +97,20 @@ const sxStyle = {
   CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800] },
   CenterPos: { top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center', 
                 justifyContent: 'center' }
+}
+
+var updateTime = 0;
+var displaySM = false;
+var displayMD = false;
+
+const getUpdateTime = (time) => {
+  updateTime = time;
+}
+
+const CheckDisplaySM = (val) => {
+  displaySM = val;
+}
+
+const CheckDisplayMD = (val) => {
+  displayMD = val;
 }
