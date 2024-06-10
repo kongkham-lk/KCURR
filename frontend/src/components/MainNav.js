@@ -23,9 +23,9 @@ export default function MainNav(props) {
   const [mobileScreen, setMobileScreen] = useState(false);
   const [state, setState] = useState(isOutLineTheme);
 
-  const handleChange = () => {
-    setState(!state);
-    onChangeTheme(!state);
+  const handleChange = (newState = !state) => {
+    setState(newState);
+    onChangeTheme(newState);
   };
 
   const handleDrawerToggle = () => {
@@ -106,20 +106,28 @@ const navItems = [
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTheme }) => {
 
   const Theme = {
-    Outline: 'outline',
-    Elevate: 'elevate',
+    Outline: {name: 'outline', isOutline: true},
+    Elevate: {name: 'elevate', isOutline: false},
   }
 
-  const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline : Theme.Elevate);
-
+  const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline.name : Theme.Elevate.name);
 
   const handleChange = (event, newAlignment) => {
     if (newAlignment === null || newAlignment === alignment)
       return;
 
     setAlignment(newAlignment);
-    onChangeTheme(newAlignment);
+
+    if (event.target.value === Theme.Outline.name)
+      onChangeTheme(Theme.Outline.isOutline);
+    else if (event.target.value === Theme.Elevate.name)
+      onChangeTheme(Theme.Elevate.isOutline);
   };
+
+  const checkToggleDrawer = (event) => {
+    if (event.target.value !== Theme.Outline.name && event.target.value !== Theme.Elevate.name)
+      handleDrawerToggle();
+  }
 
   return (
     <Box onClick={handleDrawerToggle}>
@@ -134,8 +142,8 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
             aria-label="Platform"
             sx={sxStyle.ToggleButton}
           >
-            <ToggleButton value={Theme.Elevate} sx={sxStyle.ToggleButton}>{Theme.Elevate}</ToggleButton>
-            <ToggleButton value={Theme.Outline} sx={sxStyle.ToggleButton}>{Theme.Outline}</ToggleButton>
+            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
+            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
           </ToggleButtonGroup>
           </Box>
         {navItems.map((item) => (
