@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
   const { isDisplaySM, isOutLineTheme, onChangeTheme } = props;
@@ -85,7 +87,7 @@ export default function MainNav(props) {
           }}
           sx={sxStyle.Drawer}
         >
-          <PopupSideBar navItems={navItems} handleDrawerToggle={handleDrawerToggle} />
+          <PopupSideBar navItems={navItems} handleDrawerToggle={handleDrawerToggle} isOutLineTheme={isOutLineTheme} onChangeTheme={onChangeTheme}/>
         </Drawer>
       </Box>
     </Box>
@@ -101,10 +103,41 @@ const navItems = [
   { label: 'Contact', link: "/contact" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle }) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTheme }) => {
+
+  const Theme = {
+    Outline: 'outline',
+    Elevate: 'elevate',
+  }
+
+  const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline : Theme.Elevate);
+
+
+  const handleChange = (event, newAlignment) => {
+    if (newAlignment === null || newAlignment === alignment)
+      return;
+
+    setAlignment(newAlignment);
+    onChangeTheme(newAlignment);
+  };
+
   return (
     <Box onClick={handleDrawerToggle}>
       <List sx={sxStyle.ListPopupSideBar}>
+        <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.ToggleButton}}>   
+          <Typography variant="overline" display="block" color='gray'>Theme</Typography>
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+            sx={sxStyle.ToggleButton}
+          >
+            <ToggleButton value={Theme.Elevate} sx={sxStyle.ToggleButton}>{Theme.Elevate}</ToggleButton>
+            <ToggleButton value={Theme.Outline} sx={sxStyle.ToggleButton}>{Theme.Outline}</ToggleButton>
+          </ToggleButtonGroup>
+          </Box>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
             <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
@@ -153,6 +186,7 @@ const sxStyle = {
   },
   themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'},
   bringToTop: {zIndex: (theme) => theme.zIndex.drawer + 1},
+  ToggleButton: {width: '-webkit-fill-available'}
 }
 
 const style = {
