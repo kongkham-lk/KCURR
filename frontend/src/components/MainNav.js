@@ -130,8 +130,8 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
   }
 
   return (
-    <Box onClick={handleDrawerToggle}>
-      <List sx={sxStyle.ListPopupSideBar}>
+    <Box onClick={checkToggleDrawer} height='-webkit-fill-available'>
+      <List sx={sxStyle.ListPopupSideBar} height='-webkit-fill-available'>
         <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.ToggleButton}}>   
           <Typography variant="overline" display="block" color='gray'>Theme</Typography>
           <ToggleButtonGroup
