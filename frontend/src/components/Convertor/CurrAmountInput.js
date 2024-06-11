@@ -34,4 +34,4 @@ export default function CurrAmountInput(props) {
 };
 
 const sxStyle = { TextField: { width: '25ch' } };
-const style = {Box: { marginRight: "10px" }}
+const style = { Box: { marginRight: "10px" } }

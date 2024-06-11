@@ -28,9 +28,11 @@ export default function EnhancedTableHead(props) {
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
-                            style={{ marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px", 
-                                     marginRight: headCell.id === 'targetCurr' && "-20px",
-                                     padding: isDisplaySM && "0px" }}
+                            style={{
+                                marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px",
+                                marginRight: headCell.id === 'targetCurr' && "-20px",
+                                padding: isDisplaySM && "0px"
+                            }}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
@@ -44,7 +46,7 @@ export default function EnhancedTableHead(props) {
                 <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
                     Chart (24h)
                 </TableCell>
-                <TableCell style={{padding: isDisplaySM && "0px 8px 8px 0px"}} align="right" >
+                <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px" }} align="right" >
                     {isDisplaySM ? "Del" : "Delete"}
                 </TableCell>
             </TableRow>

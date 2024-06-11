@@ -11,7 +11,7 @@ export default function CurrCountriesDropDown(props) {
     const targetCurrs = unsortedKeys.sort();
 
     const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
-    
+
     return (
         <FormControl sx={sxStyle} size={size}>
             <InputLabel id={inputCurrType} >{label}</InputLabel>

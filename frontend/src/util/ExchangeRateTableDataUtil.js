@@ -55,14 +55,14 @@ const descendingComparator = (a, b, orderBy) => {
     return 0;
 }
 
-export function styleTableRowInFile (dense, emptyRows) {
+export function styleTableRowInFile(dense, emptyRows) {
     return { height: (dense ? 33 : 53) * emptyRows }
 };
 
-export function styleTableCellDelete (targetCurr, defaultCurr, isDisplaySM) { 
+export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px" , paddingRight: isDisplaySM && "0px" };
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
     } else {
-        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px" ,paddingRight: isDisplaySM && "0px"  };
+        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
     }
 };

@@ -56,7 +56,7 @@ export default function ExchangeRateTableData(props) {
     useEffect(() => {
         async function checkNewRow() {
             // console.log("refresh page!!!");
-            
+
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 // console.log("Create new curr list!!!");
                 const currList = await createCurrLists(defaultCurrCode, newCurrCode, currDataSet, timeSeriesRangeLength);
@@ -78,18 +78,18 @@ export default function ExchangeRateTableData(props) {
 
     const handleUpdateRateTime = () => {
         const newDate = new Date();
-        const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", " 
-                            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0,-3);
+        const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", "
+            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0, -3);
         setLastUpdateRateTime(updateTime);
     }
 
     // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
         // console.log("Rearrage list!!!");
-        
+
         const oldTargetCurrArray = [...currCodeArray];
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
-        
+
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
             const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
             oldTargetCurrArray.unshift(targetCurr);
@@ -155,7 +155,7 @@ export default function ExchangeRateTableData(props) {
             // console.log("Attempting to delete default currency row, Exit!!!");
             return;
         }
-            
+
         // console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
         const oldTargetCurrCodeArray = [...currCodeArray];
@@ -186,15 +186,15 @@ export default function ExchangeRateTableData(props) {
                         >
                             {isDisplaySM ? "Live Rates" : "Live Exchange Rates"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={{margin: isDisplaySM ? "0px" : "16px"}} onClick={handleResetFilter}>
+                        <Tooltip title="Reset Filter" style={{ margin: isDisplaySM ? "0px" : "16px" }} onClick={handleResetFilter}>
                             <IconButton>
                                 <FilterListOffIcon />
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <TableContainer style={isDisplaySM ? {margin: "0"} : style.NoGapTableContainer}>
+                    <TableContainer style={isDisplaySM ? { margin: "0" } : style.NoGapTableContainer}>
                         <Table
-                            sx={isDisplaySM ? {whiteSpace: "nowrap", padding: "0"} : sxStyle.Table}
+                            sx={isDisplaySM ? { whiteSpace: "nowrap", padding: "0" } : sxStyle.Table}
                             aria-labelledby="tableTitle"
                             size={dense ? 'small' : 'medium'}
                         >
@@ -220,13 +220,13 @@ export default function ExchangeRateTableData(props) {
                                                 padding="none"
                                             >
                                                 <Box sx={sxStyle.hoverButton}>
-                                                    <Button 
-                                                        variant="text" 
-                                                        onClick={() => handleSetDefaultCurr(targetCurrCode)} 
+                                                    <Button
+                                                        variant="text"
+                                                        onClick={() => handleSetDefaultCurr(targetCurrCode)}
                                                         sx={{
-                                                                ...sxStyle.defaultCurrSetterButton.main, 
-                                                                ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
-                                                            }} 
+                                                            ...sxStyle.defaultCurrSetterButton.main,
+                                                            ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
+                                                        }}
                                                     >
                                                         {getFlag(targetCurrCode)}
                                                         <span style={style.span}>
@@ -235,16 +235,16 @@ export default function ExchangeRateTableData(props) {
                                                     </Button>
                                                 </Box>
                                             </TableCell>
-                                            <TableCell align="right" style={{paddingRight: isDisplaySM && "0px"}}>
+                                            <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px" }}>
                                                 {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
                                             </TableCell>
-                                            { isDisplaySM ? "" : 
+                                            {isDisplaySM ? "" :
                                                 <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                     {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                 </TableCell>
                                             }
                                             <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
-                                                <div style={{...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg)}}>
+                                                <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                 </div>
                                             </TableCell>
@@ -268,13 +268,13 @@ export default function ExchangeRateTableData(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Box 
+                    <Box
                         sx={{
-                            ...sxStyle.PaginationSubContainer.main, 
+                            ...sxStyle.PaginationSubContainer.main,
                             ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg),
                         }}
                     >
-                        {!isDisplaySM && 
+                        {!isDisplaySM &&
                             <CurrCountriesDropDown
                                 sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                                 label="Add Currency"
@@ -294,20 +294,20 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
-                            sx={{...(isDisplaySM && sxStyle.Pageination)}}
+                            sx={{ ...(isDisplaySM && sxStyle.Pageination) }}
                         />
-                        {!isDisplayMD && 
-                            <CircularProgressWithLabel 
-                                sx={sxStyle.progressBar} 
-                                onUpdateNewLiveRate={updateNewLiveRate} 
-                                lastUpdateRateTime={lastUpdateRateTime} 
-                                isDisplaySM={isDisplaySM} 
+                        {!isDisplayMD &&
+                            <CircularProgressWithLabel
+                                sx={sxStyle.progressBar}
+                                onUpdateNewLiveRate={updateNewLiveRate}
+                                lastUpdateRateTime={lastUpdateRateTime}
+                                isDisplaySM={isDisplaySM}
                             />
                         }
                     </Box>
-                    {isDisplayMD && 
-                        <Box sx={{...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end'}}>
-                            {isDisplaySM && 
+                    {isDisplayMD &&
+                        <Box sx={{ ...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end' }}>
+                            {isDisplaySM &&
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                                     label="Add Currency"
@@ -318,21 +318,21 @@ export default function ExchangeRateTableData(props) {
                                     size="small"
                                 />
                             }
-                            <CircularProgressWithLabel 
-                                sx={sxStyle.progressBar} 
-                                onUpdateNewLiveRate={updateNewLiveRate} 
-                                lastUpdateRateTime={lastUpdateRateTime} 
-                                isDisplaySM={isDisplaySM} 
-                                isDisplayMD={isDisplayMD} 
+                            <CircularProgressWithLabel
+                                sx={sxStyle.progressBar}
+                                onUpdateNewLiveRate={updateNewLiveRate}
+                                lastUpdateRateTime={lastUpdateRateTime}
+                                isDisplaySM={isDisplaySM}
+                                isDisplayMD={isDisplayMD}
                             />
                         </Box>
                     }
                 </Paper>
-                {isDisplaySM ? "" : 
+                {isDisplaySM ? "" :
                     <FormControlLabel
-                        control={<Switch checked={dense} onChange={updateNewLiveRate}/>}
+                        control={<Switch checked={dense} onChange={updateNewLiveRate} />}
                         label="Dense padding"
-                        sx={{display: 'none'}}
+                        sx={{ display: 'none' }}
                     />
                 }
             </Box >
@@ -356,24 +356,26 @@ const style = {
 };
 
 const sxStyle = {
-    Box: { width: 1, overflowY: "auto"},
+    Box: { width: 1, overflowY: "auto" },
     Paper: { width: 1, boxShadow: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
-    CurrCountriesDropDown: { 
-        lg: { minWidth: 150, width: 170,},
-        sm: { width: '80px',},
+    CurrCountriesDropDown: {
+        lg: { minWidth: 150, width: 170, },
+        sm: { width: '80px', },
     },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': {padding: 0} },
+    Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': { padding: 0 } },
     defaultCurrSetterButton: {
-        main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
+        main: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },
         sm: { marginLeft: "10px", padding: "0px" },
     },
-    hoverButton: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
-                    '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }, },
+    hoverButton: {
+        height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
+        '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', },
+    },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
         lg: { flexDirection: 'row', alignItems: 'center' },
@@ -384,6 +386,6 @@ const sxStyle = {
         lg: { margin: '10px' },
         sm: { marginTop: '10px', width: '-webkit-fill-available' },
     },
-    progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center'},
+    progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' }
 };

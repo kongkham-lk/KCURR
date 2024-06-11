@@ -1,4 +1,4 @@
-export function checkIfContainsOnlyNumbers (str) {
+export function checkIfContainsOnlyNumbers(str) {
     return /^[0-9.]+$/.test(str);
 }
 
