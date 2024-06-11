@@ -32,8 +32,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services for controllers with views
-builder.Services.AddControllersWithViews();
+// Add services for controllers
+builder.Services.AddControllers();
 
 // Add support for making HTTP requests
 builder.Services.AddHttpClient();
@@ -47,13 +47,6 @@ builder.Services.AddSingleton<ApiKeysProvider>();
  
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error"); // Use custom error page in production
-    app.UseHsts(); // Enable HSTS (HTTP Strict Transport Security) in production
-}
-
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("CORS Allowed Origins: {@CorsAllowedOrigins}", allowedOrigins);
 
@@ -63,15 +56,8 @@ app.UseHttpsRedirection(); // Redirect HTTP requests to HTTPS
 
 app.UseCors(); // Enable CORS using the previously defined policy
 
-app.UseStaticFiles(); // Serve static files
-
-app.UseRouting(); // Enable routing
-
 app.UseAuthorization(); // Enable authorization (middleware)
 
 app.MapControllers(); // Map controller routes
-
-// Serve the index.html file for all unknown routes to support client-side routing in a SPA
-app.MapFallbackToFile("index.html");
 
 app.Run(); // Run the application
