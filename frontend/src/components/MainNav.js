@@ -52,7 +52,7 @@ export default function MainNav(props) {
           </Typography>
           <Box sx={sxStyle.BoxSub}>
             {navItems.map((item) => (
-                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, margin: '0px' }} >
+                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, ...sxStyle.NonMargin }} >
                   <Box sx={sxStyle.Link}>
                     {item.label}
                   </Box>
@@ -60,7 +60,7 @@ export default function MainNav(props) {
             ))}
             <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
               <FormControlLabel
-                mx={0}
+                sx={sxStyle.NonMargin}
                 control={
                   <Switch checked={state.gilad} onChange={() => handleChange(!state)} defaultChecked/>
                 }
@@ -132,7 +132,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
   return (
     <Box onClick={checkToggleDrawer} height='-webkit-fill-available'>
       <List sx={sxStyle.ListPopupSideBar} height='-webkit-fill-available'>
-        <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.ToggleButton}}>   
+        <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.FillAllWidth}}>   
           <Typography variant="overline" display="block" color='gray'>Theme</Typography>
           <ToggleButtonGroup
             color="primary"
@@ -140,10 +140,10 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
             exclusive
             onChange={handleChange}
             aria-label="Platform"
-            sx={sxStyle.ToggleButton}
+            sx={sxStyle.FillAllWidth}
           >
-            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
-            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
+            <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
+            <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
           </ToggleButtonGroup>
           </Box>
         {navItems.map((item) => (
@@ -201,7 +201,8 @@ const sxStyle = {
   },
   themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'},
   bringToTop: {zIndex: (theme) => theme.zIndex.drawer + 1},
-  ToggleButton: {width: '-webkit-fill-available'}
+  FillAllWidth: {width: '-webkit-fill-available'},
+  NonMargin: {margin: '0px'}  
 }
 
 const style = {
