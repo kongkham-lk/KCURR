@@ -23,7 +23,7 @@ export default function MainNav(props) {
   const [mobileScreen, setMobileScreen] = useState(false);
   const [state, setState] = useState(isOutLineTheme);
 
-  const handleChange = (newState = !state) => {
+  const handleChange = (newState) => {
     setState(newState);
     onChangeTheme(newState);
   };
@@ -52,7 +52,7 @@ export default function MainNav(props) {
           </Typography>
           <Box sx={sxStyle.BoxSub}>
             {navItems.map((item) => (
-                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, margin: '0px' }} >
+                <Link id="navPage" to={item.link} key={item.label} style={{...sxStyle.Link, ...sxStyle.NonMargin }} >
                   <Box sx={sxStyle.Link}>
                     {item.label}
                   </Box>
@@ -60,9 +60,9 @@ export default function MainNav(props) {
             ))}
             <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
               <FormControlLabel
-                mx={0}
+                sx={sxStyle.NonMargin}
                 control={
-                  <Switch checked={state.gilad} onChange={handleChange} defaultChecked/>
+                  <Switch checked={state.gilad} onChange={() => handleChange(!state)} defaultChecked/>
                 }
               />
             </FormControl>
@@ -132,7 +132,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
   return (
     <Box onClick={checkToggleDrawer} height='-webkit-fill-available'>
       <List sx={sxStyle.ListPopupSideBar} height='-webkit-fill-available'>
-        <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.ToggleButton}}>   
+        <Box  pt={1} px={3} pb={2.5} sx={{...sxStyle.FillAllWidth}}>   
           <Typography variant="overline" display="block" color='gray'>Theme</Typography>
           <ToggleButtonGroup
             color="primary"
@@ -140,10 +140,10 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
             exclusive
             onChange={handleChange}
             aria-label="Platform"
-            sx={sxStyle.ToggleButton}
+            sx={sxStyle.FillAllWidth}
           >
-            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
-            <ToggleButton sx={sxStyle.ToggleButton} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
+            <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
+            <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
           </ToggleButtonGroup>
           </Box>
         {navItems.map((item) => (
@@ -182,19 +182,27 @@ const sxStyle = {
   ListItemPopupSideBar: {  },
   ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
   Theme: {
-    Elevate: {color: 'white', '& img': {filter: 'saturate(0) brightness(100)'}, '& #navPage:hover': {borderBottom: '3px solid white'}, '& #navPage:hover div': {marginBottom: '12px'},},
+    Elevate: {
+                color: 'white', 
+                '& img': {filter: 'saturate(0) brightness(100)'}, 
+                '& #navPage:hover': {borderBottom: '4px solid white'}, 
+                '& #navPage:hover div': {marginBottom: '12px'},
+             },
     Outline: {
-                color: `#${baseColor}`, fontWeight: 500,
+                color: `#${baseColor}`, 
+                fontWeight: 500,
                 // '& img': {filter: 'saturate(0) brightness(0)'},
                 '& nav': { boxShadow: 'none', background: 'white'}, 
                 '& #navMain': { fontWeight: 600,}, 
-                '& #subNav': {borderBottom: `1.5px solid #${baseColor}`},
-                '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, '& #navPage:hover div': {marginBottom: '12px'},
+                '& #subNav': {borderBottom: `1.5px solid #${baseColor}55`, display: 'flex', alignItems: 'stretch'},
+                '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, 
+                '& #navPage:hover div': {marginBottom: '12px'},
              },
   },
   themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'},
   bringToTop: {zIndex: (theme) => theme.zIndex.drawer + 1},
-  ToggleButton: {width: '-webkit-fill-available'}
+  FillAllWidth: {width: '-webkit-fill-available'},
+  NonMargin: {margin: '0px'}  
 }
 
 const style = {
