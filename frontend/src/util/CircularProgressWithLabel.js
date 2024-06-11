@@ -5,9 +5,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
-  const { lastUpdateRateTime, isDisplaySM } = props
   return (
-    <Box sx={{...sxStyle.Container, justifyContent: isDisplaySM && 'flex-end'}}>
+    <Box sx={{...sxStyle.Container, justifyContent: displaySM && 'flex-end'}}>
       <Box sx={sxStyle.Box}>
         <CircularProgress
             variant="determinate"
@@ -26,13 +25,18 @@ function CircularProgressWithLabel(props) {
           </Typography>
         </Box>
       </Box>
-
-      <Box ml={2} sx={{display: 'flex', flexDirection: 'column', width: isDisplaySM ? '50%' : '100%'}}>
-        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
-            {"Last Update "}
+      <Box
+        flex 
+        flexDirection={'column'} 
+        ml={2} 
+        mr={displayMD && !displaySM && '30px'} 
+        width={displaySM ? '50%' : '100%'}
+      >
+        <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
+          {"Last Update "}
         </Typography>
-        <Typography variant="body2" sx={{fontSize: isDisplaySM && '0.78rem'}}>
-            {lastUpdateRateTime}
+        <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
+          {updateTime}
         </Typography>
       </Box>
     </Box>
@@ -50,11 +54,11 @@ CircularProgressWithLabel.propTypes = {
 
 export default function CircularWithValueLabel(props) {
   const [progress, setProgress] = useState(60);
-  const { onUpdateNewLiveRate, lastUpdateRateTime, isDisplaySM } = props;
+  const { onUpdateNewLiveRate, lastUpdateRateTime, isDisplaySM, isDisplayMD } = props;
 
   const checkTimer = (prevProgress) => {
     if (prevProgress <= 0) {
-      console.log('Reset timer and Refresh lives rate!!!');
+      // console.log('Reset timer and Refresh lives rate!!!');
       onUpdateNewLiveRate();
       prevProgress = 100;
     } else {
@@ -70,9 +74,21 @@ export default function CircularWithValueLabel(props) {
     return () => {
       clearInterval(timer);
     };
-  }, [progress, lastUpdateRateTime]);
+  }, [progress, lastUpdateRateTime, isDisplaySM, isDisplayMD]);
 
-  return <CircularProgressWithLabel value={progress} thickness={3} size={45} lastUpdateRateTime={lastUpdateRateTime} isDisplaySM={isDisplaySM} />;
+  useEffect(() => {
+    getUpdateTime(lastUpdateRateTime);
+  }, [lastUpdateRateTime]);
+
+  useEffect(() => {
+    CheckDisplaySM(isDisplaySM);
+  }, [isDisplaySM]);
+
+  useEffect(() => {
+    CheckDisplayMD(isDisplayMD);
+  }, [isDisplayMD]);
+
+  return <CircularProgressWithLabel value={progress} thickness={3} size={45} />;
 }
 
 const sxStyle = {
@@ -81,4 +97,20 @@ const sxStyle = {
   CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800] },
   CenterPos: { top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center', 
                 justifyContent: 'center' }
+}
+
+var updateTime = 0;
+var displaySM = false;
+var displayMD = false;
+
+const getUpdateTime = (time) => {
+  updateTime = time;
+}
+
+const CheckDisplaySM = (val) => {
+  displaySM = val;
+}
+
+const CheckDisplayMD = (val) => {
+  displayMD = val;
 }

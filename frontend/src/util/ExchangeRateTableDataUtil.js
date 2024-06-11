@@ -28,7 +28,7 @@ export function styleTableCell(currList, isDisplaySM) {
 export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
-            backgroundColor: "#cbeafc", backgroundClip: "border-box",
+            backgroundColor: "#1876d259", backgroundClip: "border-box",
             outline: "10px solid white", outlineOffset: "-2px",
             borderRadius: "13px",
         }

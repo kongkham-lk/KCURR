@@ -17,7 +17,7 @@ export default function useCurrCountriesApiGetter() {
                 let retryFetching = 5;
           
                 while (!isValidResponse && retryFetching > 0) {
-                    console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
+                    // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
 
                     try {
                         resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
@@ -29,7 +29,7 @@ export default function useCurrCountriesApiGetter() {
                             setCurrCountiesCodeMapDetail(resCurrCountries.data);
                             setIsReady(true);
                             isValidResponse = true; // Stop the loop
-                            console.log(`Successfully received currency-country data!!!`);
+                            // console.log(`Successfully received currency-country data!!!`);
                         }
                         else {
                             console.log(`Data not found!!!`);

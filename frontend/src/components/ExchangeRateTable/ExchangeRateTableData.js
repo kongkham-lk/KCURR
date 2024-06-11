@@ -27,7 +27,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM, isDisplayMD } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
@@ -55,20 +55,20 @@ export default function ExchangeRateTableData(props) {
 
     useEffect(() => {
         async function checkNewRow() {
-            console.log("refresh page!!!");
+            // console.log("refresh page!!!");
             
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
-                console.log("Create new curr list!!!");
+                // console.log("Create new curr list!!!");
                 const currList = await createCurrLists(defaultCurrCode, newCurrCode, currDataSet, timeSeriesRangeLength);
                 const newLists = [...currLists, currList];
                 setNewCurrCode("");
                 setCurrLists(newLists);
             }
-            console.log("Check Curr Lists after refresh page: ", currLists);
-            console.log("Check Curr Array after refresh page: ", currCodeArray);
+            // console.log("Check Curr Lists after refresh page: ", currLists);
+            // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, currDataSet, defaultCurrCode]);
+    }, [newCurrCode, currLists, currDataSet, defaultCurrCode, currCodeArray]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -85,7 +85,7 @@ export default function ExchangeRateTableData(props) {
 
     // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
-        console.log("Rearrage list!!!");
+        // console.log("Rearrage list!!!");
         
         const oldTargetCurrArray = [...currCodeArray];
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
@@ -95,7 +95,7 @@ export default function ExchangeRateTableData(props) {
             oldTargetCurrArray.unshift(targetCurr);
         }
 
-        console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
+        // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
         await handleUpdateNewLiveRate(oldTargetCurrArray); // Refetch new update rate from beacon api
 
         setDefaultCurrCode(targetCurr);
@@ -104,7 +104,7 @@ export default function ExchangeRateTableData(props) {
 
     // Refetch new update rate from api
     const handleUpdateNewLiveRate = async (currCodeArray) => {
-        console.log("Fetching latest rate from API!!!")
+        // console.log("Fetching latest rate from API!!!")
         const newLists = [];
         const initialValue = { baseCurr: currCodeArray[0] };
         const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
@@ -113,7 +113,7 @@ export default function ExchangeRateTableData(props) {
             newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
         }
 
-        console.log("check response list of latest rate:  ", newLists);
+        // console.log("check response list of latest rate:  ", newLists);
         setCurrLists(newLists);
         setCurrDataSet(newAddCurrDataSet);
         handleUpdateRateTime();
@@ -129,7 +129,7 @@ export default function ExchangeRateTableData(props) {
     };
 
     const updateNewLiveRate = (event) => {
-        console.log("Timer trigger!!!")
+        // console.log("Timer trigger!!!")
         handleUpdateNewLiveRate(currCodeArray);
     };
 
@@ -145,18 +145,18 @@ export default function ExchangeRateTableData(props) {
     );
 
     const handleAddCurrCountry = (e) => {
-        console.log("Add new item to list: ", e.value);
+        // console.log("Add new item to list: ", e.value);
         setNewCurrCode(e.value);
         setCurrCodeArray([...currCodeArray, e.value])
     };
 
     const handleDelete = (targetCurr) => {
         if (targetCurr === currCodeArray[0]) {
-            console.log("Attempting to delete default currency row, Exit!!!");
+            // console.log("Attempting to delete default currency row, Exit!!!");
             return;
         }
             
-        console.log("Delete an item to list: ", targetCurr);
+        // console.log("Delete an item to list: ", targetCurr);
         const oldCurrLists = [...currLists];
         const oldTargetCurrCodeArray = [...currCodeArray];
 
@@ -166,7 +166,7 @@ export default function ExchangeRateTableData(props) {
                 oldTargetCurrCodeArray.splice(i, 1);
             }
         }
-        console.log("check Curr List after delete:  ", oldCurrLists);
+        // console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
         setCurrCodeArray(oldTargetCurrCodeArray);
     }
@@ -271,7 +271,7 @@ export default function ExchangeRateTableData(props) {
                     <Box 
                         sx={{
                             ...sxStyle.PaginationSubContainer.main, 
-                            ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg)
+                            ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg),
                         }}
                     >
                         {!isDisplaySM && 
@@ -294,9 +294,9 @@ export default function ExchangeRateTableData(props) {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
-                            sx={{margin: isDisplaySM && '0px -13px', width: 'auto'}}
+                            sx={{...(isDisplaySM && sxStyle.Pageination)}}
                         />
-                        {!isDisplaySM && 
+                        {!isDisplayMD && 
                             <CircularProgressWithLabel 
                                 sx={sxStyle.progressBar} 
                                 onUpdateNewLiveRate={updateNewLiveRate} 
@@ -305,22 +305,25 @@ export default function ExchangeRateTableData(props) {
                             />
                         }
                     </Box>
-                    {isDisplaySM && 
-                        <Box sx={sxStyle.progressBarContainer}>
-                            <CurrCountriesDropDown
-                                sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                label="Add Currency"
-                                inputCurrType="targetCurr"
-                                onAddCurrCountry={handleAddCurrCountry}
-                                currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                passInStyle={style.CurrCountriesDropDown}
-                                size="small"
-                            />
+                    {isDisplayMD && 
+                        <Box sx={{...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end'}}>
+                            {isDisplaySM && 
+                                <CurrCountriesDropDown
+                                    sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                    label="Add Currency"
+                                    inputCurrType="targetCurr"
+                                    onAddCurrCountry={handleAddCurrCountry}
+                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                    passInStyle={style.CurrCountriesDropDown}
+                                    size="small"
+                                />
+                            }
                             <CircularProgressWithLabel 
                                 sx={sxStyle.progressBar} 
                                 onUpdateNewLiveRate={updateNewLiveRate} 
                                 lastUpdateRateTime={lastUpdateRateTime} 
                                 isDisplaySM={isDisplaySM} 
+                                isDisplayMD={isDisplayMD} 
                             />
                         </Box>
                     }
@@ -363,7 +366,7 @@ const sxStyle = {
     },
     TableRow: { '&:last-child td, &:last-child th': { border: 0 } },
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
-    Pageination: { display: "flex", justifyContent: "space-between", flexWrap: 'wrap' },
+    Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': {padding: 0} },
     defaultCurrSetterButton: {
         main:{ display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
         lg: { marginLeft: "15px" },
