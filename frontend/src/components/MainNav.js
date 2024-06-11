@@ -185,7 +185,7 @@ const sxStyle = {
     Elevate: {
                 color: 'white', 
                 '& img': {filter: 'saturate(0) brightness(100)'}, 
-                '& #navPage:hover': {borderBottom: '3px solid white'}, 
+                '& #navPage:hover': {borderBottom: '4px solid white'}, 
                 '& #navPage:hover div': {marginBottom: '12px'},
              },
     Outline: {
@@ -194,7 +194,7 @@ const sxStyle = {
                 // '& img': {filter: 'saturate(0) brightness(0)'},
                 '& nav': { boxShadow: 'none', background: 'white'}, 
                 '& #navMain': { fontWeight: 600,}, 
-                '& #subNav': {borderBottom: `1.5px solid #${baseColor}`, height: 'auto'},
+                '& #subNav': {borderBottom: `1.5px solid #${baseColor}55`, display: 'flex', alignItems: 'stretch'},
                 '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, 
                 '& #navPage:hover div': {marginBottom: '12px'},
              },
