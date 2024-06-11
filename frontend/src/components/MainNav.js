@@ -23,7 +23,7 @@ export default function MainNav(props) {
   const [mobileScreen, setMobileScreen] = useState(false);
   const [state, setState] = useState(isOutLineTheme);
 
-  const handleChange = (newState = !state) => {
+  const handleChange = (newState) => {
     setState(newState);
     onChangeTheme(newState);
   };
@@ -62,7 +62,7 @@ export default function MainNav(props) {
               <FormControlLabel
                 mx={0}
                 control={
-                  <Switch checked={state.gilad} onChange={handleChange} defaultChecked/>
+                  <Switch checked={state.gilad} onChange={() => handleChange(!state)} defaultChecked/>
                 }
               />
             </FormControl>
@@ -182,14 +182,21 @@ const sxStyle = {
   ListItemPopupSideBar: {  },
   ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
   Theme: {
-    Elevate: {color: 'white', '& img': {filter: 'saturate(0) brightness(100)'}, '& #navPage:hover': {borderBottom: '3px solid white'}, '& #navPage:hover div': {marginBottom: '12px'},},
+    Elevate: {
+                color: 'white', 
+                '& img': {filter: 'saturate(0) brightness(100)'}, 
+                '& #navPage:hover': {borderBottom: '3px solid white'}, 
+                '& #navPage:hover div': {marginBottom: '12px'},
+             },
     Outline: {
-                color: `#${baseColor}`, fontWeight: 500,
+                color: `#${baseColor}`, 
+                fontWeight: 500,
                 // '& img': {filter: 'saturate(0) brightness(0)'},
                 '& nav': { boxShadow: 'none', background: 'white'}, 
                 '& #navMain': { fontWeight: 600,}, 
-                '& #subNav': {borderBottom: `1.5px solid #${baseColor}`},
-                '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, '& #navPage:hover div': {marginBottom: '12px'},
+                '& #subNav': {borderBottom: `1.5px solid #${baseColor}`, height: 'auto'},
+                '& #navPage:hover': {borderBottom: `3px solid #${baseColor}`}, 
+                '& #navPage:hover div': {marginBottom: '12px'},
              },
   },
   themeSetter: {justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px'},
