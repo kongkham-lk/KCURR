@@ -53,10 +53,8 @@ export default function MainNav(props) {
                     </Typography>
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
-                            const isCurrentPage = currentUrl.pathname === "/" && item.link.substring(item.link.indexOf("/") - 1) === "/" || currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1));
-                            console.log("check item.link: ", item.link);
-                            console.log("check currentUrl: ", currentUrl.pathname);
-                            console.log("check isCurrentPage: ", isCurrentPage);
+                            const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
+                                                    || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
                                 <>
                                     <Link
