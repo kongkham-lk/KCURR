@@ -486,3 +486,6 @@ appsettings.ApiKeys.json
 # Library / Modules dependencies files
 node_modules/
 .DS_Store
+
+# Seeding files
+backend/SeedFiles/

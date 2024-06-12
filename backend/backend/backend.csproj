@@ -21,6 +21,15 @@
       <Content Update="appsettings.ApiKeys.json">
         <CopyToPublishDirectory>Never</CopyToPublishDirectory>
       </Content>
+      <Content Condition="'$(ExcludeConfigFilesFromBuildOutput)'!='true'" Update="appsettings.Environment.json">
+        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="SeedFiles\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="SeedFiles\" />
+    </ItemGroup>
 </Project>
