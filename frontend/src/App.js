@@ -41,7 +41,7 @@ export default function App() {
 
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={

@@ -18,7 +18,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isOutLineTheme, onChangeTheme, currentUrl } = props;
+    const { isDisplaySM, isDisplayMD, isOutLineTheme, onChangeTheme, currentUrl } = props;
 
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
@@ -70,7 +70,7 @@ export default function MainNav(props) {
                                         }}
                                     >
                                         <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
-                                            {item.label}
+                                            {isDisplayMD ? item.label.substring(item.label.indexOf(" ")) : item.label}
                                         </Box>
                                     </Link>
                                 </>
