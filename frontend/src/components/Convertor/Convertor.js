@@ -71,7 +71,7 @@ export default function Convertor(props) {
             <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />
             {formData !== null && (
                 <>
-                    <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{fontSize: isDisplaySM ? "1.7rem" : "2.125rem"}}>
+                    <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{ fontSize: isDisplaySM ? "1.7rem" : "2.125rem" }}>
                         {amount} {baseCurr} = {total.toFixed(2)} {targetCurr}
                     </Typography>
                     {timeSeries !== null
@@ -83,10 +83,10 @@ export default function Convertor(props) {
                                 1 {baseCurr} = {(total / amount).toFixed(2)} {targetCurr}
                             </Typography>
                             <div style={style.divChart} >
-                                <Box sx={{...sxStyle.lineGraph, height: !isDisplaySM && "300px"}}>
+                                <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
                                     <LineGraph timeSeries={timeSeries} displayLabel={true} />
                                 </Box>
-                                <div style={{...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%"}}>
+                                <div style={{ ...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%" }}>
                                     <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                                 </div>
                             </div>
@@ -105,7 +105,7 @@ const styleSpan = (changeRateInPercent) => {
 
 const style = {
     divRangeTimeSeriesSelector: { textAlign: "center" },
-    divChart: { height: "auto", width: "100%"},
+    divChart: { height: "auto", width: "100%" },
 }
 
 const sxStyle = {

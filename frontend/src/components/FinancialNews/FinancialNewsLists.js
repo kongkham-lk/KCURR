@@ -6,7 +6,7 @@ export default function FinancialNews(props) {
 
     return (
         <>
-            <div style={{...sxStyle.NewsList.main, ...(isDisplaySM && sxStyle.NewsList.sm)}}>
+            <div style={{ ...sxStyle.NewsList.main, ...(isDisplaySM && sxStyle.NewsList.sm) }}>
                 <Typography
                     component="div"
                     variant="subtitle1"
@@ -16,7 +16,7 @@ export default function FinancialNews(props) {
                 >
                     {news.publisher}
                 </Typography>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
                     <Typography
                         className="hoverLink"
                         variant="h3"
@@ -29,7 +29,7 @@ export default function FinancialNews(props) {
                         {news.title}
                     </Typography>
                     {isDisplaySM && <span>
-                        <img src={news.thumbnail} alt="News Thumbnail" style={style.smallThumbnamil}/>
+                        <img src={news.thumbnail} alt="News Thumbnail" style={style.smallThumbnamil} />
                     </span>}
                 </div>
             </div>
@@ -54,5 +54,5 @@ const sxStyle = {
 
 const style = {
     newsPublisher: { width: "fit-content", marginBottom: "12px", color: "black", borderBottom: "1px solid #cbcbcb" },
-    smallThumbnamil: {width: "72px", height: "72px", margin: "0 0 0 10px", borderRadius: "8px"},
+    smallThumbnamil: { width: "72px", height: "72px", margin: "0 0 0 10px", borderRadius: "8px" },
 }

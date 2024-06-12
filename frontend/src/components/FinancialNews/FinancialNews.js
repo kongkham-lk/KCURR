@@ -59,11 +59,11 @@ export default function FinancialNews(props) {
                             variant="h5"
                             color="black"
                             component="div"
-                            style={{margin: filter ? "16px 0px" : "16px 0 0 0"}}
+                            style={{ margin: filter ? "16px 0px" : "16px 0 0 0" }}
                         >
                             {isDisplaySM ? "News" : "Financial News"}
                         </Typography>
-                        {filter && <div style={{...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg)}}>
+                        {filter && <div style={{ ...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg) }}>
                             <InputTextField updateVal={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
                             <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
                                 Add
@@ -81,17 +81,17 @@ export default function FinancialNews(props) {
                                 key={news.title}
                                 href={news.link}
                                 className="hoverCard"
-                                sx={isOutLineTheme ? {margin: 0, textDecoration: 'none'} : sxStyle.Link}>
-                                {!isDisplaySM ? 
-                                    <Card 
-                                        variant={isOutLineTheme ? "outlined" : "elevation"} 
+                                sx={isOutLineTheme ? { margin: 0, textDecoration: 'none' } : sxStyle.Link}>
+                                {!isDisplaySM ?
+                                    <Card
+                                        variant={isOutLineTheme ? "outlined" : "elevation"}
                                         sx={{
                                             ...sxStyle.Card, borderRadius: isOutLineTheme ? 0 : 1,
                                             border: isOutLineTheme && 0,
                                             borderBottom: isOutLineTheme && '1px solid rgba(0, 0, 0, 0.12)',
                                             padding: isOutLineTheme && '15px 0px',
-                                            '&:hover': !isOutLineTheme && { boxShadow: '0px 0px 12px #644e243f', transition: '0.2s' }, 
-                                            '&:hover .hoverLink': !isOutLineTheme && {color: '#0060cd'}
+                                            '&:hover': !isOutLineTheme && { boxShadow: '0px 0px 12px #644e243f', transition: '0.2s' },
+                                            '&:hover .hoverLink': !isOutLineTheme && { color: '#0060cd' }
                                         }}
                                     >
                                         {news.thumbnail !== null && !isDisplaySM && <CardMedia
@@ -100,13 +100,14 @@ export default function FinancialNews(props) {
                                             image={news.thumbnail}
                                             alt="Live from space album cover"
                                         />}
-                                        <Box sx={{...sxStyle.Box, '&:hover': isOutLineTheme && {borderRight: '8px solid #1876d2'}}}>
+                                        <Box sx={{ ...sxStyle.Box, '&:hover': isOutLineTheme && { borderRight: '8px solid #1876d2' } }}>
                                             <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />
                                         </Box>
-                                    </Card> : 
+                                    </Card> :
                                     <FinancialNewsLists news={news} isDisplaySM={isDisplaySM} />}
                             </Link>
-                        )}
+                        )
+                    }
                     )}
                 </>
                 : <Loading />
@@ -116,8 +117,10 @@ export default function FinancialNews(props) {
 };
 
 const sxStyle = {
-    Box: { display: 'flex', flexDirection: 'column', width: "100%", flex: '1 0 auto', justifyContent: "space-between", 
-            width: "min-content", padding: "20px" },
+    Box: {
+        display: 'flex', flexDirection: 'column', width: "100%", flex: '1 0 auto', justifyContent: "space-between",
+        width: "min-content", padding: "20px"
+    },
     Link: { width: '100%', textDecoration: "none", margin: "7px 0" },
     Card: { display: 'flex', width: '100%', },
     CardMedia: { width: 240, height: 180, objectFit: "cover" },
@@ -125,7 +128,7 @@ const sxStyle = {
 
 const style = {
     div: { display: 'flex', flexDirection: "column", width: '100%' },
-    subDivHeading: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px"},
+    subDivHeading: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" },
     subDivInputField: {
         main: { display: "flex", alignItems: "center", justifyContent: "flex-end" },
         lg: { width: "25%" },

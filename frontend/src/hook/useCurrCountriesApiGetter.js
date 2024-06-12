@@ -15,7 +15,7 @@ export default function useCurrCountriesApiGetter() {
                 let resCurrCountries;
                 let isValidResponse = false;
                 let retryFetching = 5;
-          
+
                 while (!isValidResponse && retryFetching > 0) {
                     // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
 
