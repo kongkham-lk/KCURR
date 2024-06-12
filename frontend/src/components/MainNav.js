@@ -171,7 +171,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
                 {navItems.map((item) => (
                     <ListItem key={item.label} disablePadding>
                         <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
-                            <ListItemText primary={item.label} sx={{}} />
+                            <ListItemText primary={item.label} />
                         </ListItemButton>
                     </ListItem>
                 ))}
