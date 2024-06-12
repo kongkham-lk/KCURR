@@ -161,6 +161,7 @@ export default function ExchangeRateTableData(props) {
         const oldTargetCurrCodeArray = [...currCodeArray];
 
         for (let i in oldCurrLists) {
+            // only delete the currency in the list that match targetCurr, but not defaultCurr 
             if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
                 oldCurrLists.splice(i, 1);
                 oldTargetCurrCodeArray.splice(i, 1);
