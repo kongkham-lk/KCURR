@@ -4,7 +4,7 @@ import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import FinancialNews from './components/FinancialNews/FinancialNews';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Loading } from './components/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
@@ -15,6 +15,7 @@ export default function App() {
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
+    const currentUrl = useLocation();
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -40,7 +41,7 @@ export default function App() {
 
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} />
+            <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={

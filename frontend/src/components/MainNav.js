@@ -18,7 +18,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isOutLineTheme, onChangeTheme } = props;
+    const { isDisplaySM, isOutLineTheme, onChangeTheme, currentUrl } = props;
 
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
@@ -37,10 +37,11 @@ export default function MainNav(props) {
             display='flex'
             sx={{
                 ...(isDisplaySM ? sxStyle.StarterGapForMobile : sxStyle.StarterGap),
-                ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate)
+                ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
+                ...sxStyle.Theme.ApplyAll,
             }}
         >
-            <AppBar component="nav" sx={{ ...sxStyle.bringToTop, color: 'inherit' }}>
+            <AppBar component="nav" sx={{ ...sxStyle.bringToTop, ...commonStyles.inheritColor }}>
                 <Toolbar id="subNav">
                     <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
                         <Link to={mainLogo.link} style={sxStyle.mainLogo}>
@@ -51,13 +52,32 @@ export default function MainNav(props) {
                         </Link>
                     </Typography>
                     <Box sx={sxStyle.BoxSub}>
-                        {navItems.map((item) => (
-                            <Link id="navPage" to={item.link} key={item.label} style={{ ...sxStyle.Link, ...sxStyle.NonMargin }} >
-                                <Box sx={sxStyle.Link}>
-                                    {item.label}
-                                </Box>
-                            </Link>
-                        ))}
+                        {navItems.map((item) => {
+                            const isCurrentPage = item.link.includes(currentUrl.pathname);
+                            console.log("check item.link: ", item.link);
+                            console.log("check currentUrl: ", currentUrl);
+                            console.log("check isCurrentPage: ", isCurrentPage);
+                            return (
+                                <>
+                                    <Link
+                                        id="navPage"
+                                        to={item.link}
+                                        key={item.label}
+                                        style={{
+                                            ...sxStyle.Link,
+                                            ...sxStyle.NonMargin,
+                                            ...(isCurrentPage && {
+                                                ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
+                                            }),
+                                        }}
+                                    >
+                                        <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
+                                            {item.label}
+                                        </Box>
+                                    </Link>
+                                </>
+                            )
+                        })}
                         <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
                             <FormControlLabel
                                 sx={sxStyle.NonMargin}
@@ -87,14 +107,18 @@ export default function MainNav(props) {
                     }}
                     sx={sxStyle.Drawer}
                 >
-                    <PopupSideBar navItems={navItems} handleDrawerToggle={handleDrawerToggle} isOutLineTheme={isOutLineTheme} onChangeTheme={onChangeTheme} />
+                    <PopupSideBar
+                        navItems={navItems}
+                        handleDrawerToggle={handleDrawerToggle}
+                        isOutLineTheme={isOutLineTheme}
+                        onChangeTheme={onChangeTheme}
+                    />
                 </Drawer>
             </Box>
         </Box>
     );
 };
 
-const drawerWidth = "-webkit-fill-available";
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
     { label: 'Convertor', link: "/convertor" },
@@ -130,8 +154,8 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
     }
 
     return (
-        <Box onClick={checkToggleDrawer} height='-webkit-fill-available'>
-            <List sx={sxStyle.ListPopupSideBar} height='-webkit-fill-available'>
+        <Box onClick={checkToggleDrawer} height={commonStyles.prop.fillAvailSpace}>
+            <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
                 <Box pt={1} px={3} pb={2.5} sx={{ ...sxStyle.FillAllWidth }}>
                     <Typography variant="overline" display="block" color='gray'>Theme</Typography>
                     <ToggleButtonGroup
@@ -158,55 +182,75 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
     )
 };
 
-const baseColor = "1876d2";
+const baseColor = {
+    main: "1876d2",
+    sub: "1976d2"
+};
 
 const embbedLogo = {
-    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor}/currency-exchange.png`,
+    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.main}/currency-exchange.png`,
     alt: "KCURR App Logo",
 };
 
+const commonStyles = {
+    navPageBorderBottom: {
+        Elevate: { borderBottom: '4px solid white' },
+        Outline: { borderBottom: `4px solid #${baseColor.main}` },
+        ElevateHover: { borderBottom: '4px solid #ffffff99' },
+        OutlineHover: { borderBottom: `4px solid #${baseColor.main}55` },
+    },
+    subNavPageMargin: { marginBottom: '11px' },
+    alignItemsStretch: { display: 'flex', alignItems: 'stretch' },
+    alignItemsCenter: { display: 'flex', alignItems: 'center' },
+    inheritColor: { color: 'inherit' },
+    noneTextDeco: { textDecoration: "none", },
+    prop: {
+        fillAvailSpace: '-webkit-fill-available'
+    },
+};
+
+const drawerWidth = commonStyles.prop.fillAvailSpace;
+
 const sxStyle = {
-    StarterGap: { mb: 14, '& #subNav': { display: 'flex', alignItems: 'stretch' } },
+    StarterGap: { mb: 14, '& #subNav': { ...commonStyles.alignItemsStretch } },
     StarterGapForMobile: { mb: 12 },
     IconButton: { mr: 1, display: { sm: 'none' } },
-    Typography: { flexGrow: 1, display: "flex", justifyContent: 'left', alignItems: 'center' },
-    Link: { color: 'inherit', margin: "15px", textDecoration: "none", display: 'flex', alignItems: 'center' },
-    mainLogo: { color: 'inherit', textDecoration: "none", },
+    Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
+    Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
+    mainLogo: { ...commonStyles.inheritColor, ...commonStyles.noneTextDeco, },
     BoxSub: { display: { xs: 'none', sm: 'flex' }, alignItems: 'stretch' },
     Drawer: {
         display: { xs: 'block', sm: 'none' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: '#1976d2' },
+    BoxPopupSideBar: { color: `#${baseColor.sub}` },
     ListPopupSideBar: { my: 8 },
-    ListItemPopupSideBar: {},
     ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
     Theme: {
         Elevate: {
             color: 'white',
             '& img': { filter: 'saturate(0) brightness(100)' },
-            '& #navPage:hover': { borderBottom: '4px solid white' },
-            '& #navPage:hover div': { marginBottom: '12px' },
+            '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
+            '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
-            color: `#${baseColor}`,
+            color: `#${baseColor.main}`,
             fontWeight: 500,
-            // '& img': {filter: 'saturate(0) brightness(0)'},
             '& nav': { boxShadow: 'none', background: 'white' },
             '& #navMain': { fontWeight: 600, },
-            '& #subNav': { borderBottom: `1.5px solid #${baseColor}55`, display: 'flex', alignItems: 'stretch' },
-            '& #navPage:hover': { borderBottom: `3px solid #${baseColor}` },
-            '& #navPage:hover div': { marginBottom: '12px' },
+            '& #subNav': { borderBottom: `1.5px solid #${baseColor.main}55`, ...commonStyles.alignItemsStretch },
+            '& #navPage:hover': { ...commonStyles.navPageBorderBottom.OutlineHover },
+            '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
     },
     themeSetter: { justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px' },
     bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
-    FillAllWidth: { width: '-webkit-fill-available' },
+    FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
     NonMargin: { margin: '0px' }
 }
 
 const style = {
     logo: { width: "35px", height: "35px", margin: "0 8px 0 0" },
-    Link: { color: "black", textDecoration: "none" },
-    logoImg: { display: "flex", alignItems: "center", marginLeft: "15px" },
+    Link: { color: "black", ...commonStyles.noneTextDeco },
+    logoImg: { ...commonStyles.alignItemsCenter, marginLeft: "15px" },
 }
