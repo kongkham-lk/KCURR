@@ -8,8 +8,9 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly ApiKeysProvider _apiKeysProvider;
-    private readonly string _currencyBeaconApiKey;
+    private string _currencyBeaconApiKey;
     private readonly ILogger<CurrencyBeaconApiClient> _logger;
+    private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
     public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger)
     {
@@ -36,8 +37,11 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return currMapRates;
     }
 
-    public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries()
+    public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries(bool getAnotherApiKey)
     {
+        if (getAnotherApiKey)
+            _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
+
         string url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
         var currCountriesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconCurrCountriesApiResponse>(url);
         Dictionary<string, CurrCountriesResponse> currCountries =  TransformedCurrCountriesResData(currCountriesResponse);

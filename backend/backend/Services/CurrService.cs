@@ -1,4 +1,3 @@
-using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
 
@@ -7,10 +6,13 @@ namespace backend.Services;
 public class CurrService
 {
     private readonly List<IExchangeRateApiClient> _exchangeRateApiClients;
+    private readonly ILogger<CurrService> _logger;
+    private int TotalRetryApiKey { get; set; } = 3;
 
-    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients)
+    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger)
     {
         _exchangeRateApiClients = exchangeRateApiClients.ToList();
+        _logger = logger;
     }
 
     public async Task<double> Convert(double amount, string baseCurrCountry, string targetCurrCountry)
@@ -41,19 +43,27 @@ public class CurrService
 
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries()
     {
-        Dictionary<string, CurrCountriesResponse> currCountries = null!;
-        foreach (var apiClientElement in _exchangeRateApiClients)
+        if (TotalRetryApiKey > 0)
         {
-            try
+            Dictionary<string, CurrCountriesResponse> currCountries = null!;
+            foreach (var apiClientElement in _exchangeRateApiClients)
             {
-                currCountries = await apiClientElement.GetCurrCountries();
+                try
+                {
+                    currCountries = await apiClientElement.GetCurrCountries(false);
+                    TotalRetryApiKey--;
+
+                    if (currCountries is null)
+                        currCountries = await RetryToGetCurrCountries(apiClientElement, currCountries);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogInformation(e.ToString());
+                }
             }
-            catch (Exception e)
-            {
-                continue;
-            }
+            return currCountries;
         }
-        return currCountries;
+        return null;
     }
 
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr,
@@ -76,5 +86,23 @@ public class CurrService
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries =
             timeseriesTransformer.TransformedData( timeSeries, targetCurr);
         return targetCurrTimeSeries;
+    }
+
+    private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> currCountries)
+    {
+        while (TotalRetryApiKey > 0 && currCountries is null)
+        {
+            currCountries = await apiClientElement.GetCurrCountries(true); // invoke method again by trying to use another api key
+            TotalRetryApiKey--;
+
+            if (currCountries is not null)
+            {
+                TotalRetryApiKey = 3; // reset total retry api key when data return
+                break;
+            }
+            else if (TotalRetryApiKey == 0)
+                _logger.LogInformation($"None of the Key works!!!");
+        }
+        return currCountries;
     }
 }

@@ -10,7 +10,8 @@ public class ApiKeysProvider
     private IConfiguration? _apiKeysConfiguration;
     private ILogger<ApiKeysProvider> _logger;
     private IWebHostEnvironment _env;
-
+    private string CurrentKey { get; set; } = "";
+    private List<string> FailKeyList { get; set; } = new();
 
     public enum ApiName
     {
@@ -21,6 +22,8 @@ public class ApiKeysProvider
 
     public ApiKeysProvider(ILogger<ApiKeysProvider> logger, IWebHostEnvironment env)
     {
+        // Determined on how to retrieve API key
+        // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
         if (env.IsDevelopment())
             _apiKeysConfiguration = ReadApiKeysFromJson();
         _logger = logger;
@@ -35,24 +38,37 @@ public class ApiKeysProvider
             return "";
         }
 
-        string targetApiKey = "";
+        string? targetApiKey = "";
 
-        // Determined on how to retrieve API key
-        // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
-        if (apiName == ApiName.CurrencyApiApiKey)
-            //targetApiKey = _apiKeysConfiguration[ApiName.Config_CurrencyApiApiKey.ToString()];
-            targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[ApiName.CurrencyApiApiKey.ToString()] : Environment.GetEnvironmentVariable(ApiName.CurrencyApiApiKey.ToString());
-        else // use different api key based on time (second) since each api has monthly quota
+        DateTime currentTime = DateTime.Now;
+        int currentSecond = currentTime.Second;
+        int num = (Convert.ToInt32(currentSecond) % 10) % 3; // use different api key based on time (second) since each api has monthly quota
+
+        // is not empty mean the prev key is fail key (no quota left to retrieve data)
+        if (CurrentKey != "" && !FailKeyList.Any(key => key.Equals(CurrentKey)))
+            FailKeyList.Add(CurrentKey);
+
+        string baseApiName = apiName.ToString() + ":";
+        string keysLengthIndex = baseApiName + "TotalKey";
+        CurrentKey = baseApiName + num;
+
+        int backupKeyLength = _env.IsDevelopment() ?
+            Convert.ToInt16(_apiKeysConfiguration?[keysLengthIndex]) :
+            Convert.ToInt16(Environment.GetEnvironmentVariable(keysLengthIndex));
+
+        while (FailKeyList.Any(key => key.Equals(CurrentKey))
+            && FailKeyList.Select(key => key.Contains(apiName.ToString())).Count() < backupKeyLength)
         {
-            DateTime currentTime = DateTime.Now;
-            int currentSecond = currentTime.Second;
-            int num = (Convert.ToInt32(currentSecond) % 10) % 3;
+            // in case there is no next backup key, thus need to reset
+            if (num + 1 > backupKeyLength)
+                num++;
+            else
+                num = 0;
 
-            if (apiName == ApiName.CurrencyBeaconApiKey)
-                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[$"{ApiName.CurrencyBeaconApiKey.ToString()}:{num}"] : Environment.GetEnvironmentVariable(ApiName.CurrencyBeaconApiKey.ToString() + num);
-            else if (apiName == ApiName.RapidApiApiKey)
-                targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration[$"{ApiName.RapidApiApiKey.ToString()}:{num}"] : Environment.GetEnvironmentVariable(ApiName.RapidApiApiKey.ToString() + num);
+            CurrentKey = baseApiName + num;
         }
+
+        targetApiKey = _env.IsDevelopment() ? _apiKeysConfiguration?[CurrentKey] : Environment.GetEnvironmentVariable(CurrentKey);
 
         //_logger.LogInformation($"Returning Key: {apiName}, Value: {targetApiKey}!!!"); // Logging API key retrieving result
 
