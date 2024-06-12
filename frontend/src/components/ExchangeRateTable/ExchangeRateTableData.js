@@ -161,7 +161,7 @@ export default function ExchangeRateTableData(props) {
         const oldTargetCurrCodeArray = [...currCodeArray];
 
         for (let i in oldCurrLists) {
-            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== targetCurr) {
+            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
                 oldCurrLists.splice(i, 1);
                 oldTargetCurrCodeArray.splice(i, 1);
             }
