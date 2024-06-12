@@ -14,8 +14,8 @@ export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
     const currentUrl = useLocation();
+    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter(currentUrl);
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
