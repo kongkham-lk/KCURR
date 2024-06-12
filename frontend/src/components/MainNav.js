@@ -53,9 +53,9 @@ export default function MainNav(props) {
                     </Typography>
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
-                            const isCurrentPage = item.link.includes(currentUrl.pathname);
+                            const isCurrentPage = currentUrl.pathname === "/" && item.link.substring(item.link.indexOf("/") - 1) === "/" || currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1));
                             console.log("check item.link: ", item.link);
-                            console.log("check currentUrl: ", currentUrl);
+                            console.log("check currentUrl: ", currentUrl.pathname);
                             console.log("check isCurrentPage: ", isCurrentPage);
                             return (
                                 <>
@@ -121,9 +121,9 @@ export default function MainNav(props) {
 
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
+    { label: 'Dashboard', link: "/" },
     { label: 'Convertor', link: "/convertor" },
     { label: 'Financial News', link: "/financial-news" },
-    { label: 'About', link: "/about" },
     { label: 'Contact', link: "/contact" },
 ];
 
