@@ -43,31 +43,29 @@ public class CurrService
 
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries()
     {
-        if (TotalRetryApiKey > 0)
+        Dictionary<string, CurrCountriesResponse> currCountries = null!;
+        foreach (var apiClientElement in _exchangeRateApiClients)
         {
-            Dictionary<string, CurrCountriesResponse> currCountries = null!;
-            foreach (var apiClientElement in _exchangeRateApiClients)
+            try
             {
-                try
-                {
-                    currCountries = await apiClientElement.GetCurrCountries(false);
-                    TotalRetryApiKey--;
+                TotalRetryApiKey--;
+                currCountries = await apiClientElement.GetCurrCountries(false);
+            }
+            catch (Exception e)
+            {
+                currCountries = await RetryToGetCurrCountries(apiClientElement, currCountries);
 
-                    if (currCountries is null)
-                        currCountries = await RetryToGetCurrCountries(apiClientElement, currCountries);
-                }
-                catch (Exception e)
+                if (currCountries is null)
                 {
-                    _logger.LogInformation(e.ToString());
+                    _logger.LogInformation("Cannot retrieve CurrCountries: " + e);
+                    Console.WriteLine("Cannot retrieve CurrCountries: " + e);
                 }
             }
-            return currCountries;
         }
-        return null;
+        return currCountries;
     }
 
-    public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr,
-        string targetCurr, string timeSeriesRange)
+    public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
     {
         SortedList<string, double> timeSeries = null!;
         foreach (var apiClientElement in _exchangeRateApiClients)
@@ -78,31 +76,29 @@ public class CurrService
             }
             catch (Exception e)
             {
-                continue;
+                _logger.LogInformation("Cannot retrieve Curr TimeSeries: " + e);
+                Console.WriteLine("Cannot retrieve Curr TimeSeries: " + e);
             }
         }
 
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients);
-        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries =
-            timeseriesTransformer.TransformedData( timeSeries, targetCurr);
+        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = timeseriesTransformer.TransformedData( timeSeries, targetCurr);
         return targetCurrTimeSeries;
     }
 
-    private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> currCountries)
+    private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> response)
     {
-        while (TotalRetryApiKey > 0 && currCountries is null)
+        while (TotalRetryApiKey > 0 && response is null)
         {
-            currCountries = await apiClientElement.GetCurrCountries(true); // invoke method again by trying to use another api key
+            response = await apiClientElement.GetCurrCountries(true); // invoke method again by trying to use another api key
             TotalRetryApiKey--;
 
-            if (currCountries is not null)
-            {
-                TotalRetryApiKey = 3; // reset total retry api key when data return
+            if (response is not null)
                 break;
-            }
             else if (TotalRetryApiKey == 0)
-                _logger.LogInformation($"None of the Key works!!!");
+                _logger.LogInformation($"None of the currCountries api key works!!!");
         }
-        return currCountries;
+        TotalRetryApiKey = 3; // reset total retry api key when data return
+        return response;
     }
 }

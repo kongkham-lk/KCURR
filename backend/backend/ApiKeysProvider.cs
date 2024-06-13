@@ -23,7 +23,7 @@ public class ApiKeysProvider
     public ApiKeysProvider(ILogger<ApiKeysProvider> logger, IWebHostEnvironment env)
     {
         // Determined on how to retrieve API key
-        // if in developement env. then grab from AppSettings.json, else grab from environment variable instead.
+        // if in developement env. then grab all the api keys from AppSettings.json, else grab from environment variable instead.
         if (env.IsDevelopment())
             _apiKeysConfiguration = ReadApiKeysFromJson();
         _logger = logger;

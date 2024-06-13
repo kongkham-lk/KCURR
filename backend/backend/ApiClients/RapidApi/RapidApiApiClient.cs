@@ -8,7 +8,7 @@ public class RapidApiApiClient : IFinancialNewsApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly ApiKeysProvider _apiKeysProvider;
-    private readonly string _rapidApiApiKey;
+    private  string _rapidApiApiKey;
 
     public RapidApiApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {
@@ -20,8 +20,11 @@ public class RapidApiApiClient : IFinancialNewsApiClient
         _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
     }
     
-    public async Task<FinancialNewsResponse[]> GetFinancialNews(string newsTopic)
+    public async Task<FinancialNewsResponse[]> GetFinancialNews(string newsTopic, bool getAnotherApiKey)
     {
+        if (getAnotherApiKey)
+            UpdateApiKey();
+
         string url = "/auto-complete?q=" + newsTopic + "&region=US";
         var financialNewsList = await RetrieveDataFromApi(url)!;
         return financialNewsList;
@@ -82,5 +85,18 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     private string FormatDateTime(DateTime newsPublishTime)
     {
         return newsPublishTime.ToString("ddd, MMM dd, yyyy HH:mm", CultureInfo.InvariantCulture);
+    }
+
+    private void UpdateApiKey()
+    {
+        string newApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.RapidApiApiKey);
+
+        if (_httpClient.DefaultRequestHeaders.Contains("X-RapidAPI-Key"))
+        {
+            _httpClient.DefaultRequestHeaders.Remove("X-RapidAPI-Key");
+        }
+
+        _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", newApiKey);
+        _rapidApiApiKey = newApiKey;
     }
 }
