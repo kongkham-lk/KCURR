@@ -53,16 +53,22 @@ CircularProgressWithLabel.propTypes = {
 };
 
 export default function CircularWithValueLabel(props) {
-    const [progress, setProgress] = useState(60);
-    const { onUpdateNewLiveRate, lastUpdateRateTime, isDisplaySM, isDisplayMD } = props;
+    const { onUpdateNewLiveRate, onUpdateDisplayTime, lastUpdateRateTime, isDisplaySM, isDisplayMD } = props;
+    const [progress, setProgress] = useState(59);
+    const [timerForUpdateNewLiveRate, setTimerForUpdateNewLiveRate] = useState(15); // reduce the frequency of retrieving new rate from run out of quota
 
     const checkTimer = (prevProgress) => {
-        if (prevProgress <= 0) {
+        if (prevProgress <= 2) {  // 1.66 * 60 = 99.6
             // console.log('Reset timer and Refresh lives rate!!!');
-            onUpdateNewLiveRate();
-            prevProgress = 100;
+            prevProgress = 99.6;
+            setTimerForUpdateNewLiveRate(timerForUpdateNewLiveRate - 1);
+            if (timerForUpdateNewLiveRate == 0) {
+                onUpdateNewLiveRate();
+                setTimerForUpdateNewLiveRate(15);
+            }
+            onUpdateDisplayTime();
         } else {
-            prevProgress -= 1.667;
+            prevProgress -= 1.6666666667;
         }
         return prevProgress;
     }
@@ -74,10 +80,10 @@ export default function CircularWithValueLabel(props) {
         return () => {
             clearInterval(timer);
         };
-    }, [progress, lastUpdateRateTime, isDisplaySM, isDisplayMD]);
+    }, [progress, lastUpdateRateTime, timerForUpdateNewLiveRate, isDisplaySM, isDisplayMD]);
 
     useEffect(() => {
-        getUpdateTime(lastUpdateRateTime);
+        setUpdateTime(lastUpdateRateTime);
     }, [lastUpdateRateTime]);
 
     useEffect(() => {
@@ -105,7 +111,7 @@ var updateTime = 0;
 var displaySM = false;
 var displayMD = false;
 
-const getUpdateTime = (time) => {
+const setUpdateTime = (time) => {
     updateTime = time;
 }
 

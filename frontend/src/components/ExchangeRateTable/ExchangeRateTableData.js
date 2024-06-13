@@ -7,8 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -45,6 +43,7 @@ export default function ExchangeRateTableData(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [triggerNewTimeDisplay, setTriggerNewTimeDisplay] = useState(false);
 
     useEffect(() => {
         if (isReady) {
@@ -70,6 +69,12 @@ export default function ExchangeRateTableData(props) {
         checkNewRow();
     }, [newCurrCode, currLists, currDataSet, defaultCurrCode, currCodeArray]);
 
+    // refresh time display on screen when any time-related property is updated
+    useEffect(() => {
+        console.log("Update new display time!!!");
+        handleUpdateRateTime();
+    }, [triggerNewTimeDisplay]);
+
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -79,7 +84,7 @@ export default function ExchangeRateTableData(props) {
     const handleUpdateRateTime = () => {
         const newDate = new Date();
         const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", "
-            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0, -3);
+            + newDate.toLocaleTimeString('en-US', { hour12: false })//;.slice(0, -3);
         setLastUpdateRateTime(updateTime);
     }
 
@@ -301,8 +306,10 @@ export default function ExchangeRateTableData(props) {
                             <CircularProgressWithLabel
                                 sx={sxStyle.progressBar}
                                 onUpdateNewLiveRate={updateNewLiveRate}
+                                onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
                                 lastUpdateRateTime={lastUpdateRateTime}
                                 isDisplaySM={isDisplaySM}
+                                isDisplayMD={isDisplayMD}
                             />
                         }
                     </Box>
@@ -322,6 +329,7 @@ export default function ExchangeRateTableData(props) {
                             <CircularProgressWithLabel
                                 sx={sxStyle.progressBar}
                                 onUpdateNewLiveRate={updateNewLiveRate}
+                                onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
                                 lastUpdateRateTime={lastUpdateRateTime}
                                 isDisplaySM={isDisplaySM}
                                 isDisplayMD={isDisplayMD}
