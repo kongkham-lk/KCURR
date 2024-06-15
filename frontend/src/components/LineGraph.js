@@ -3,18 +3,19 @@ import { Chart as Chartjs } from 'chart.js/auto';
 import { Box } from '@mui/material';
 
 export function LineGraph(props) {
-    const { displayLabel = false, timeSeries } = props;
-    const changingRates = timeSeries.changingRates;
-    const timeSeriesRangeLabel = changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator;
+    const { displayLabel = false, timeSeries = null } = props;
+    // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
+    const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
+    const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
     const borderColor = () => {
-        if (changingRates[0] > changingRates[changingRates.length - 1]) {
+        if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
         } else {
             return '#0ba50b'
         }
     }
     const backgroundColor = () => {
-        if (changingRates[0] > changingRates[changingRates.length - 1]) {
+        if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000b0';
         } else {
             return '#0ba50bb0'
