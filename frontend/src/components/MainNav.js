@@ -32,6 +32,11 @@ export default function MainNav(props) {
         setMobileScreen((horizontalScreen) => !horizontalScreen);
     };
 
+    const handleRefreshPage = (link) => {
+        if (link === currentUrl.pathname)
+            window.location.reload();
+    }
+
     return (
         <Box
             display='flex'
@@ -68,6 +73,7 @@ export default function MainNav(props) {
                                                 ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
                                             }),
                                         }}
+                                        onClick={() => handleRefreshPage(item.link)}
                                     >
                                         <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
                                             {isDisplayMD ? item.label.substring(item.label.indexOf(" ")) : item.label}
