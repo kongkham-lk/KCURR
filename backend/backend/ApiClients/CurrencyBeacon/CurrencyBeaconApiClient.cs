@@ -1,6 +1,7 @@
 using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
+using backend.Utilities;
 
 namespace backend.ApiClients.CurrencyBeacon;
 
@@ -22,40 +23,77 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
 
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)
     {
-        var url = "https://api.currencybeacon.com/v1/latest?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr;
-        var exchangeRateApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconExchangeRateApiResponse>(url);
+        CurrencyBeaconExchangeRateApiResponse exchangeRateApiResponse;
+        if (isDevelopment)
+        {
+            string relativePath = "/Latest-USD.json";
+            exchangeRateApiResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconExchangeRateApiResponse>(relativePath);
+        }
+        else
+        {
+            var url = "https://api.currencybeacon.com/v1/latest?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr;
+            exchangeRateApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconExchangeRateApiResponse>(url);
+        }
         var currMapRates = exchangeRateApiResponse.Response.Rates;
         return currMapRates;
     }
     
     public async Task<Dictionary<string, double>> GetHistoricalExchangeRates(string baseCurr)
     {
-        var yesterday = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd",CultureInfo.CreateSpecificCulture("en-US"));
-        var url = "https://api.currencybeacon.com/v1/historical?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr + "&date=" + yesterday;
-        var currMapRatesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconExchangeRateApiResponse>(url);
+        CurrencyBeaconExchangeRateApiResponse currMapRatesResponse;
+        if (isDevelopment)
+        {
+            string relativePath = "/Historical-USD.json";
+            currMapRatesResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconExchangeRateApiResponse>(relativePath);
+        }
+        else
+        {
+            var yesterday = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"));
+            var url = "https://api.currencybeacon.com/v1/historical?api_key=" + _currencyBeaconApiKey + "&base=" + baseCurr + "&date=" + yesterday;
+            currMapRatesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconExchangeRateApiResponse>(url);
+        }
         var currMapRates = currMapRatesResponse.Response.Rates;
         return currMapRates;
     }
 
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries(bool getAnotherApiKey)
     {
-        if (getAnotherApiKey)
-            _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
+        CurrencyBeaconCurrCountriesApiResponse currCountriesResponse;
+        if (isDevelopment)
+        {
+            string relativePath = "/Currencies-Countries.json";
+            currCountriesResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconCurrCountriesApiResponse>(relativePath);
+        }
+        else
+        {
+            if (getAnotherApiKey)
+                _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
 
-        string url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
-        var currCountriesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconCurrCountriesApiResponse>(url);
-        Dictionary<string, CurrCountriesResponse> currCountries =  TransformedCurrCountriesResData(currCountriesResponse);
+            string url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
+            currCountriesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconCurrCountriesApiResponse>(url);
+        }
+        Dictionary<string, CurrCountriesResponse> currCountries = TransformedCurrCountriesResData(currCountriesResponse);
         return currCountries;
     }
 
     public async Task<SortedList<string, double>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr,
         string timeSeriesRange)
     {
-        var endDate = DateTime.Now.ToString("yyyy-MM-dd");
-        var startDate = GetStartingDate(timeSeriesRange);
-        var url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" +
-                  startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
-        var rateTimeSeriesApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconTimeSeriesApiResponse>(url);
+        CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse;
+        if (isDevelopment)
+        {
+            string relativePath = "/Timeseries-USD_THB-" + timeSeriesRange + ".json";
+            rateTimeSeriesApiResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconTimeSeriesApiResponse>(relativePath);
+            targetCurr = "THB"; // the seeding file only provide rate sample of USD-THB
+        }
+        else
+        {
+            var endDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var startDate = GetStartingDate(timeSeriesRange);
+            var url = "https://api.currencybeacon.com/v1/timeser ies?api_key=" + _currencyBeaconApiKey + "&start_date=" +
+                      startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
+            rateTimeSeriesApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconTimeSeriesApiResponse>(url);
+        }
         var sortedRateTimeSeries = TransformedTimeSeriesResData(rateTimeSeriesApiResponse, targetCurr);
         return sortedRateTimeSeries;
     }

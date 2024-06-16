@@ -28,8 +28,10 @@
 
     <ItemGroup>
       <None Remove="SeedFiles\" />
+      <None Remove="Utilities\" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="SeedFiles\" />
+      <Folder Include="Utilities\" />
     </ItemGroup>
 </Project>

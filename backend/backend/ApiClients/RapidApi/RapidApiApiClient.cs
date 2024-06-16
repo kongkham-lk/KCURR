@@ -1,6 +1,7 @@
 using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
+using backend.Utilities;
 
 namespace backend.ApiClients.RapidApi;
 
@@ -9,6 +10,7 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     private readonly HttpClient _httpClient;
     private readonly ApiKeysProvider _apiKeysProvider;
     private  string _rapidApiApiKey;
+    private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
     public RapidApiApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {
@@ -22,26 +24,44 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     
     public async Task<FinancialNewsResponse[]> GetFinancialNews(string newsTopic, bool getAnotherApiKey)
     {
-        if (getAnotherApiKey)
-            UpdateApiKey();
+        FinancialNewsResponse[]? financialNewsList = null;
 
-        string url = "/auto-complete?q=" + newsTopic + "&region=US";
-        var financialNewsList = await RetrieveDataFromApi(url)!;
+        if (isDevelopment)
+        {
+            string relativePath = "/News.json";
+            financialNewsList = await RetrieveDataFromApi(relativePath)!;
+        }
+        else
+        {
+            if (getAnotherApiKey)
+                UpdateApiKey();
+
+            string url = "/auto-complete?q=" + newsTopic + "&region=US";
+            financialNewsList = await RetrieveDataFromApi(url)!;
+        }
         return financialNewsList;
     }
     
     private async Task<FinancialNewsResponse[]> RetrieveDataFromApi(string url)
     {
-        var response = await _httpClient.GetAsync(url);
-
-        if (response.IsSuccessStatusCode)
+        if (isDevelopment)
         {
-            var rapidApiResponse = await response.Content.ReadFromJsonAsync<RapidApiApiResponse>();
+            var rapidApiResponse = await JsonSeedFilesReader.ReadCurrFromJson<RapidApiApiResponse>(url);
             return TransformJsonData(rapidApiResponse);
         }
         else
         {
-            return null!;
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var rapidApiResponse = await response.Content.ReadFromJsonAsync<RapidApiApiResponse>();
+                return TransformJsonData(rapidApiResponse);
+            }
+            else
+            {
+                return null!;
+            }
         }
     }
 
