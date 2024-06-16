@@ -15,7 +15,7 @@ export default function App() {
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter(currentUrl);
+    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
