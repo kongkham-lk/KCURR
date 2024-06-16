@@ -76,8 +76,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return currCountries;
     }
 
-    public async Task<SortedList<string, double>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr,
-        string timeSeriesRange)
+    public async Task<SortedList<string, double>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
     {
         CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse;
         if (isDevelopment)
@@ -119,8 +118,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return startDate;
     }
 
-    private Dictionary<string, CurrCountriesResponse> TransformedCurrCountriesResData(
-        CurrencyBeaconCurrCountriesApiResponse currCountriesRes)
+    private Dictionary<string, CurrCountriesResponse> TransformedCurrCountriesResData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes)
     {
         CurrencyBeaconCurrCountriesApiResponseResponse[] data = currCountriesRes.Response;
         Dictionary<string, CurrCountriesResponse> currCountries = new Dictionary<string, CurrCountriesResponse>();
@@ -141,8 +139,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return currCountries;
     }
 
-    private SortedList<string, double> TransformedTimeSeriesResData(
-        CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse, string targetCurr)
+    private SortedList<string, double> TransformedTimeSeriesResData(CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse, string targetCurr)
     {
         var dateByRateLists = rateTimeSeriesApiResponse.Response;
         Dictionary<string, double> unsortedList = new Dictionary<string, double>();
