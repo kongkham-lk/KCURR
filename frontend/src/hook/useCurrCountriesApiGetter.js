@@ -11,7 +11,6 @@ export default function useCurrCountriesApiGetter(currentUrl) {
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
-                if (!currentUrl.pathname.toLowerCase().includes("news")) {
                     let resCurrCountries;
                     let isValidResponse = false;
                     let retryFetching = 5;
@@ -42,10 +41,6 @@ export default function useCurrCountriesApiGetter(currentUrl) {
                             retryFetching--;
                         }
                     }
-                } 
-                else {
-                    return { currCountiesCodeMapDetail, isReady };
-                }
             }
             fetchCurrOption();
         }, [baseURL]
