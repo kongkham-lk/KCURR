@@ -71,7 +71,7 @@ export default function ExchangeRateTableData(props) {
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
-        console.log("Update new display time!!!");
+        // console.log("Update new display time!!!");
         handleUpdateRateTime();
     }, [triggerNewTimeDisplay]);
 

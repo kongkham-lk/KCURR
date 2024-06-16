@@ -24,6 +24,9 @@ public class FinancialNewsService
             {
                 TotalRetryApiKey--;
                 news = await apiClient.GetFinancialNews(newsTopic, false);
+
+                if (news is null)
+                    throw new NullReferenceException();
             }
             catch (Exception e)
             {
