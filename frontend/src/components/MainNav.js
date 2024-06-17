@@ -61,25 +61,23 @@ export default function MainNav(props) {
                             const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
                                                     || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
-                                <>
-                                    <Link
-                                        id="navPage"
-                                        to={item.link}
-                                        key={item.label}
-                                        style={{
-                                            ...sxStyle.Link,
-                                            ...sxStyle.NonMargin,
-                                            ...(isCurrentPage && {
-                                                ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
-                                            }),
-                                        }}
-                                        onClick={() => handleRefreshPage(item.link)}
-                                    >
-                                        <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
-                                            {isDisplayMD ? item.label.substring(item.label.indexOf(" ")) : item.label}
-                                        </Box>
-                                    </Link>
-                                </>
+                                <Link
+                                    id="navPage"
+                                    to={item.link}
+                                    key={item.label}
+                                    style={{
+                                        ...sxStyle.Link,
+                                        ...sxStyle.NonMargin,
+                                        ...(isCurrentPage && {
+                                            ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
+                                        }),
+                                    }}
+                                    onClick={() => handleRefreshPage(item.link)}
+                                >
+                                    <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
+                                        {isDisplayMD ? item.label.substring(item.label.indexOf(" ")) : item.label}
+                                    </Box>
+                                </Link>
                             )
                         })}
                         <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
