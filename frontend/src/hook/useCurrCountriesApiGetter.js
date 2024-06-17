@@ -43,7 +43,7 @@ export default function useCurrCountriesApiGetter() {
                     }
             }
             fetchCurrOption();
-        }, [baseURL]
+        }, [baseURL, port]
     );
     return { currCountiesCodeMapDetail, isReady };
 };
