@@ -47,11 +47,11 @@ export default function App() {
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} currentUrl={currentUrl}/>
                                     : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
+                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} currentUrl={currentUrl}/>
                                     : <Loading />}
                             </Item>
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
@@ -59,19 +59,19 @@ export default function App() {
                             </Item>
                         </>
                     } ></Route>
-                    <Route path="/convertor/:curr?" element={
-                        <>
-                            <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
-                            </Item>
-                            <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
-                            </Item>
-                        </>
+                    <Route path="/Convertor/:curr?" element={
+                        <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                            {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} currentUrl={currentUrl}/>
+                                : <Loading />}
+                        </Item>
                     } ></Route>
-                    <Route exact path="/financial-news" element={
+                    <Route path="/Chart" element={
+                        <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                            {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} currentUrl={currentUrl}/>
+                                : <Loading />}
+                        </Item>
+                    } ></Route>
+                    <Route exact path="/News" element={
                         <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                             <FinancialNews filter="true" isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
                         </Item>
