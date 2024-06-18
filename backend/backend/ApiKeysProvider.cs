@@ -43,7 +43,7 @@ public class ApiKeysProvider
         if (CurrentKey != "" && !FailKeyList.Any(key => key.Equals(CurrentKey)))
             FailKeyList.Add(CurrentKey);
 
-        string baseApiName = apiName.ToString() + ":";
+        string baseApiName = apiName.ToString() + (_env.IsDevelopment() ? ":" : "");
         string keysLengthIndex = baseApiName + "TotalKey";
         CurrentKey = baseApiName + num;
 
