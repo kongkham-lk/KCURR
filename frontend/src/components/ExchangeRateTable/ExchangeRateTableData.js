@@ -249,6 +249,7 @@ export default function ExchangeRateTableData(props) {
                                                     {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                 </TableCell>
                                             }
+                                            {/* Chart Cell */}
                                             <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
                                                 <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }}>
                                                     {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
@@ -391,3 +392,68 @@ const sxStyle = {
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' }
 };
+
+/* 
+
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { TransitionGroup } from 'react-transition-group';
+
+const Charts = [
+  "5555"
+];
+
+function renderItem(item) {
+  return (
+    <ListItem>
+      <ListItemText primary={item} />
+    </ListItem>
+  );
+}
+
+export default function TransitionGroupExample() {
+  const content = "Display Content Here!!!";
+  const [fruitsInBasket, setFruitsInBasket] = React.useState([...Charts]);
+
+  const handleDisplayChart = (currCode) => {
+    if (fruitsInBasket.length === 0) {
+      setFruitsInBasket([...Charts]);
+    } else {
+      setFruitsInBasket([]);
+    }
+  };
+
+  const handleRemoveFruit = (item) => {
+    setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
+  };
+  
+  const currCode = "usd";
+
+  const addFruitButton = (
+    <Button
+      variant="contained"
+      onClick={() => handleDisplayChart(currCode)}
+    >
+      Add fruit to basket
+    </Button>
+  );
+
+  return (
+    <div>
+      {addFruitButton}
+      <TransitionGroup style={{marginTop: '10px'}}>
+        {fruitsInBasket.map((item) => (
+          <Collapse key={item}>{renderItem(item)}</Collapse>
+        ))}
+      </TransitionGroup>
+    </div>
+  );
+}
+  
+ */
