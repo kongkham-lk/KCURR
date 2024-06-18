@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function useCurrCountriesApiGetter() {
-
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [isReady, setIsReady] = useState(false);
 
@@ -12,39 +11,39 @@ export default function useCurrCountriesApiGetter() {
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
-                let resCurrCountries;
-                let isValidResponse = false;
-                let retryFetching = 5;
+                    let resCurrCountries;
+                    let isValidResponse = false;
+                    let retryFetching = 5;
 
-                while (!isValidResponse && retryFetching > 0) {
-                    // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
+                    while (!isValidResponse && retryFetching > 0) {
+                        // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
 
-                    try {
-                        resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
-                    } catch (e) {
-                        console.log(e.stack);
-                    }
-                    if (resCurrCountries !== undefined) {
-                        if (Object.keys(resCurrCountries.data).length) {
-                            setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                            setIsReady(true);
-                            isValidResponse = true; // Stop the loop
-                            // console.log(`Successfully received currency-country data!!!`);
+                        try {
+                            resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
+                        } catch (e) {
+                            console.log(e.stack);
                         }
-                        else {
-                            console.log(`Data not found!!!`);
+                        if (resCurrCountries !== undefined) {
+                            if (Object.keys(resCurrCountries.data).length) {
+                                setCurrCountiesCodeMapDetail(resCurrCountries.data);
+                                setIsReady(true);
+                                isValidResponse = true; // Stop the loop
+                                // console.log(`Successfully received currency-country data!!!`);
+                            }
+                            else {
+                                console.log(`Data not found!!!`);
+                            }
+                        }
+
+                        if (!isValidResponse) {
+                            // Optionally, you can add a delay before retrying
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay before retrying
+                            retryFetching--;
                         }
                     }
-
-                    if (!isValidResponse) {
-                        // Optionally, you can add a delay before retrying
-                        await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay before retrying
-                        retryFetching--;
-                    }
-                }
             }
             fetchCurrOption();
-        }, [baseURL]
+        }, [baseURL, port]
     );
     return { currCountiesCodeMapDetail, isReady };
 };

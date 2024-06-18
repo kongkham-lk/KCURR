@@ -14,8 +14,8 @@ export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
     const currentUrl = useLocation();
+    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -41,7 +41,7 @@ export default function App() {
 
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={

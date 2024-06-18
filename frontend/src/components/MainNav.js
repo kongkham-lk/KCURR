@@ -18,7 +18,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isOutLineTheme, onChangeTheme, currentUrl } = props;
+    const { isDisplaySM, isDisplayMD, isOutLineTheme, onChangeTheme, currentUrl } = props;
 
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
@@ -31,6 +31,11 @@ export default function MainNav(props) {
     const handleDrawerToggle = () => {
         setMobileScreen((horizontalScreen) => !horizontalScreen);
     };
+
+    const handleRefreshPage = (link) => {
+        if (link === currentUrl.pathname)
+            window.location.reload();
+    }
 
     return (
         <Box
@@ -53,29 +58,26 @@ export default function MainNav(props) {
                     </Typography>
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
-                            const isCurrentPage = item.link.includes(currentUrl.pathname);
-                            console.log("check item.link: ", item.link);
-                            console.log("check currentUrl: ", currentUrl);
-                            console.log("check isCurrentPage: ", isCurrentPage);
+                            const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
+                                                    || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
-                                <>
-                                    <Link
-                                        id="navPage"
-                                        to={item.link}
-                                        key={item.label}
-                                        style={{
-                                            ...sxStyle.Link,
-                                            ...sxStyle.NonMargin,
-                                            ...(isCurrentPage && {
-                                                ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
-                                            }),
-                                        }}
-                                    >
-                                        <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
-                                            {item.label}
-                                        </Box>
-                                    </Link>
-                                </>
+                                <Link
+                                    id="navPage"
+                                    to={item.link}
+                                    key={item.label}
+                                    style={{
+                                        ...sxStyle.Link,
+                                        ...sxStyle.NonMargin,
+                                        ...(isCurrentPage && {
+                                            ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
+                                        }),
+                                    }}
+                                    onClick={() => handleRefreshPage(item.link)}
+                                >
+                                    <Box sx={{ ...sxStyle.Link, ...(isCurrentPage && commonStyles.subNavPageMargin) }}>
+                                        {isDisplayMD ? item.label.substring(item.label.indexOf(" ")) : item.label}
+                                    </Box>
+                                </Link>
                             )
                         })}
                         <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
@@ -121,9 +123,9 @@ export default function MainNav(props) {
 
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
+    { label: 'Dashboard', link: "/" },
     { label: 'Convertor', link: "/convertor" },
     { label: 'Financial News', link: "/financial-news" },
-    { label: 'About', link: "/about" },
     { label: 'Contact', link: "/contact" },
 ];
 
@@ -173,7 +175,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
                 {navItems.map((item) => (
                     <ListItem key={item.label} disablePadding>
                         <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
-                            <ListItemText primary={item.label} sx={{}} />
+                            <ListItemText primary={item.label} />
                         </ListItemButton>
                     </ListItem>
                 ))}

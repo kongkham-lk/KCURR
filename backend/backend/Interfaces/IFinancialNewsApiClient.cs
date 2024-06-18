@@ -4,5 +4,5 @@ namespace backend.Interfaces;
 
 public interface IFinancialNewsApiClient
 {
-    Task<FinancialNewsResponse[]> GetFinancialNews(string newsTopic);
+    Task<FinancialNewsResponse[]> GetFinancialNews(string newsTopic, bool getAnotherApiKey);
 }

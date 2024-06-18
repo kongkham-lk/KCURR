@@ -1,4 +1,3 @@
-using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
 
@@ -7,10 +6,13 @@ namespace backend.Services;
 public class CurrService
 {
     private readonly List<IExchangeRateApiClient> _exchangeRateApiClients;
+    private readonly ILogger<CurrService> _logger;
+    private int TotalRetryApiKey { get; set; } = 3;
 
-    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients)
+    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger)
     {
         _exchangeRateApiClients = exchangeRateApiClients.ToList();
+        _logger = logger;
     }
 
     public async Task<double> Convert(double amount, string baseCurrCountry, string targetCurrCountry)
@@ -46,18 +48,24 @@ public class CurrService
         {
             try
             {
-                currCountries = await apiClientElement.GetCurrCountries();
+                TotalRetryApiKey--;
+                currCountries = await apiClientElement.GetCurrCountries(false);
             }
             catch (Exception e)
             {
-                continue;
+                currCountries = await RetryToGetCurrCountries(apiClientElement, currCountries);
+
+                if (currCountries is null)
+                {
+                    _logger.LogInformation("Cannot retrieve CurrCountries: " + e);
+                    Console.WriteLine("Cannot retrieve CurrCountries: " + e);
+                }
             }
         }
         return currCountries;
     }
 
-    public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr,
-        string targetCurr, string timeSeriesRange)
+    public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
     {
         SortedList<string, double> timeSeries = null!;
         foreach (var apiClientElement in _exchangeRateApiClients)
@@ -68,13 +76,29 @@ public class CurrService
             }
             catch (Exception e)
             {
-                continue;
+                _logger.LogInformation("Cannot retrieve Curr TimeSeries: " + e);
+                Console.WriteLine("Cannot retrieve Curr TimeSeries: " + e);
             }
         }
 
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients);
-        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries =
-            timeseriesTransformer.TransformedData( timeSeries, targetCurr);
+        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = timeseriesTransformer.TransformedData( timeSeries, targetCurr);
         return targetCurrTimeSeries;
+    }
+
+    private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> response)
+    {
+        while (TotalRetryApiKey > 0 && response is null)
+        {
+            response = await apiClientElement.GetCurrCountries(true); // invoke method again by trying to use another api key
+            TotalRetryApiKey--;
+
+            if (response is not null)
+                break;
+            else if (TotalRetryApiKey == 0)
+                _logger.LogInformation($"None of the currCountries api key works!!!");
+        }
+        TotalRetryApiKey = 3; // reset total retry api key when data return
+        return response;
     }
 }
