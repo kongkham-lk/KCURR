@@ -337,13 +337,6 @@ export default function ExchangeRateTableData(props) {
                         </Box>
                     }
                 </Paper>
-                {/* {isDisplaySM ? "" :
-                    <FormControlLabel
-                        control={<Switch checked={dense} onChange={updateNewLiveRate} />}
-                        label="Dense padding"
-                        sx={{ display: 'none' }}
-                    />
-                } */}
             </Box >
             }
         </>
