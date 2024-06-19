@@ -275,48 +275,16 @@ export default function ExchangeRateTableData(props) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Box
-                        sx={{
-                            ...sxStyle.PaginationSubContainer.main,
-                            ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg),
-                        }}
-                    >
-                        {!isDisplaySM &&
-                            <CurrCountriesDropDown
-                                sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                label="Add Currency"
-                                inputCurrType="targetCurr"
-                                onAddCurrCountry={handleAddCurrCountry}
-                                currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                passInStyle={style.CurrCountriesDropDown}
-                                size="small"
-                            />
-                        }
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={currLists.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
-                            sx={{ ...(isDisplaySM && sxStyle.Pageination) }}
-                        />
-                        {!isDisplayMD &&
-                            <CircularProgressWithLabel
-                                sx={sxStyle.progressBar}
-                                onUpdateNewLiveRate={updateNewLiveRate}
-                                onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                lastUpdateRateTime={lastUpdateRateTime}
-                                isDisplaySM={isDisplaySM}
-                                isDisplayMD={isDisplayMD}
-                            />
-                        }
-                    </Box>
-                    {isDisplayMD &&
-                        <Box sx={{ ...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end' }}>
-                            {isDisplaySM &&
+
+                    {/* Table Pageination */}
+                    <Box>
+                        <Box
+                            sx={{
+                                ...sxStyle.PaginationSubContainer.main,
+                                ...(isDisplaySM ? sxStyle.PaginationSubContainer.sm : sxStyle.PaginationSubContainer.lg),
+                            }}
+                        >
+                            {!isDisplaySM &&
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
                                     label="Add Currency"
@@ -327,16 +295,52 @@ export default function ExchangeRateTableData(props) {
                                     size="small"
                                 />
                             }
-                            <CircularProgressWithLabel
-                                sx={sxStyle.progressBar}
-                                onUpdateNewLiveRate={updateNewLiveRate}
-                                onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                lastUpdateRateTime={lastUpdateRateTime}
-                                isDisplaySM={isDisplaySM}
-                                isDisplayMD={isDisplayMD}
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                component="div"
+                                count={currLists.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
+                                sx={{ ...(isDisplaySM && sxStyle.Pageination) }}
                             />
+                            {!isDisplayMD &&
+                                <CircularProgressWithLabel
+                                    sx={sxStyle.progressBar}
+                                    onUpdateNewLiveRate={updateNewLiveRate}
+                                    onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
+                                    lastUpdateRateTime={lastUpdateRateTime}
+                                    isDisplaySM={isDisplaySM}
+                                    isDisplayMD={isDisplayMD}
+                                />
+                            }
                         </Box>
-                    }
+                        {isDisplayMD &&
+                            <Box sx={{ ...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end' }}>
+                                {isDisplaySM &&
+                                    <CurrCountriesDropDown
+                                        sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                        label="Add Currency"
+                                        inputCurrType="targetCurr"
+                                        onAddCurrCountry={handleAddCurrCountry}
+                                        currCountiesCodeMapDetail={currCountiesCodeMapDetail}
+                                        passInStyle={style.CurrCountriesDropDown}
+                                        size="small"
+                                    />
+                                }
+                                <CircularProgressWithLabel
+                                    sx={sxStyle.progressBar}
+                                    onUpdateNewLiveRate={updateNewLiveRate}
+                                    onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
+                                    lastUpdateRateTime={lastUpdateRateTime}
+                                    isDisplaySM={isDisplaySM}
+                                    isDisplayMD={isDisplayMD}
+                                />
+                            </Box>
+                        }
+                    </Box>
                 </Paper>
             </Box >
             }
