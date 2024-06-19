@@ -5,6 +5,9 @@ export function getComparator(order, orderBy) {
 }
 
 export function stableSort(array, comparator) {
+    if (array === null || array === undefined)
+        return array;
+
     const stabilizedArray = Array.from({ length: array.length }, (v, i) => [array[i], i]);
     stabilizedArray.sort((a, b) => {
         const order = comparator(a[0], b[0]);
