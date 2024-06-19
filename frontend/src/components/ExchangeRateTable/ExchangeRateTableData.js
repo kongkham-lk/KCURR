@@ -90,21 +90,26 @@ export default function ExchangeRateTableData(props) {
 
     // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
-        // console.log("Rearrage list!!!");
-
-        const oldTargetCurrArray = [...currCodeArray];
+        // get the index of new default curr
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
-
+        
+        // Do nth if new default currency is not exist or already set as default currency
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
-            const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
-            oldTargetCurrArray.unshift(targetCurr);
+            // console.log("Rearrage list!!!");
+
+            // Copy the target currency to the front and construct the new array in one step
+            const newCurrCodeArray = [
+                currCodeArray[targetCurrIndex],
+                ...currCodeArray.slice(0, targetCurrIndex),
+                ...currCodeArray.slice(targetCurrIndex + 1)
+            ];
+            
+            // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
+            await handleUpdateNewLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
+
+            setCurrCodeArray(newCurrCodeArray);
+            setDefaultCurrCode(targetCurr);
         }
-
-        // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
-        await handleUpdateNewLiveRate(oldTargetCurrArray); // Refetch new update rate from beacon api
-
-        setDefaultCurrCode(targetCurr);
-        setCurrCodeArray([...oldTargetCurrArray]);
     };
 
     // Refetch new update rate from api
