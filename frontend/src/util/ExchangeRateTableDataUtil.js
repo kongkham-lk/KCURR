@@ -8,15 +8,18 @@ export function stableSort(array, comparator) {
     if (array === null || array === undefined)
         return array;
 
+    // Create an array of tuples, where each tuple contains an element from the original array and its index.
     const stabilizedArray = Array.from({ length: array.length }, (v, i) => [array[i], i]);
+
+    // Sort the array of tuples using the provided comparator.
     stabilizedArray.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
+        const order = comparator(a[0], b[0]); // Compare the original elements.
         if (order !== 0) {
-            return order;
+            return order; // If they are not equal, return the comparison result.
         }
-        return a[1] - b[1];
+        return a[1] - b[1]; // If they are equal, compare their original index to maintain stability.
     });
-    
+    // Extract the original elements from the sorted tuples and return the sorted array.
     return stabilizedArray.map((el) => el[0]);
 }
 
