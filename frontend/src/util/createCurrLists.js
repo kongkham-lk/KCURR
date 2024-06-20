@@ -21,6 +21,10 @@ export async function createCurrLists(baseCurr, targetCurr, currApiDataSet, time
 }
 
 async function sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange) {
+    console.log("Start requesting TimeSeries!!!")
+    console.log("baseCurr: ", baseCurr)
+    console.log("targetCurr: ", targetCurr)
+    console.log("timeSeriesRange: ", timeSeriesRange)
     const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
     return timeSeriesRes.data[targetCurr];
 }
