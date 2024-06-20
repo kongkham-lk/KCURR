@@ -23,11 +23,11 @@ export default function CurrCountriesDropDown(props) {
                 onChange={handleChange}
                 style={passInStyle}
             >
-                {console.log("Getflag of dropdown!!!")}
+                {console.log("remove Getflag of dropdown!!!")}
                 {targetCurrs?.map((targetCurr) => (
                     <MenuItem key={currCountiesCodeMapDetail[targetCurr].currCode} value={currCountiesCodeMapDetail[targetCurr].currCode} >
                         <div style={style.div}>
-                            {getFlag(currCountiesCodeMapDetail[targetCurr].currCode)}
+                            {/* {getFlag(currCountiesCodeMapDetail[targetCurr].currCode)} */}
                             <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
                         </div>
                     </MenuItem>
