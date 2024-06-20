@@ -23,6 +23,7 @@ export default function CurrCountriesDropDown(props) {
                 onChange={handleChange}
                 style={passInStyle}
             >
+                {console.log("Getflag of dropdown!!!")}
                 {targetCurrs?.map((targetCurr) => (
                     <MenuItem key={currCountiesCodeMapDetail[targetCurr].currCode} value={currCountiesCodeMapDetail[targetCurr].currCode} >
                         <div style={style.div}>

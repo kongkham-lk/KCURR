@@ -239,6 +239,7 @@ export default function ExchangeRateTableData(props) {
                                                             ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
                                                         }}
                                                     >
+                                                        {console.log("Getflag of each row!!!")}
                                                         {getFlag(targetCurrCode)}
                                                         <span style={style.span}>
                                                             {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
