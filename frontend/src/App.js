@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
@@ -9,14 +9,15 @@ import { Loading } from './components/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { getInvalidCurrFlagList } from './util/getFlag';
 
 export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
-
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isReady } = useCurrCountriesApiGetter();
+    
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
@@ -39,6 +40,16 @@ export default function App() {
         setIsOutLineTheme(event);
     }
 
+    const commonAttr = {
+        themeFlags: {isOutLineTheme},
+        displayFlags: {isDisplaySM, isDisplayMD},
+    }
+
+    const attr = {
+        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, ...commonAttr.displayFlags},
+        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags}
+    }
+
     return (
         <div className="App">
             <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
@@ -47,15 +58,15 @@ export default function App() {
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
+                                {isReady ? <Convertor {...attr.curr}/>
                                     : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
+                                {isReady ? <ExchangeRateTable {...attr.curr} />
                                     : <Loading />}
                             </Item>
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                <FinancialNews isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                                <FinancialNews {...attr.news} />
                             </Item>
                         </>
                     } ></Route>

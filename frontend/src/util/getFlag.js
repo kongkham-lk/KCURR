@@ -1,26 +1,38 @@
-export function getFlag(currCountry) {
-    if (isValidParam(currCountry))
+export function getFlag(currCountry, invalidCurFlagList) {
+    if (isValidParam(currCountry) && !invalidCurFlagList.includes(currCountry))
         return <img style={style.flagImg} src={getBaseUrl(currCountry)} alt=""/>
     else
         return <div style={{...style.flagImg, ...style.divGetFlag}} >{currCountry}</div>
 };
 
 const isValidParam = (currCountry) => {
-    if (!(currCountry == null || currCountry.substring(0, 1) === "X") && isUrlExists(getBaseUrl(currCountry)))
-        return true;
-    else 
+    if (currCountry == null || currCountry.substring(0, 1) === "X")
         return false;
+    else 
+        return true;
 }
 
 const getBaseUrl = (currCountry) => {
     return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${currCountry.substring(0, 2).toUpperCase()}.svg`;
 }
 
-const isUrlExists = (url) => {
-    var req = new XMLHttpRequest();
-    req.open('HEAD', url, false);
-    req.send();
-    return req.status === 200;
+export async function getInvalidCurrFlagList(currCodes) {
+    let invalidCurFlagList = [];
+    console.log("log currCodes: ", currCodes);
+    for (let currCode of currCodes) {
+        const url = getBaseUrl(currCode);
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            if (response.status === 200) {
+                console.log("log invalidCurFlag: ", currCode);
+                invalidCurFlagList = [...invalidCurFlagList, currCode];
+            }
+        } catch (error) {
+            console.error(`Error checking URL for ${currCode}:`, error);
+        }
+    }
+    console.log("log invalidCurFlag: ", invalidCurFlagList);
+    return invalidCurFlagList;
 }
 
 const style = {

@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from 'react';
 import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -5,10 +6,7 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sxStyle, size, passInStyle = { height: "56.5px" } } = props;
-
-    const unsortedKeys = Object.keys(currCountiesCodeMapDetail);
-    const targetCurrs = unsortedKeys.sort();
+    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, sxStyle, size, passInStyle = { height: "56.5px" } } = props;
 
     const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
 
@@ -23,12 +21,11 @@ export default function CurrCountriesDropDown(props) {
                 onChange={handleChange}
                 style={passInStyle}
             >
-                {console.log("remove Getflag of dropdown!!!")}
-                {targetCurrs?.map((targetCurr) => (
-                    <MenuItem key={currCountiesCodeMapDetail[targetCurr].currCode} value={currCountiesCodeMapDetail[targetCurr].currCode} >
+                {sortedCurrsCodeList?.map((targetCurrCode) => (
+                    <MenuItem key={targetCurrCode} value={targetCurrCode} >
                         <div style={style.div}>
-                            {/* {getFlag(currCountiesCodeMapDetail[targetCurr].currCode)} */}
-                            <span style={style.span}>{currCountiesCodeMapDetail[targetCurr].display}</span>
+                            {getFlag(targetCurrCode, invalidCurFlagList)}
+                            <span style={style.span}>{currCountiesCodeMapDetail[targetCurrCode].display}</span>
                         </div>
                     </MenuItem>
                 ))}

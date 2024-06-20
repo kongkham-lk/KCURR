@@ -25,7 +25,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM, isDisplayMD } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, invalidCurFlagList, initialDefaultCurr, isDisplaySM, isDisplayMD } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
@@ -239,8 +239,7 @@ export default function ExchangeRateTableData(props) {
                                                             ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
                                                         }}
                                                     >
-                                                        {console.log("Getflag of each row!!!")}
-                                                        {getFlag(targetCurrCode)}
+                                                        {getFlag(targetCurrCode, invalidCurFlagList)}
                                                         <span style={style.span}>
                                                             {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
                                                         </span>
