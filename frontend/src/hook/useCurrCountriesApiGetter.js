@@ -30,7 +30,6 @@ export default function useCurrCountriesApiGetter() {
                         if (resCurrCountries !== undefined) {
                             if (Object.keys(resCurrCountries.data).length) {
                                 setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                                setIsReady(true);
                                 isValidResponse = true; // Stop the loop
                                 // console.log(`Successfully received currency-country data!!!`);
                             }
@@ -57,6 +56,7 @@ export default function useCurrCountriesApiGetter() {
 
                     setSortedCurrsCodeList(newSortedCurrsCodeList);
                     setInvalidCurFlagList(newInvalidCurrFlagList);
+                    setIsReady(true);
                 }
             }
             fetchCurrOption();
