@@ -2,15 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getInvalidCurrFlagList } from '../util/getFlag';
 
-const getSortCurrCodeList = (currCountiesCodeMapDetail) => {
-    const unsortedCodeList = Object.keys(currCountiesCodeMapDetail);
-    return unsortedCodeList.sort();
-};
-
-const fetchInvalidCurrFlags = async (sortedCurrsCodeList) => {
-    return await getInvalidCurrFlagList(sortedCurrsCodeList);
-};
-
 export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [sortedCurrsCodeList, setSortedCurrsCodeList] = useState([]);
@@ -55,10 +46,15 @@ export default function useCurrCountriesApiGetter() {
                         }
                     }
                 } else {
-                    const newSortedCurrsCodeList = getSortCurrCodeList(currCountiesCodeMapDetail);
-                    setSortedCurrsCodeList(newSortedCurrsCodeList);
+                    const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
 
-                    const newInvalidCurrFlagList = await fetchInvalidCurrFlags(sortedCurrsCodeList);
+                    console.log("check all cur code for flag api!!!");
+                    console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
+                    const newInvalidCurrFlagList = await getInvalidCurrFlagList(sortedCurrsCodeList);
+
+                    console.log("return invalidCurrList: ", newInvalidCurrFlagList);
+
+                    setSortedCurrsCodeList(newSortedCurrsCodeList);
                     setInvalidCurFlagList(newInvalidCurrFlagList);
                 }
                     
