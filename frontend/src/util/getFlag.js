@@ -24,7 +24,7 @@ export async function getInvalidCurrFlagList(currCodes) {
         try {
             const response = await fetch(url, { method: 'HEAD' });
             if (response.status !== 200) {
-                console.log("log invalidCurFlag: ", currCode);
+                console.log("add invalidCurFlag: ", currCode);
                 invalidCurFlagList = [...invalidCurFlagList, currCode];
             }
         } catch (error) {

@@ -62,7 +62,7 @@ export default function CircularWithValueLabel(props) {
             // console.log('Reset timer and Refresh lives rate!!!');
             prevProgress = 99.6;
             setTimerForUpdateNewLiveRate(timerForUpdateNewLiveRate - 1);
-            if (timerForUpdateNewLiveRate == 0) {
+            if (timerForUpdateNewLiveRate === 0) {
                 onUpdateNewLiveRate();
                 setTimerForUpdateNewLiveRate(15);
             }

@@ -10,7 +10,7 @@ import { Box } from '@mui/material';
 
 export default function Convertor(props) {
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isDisplaySM } = props;
-    console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
+    //console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
     const { curr } = useParams();
 
     const currInput = {

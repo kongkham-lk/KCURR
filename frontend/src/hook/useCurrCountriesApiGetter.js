@@ -48,16 +48,16 @@ export default function useCurrCountriesApiGetter() {
                 } else {
                     const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
 
-                    console.log("check all cur code for flag api!!!");
                     console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
-                    const newInvalidCurrFlagList = await getInvalidCurrFlagList(sortedCurrsCodeList);
+                    console.log("check all cur code for flag api!!!");
+                    
+                    const newInvalidCurrFlagList = await getInvalidCurrFlagList(newSortedCurrsCodeList);
 
                     console.log("return invalidCurrList: ", newInvalidCurrFlagList);
 
                     setSortedCurrsCodeList(newSortedCurrsCodeList);
                     setInvalidCurFlagList(newInvalidCurrFlagList);
                 }
-                    
             }
             fetchCurrOption();
         }, [baseURL, currCountiesCodeMapDetail, port]
