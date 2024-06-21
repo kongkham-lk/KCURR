@@ -11,14 +11,27 @@ export function stableSort(array, comparator) {
     // Create an array of tuples, where each tuple contains an element from the original array and its index.
     const stabilizedArray = Array.from({ length: array.length }, (v, i) => [array[i], i]);
 
+    // console.log("array: ", array)
+    // console.log("stabilizedArray: ", stabilizedArray)
+
     // Sort the array of tuples using the provided comparator.
     stabilizedArray.sort((a, b) => {
         const order = comparator(a[0], b[0]); // Compare the original elements.
+
+        // console.log(" a: ", a)
+        // console.log(" b: ", b)
+        // console.log(" order: ", order)
+
         if (order !== 0) {
             return order; // If they are not equal, return the comparison result.
         }
+
+        // console.log(" a[1] - b[1]: ", a[1] - b[1])
         return a[1] - b[1]; // If they are equal, compare their original index to maintain stability.
     });
+
+    // console.log(" stabilizedArray: ", stabilizedArray);
+
     // Extract the original elements from the sorted tuples and return the sorted array.
     return stabilizedArray.map((el) => el[0]);
 }

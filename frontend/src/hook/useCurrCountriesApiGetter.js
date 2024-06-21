@@ -47,12 +47,12 @@ export default function useCurrCountriesApiGetter() {
                 } else {
                     const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
 
-                    console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
-                    console.log("check all cur code for flag api!!!");
+                    // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
+                    // console.log("check all cur code for flag api!!!");
                     
                     const newInvalidCurrFlagList = await getInvalidCurrFlagList(newSortedCurrsCodeList);
 
-                    console.log("return invalidCurrList: ", newInvalidCurrFlagList);
+                    // console.log("return invalidCurrList: ", newInvalidCurrFlagList);
 
                     setSortedCurrsCodeList(newSortedCurrsCodeList);
                     setInvalidCurFlagList(newInvalidCurrFlagList);
@@ -62,6 +62,6 @@ export default function useCurrCountriesApiGetter() {
             fetchCurrOption();
         }, [baseURL, currCountiesCodeMapDetail, port]
     );
-    console.log("log invalidCurFlagList: ", invalidCurFlagList);
+    // console.log("log invalidCurFlagList: ", invalidCurFlagList);
     return { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isReady };
 };

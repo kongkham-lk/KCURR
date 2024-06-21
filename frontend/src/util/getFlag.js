@@ -18,20 +18,20 @@ const getBaseUrl = (currCountry) => {
 
 export async function getInvalidCurrFlagList(currCodes) {
     let invalidCurFlagList = [];
-    console.log("log currCodes: ", currCodes);
+    // console.log("log currCodes: ", currCodes);
     for (let currCode of currCodes) {
         const url = getBaseUrl(currCode);
         try {
             const response = await fetch(url, { method: 'HEAD' });
             if (response.status !== 200) {
-                console.log("add invalidCurFlag: ", currCode);
+                // console.log("add invalidCurFlag: ", currCode);
                 invalidCurFlagList = [...invalidCurFlagList, currCode];
             }
         } catch (error) {
             console.error(`Error checking URL for ${currCode}:`, error);
         }
     }
-    console.log("log invalidCurFlag: ", invalidCurFlagList);
+    // console.log("log invalidCurFlag: ", invalidCurFlagList);
     return invalidCurFlagList;
 }
 
