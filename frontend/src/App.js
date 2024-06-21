@@ -58,15 +58,13 @@ export default function App() {
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor {...attr.curr}/>
-                                    : <Loading />}
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} />
-                                    : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                <FinancialNews {...attr.news} />
+                                {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                             </Item>
                         </>
                     } ></Route>
