@@ -1,5 +1,7 @@
-export function getFlag(currCountry, invalidCurFlagList) {
-    if (isValidParam(currCountry) && !invalidCurFlagList.includes(currCountry))
+import axios from 'axios';
+import cheerio from 'cheerio';
+export function getFlag(currCountry, validCurFlagList) {
+    if (isValidParam(currCountry) && validCurFlagList.includes(currCountry.substring(0, 2).toUpperCase()))
         return <img style={style.flagImg} src={getBaseUrl(currCountry)} alt=""/>
     else
         return <div style={{...style.flagImg, ...style.divGetFlag}} >{currCountry}</div>
@@ -16,23 +18,30 @@ const getBaseUrl = (currCountry) => {
     return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${currCountry.substring(0, 2).toUpperCase()}.svg`;
 }
 
-export async function getInvalidCurrFlagList(currCodes) {
-    let invalidCurFlagList = [];
-    // console.log("log currCodes: ", currCodes);
-    for (let currCode of currCodes) {
-        const url = getBaseUrl(currCode);
-        try {
-            const response = await fetch(url, { method: 'HEAD' });
-            if (response.status !== 200) {
-                // console.log("add invalidCurFlag: ", currCode);
-                invalidCurFlagList = [...invalidCurFlagList, currCode];
-            }
-        } catch (error) {
-            console.error(`Error checking URL for ${currCode}:`, error);
-        }
+export async function fetchAllCountryFlags() {
+    try {
+        // Fetch the HTML content
+        const { data } = await axios.get('https://catamphetamine.gitlab.io/country-flag-icons/3x2/');
+        // Load the HTML into cheerio
+        const $ = cheerio.load(data);
+
+        // Initialize an array to store the results
+        const countryFlags = [];
+
+        // Iterate over each section with class 'Country'
+        $('section.Country').each((index, element) => {
+            const countryCode = $(element).find('h1').text().trim();
+
+            // Push the result into the array
+            countryFlags.push(countryCode);
+        });
+
+        // Return the result
+        return countryFlags;
+    } catch (error) {
+        console.error('Error fetching country flags:', error);
+        return [];
     }
-    // console.log("log invalidCurFlag: ", invalidCurFlagList);
-    return invalidCurFlagList;
 }
 
 const style = {

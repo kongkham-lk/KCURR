@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, 
+    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, size, passInStyle = { height: "56.5px" } } = props;
 
     const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
@@ -25,7 +25,7 @@ export default function CurrCountriesDropDown(props) {
                 {sortedCurrsCodeList?.map((targetCurrCode) => (
                     <MenuItem key={targetCurrCode} value={targetCurrCode} >
                         <div style={style.div}>
-                            {getFlag(targetCurrCode, invalidCurFlagList)}
+                            {getFlag(targetCurrCode, validCurFlagList)}
                             <span style={style.span}>{currCountiesCodeMapDetail[targetCurrCode].display}</span>
                         </div>
                     </MenuItem>

@@ -8,7 +8,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, currInput, isDisplaySM } = props;
+    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, currInput, isDisplaySM } = props;
 
     const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
     const [isError, setIsError] = useState(false);
@@ -55,7 +55,7 @@ export default function ConvertorForm(props) {
         updateVal: handleCurrCountryForm,
         currCountiesCodeMapDetail,
         sortedCurrsCodeList, 
-        invalidCurFlagList
+        validCurFlagList
     }
 
     const attr = {
@@ -77,7 +77,6 @@ export default function ConvertorForm(props) {
         <form onSubmit={onSubmit} >
             <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
                 <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
-                {/* const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, currInput, isDisplaySM } = props; */}
                 <CurrCountriesDropDown {...attr.baseCurr} />
                 <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}

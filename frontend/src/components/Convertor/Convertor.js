@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 export default function Convertor(props) {
-    const { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isDisplaySM } = props;
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isDisplaySM } = props;
     //console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
     const { curr } = useParams();
 

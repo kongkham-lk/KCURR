@@ -9,14 +9,13 @@ import { Loading } from './components/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { getInvalidCurrFlagList } from './util/getFlag';
 
 export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
-    const { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isReady } = useCurrCountriesApiGetter();
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
     
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -46,7 +45,7 @@ export default function App() {
     }
 
     const attr = {
-        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, ...commonAttr.displayFlags},
+        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags},
         news: {...commonAttr.themeFlags, ...commonAttr.displayFlags}
     }
 

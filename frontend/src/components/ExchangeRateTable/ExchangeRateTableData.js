@@ -25,7 +25,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, invalidCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
@@ -238,7 +238,7 @@ export default function ExchangeRateTableData(props) {
                                                             ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
                                                         }}
                                                     >
-                                                        {getFlag(targetCurrCode, invalidCurFlagList)}
+                                                        {getFlag(targetCurrCode, validCurFlagList)}
                                                         <span style={style.span}>
                                                             {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
                                                         </span>
@@ -294,7 +294,7 @@ export default function ExchangeRateTableData(props) {
                                 passInStyle={style.CurrCountriesDropDown}
                                 size="small"
                                 sortedCurrsCodeList={sortedCurrsCodeList}
-                                invalidCurFlagList={invalidCurFlagList}
+                                validCurFlagList={validCurFlagList}
                             />
                         }
                         <TablePagination
@@ -331,7 +331,7 @@ export default function ExchangeRateTableData(props) {
                                     passInStyle={style.CurrCountriesDropDown}
                                     size="small"
                                     sortedCurrsCodeList={sortedCurrsCodeList}
-                                    invalidCurFlagList={invalidCurFlagList}
+                                    validCurFlagList={validCurFlagList}
                                 />
                             }
                             <CircularProgressWithLabel

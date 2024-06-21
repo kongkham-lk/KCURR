@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getInvalidCurrFlagList } from '../util/getFlag';
+import { fetchAllCountryFlags } from '../util/getFlag';
 
 export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
     const [sortedCurrsCodeList, setSortedCurrsCodeList] = useState([]);
-    const [invalidCurFlagList, setInvalidCurFlagList] = useState([]); // the curr code flag that api return 404 status
+    const [validCurFlagList, setValidCurFlagList] = useState([]); // the curr code flag that api return 404 status
     const [isReady, setIsReady] = useState(false);
 
     const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BASEURL : process.env.REACT_APP_PROD_BASEURL;
@@ -50,18 +50,17 @@ export default function useCurrCountriesApiGetter() {
                     // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
                     // console.log("check all cur code for flag api!!!");
                     
-                    const newInvalidCurrFlagList = await getInvalidCurrFlagList(newSortedCurrsCodeList);
+                    const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
 
-                    // console.log("return invalidCurrList: ", newInvalidCurrFlagList);
+                    // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
 
                     setSortedCurrsCodeList(newSortedCurrsCodeList);
-                    setInvalidCurFlagList(newInvalidCurrFlagList);
+                    setValidCurFlagList(newValidCurrFlagList);
                     setIsReady(true);
                 }
             }
             fetchCurrOption();
         }, [baseURL, currCountiesCodeMapDetail, port]
     );
-    // console.log("log invalidCurFlagList: ", invalidCurFlagList);
-    return { currCountiesCodeMapDetail, sortedCurrsCodeList, invalidCurFlagList, isReady };
+    return { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady };
 };
