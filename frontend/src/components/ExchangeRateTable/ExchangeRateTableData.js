@@ -25,7 +25,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, invalidCurFlagList, initialDefaultCurr, isDisplaySM, isDisplayMD } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, invalidCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
@@ -35,7 +35,6 @@ export default function ExchangeRateTableData(props) {
 
     // retrieved initial exchange rate table list
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
-
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
@@ -294,6 +293,8 @@ export default function ExchangeRateTableData(props) {
                                 currCountiesCodeMapDetail={currCountiesCodeMapDetail}
                                 passInStyle={style.CurrCountriesDropDown}
                                 size="small"
+                                sortedCurrsCodeList={sortedCurrsCodeList}
+                                invalidCurFlagList={invalidCurFlagList}
                             />
                         }
                         <TablePagination
@@ -329,6 +330,8 @@ export default function ExchangeRateTableData(props) {
                                     currCountiesCodeMapDetail={currCountiesCodeMapDetail}
                                     passInStyle={style.CurrCountriesDropDown}
                                     size="small"
+                                    sortedCurrsCodeList={sortedCurrsCodeList}
+                                    invalidCurFlagList={invalidCurFlagList}
                                 />
                             }
                             <CircularProgressWithLabel
