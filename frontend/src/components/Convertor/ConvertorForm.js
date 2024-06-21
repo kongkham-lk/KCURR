@@ -59,13 +59,6 @@ export default function ConvertorForm(props) {
     }
 
     const attr = {
-        common: {
-            sxStyle: sxStyle.CurrCountriesDropDown,
-            updateVal: handleCurrCountryForm,
-            currCountiesCodeMapDetail,
-            sortedCurrsCodeList, 
-            invalidCurFlagList
-        },
         baseCurr: {
             label: "From",
             stateInputField: "baseCurr",
