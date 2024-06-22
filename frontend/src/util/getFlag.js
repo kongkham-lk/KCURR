@@ -18,6 +18,9 @@ const getBaseUrl = (currCountry) => {
     return `https://purecatamphetamine.github.io/country-flag-icons/3x2/${currCountry.substring(0, 2).toUpperCase()}.svg`;
 }
 
+// fetch all the available flag code from the API provider, BeaconAPI, which are provided in the form of HTML
+// then getFlag() can use the return array from this funtion to determined what to return as the result.
+// this will be invoke only once, at the very start stage.
 export async function fetchAllCountryFlags() {
     try {
         // Fetch the HTML content
