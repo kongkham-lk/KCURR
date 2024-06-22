@@ -60,7 +60,7 @@ export default function CircularWithValueLabel(props) {
     const checkTimer = (prevProgress) => {
         if (prevProgress <= 1) {  // 1.66 * 60 = 99.6
             // console.log('Reset timer and Refresh lives rate!!!');
-            prevProgress = 98.4;
+            prevProgress = 99;
             setTimerForUpdateNewLiveRate(timerForUpdateNewLiveRate - 1);
             if (timerForUpdateNewLiveRate === 0) {
                 onUpdateNewLiveRate();
@@ -68,7 +68,7 @@ export default function CircularWithValueLabel(props) {
             }
             onUpdateDisplayTime();
         } else {
-            prevProgress -= 1.6666666667;
+            prevProgress -= 1.7;
         }
         return prevProgress;
     }
