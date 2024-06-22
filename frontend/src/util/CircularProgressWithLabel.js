@@ -58,9 +58,9 @@ export default function CircularWithValueLabel(props) {
     const [timerForUpdateNewLiveRate, setTimerForUpdateNewLiveRate] = useState(15); // reduce the frequency of retrieving new rate from run out of quota
 
     const checkTimer = (prevProgress) => {
-        if (prevProgress <= 2) {  // 1.66 * 60 = 99.6
+        if (prevProgress <= 1) {  // 1.66 * 60 = 99.6
             // console.log('Reset timer and Refresh lives rate!!!');
-            prevProgress = 99.6;
+            prevProgress = 98.4;
             setTimerForUpdateNewLiveRate(timerForUpdateNewLiveRate - 1);
             if (timerForUpdateNewLiveRate === 0) {
                 onUpdateNewLiveRate();
