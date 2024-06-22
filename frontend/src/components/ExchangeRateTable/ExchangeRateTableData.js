@@ -83,7 +83,7 @@ export default function ExchangeRateTableData(props) {
     const handleUpdateRateTime = () => {
         const newDate = new Date();
         const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", "
-            + newDate.toLocaleTimeString('en-US', { hour12: false })//;.slice(0, -3);
+            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0, -3);
         setLastUpdateRateTime(updateTime);
     }
 
