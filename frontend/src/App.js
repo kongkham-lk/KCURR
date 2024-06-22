@@ -45,13 +45,14 @@ export default function App() {
     }
 
     const attr = {
+        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags},
         curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags},
         news: {...commonAttr.themeFlags, ...commonAttr.displayFlags}
     }
 
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={
@@ -70,18 +71,16 @@ export default function App() {
                     <Route path="/convertor/:curr?" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                         </>
                     } ></Route>
                     <Route exact path="/financial-news" element={
                         <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            <FinancialNews filter="true" isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                            <FinancialNews filter="true" {...attr.news} />
                         </Item>
                     } ></Route>
                 </Routes>
