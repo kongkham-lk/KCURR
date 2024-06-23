@@ -25,7 +25,7 @@ import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, initialDefaultCurr, isDisplaySM, isDisplayMD } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
@@ -35,7 +35,6 @@ export default function ExchangeRateTableData(props) {
 
     // retrieved initial exchange rate table list
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
-
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
@@ -84,27 +83,32 @@ export default function ExchangeRateTableData(props) {
     const handleUpdateRateTime = () => {
         const newDate = new Date();
         const updateTime = newDate.toDateString().slice(4, -5) + ", " + newDate.toDateString().slice(-5) + ", "
-            + newDate.toLocaleTimeString('en-US', { hour12: false })//;.slice(0, -3);
+            + newDate.toLocaleTimeString('en-US', { hour12: false }).slice(0, -3);
         setLastUpdateRateTime(updateTime);
     }
 
     // Re-arrange curr list order
     const handleSetDefaultCurr = async (targetCurr) => {
-        // console.log("Rearrage list!!!");
-
-        const oldTargetCurrArray = [...currCodeArray];
+        // get the index of new default curr
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
-
+        
+        // Do nth if new default currency is not exist or already set as default currency
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
-            const [targetCurr] = oldTargetCurrArray.splice(targetCurrIndex, 1);
-            oldTargetCurrArray.unshift(targetCurr);
+            // console.log("Rearrage list!!!");
+
+            // Copy the target currency to the front and construct the new array in one step
+            const newCurrCodeArray = [
+                currCodeArray[targetCurrIndex],
+                ...currCodeArray.slice(0, targetCurrIndex),
+                ...currCodeArray.slice(targetCurrIndex + 1)
+            ];
+            
+            // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
+            await handleUpdateNewLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
+
+            setCurrCodeArray(newCurrCodeArray);
+            setDefaultCurrCode(targetCurr);
         }
-
-        // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
-        await handleUpdateNewLiveRate(oldTargetCurrArray); // Refetch new update rate from beacon api
-
-        setDefaultCurrCode(targetCurr);
-        setCurrCodeArray([...oldTargetCurrArray]);
     };
 
     // Refetch new update rate from api
@@ -234,7 +238,7 @@ export default function ExchangeRateTableData(props) {
                                                             ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
                                                         }}
                                                     >
-                                                        {getFlag(targetCurrCode)}
+                                                        {getFlag(targetCurrCode, validCurFlagList)}
                                                         <span style={style.span}>
                                                             {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
                                                         </span>
@@ -293,6 +297,8 @@ export default function ExchangeRateTableData(props) {
                                     currCountiesCodeMapDetail={currCountiesCodeMapDetail}
                                     passInStyle={style.CurrCountriesDropDown}
                                     size="small"
+                                    sortedCurrsCodeList={sortedCurrsCodeList}
+                                    validCurFlagList={validCurFlagList}
                                 />
                             }
                             <TablePagination

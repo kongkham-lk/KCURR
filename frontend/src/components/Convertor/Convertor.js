@@ -9,7 +9,8 @@ import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 export default function Convertor(props) {
-    const { currCountiesCodeMapDetail, isDisplaySM, currentUrl } = props;
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isDisplaySM, currentUrl } = props;
+    //console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
     const { curr } = useParams();
 
     const currInput = {
@@ -69,7 +70,7 @@ export default function Convertor(props) {
             <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currCountiesCodeMapDetail={currCountiesCodeMapDetail} currInput={currInput} isDisplaySM={isDisplaySM} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} />
             {formData !== null && (
                 <>
                     <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{ fontSize: isDisplaySM ? "1.7rem" : "2.125rem" }}>

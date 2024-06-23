@@ -1,6 +1,5 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
-import { Box } from '@mui/material';
 
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries = null } = props;

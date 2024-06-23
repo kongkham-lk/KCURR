@@ -8,7 +8,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { setFormDataToConvertor, currCountiesCodeMapDetail, currInput, isDisplaySM } = props;
+    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, currInput, isDisplaySM } = props;
 
     const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
     const [isError, setIsError] = useState(false);
@@ -50,15 +50,38 @@ export default function ConvertorForm(props) {
         retrieveConvertValue(setFormDataToConvertor, formInputs);
     };
 
+    const commonAttr = {
+        sxStyle: sxStyle.CurrCountriesDropDown,
+        updateVal: handleCurrCountryForm,
+        currCountiesCodeMapDetail,
+        sortedCurrsCodeList, 
+        validCurFlagList
+    }
+
+    const attr = {
+        baseCurr: {
+            label: "From",
+            stateInputField: "baseCurr",
+            baseCurrVal: formInputs.baseCurr,
+            ...commonAttr
+        },
+        targetCurr: {
+            label: "To",
+            stateInputField: "targetCurr",
+            baseCurrVal: formInputs.targetCurr,
+            ...commonAttr
+        },
+    };
+
     return (
         <form onSubmit={onSubmit} >
             <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
                 <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
-                <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="From" stateInputField="baseCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                <CurrCountriesDropDown {...attr.baseCurr} />
                 <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}
                 </Button>
-                <CurrCountriesDropDown sxStyle={sxStyle.CurrCountriesDropDown} label="To" stateInputField="targetCurr" updateVal={handleCurrCountryForm} baseCurrVal={formInputs.targetCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} />
+                <CurrCountriesDropDown {...attr.targetCurr} />
             </div>
             <Button variant="contained" type="submit" style={style.convertButton} disabled={isError ? true : false} >
                 Convert

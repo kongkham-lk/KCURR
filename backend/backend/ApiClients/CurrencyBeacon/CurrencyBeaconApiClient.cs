@@ -89,7 +89,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         {
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             var startDate = GetStartingDate(timeSeriesRange);
-            var url = "https://api.currencybeacon.com/v1/timeser ies?api_key=" + _currencyBeaconApiKey + "&start_date=" +
+            var url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" +
                       startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
             rateTimeSeriesApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconTimeSeriesApiResponse>(url);
         }
