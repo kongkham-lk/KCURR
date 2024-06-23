@@ -97,27 +97,6 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return sortedRateTimeSeries;
     }
 
-    private string GetStartingDate(string timeSeriesRange)
-    {
-        DateTime offsetToday = default;
-        DateTime today = DateTime.Today;
-        if (timeSeriesRange.ToLower().Equals("1d"))
-            offsetToday = today.AddDays(-1);
-        else if (timeSeriesRange.ToLower().Equals("1w"))
-            offsetToday = today.AddDays(-6);
-        else if (timeSeriesRange.ToLower().Equals("1m"))
-            offsetToday = today.AddMonths(-1);
-        else if (timeSeriesRange.ToLower().Equals("3m"))
-            offsetToday = today.AddMonths(-3);
-        else if (timeSeriesRange.ToLower().Equals("6m"))
-            offsetToday = today.AddMonths(-6);
-        else if (timeSeriesRange.ToLower().Equals("1y"))
-            offsetToday = today.AddYears(-1);
-
-        var startDate = offsetToday.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"));
-        return startDate;
-    }
-
     private Dictionary<string, CurrCountriesResponse> TransformedCurrCountriesResData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes)
     {
         CurrencyBeaconCurrCountriesApiResponseResponse[] data = currCountriesRes.Response;
