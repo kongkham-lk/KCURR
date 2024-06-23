@@ -183,6 +183,26 @@ export default function ExchangeRateTableData(props) {
 
     const handleResetFilter = () => setOrderBy('');
 
+    const attr = {
+        CurrCountriesDropDown: {
+                label: "Add Currency",
+                inputCurrType: "targetCurr",
+                onAddCurrCountry: {handleAddCurrCountry},
+                currCountiesCodeMapDetail,
+                passInStyle: {...style.CurrCountriesDropDown},
+                size: "small",
+                sortedCurrsCodeList,
+                validCurFlagList,
+            },
+        CircularProgressWithLabel: {
+            ...sxStyle.progressBar,
+            onUpdateNewLiveRate: {updateNewLiveRate},
+            lastUpdateRateTime,
+            isDisplaySM,
+            isDisplayMD,
+        },
+    }
+
     return (
         <>
             {isReady && <Box sx={sxStyle.Box} >
@@ -292,14 +312,7 @@ export default function ExchangeRateTableData(props) {
                             {!isDisplaySM &&
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                    label="Add Currency"
-                                    inputCurrType="targetCurr"
-                                    onAddCurrCountry={handleAddCurrCountry}
-                                    currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                    passInStyle={style.CurrCountriesDropDown}
-                                    size="small"
-                                    sortedCurrsCodeList={sortedCurrsCodeList}
-                                    validCurFlagList={validCurFlagList}
+                                    {...attr.CurrCountriesDropDown}
                                 />
                             }
                             <TablePagination
@@ -315,12 +328,8 @@ export default function ExchangeRateTableData(props) {
                             />
                             {!isDisplayMD &&
                                 <CircularProgressWithLabel
-                                    sx={sxStyle.progressBar}
-                                    onUpdateNewLiveRate={updateNewLiveRate}
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                    lastUpdateRateTime={lastUpdateRateTime}
-                                    isDisplaySM={isDisplaySM}
-                                    isDisplayMD={isDisplayMD}
+                                    {...attr.CircularProgressWithLabel}
                                 />
                             }
                         </Box>
@@ -329,21 +338,12 @@ export default function ExchangeRateTableData(props) {
                                 {isDisplaySM &&
                                     <CurrCountriesDropDown
                                         sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                        label="Add Currency"
-                                        inputCurrType="targetCurr"
-                                        onAddCurrCountry={handleAddCurrCountry}
-                                        currCountiesCodeMapDetail={currCountiesCodeMapDetail}
-                                        passInStyle={style.CurrCountriesDropDown}
-                                        size="small"
+                                        {...attr.CurrCountriesDropDown}
                                     />
                                 }
                                 <CircularProgressWithLabel
-                                    sx={sxStyle.progressBar}
-                                    onUpdateNewLiveRate={updateNewLiveRate}
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                    lastUpdateRateTime={lastUpdateRateTime}
-                                    isDisplaySM={isDisplaySM}
-                                    isDisplayMD={isDisplayMD}
+                                    {...attr.CircularProgressWithLabel}
                                 />
                             </Box>
                         }
