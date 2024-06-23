@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
@@ -15,8 +15,8 @@ export default function App() {
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
-
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
+    
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
@@ -39,41 +39,48 @@ export default function App() {
         setIsOutLineTheme(event);
     }
 
+    const commonAttr = {
+        themeFlags: {isOutLineTheme},
+        displayFlags: {isDisplaySM, isDisplayMD},
+    }
+
+    const attr = {
+        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags},
+        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags},
+        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags}
+    }
+
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                <FinancialNews isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                                {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                             </Item>
                         </>
                     } ></Route>
                     <Route path="/convertor/:curr?" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                         </>
                     } ></Route>
                     <Route exact path="/financial-news" element={
                         <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            <FinancialNews filter="true" isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                            <FinancialNews filter="true" {...attr.news} />
                         </Item>
                     } ></Route>
                 </Routes>
