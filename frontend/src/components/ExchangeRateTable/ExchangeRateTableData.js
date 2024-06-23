@@ -229,10 +229,11 @@ export default function ExchangeRateTableData(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Box sx={sxStyle.hoverButton}>
+                                                <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
                                                     <Button
                                                         variant="text"
                                                         onClick={() => handleSetDefaultCurr(targetCurrCode)}
+                                                        disabled={index === 0 && true}
                                                         sx={{
                                                             ...sxStyle.defaultCurrSetterButton.main,
                                                             ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
@@ -381,13 +382,13 @@ const sxStyle = {
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
     Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': { padding: 0 } },
     defaultCurrSetterButton: {
-        main: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' } },
+        main: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' }, '&:disabled': { color: 'black' } },
         lg: { marginLeft: "15px" },
         sm: { marginLeft: "10px", padding: "0px" },
     },
     hoverButton: {
-        height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',
-        '&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', },
+        main: {height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',},
+        hover: {'&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }},
     },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
