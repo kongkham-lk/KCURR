@@ -7,12 +7,16 @@ public class CurrService
 {
     private readonly List<IExchangeRateApiClient> _exchangeRateApiClients;
     private readonly ILogger<CurrService> _logger;
+    private readonly IWebHostEnvironment _env;
     private int TotalRetryApiKey { get; set; } = 3;
+    private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
+    private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> RangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
 
-    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger)
+    public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
         _exchangeRateApiClients = exchangeRateApiClients.ToList();
         _logger = logger;
+        _env = env;
     }
 
     public async Task<double> Convert(double amount, string baseCurrCountry, string targetCurrCountry)
@@ -67,12 +71,22 @@ public class CurrService
 
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
     {
-        SortedList<string, double> timeSeries = null!;
+        Dictionary<string, RateTimeSeriesResponse>? targetCurrTimeSeries = null;
+        if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        {
+            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
+            targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
+
+            if (targetCurrTimeSeries != null)
+                return targetCurrTimeSeries;
+        }
+
         foreach (var apiClientElement in _exchangeRateApiClients)
         {
             try
             {
-                timeSeries = await apiClientElement.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+                if (LatestTimeSeriesUpdate is null) // only retrieve timeSeries once every new update request from frontend
+                    LatestTimeSeriesUpdate = await apiClientElement.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
             }
             catch (Exception e)
             {
@@ -81,8 +95,29 @@ public class CurrService
             }
         }
 
-        TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients);
-        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = timeseriesTransformer.TransformedData( timeSeries, targetCurr);
+        IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
+        TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
+        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+
+        if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        {
+            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
+            if (allCurrTimeSeriesList != null && allCurrTimeSeriesList.Any())
+                allCurrTimeSeriesList.Add(targetCurrTimeSeries);
+            else
+                allCurrTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>()
+                {
+                    targetCurrTimeSeries
+                };
+        }
+        else
+        {
+            List<Dictionary<string, RateTimeSeriesResponse>> tempList = new()
+            {
+                targetCurrTimeSeries
+            };
+            RangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
+        }
         return targetCurrTimeSeries;
     }
 

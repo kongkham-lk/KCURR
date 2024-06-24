@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Globalization;
 using backend.Interfaces;
 using backend.Models;
 using backend.Utilities;
+using Microsoft.Extensions.Hosting;
 
 namespace backend.ApiClients.CurrencyBeacon;
 
@@ -11,14 +13,16 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     private readonly ApiKeysProvider _apiKeysProvider;
     private string _currencyBeaconApiKey;
     private readonly ILogger<CurrencyBeaconApiClient> _logger;
+    private readonly IWebHostEnvironment _env;
     private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-    public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger)
+    public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger, IWebHostEnvironment env)
     {
         _httpClient = httpClient;
         _apiKeysProvider = apiKeysProvider;
         _currencyBeaconApiKey = _apiKeysProvider.GetApiKey(ApiKeysProvider.ApiName.CurrencyBeaconApiKey);
         _logger = logger;
+        _env = env;
     }
 
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)
@@ -81,19 +85,21 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse;
         if (isDevelopment)
         {
-            string relativePath = "/Timeseries-USD_THB-" + timeSeriesRange + ".json";
+            string relativePath = "/Timeseries-USD_THB-6m_b.json";
             rateTimeSeriesApiResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconTimeSeriesApiResponse>(relativePath);
             targetCurr = "THB"; // the seeding file only provide rate sample of USD-THB
         }
         else
         {
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
-            var startDate = GetStartingDate(timeSeriesRange);
+            IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
+            var startDate = DateGetter.GetTodayOffsetDateInString("6m", tempEnv);
             var url = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" +
                       startDate + "&end_date=" + endDate + "&base=" + baseCurr + "&symbols=" + targetCurr;
             rateTimeSeriesApiResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconTimeSeriesApiResponse>(url);
+
         }
-        var sortedRateTimeSeries = TransformedTimeSeriesResData(rateTimeSeriesApiResponse, targetCurr);
+        var sortedRateTimeSeries = TransformedTimeSeriesResToDictionary(rateTimeSeriesApiResponse, targetCurr);
         return sortedRateTimeSeries;
     }
 
@@ -118,7 +124,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return currCountries;
     }
 
-    private SortedList<string, double> TransformedTimeSeriesResData(CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse, string targetCurr)
+    private SortedList<string, double> TransformedTimeSeriesResToDictionary(CurrencyBeaconTimeSeriesApiResponse rateTimeSeriesApiResponse, string targetCurr)
     {
         var dateByRateLists = rateTimeSeriesApiResponse.Response;
         Dictionary<string, double> unsortedList = new Dictionary<string, double>();

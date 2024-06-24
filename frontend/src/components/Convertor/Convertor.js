@@ -87,7 +87,6 @@ export default function Convertor(props) {
                             {displayFeature &&
                                 <div style={style.divChart} >
                                     <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
-                                        {console.log("logging timeSeries: ", timeSeries)}
                                         <LineGraph timeSeries={timeSeries} displayLabel={true} />
                                     </Box>
                                         <div style={{ ...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%", display: !displayFeature && "none" }}>
