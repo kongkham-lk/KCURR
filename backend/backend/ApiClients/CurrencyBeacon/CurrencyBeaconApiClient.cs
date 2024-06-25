@@ -80,7 +80,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
 
     public async Task<SortedList<string, double>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
     {
-        _logger.LogInformation($"Requesting for new TimeSeries object !!!");
+        _logger.LogInformation($"Requesting for new TimeSeries object of: {baseCurr} to {targetCurr}");
         CurrencyBeaconTimeSeriesApiResponse[] rateTimeSeriesApiResponseList = new CurrencyBeaconTimeSeriesApiResponse[2];
         string[] pathToJSON = new string[2];
         if (isDevelopment)
