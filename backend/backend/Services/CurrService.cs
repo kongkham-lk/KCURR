@@ -72,9 +72,8 @@ public class CurrService
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange, bool isNewUpdateRequest)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
-        if (isNewUpdateRequest)
-            RangeByCurrTimeSeriesLists = new();
-        else if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+
+        if (!isNewUpdateRequest && RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
             targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
@@ -106,7 +105,22 @@ public class CurrService
         {
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
             if (allCurrTimeSeriesList != null && allCurrTimeSeriesList.Any())
-                allCurrTimeSeriesList.Add(targetCurrTimeSeries);
+            {
+                if (isNewUpdateRequest)
+                {
+                    for (int i = 0; i < allCurrTimeSeriesList.Count(); i++)
+                    {
+                        // if the currTimeSeries's key existed in the list, update its value and stop iteration
+                        if (allCurrTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
+                        {
+                            allCurrTimeSeriesList[i] = targetCurrTimeSeries;
+                            break;
+                        }
+                    }
+                }
+                else
+                    allCurrTimeSeriesList.Add(targetCurrTimeSeries);
+            }
             else
                 allCurrTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
         }
