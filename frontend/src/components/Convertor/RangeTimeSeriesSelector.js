@@ -8,7 +8,7 @@ import ToggleButtonGroup, {
 export default function RangeTimeSeriesSelector(props) {
     const { updateVal, isDisplaySM } = props;
     const [displayValue, setDisplayValue] = useState("1d")
-    const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m"];
+    const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m", "9m", "1y"];
 
     const handleChange = (event, newDisplayValue) => {
         updateVal(newDisplayValue);
