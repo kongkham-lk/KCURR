@@ -45,6 +45,7 @@ public class TimeseriesTransformer
         catch (Exception e)
         {
             Console.WriteLine(e);
+            return null;
         }
         
         double highest = changingRates.Max();

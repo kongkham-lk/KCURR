@@ -60,8 +60,9 @@ public class CurrController : ControllerBase
         string baseCurr = data.BaseCurr;
         string targetCurr = data.TargetCurr;
         string timeSeriesRange = data.TimeSeriesRange;
+        bool isNewUpdateRequest = data.IsNewUpdateRequest;
         Dictionary<string, RateTimeSeriesResponse> result =
-            await _currService.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+            await _currService.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
         return result;
     }
 }

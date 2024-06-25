@@ -21,6 +21,7 @@ export default function Convertor(props) {
     const [formData, setFormData] = useState(null);
     const [timeSeries, setTimeSeries] = useState(null);
     const [timeSeriesRange, setTimeSeriesRange] = useState("1d");
+    const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
     const displayFeature = currentUrl.pathname.toLowerCase().includes("convert");
 
     let baseCurr;
@@ -45,7 +46,7 @@ export default function Convertor(props) {
     useEffect(() => {
         if (formData != null) {
             async function timeSeriesGetter() {
-                const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+                const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
                 setTimeSeries(timeSeriesRes.data[targetCurr])
             }
             timeSeriesGetter()
@@ -54,6 +55,7 @@ export default function Convertor(props) {
     )
 
     const setFormDataToConvertor = (inputData, response) => {
+        setIsNewUpdateRequest(true);
         setFormData(() => {
             return {
                 ...inputData, total: response.data
@@ -62,6 +64,7 @@ export default function Convertor(props) {
     }
 
     const handleClick = (range) => {
+        setIsNewUpdateRequest(false)
         setTimeSeriesRange(range)
     }
 
