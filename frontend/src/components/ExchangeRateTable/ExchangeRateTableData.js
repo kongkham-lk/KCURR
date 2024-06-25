@@ -40,7 +40,6 @@ export default function ExchangeRateTableData(props) {
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
-    const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [triggerNewTimeDisplay, setTriggerNewTimeDisplay] = useState(false);
 
@@ -226,7 +225,7 @@ export default function ExchangeRateTableData(props) {
                         <Table
                             sx={isDisplaySM ? { whiteSpace: "nowrap", padding: "0" } : sxStyle.Table}
                             aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
+                            size='medium'
                         >
                             <EnhancedTableHead
                                 order={order}
