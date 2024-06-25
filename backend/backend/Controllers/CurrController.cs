@@ -47,9 +47,9 @@ public class CurrController : ControllerBase
     [HttpGet("currency-country")]
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountriesFromCurrencyBeacon()
     {
-        _logger.LogInformation("Received request from frontend!!!");
+        //_logger.LogInformation("Received request from frontend!!!");
         var result = await _currService.GetCurrCountries();
-        _logger.LogInformation($"Response back data: {result}");
+        //_logger.LogInformation($"Response back data: {result}");
         return result;
     }
 
