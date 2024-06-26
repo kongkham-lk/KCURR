@@ -47,9 +47,9 @@ public class CurrController : ControllerBase
     [HttpGet("currency-country")]
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountriesFromCurrencyBeacon()
     {
-        _logger.LogInformation("Received request from frontend!!!");
+        //_logger.LogInformation("Received request from frontend!!!");
         var result = await _currService.GetCurrCountries();
-        _logger.LogInformation($"Response back data: {result}");
+        //_logger.LogInformation($"Response back data: {result}");
         return result;
     }
 
@@ -60,8 +60,9 @@ public class CurrController : ControllerBase
         string baseCurr = data.BaseCurr;
         string targetCurr = data.TargetCurr;
         string timeSeriesRange = data.TimeSeriesRange;
+        bool isNewUpdateRequest = data.IsNewUpdateRequest;
         Dictionary<string, RateTimeSeriesResponse> result =
-            await _currService.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+            await _currService.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
         return result;
     }
 }
