@@ -246,7 +246,7 @@ export default function ExchangeRateTableData(props) {
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
-                                                padding="none"
+                                                sx={sxStyle.paddingXAxisNone}
                                             >
                                                 <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
                                                     <Button
@@ -387,7 +387,7 @@ const sxStyle = {
     },
     hoverButton: {
         main: {height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',},
-        hover: {'&:hover': { background: '#0000000a', padding: '10px 0px', margin: '0px 0.5px', }},
+        hover: {'&:hover': { background: '#0000000a', margin: '0px 0.5px', }},
     },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
@@ -400,7 +400,8 @@ const sxStyle = {
         sm: { marginTop: '10px', width: '-webkit-fill-available' },
     },
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    progressBar: { minWidth: '190px', display: 'flex' }
+    progressBar: { minWidth: '190px', display: 'flex' },
+    paddingXAxisNone: {padding: '16px 0px'}
 };
 
 /* 
