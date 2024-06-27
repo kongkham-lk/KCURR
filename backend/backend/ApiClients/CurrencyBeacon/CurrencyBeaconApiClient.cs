@@ -85,21 +85,21 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         string[] pathToJSON = new string[2];
         if (isDevelopment)
         {
-            pathToJSON[0] = "/Timeseries-USD_THB-6m_b.json";
-            pathToJSON[1] = "/Timeseries-USD_THB-6m_a.json";
+            pathToJSON[0] = "/Timeseries-USD_THB-6m_a.json";
+            pathToJSON[1] = "/Timeseries-USD_THB-6m_b.json";
             rateTimeSeriesApiResponseList[0] = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconTimeSeriesApiResponse>(pathToJSON[0]);
             rateTimeSeriesApiResponseList[1] = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconTimeSeriesApiResponse>(pathToJSON[1]);
-            targetCurr = "THB"; // the seeding file only provide rate sample of USD-THB
+            targetCurr = "GBP"; // the seeding file only provide rate sample of USD-THB
         }
         else
         {
             string[] startDate = new string[2];
             string[] endDate = new string[2];
             IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
-            endDate[0] = DateTime.Now.ToString("yyyy-MM-dd");
-            startDate[0] = DateGetter.GetTodayOffsetDateInString("6m", tempEnv);
-            endDate[1] = startDate[0];
-            startDate[1] = DateGetter.GetTodayOffsetDateInString("1y", tempEnv);
+            endDate[1] = DateTime.Now.ToString("yyyy-MM-dd");
+            startDate[1] = DateGetter.GetTodayOffsetDateInString("6m", tempEnv, true); // get last 6-month's 1 day after today
+            endDate[0] = DateGetter.GetTodayOffsetDateInString("6m", tempEnv);
+            startDate[0] = DateGetter.GetTodayOffsetDateInString("1y", tempEnv); // get last year's 1 day after today
             pathToJSON[0] = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" +
                       startDate[0] + "&end_date=" + endDate[0] + "&base=" + baseCurr + "&symbols=" + targetCurr;
             pathToJSON[1] = "https://api.currencybeacon.com/v1/timeseries?api_key=" + _currencyBeaconApiKey + "&start_date=" +
@@ -116,7 +116,9 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         CurrencyBeaconCurrCountriesApiResponseResponse[] data = currCountriesRes.Response;
         Dictionary<string, CurrCountriesResponse> currCountries = new Dictionary<string, CurrCountriesResponse>();
+
         if (data != null)
+        {
             for (int i = 0; i < data.Length; i++)
             {
                 CurrencyBeaconCurrCountriesApiResponseResponse currCountryDetail = data[i];
@@ -129,6 +131,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
                 CurrCountriesResponse val = new CurrCountriesResponse(currCode, countryCurrName, display, currSymbol, flagCode);
                 currCountries[key] = val;
             }
+        }
 
         return currCountries;
     }
@@ -137,24 +140,15 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         Dictionary<string, double> unsortedList = new Dictionary<string, double>();
 
-        var dateByRateLists = rateTimeSeriesApiResponses[0].Response;
-        foreach (var dateByRateList in dateByRateLists)
+        foreach (var rateTimeSeriesApiResponse in rateTimeSeriesApiResponses)
         {
-            var date = dateByRateList.Key;
-            var rate = dateByRateList.Value[targetCurr];
-            unsortedList.Add(date, rate);
-        }
-
-        dateByRateLists = rateTimeSeriesApiResponses[1].Response;
-        foreach (var dateByRateList in dateByRateLists)
-        {
-            // the last element of rateTimeSeriesApiResponses[0] and the first element of rateTimeSeriesApiResponses[1] is the same key
-            if (unsortedList.ContainsKey(dateByRateList.Key)) 
-                continue;
-
-            var date = dateByRateList.Key;
-            var rate = dateByRateList.Value[targetCurr];
-            unsortedList.Add(date, rate);
+            var dateByRateLists = rateTimeSeriesApiResponse.Response;
+            foreach (var dateByRateList in dateByRateLists)
+            {
+                var date = dateByRateList.Key;
+                var rate = dateByRateList.Value[targetCurr];
+                unsortedList.Add(date, rate);
+            }
         }
 
         SortedList<string, double> sortedList = new SortedList<string, double>(unsortedList);

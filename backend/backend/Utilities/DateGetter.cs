@@ -15,14 +15,14 @@ public class DateGetter
         return dateRanges;
     }
 
-    public static string GetTodayOffsetDateInString(string timeSeriesRange, IWebHostEnvironment env)
+    public static string GetTodayOffsetDateInString(string timeSeriesRange, IWebHostEnvironment env, bool isOffsetOneDay = false)
     {
-        DateTime offsetToday = OffsetDateFromToday(timeSeriesRange, env);
+        DateTime offsetToday = OffsetDateFromToday(timeSeriesRange, env, isOffsetOneDay);
         var startDate = offsetToday.ToString("yyyy-MM-dd", CultureInfo.CreateSpecificCulture("en-US"));
         return startDate;
     }
 
-    public static DateTime OffsetDateFromToday(string timeSeriesRange, IWebHostEnvironment env)
+    public static DateTime OffsetDateFromToday(string timeSeriesRange, IWebHostEnvironment env, bool isOffsetOneDay = false)
     {
         DateTime offsetToday = default;
         DateTime today = env == null ? DateTime.Today : Convert.ToDateTime("2024-06-11", new CultureInfo("en-US"));
@@ -41,7 +41,7 @@ public class DateGetter
                 offsetToday = today.AddMonths(-3);
                 break;
             case "6m":
-                offsetToday = today.AddMonths(-6);
+                offsetToday = today.AddMonths(-6).AddDays(isOffsetOneDay ? 1 : 0);
                 break;
             case "9m":
                 offsetToday = today.AddMonths(-9);
