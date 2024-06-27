@@ -50,7 +50,7 @@ export function styleTableRow(currKey, defaultCurr) {
         return {
             backgroundColor: "#1876d259", backgroundClip: "border-box",
             outline: "10px solid white", outlineOffset: "-2px",
-            borderRadius: "13px",
+            borderRadius: "13px", verticalAlign: 'middle',
         }
     }
 }
