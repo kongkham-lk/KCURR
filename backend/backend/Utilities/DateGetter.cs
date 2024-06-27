@@ -47,7 +47,7 @@ public class DateGetter
                 offsetToday = today.AddMonths(-9);
                 break;
             case "1y":
-                offsetToday = today.AddYears(-1);
+                offsetToday = today.AddYears(-1).AddDays(1); // Don't get the today's last year
                 break;
         }
         return offsetToday;
