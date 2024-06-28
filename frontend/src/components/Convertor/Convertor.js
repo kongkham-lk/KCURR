@@ -51,8 +51,7 @@ export default function Convertor(props) {
             }
             timeSeriesGetter()
         }
-    }, [formData, timeSeriesRange]
-    )
+    }, [formData, timeSeriesRange])
 
     const setFormDataToConvertor = (inputData, response) => {
         setIsNewUpdateRequest(true);
@@ -92,9 +91,9 @@ export default function Convertor(props) {
                                     <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
                                         <LineGraph timeSeries={timeSeries} displayLabel={true} />
                                     </Box>
-                                        <div style={{ ...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%", display: !displayFeature && "none" }}>
-                                            <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
-                                        </div>
+                                    <div style={{ ...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%", display: !displayFeature && "none" }}>
+                                        <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
+                                    </div>
                                 </div>
                             }
                         </div> : <div className="loader"></div>
