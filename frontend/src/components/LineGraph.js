@@ -12,14 +12,16 @@ export function LineGraph(props) {
         } else {
             return '#0ba50b'
         }
-    }
+    };
+    
     const backgroundColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000b0';
         } else {
             return '#0ba50bb0'
         }
-    }
+    };
+
     const borderWidth = displayLabel ? 2 : 2.3;
     const labels = timeSeriesRangeLabel;
     const data = {
@@ -33,6 +35,7 @@ export function LineGraph(props) {
             tension: 0,
         }]
     };
+
     const plugins = displayLabel ? {
         legend: {
             display: false,
@@ -73,7 +76,9 @@ export function LineGraph(props) {
                 },
                 border: {
                     dash: [6, 6]
-                }
+                },
+                min: Math.floor(timeSeries.lowest * 1000) / 1000,
+                max: Math.ceil(timeSeries.highest * 1000) / 1000,
             },
             x: {
                 display: displayLabel, // Hide X axis labels
@@ -91,6 +96,7 @@ export function LineGraph(props) {
         pointRadius: 0,
         maintainAspectRatio: false,
     }
+    
     return (
         <Line
             data={data}
