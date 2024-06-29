@@ -9,6 +9,7 @@ public class CurrService
     private readonly ILogger<CurrService> _logger;
     private readonly IWebHostEnvironment _env;
     private int TotalRetryApiKey { get; set; } = 3;
+    private Dictionary<string, double> LatestRates { get; set; } = new();
     private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
     private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> RangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
 
@@ -34,8 +35,8 @@ public class CurrService
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)
     {
         RateGetter rateGetter = new RateGetter(_exchangeRateApiClients);
-        Dictionary<string, double> rates = await rateGetter.GetRates(baseCurr, RateGetter.Mode.Latest);
-        return rates;
+        LatestRates = await rateGetter.GetRates(baseCurr, RateGetter.Mode.Latest);
+        return LatestRates;
     }
 
     public async Task<Dictionary<string, double>> GetHistoricalExchangeRates(string baseCurr)
@@ -96,9 +97,12 @@ public class CurrService
             }
         }
 
+        if (isNewUpdateRequest || !LatestRates.Any())
+            LatestRates = await GetLatestExchangeRates(baseCurr);
+
         IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
-        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange, LatestRates[targetCurr]);
 
         // Added new currTimeSeries to memo list
         if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))

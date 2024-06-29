@@ -16,7 +16,7 @@ public class TimeseriesTransformer
         _exchangeRateApiClients = exchangeRateApiClients.ToList();
     }
     
-    public Dictionary<string, RateTimeSeriesResponse> TransformedData (SortedList<string, double> timeSeries, string targetCurr, string targetDateRange)
+    public Dictionary<string, RateTimeSeriesResponse> TransformedData (SortedList<string, double> timeSeries, string targetCurr, string targetDateRange, double latestRate)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = new Dictionary<string, RateTimeSeriesResponse>();
         string targetOffsetDate = DateGetter.OffsetDateFromToday(targetDateRange, _env).ToString("yyyy-MM-dd");
@@ -51,7 +51,7 @@ public class TimeseriesTransformer
         double highest = changingRates.Max();
         double lowest = changingRates.Min();
         
-        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dayRange, monthRange, changingRates, highest, lowest);
+        RateTimeSeriesResponse timeSeriesDetail = new RateTimeSeriesResponse(dayRange, monthRange, changingRates, highest, lowest, latestRate);
         targetCurrTimeSeries.Add(targetCurr, timeSeriesDetail);
         return targetCurrTimeSeries;
     }

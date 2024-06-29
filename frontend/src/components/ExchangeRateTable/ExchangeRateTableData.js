@@ -23,15 +23,17 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../subComponents/LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
+import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;
+    const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState("");
 
     const timeSeriesRangeLength = "1w";
+    const displayFeature = currentUrl.pathname.toLowerCase().includes("Chart");
 
     // retrieved initial exchange rate table list
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
@@ -184,21 +186,26 @@ export default function ExchangeRateTableData(props) {
 
     const attr = {
         CurrCountriesDropDown: {
-                label: "Add Currency",
-                inputCurrType: "targetCurr",
-                onAddCurrCountry: {handleAddCurrCountry},
-                currCountiesCodeMapDetail,
-                passInStyle: {...style.CurrCountriesDropDown},
-                size: "small",
-                sortedCurrsCodeList,
-                validCurFlagList,
-            },
+            label: "Add Currency",
+            inputCurrType: "targetCurr",
+            onAddCurrCountry: {handleAddCurrCountry},
+            currCountiesCodeMapDetail,
+            passInStyle: {...style.CurrCountriesDropDown},
+            size: "small",
+            sortedCurrsCodeList,
+            validCurFlagList,
+        },
         CircularProgressWithLabel: {
             ...sxStyle.progressBar,
             onUpdateNewLiveRate: {updateNewLiveRate},
             lastUpdateRateTime,
             isDisplaySM,
             isDisplayMD,
+        },
+        RateHistoryGraph: { 
+            passInRequestState: true, 
+            isDisplaySM, 
+            displayFeature 
         },
     }
 
@@ -237,58 +244,66 @@ export default function ExchangeRateTableData(props) {
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList, index) => {
                                     const targetCurrCode = currList.targetCurr;
+                                    const currencyRateData = {
+                                        baseCurr: currCodeArray[0].targetCurr,
+                                        targetCurr: currList.targetCurr
+                                    }
+                                    console.log("currList.targetCurr: ", currList.targetCurr)
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const timeSeries = currList.timeSeries;
 
                                     return (
-                                        <TableRow key={targetCurrCode} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
-                                            <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                sx={sxStyle.paddingXAxisNone}
-                                            >
-                                                <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
-                                                    <Button
-                                                        variant="text"
-                                                        onClick={() => handleSetDefaultCurr(targetCurrCode)}
-                                                        disabled={index === 0 && true}
-                                                        sx={{
-                                                            ...sxStyle.defaultCurrSetterButton.main,
-                                                            ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
-                                                        }}
-                                                    >
-                                                        {getFlag(targetCurrCode, validCurFlagList)}
-                                                        <span style={style.span}>
-                                                            {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
-                                                        </span>
-                                                    </Button>
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px" }}>
-                                                {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
-                                            </TableCell>
-                                            {isDisplaySM ? "" :
-                                                <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
-                                                    {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                        <>
+                                            <TableRow key={targetCurrCode} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
+                                                <TableCell
+                                                    component="th"
+                                                    id={labelId}
+                                                    scope="row"
+                                                    sx={sxStyle.paddingXAxisNone}
+                                                >
+                                                    <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
+                                                        <Button
+                                                            variant="text"
+                                                            onClick={() => handleSetDefaultCurr(targetCurrCode)}
+                                                            disabled={index === 0 && true}
+                                                            sx={{
+                                                                ...sxStyle.defaultCurrSetterButton.main,
+                                                                ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
+                                                            }}
+                                                        >
+                                                            {getFlag(targetCurrCode, validCurFlagList)}
+                                                            <span style={style.span}>
+                                                                {isDisplaySM ? targetCurrCode : currCountiesCodeMapDetail[targetCurrCode].display}
+                                                            </span>
+                                                        </Button>
+                                                    </Box>
                                                 </TableCell>
-                                            }
-                                            {/* Chart Cell */}
-                                            <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
-                                                <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }}>
-                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell
-                                                align="right"
-                                                style={styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}
-                                                onClick={() => handleDelete(targetCurrCode)}
-                                            >
-                                                <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px" }}>
+                                                    {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
+                                                </TableCell>
+                                                {isDisplaySM ? "" :
+                                                    <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                        {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                    </TableCell>
+                                                }
+                                                {/* Chart Cell */}
+                                                <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }}>
+                                                        {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell
+                                                    align="right"
+                                                    style={styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}
+                                                    onClick={() => handleDelete(targetCurrCode)}
+                                                >
+                                                    <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TransitionAppendChart currencyRateData={currencyRateData} {...attr.RateHistoryGraph}  />
+                                        </>
                                     );
                                 })}
                                 {emptyRows > 0 && (
