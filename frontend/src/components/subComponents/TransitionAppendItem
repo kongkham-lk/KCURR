@@ -8,16 +8,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TransitionGroup } from 'react-transition-group';
+import HistoricalRateGraph from './HistoricalRateGraph';
 
 const currCode = "usd";
 
-export default function TransitionGroupExample(props) {
-    const {} = props;
+export default function TransitionAppendItem(props) {
     const [displayChart, setDisplayChart] = useState(currCode);
 
     const renderGraph = (item) => {
         return (
-            <div>{item}</div>
+            <HistoricalRateGraph {...props} />
         );
     }
 
