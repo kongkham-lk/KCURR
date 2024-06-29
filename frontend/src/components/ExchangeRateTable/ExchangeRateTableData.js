@@ -23,7 +23,7 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../subComponents/LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
-import TransitionAppendChart from '../subComponents/TransitionAppendChart';
+import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl } = props;
