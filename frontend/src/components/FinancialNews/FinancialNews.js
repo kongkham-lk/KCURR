@@ -72,7 +72,7 @@ export default function FinancialNews(props) {
                     </div>
                     {filter && <Stack direction="row" style={style.Stack}>
                         {newsTopic?.map((topic, index) => (
-                            <Chip label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
+                            <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
                         ))}
                     </Stack>}
                     {newsLists.map(news => {
