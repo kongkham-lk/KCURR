@@ -18,6 +18,18 @@ export default function Convertor(props) {
         targetCurr: curr != null ? curr.substring(4).toUpperCase() : "THB",
     };
 
+    let baseCurr;
+    let targetCurr;
+    let amount;
+    let total;
+
+    if (formData !== null) {
+        baseCurr = formData.baseCurr;
+        targetCurr = formData.targetCurr;
+        amount = formData.amount;
+        total = formData.total;
+    };
+
     const setFormDataToConvertor = (inputData, response) => {
         setIsNewUpdateRequest(true);
         setFormData(() => {
@@ -25,24 +37,30 @@ export default function Convertor(props) {
                 ...inputData, total: response.data
             }
         });
-    }
-
+    };
+    
     const attr = {
         LineChartWithRangeSelector: {
-            formData,
+            currencyRateData: formData,
             passInRequestState: isNewUpdateRequest,
             displayFeature,
             ...props
         }
-    }
+    };
     
     return (
         <>
             <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} />
-            <RateHistoryGraph {...attr.LineChartWithRangeSelector} />
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} /> {formData !== null && (
+                <>
+                    <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{ fontSize: isDisplaySM ? "1.7rem" : "2.125rem" }}>
+                        {amount} {baseCurr} = {total.toFixed(2)} {targetCurr}
+                    </Typography>
+                    <RateHistoryGraph {...attr.LineChartWithRangeSelector} />
+                </>
+            )}
         </>
     )
 }
