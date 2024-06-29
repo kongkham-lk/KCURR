@@ -1,0 +1,49 @@
+
+import { useState, useEffect, useMemo } from 'react';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { TransitionGroup } from 'react-transition-group';
+
+const currCode = "usd";
+
+export default function TransitionGroupExample(props) {
+    const {} = props;
+    const [displayChart, setDisplayChart] = useState(currCode);
+
+    const renderGraph = (item) => {
+        return (
+            <div>{item}</div>
+        );
+    }
+
+    const handleDisplayChart = (currCode) => {
+        if (displayChart.length === 0) {
+            setDisplayChart(currCode);
+        } else {
+            setDisplayChart("");
+        }
+    };
+
+    const addFruitButton = (
+        <Button
+            variant="contained"
+            onClick={() => handleDisplayChart(currCode)}
+        >
+            Add fruit to basket
+        </Button>
+    );
+
+    return (
+        <div>
+            {addFruitButton}
+            <TransitionGroup style={{ marginTop: '10px' }}>
+                <Collapse key={displayChart}>{renderGraph(displayChart)}</Collapse>
+            </TransitionGroup>
+        </div>
+    );
+}
