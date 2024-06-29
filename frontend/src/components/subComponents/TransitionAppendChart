@@ -12,7 +12,7 @@ import HistoricalRateGraph from './HistoricalRateGraph';
 
 const currCode = "usd";
 
-export default function TransitionAppendItem(props) {
+export default function TransitionAppendChart(props) {
     const [displayChart, setDisplayChart] = useState(currCode);
 
     const renderGraph = (item) => {
