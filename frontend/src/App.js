@@ -5,7 +5,7 @@ import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable'
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import FinancialNews from './components/FinancialNews/FinancialNews';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { Loading } from './components/Loading';
+import { Loading } from './components/subComponents/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';

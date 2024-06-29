@@ -3,7 +3,7 @@ import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { getFlag } from '../util/getFlag';
+import { getFlag } from '../../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
     const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 

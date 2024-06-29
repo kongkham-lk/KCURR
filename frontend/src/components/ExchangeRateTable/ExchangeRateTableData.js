@@ -13,16 +13,16 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
-import CurrCountriesDropDown from '../CurrCountriesDropDown';
+import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
 import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
 import { retrieveExchangeRates } from '../../util/apiClient';
-import { LineGraph } from '../LineGraph';
+import { LineGraph } from '../subComponents/LineGraph';
 import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter';
-import CircularProgressWithLabel from '../../util/CircularProgressWithLabel';
+import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
 
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD } = props;

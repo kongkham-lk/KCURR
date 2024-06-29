@@ -2,9 +2,9 @@ import '../../App.css';
 import { useState, useEffect } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
-import { LineGraph } from '../LineGraph';
+import { LineGraph } from '../subComponents/LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
-import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
+import RangeTimeSeriesSelector from '../subComponents/RangeTimeSeriesSelector';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 
