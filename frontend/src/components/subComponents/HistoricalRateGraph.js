@@ -7,7 +7,7 @@ import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 
 export default function HistoricalRateGraph(props) {
-    const { currencyRateData, passInRequestState, isDisplaySM, displayFeature } = props;
+    const { currencyRateData, passInRequestState, isDisplaySM, displayFeature, removeMarginTop = false} = props;
     
     const [timeSeries, setTimeSeries] = useState(null);
     const [timeSeriesRange, setTimeSeriesRange] = useState("1d");
@@ -47,8 +47,8 @@ export default function HistoricalRateGraph(props) {
     return (
         <>
             {timeSeries !== null &&
-                <div style={{ borderTop: "1px solid #adadad60" }}>
-                    <Typography variant={isDisplaySM ? "h6" : "h5"} mt={isDisplaySM ? 1 : 2.5} fontWeight={400} >
+                <div style={{ borderTop: !removeMarginTop && "1px solid #adadad60" }}>
+                    <Typography variant={isDisplaySM ? "h6" : "h5"} mt={!removeMarginTop ? isDisplaySM ? 1 : 2.5 : 0} fontWeight={400} >
                         {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
                     </Typography>
                     <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} >

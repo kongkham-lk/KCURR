@@ -40,7 +40,7 @@ export default function Convertor(props) {
     };
     
     const attr = {
-        LineChartWithRangeSelector: {
+        RateHistoryGraph: {
             currencyRateData: formData,
             passInRequestState: isNewUpdateRequest,
             displayFeature,
@@ -53,12 +53,13 @@ export default function Convertor(props) {
             <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} /> {formData !== null && (
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} /> 
+            {formData !== null && (
                 <>
                     <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{ fontSize: isDisplaySM ? "1.7rem" : "2.125rem" }}>
                         {amount} {baseCurr} = {total.toFixed(2)} {targetCurr}
                     </Typography>
-                    <RateHistoryGraph {...attr.LineChartWithRangeSelector} />
+                    <RateHistoryGraph {...attr.RateHistoryGraph} />
                 </>
             )}
         </>

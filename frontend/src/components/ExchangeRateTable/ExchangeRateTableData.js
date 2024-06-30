@@ -31,9 +31,10 @@ export default function ExchangeRateTableData(props) {
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState("");
+    const [appendCharts, setAppendCharts] = useState([false, false, false, false]);
 
     const timeSeriesRangeLength = "1w";
-    const displayFeature = currentUrl.pathname.toLowerCase().includes("Chart");
+    const displayFeature = currentUrl.pathname.toLowerCase().includes("chart");
 
     // retrieved initial exchange rate table list
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
@@ -203,11 +204,18 @@ export default function ExchangeRateTableData(props) {
             isDisplayMD,
         },
         RateHistoryGraph: { 
-            passInRequestState: true, 
-            isDisplaySM, 
-            displayFeature 
+            passInRequestState: true,
+            displayFeature,
+            ...props
         },
-    }
+    };
+
+    const handleToggleFlags = async (index) => {
+        const newAppendCharts = [...appendCharts];
+        const isShow = appendCharts[index]
+        newAppendCharts[index] = !isShow;
+        setAppendCharts([...newAppendCharts]);
+    };
 
     return (
         <>
@@ -245,10 +253,9 @@ export default function ExchangeRateTableData(props) {
                                 {visibleRows.map((currList, index) => {
                                     const targetCurrCode = currList.targetCurr;
                                     const currencyRateData = {
-                                        baseCurr: currCodeArray[0].targetCurr,
+                                        baseCurr: currCodeArray[0],
                                         targetCurr: currList.targetCurr
-                                    }
-                                    console.log("currList.targetCurr: ", currList.targetCurr)
+                                    };
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const timeSeries = currList.timeSeries;
 
@@ -259,7 +266,7 @@ export default function ExchangeRateTableData(props) {
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={sxStyle.paddingXAxisNone}
+                                                    sx={{...sxStyle.paddingXAxisNone, ...sxStyle.BorderTopOnly}}
                                                 >
                                                     <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
                                                         <Button
@@ -278,23 +285,23 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px" }}>
+                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderTopOnly }}>
                                                     {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
                                                 </TableCell>
                                                 {isDisplaySM ? "" :
-                                                    <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
+                                                    <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM), ...sxStyle.BorderTopOnly}}>
                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                     </TableCell>
                                                 }
                                                 {/* Chart Cell */}
-                                                <TableCell align="right" style={styleTableCell(currList, isDisplaySM)}>
-                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }}>
+                                                <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM), ...sxStyle.BorderTopOnly}}>
+                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
                                                         {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell
                                                     align="right"
-                                                    style={styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}
+                                                    style={{...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM), ...sxStyle.BorderTopOnly}}
                                                     onClick={() => handleDelete(targetCurrCode)}
                                                 >
                                                     <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
@@ -302,7 +309,7 @@ export default function ExchangeRateTableData(props) {
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
-                                            <TransitionAppendChart currencyRateData={currencyRateData} {...attr.RateHistoryGraph}  />
+                                            <TransitionAppendChart {...attr.RateHistoryGraph} currencyRateData={currencyRateData} appendChart={appendCharts[index]} />
                                         </>
                                     );
                                 })}
@@ -316,7 +323,7 @@ export default function ExchangeRateTableData(props) {
                     </TableContainer>
 
                     {/* Table Pageination */}
-                    <Box>
+                    <Box sx={sxStyle.BorderTopOnly}>
                         <Box
                             sx={{
                                 ...sxStyle.PaginationSubContainer.main,
@@ -416,5 +423,6 @@ const sxStyle = {
     },
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' },
-    paddingXAxisNone: {padding: '16px 0px'}
+    paddingXAxisNone: {padding: '16px 0px'},
+    BorderTopOnly: {borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none'}
 };
