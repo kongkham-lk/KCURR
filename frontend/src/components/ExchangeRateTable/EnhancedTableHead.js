@@ -89,7 +89,7 @@ const borderNone = { border: 'none' };
 const style = {
     TableRow: { width: "100%", whiteSpace: "nowrap" },
     TableCell: {
-        lg: { width: "20%", borderNone },
-        sm: { width: "10%", padding: "0px 0px 10px 10px", borderNone }
+        lg: { width: "20%", ...borderNone },
+        sm: { width: "10%", padding: "0px 0px 10px 10px", ...borderNone }
     },
 }
