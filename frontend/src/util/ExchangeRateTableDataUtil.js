@@ -96,5 +96,5 @@ export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
 };
 
 const style = {
-    borderNone: {border: 'none'},
+    borderNone: { border: 'none' },
 };

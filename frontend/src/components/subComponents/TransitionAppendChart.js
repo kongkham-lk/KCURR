@@ -32,7 +32,7 @@ export default function TransitionAppendChart(props) {
             </Box>
         );
     };
-// console.log("key: ", (currencyRateData.targetCurr + "_Chart"))
+    // console.log("key: ", (currencyRateData.targetCurr + "_Chart"))
     return (
         <>
             {/* {console.log("Include hidden rows!!!")} */}

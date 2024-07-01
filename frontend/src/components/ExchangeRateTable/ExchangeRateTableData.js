@@ -94,7 +94,7 @@ export default function ExchangeRateTableData(props) {
     const handleSetDefaultCurr = async (targetCurr) => {
         // get the index of new default curr
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
-        
+
         // Do nth if new default currency is not exist or already set as default currency
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
             // console.log("Rearrage list!!!");
@@ -105,7 +105,7 @@ export default function ExchangeRateTableData(props) {
                 ...currCodeArray.slice(0, targetCurrIndex),
                 ...currCodeArray.slice(targetCurrIndex + 1)
             ];
-            
+
             // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
             await handleUpdateNewLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
@@ -190,21 +190,21 @@ export default function ExchangeRateTableData(props) {
         CurrCountriesDropDown: {
             label: "Add Currency",
             inputCurrType: "targetCurr",
-            onAddCurrCountry: {handleAddCurrCountry},
+            onAddCurrCountry: { handleAddCurrCountry },
             currCountiesCodeMapDetail,
-            passInStyle: {...style.CurrCountriesDropDown},
+            passInStyle: { ...style.CurrCountriesDropDown },
             size: "small",
             sortedCurrsCodeList,
             validCurFlagList,
         },
         CircularProgressWithLabel: {
             ...sxStyle.progressBar,
-            onUpdateNewLiveRate: {updateNewLiveRate},
+            onUpdateNewLiveRate: { updateNewLiveRate },
             lastUpdateRateTime,
             isDisplaySM,
             isDisplayMD,
         },
-        RateHistoryGraph: { 
+        RateHistoryGraph: {
             passInRequestState: true,
             displayFeature,
             ...props
@@ -262,14 +262,14 @@ export default function ExchangeRateTableData(props) {
 
                                     return (
                                         <>
-                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} style={{...styleTableRow(targetCurrCode, defaultCurrCode)}} >
+                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode) }} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={{...sxStyle.paddingNone, ...sxStyle.BorderNone }}
+                                                    sx={{ ...sxStyle.paddingNone, ...sxStyle.BorderNone }}
                                                 >
-                                                    <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
+                                                    <Box sx={{ ...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
                                                         <Button
                                                             variant="text"
                                                             onClick={() => handleSetDefaultCurr(targetCurrCode)}
@@ -287,23 +287,23 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderNone }}>
+                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderNone }} onClick={() => handleToggleFlags(index)} >
                                                     {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
                                                 </TableCell>
                                                 {isDisplaySM ? "" :
-                                                    <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM)}}>
+                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM) }} onClick={() => handleToggleFlags(index)} >
                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                     </TableCell>
                                                 }
                                                 {/* Chart Cell */}
-                                                <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM)}}>
+                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM) }}>
                                                     <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
                                                         {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell
                                                     align="right"
-                                                    style={{...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}}
+                                                    style={{ ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM) }}
                                                     onClick={() => handleDelete(targetCurrCode)}
                                                 >
                                                     <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
@@ -411,8 +411,8 @@ const sxStyle = {
         sm: { margin: "0px 10px", padding: "0px" },
     },
     hoverButton: {
-        main: {height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',},
-        hover: {'&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px' }},
+        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', },
+        hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px' } },
     },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
@@ -426,8 +426,8 @@ const sxStyle = {
     },
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' },
-    paddingNone: {padding: '0px'},
-    paddingXAxisOnly: {padding: '20px 0px'},
-    BorderTopOnly: {borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none'},
-    BorderNone: {border: 'none'}
+    paddingNone: { padding: '0px' },
+    paddingXAxisOnly: { padding: '20px 0px' },
+    BorderTopOnly: { borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none' },
+    BorderNone: { border: 'none' }
 };

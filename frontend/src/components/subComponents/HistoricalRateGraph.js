@@ -7,8 +7,8 @@ import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 
 export default function HistoricalRateGraph(props) {
-    const { currencyRateData, passInRequestState, isDisplaySM, displayFeature, removeMarginTop = false} = props;
-    
+    const { currencyRateData, passInRequestState, isDisplaySM, displayFeature, removeMarginTop = false } = props;
+
     const [timeSeries, setTimeSeries] = useState(null);
     const [timeSeriesRange, setTimeSeriesRange] = useState("1d");
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(passInRequestState);
