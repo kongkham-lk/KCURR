@@ -261,7 +261,7 @@ export default function ExchangeRateTableData(props) {
 
                                     return (
                                         <>
-                                            <TableRow key={targetCurrCode + "_Main"} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
+                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} style={{...styleTableRow(targetCurrCode, defaultCurrCode)}} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
