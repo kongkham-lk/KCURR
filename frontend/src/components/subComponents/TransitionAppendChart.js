@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 
 
 export default function TransitionAppendChart(props) {
-    const { appendChart } = props;
+    const { appendChart, currencyRateData } = props;
     const [displayChart, setDisplayChart] = useState(null);
 
     useEffect(() => {
@@ -33,7 +33,8 @@ export default function TransitionAppendChart(props) {
 
     return (
         <>
-            <TableRow>
+            {/* {console.log("Include hidden rows!!!")} */}
+            <TableRow key={currencyRateData.targetCurr + "_Chart"}>
                 <TableCell colSpan={5} sx={{ padding: 0 }} >
                     <TransitionGroup>
                         <Collapse key={displayChart} style={{ transitionDuration: '1000ms' }} >{renderGraph(displayChart)}</Collapse>
