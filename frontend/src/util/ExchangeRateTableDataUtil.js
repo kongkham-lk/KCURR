@@ -36,12 +36,12 @@ export function stableSort(array, comparator) {
     return stabilizedArray.map((el) => el[0]);
 }
 
-export function styleTableCell(currList, isDisplaySM) {
+export function styleTableCell(currList, isDisplaySM, updateColor = true) {
     let paddingVal = isDisplaySM ? "0px" : "16px"
     if (currList.change >= 0 || currList.change === null) {
-        return { color: "green", padding: paddingVal, ...style.borderNone }
+        return { color: updateColor && "green", padding: paddingVal, ...style.borderNone }
     } else {
-        return { color: "red", padding: paddingVal, ...style.borderNone }
+        return { color: updateColor && "red", padding: paddingVal, ...style.borderNone }
     }
 };
 
@@ -51,14 +51,13 @@ export function styleTableRow(currKey, defaultCurr) {
             backgroundColor: "#1876d259", backgroundClip: "border-box",
             outline: "7px solid white", outlineOffset: "-2px",
             borderRadius: "13px", verticalAlign: 'middle',
-            borderBottom: '1px solid rgba(224, 224, 224, 1)'
         }
     } else {
         return {
             backgroundColor: "transparent", backgroundClip: "border-box",
             outline: "7px solid transparent", outlineOffset: "-2px",
             borderRadius: "13px", verticalAlign: 'middle',
-            borderBottom: '1px solid rgba(224, 224, 224, 1)'
+            borderTop: '1px solid rgba(224, 224, 224, 1)'
         }
     }
 }

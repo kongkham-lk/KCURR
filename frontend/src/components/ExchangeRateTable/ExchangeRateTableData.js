@@ -332,7 +332,7 @@ export default function ExchangeRateTableData(props) {
                     </TableContainer>
 
                     {/* Table Pageination */}
-                    <Box>
+                    <Box sx={{...sxStyle.BorderTopOnly}} >
                         <Box
                             sx={{
                                 ...sxStyle.PaginationSubContainer.main,
