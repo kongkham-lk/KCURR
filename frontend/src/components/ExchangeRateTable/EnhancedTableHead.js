@@ -47,7 +47,7 @@ export default function EnhancedTableHead(props) {
                     <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
                         Chart (24h)
                     </TableCell>
-                    <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px" }} align="right" >
+                    <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px", ...borderNone }} align="right" >
                         {isDisplaySM ? "Del" : "Delete"}
                     </TableCell>
                 </TableRow>
@@ -84,10 +84,12 @@ let headCells = [
     },
 ];
 
+const borderNone = { border: 'none' };
+
 const style = {
     TableRow: { width: "100%", whiteSpace: "nowrap" },
     TableCell: {
-        lg: { width: "20%" },
-        sm: { width: "10%", padding: "0px 0px 10px 10px" }
+        lg: { width: "20%", borderNone},
+        sm: { width: "10%", padding: "0px 0px 10px 10px", borderNone }
     },
 }
