@@ -97,7 +97,7 @@ public class CurrService
             }
         }
 
-        if (isNewUpdateRequest || !LatestRates.Any())
+        if (isNewUpdateRequest)
             LatestRates = await GetLatestExchangeRates(baseCurr);
 
         IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
