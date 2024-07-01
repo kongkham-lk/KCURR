@@ -261,7 +261,7 @@ export default function ExchangeRateTableData(props) {
 
                                     return (
                                         <>
-                                            <TableRow key={targetCurrCode} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
+                                            <TableRow key={targetCurrCode + "_Main"} style={styleTableRow(targetCurrCode, defaultCurrCode)} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
@@ -309,6 +309,7 @@ export default function ExchangeRateTableData(props) {
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
+                                            {console.log("Hide Chart!!!")}
                                             <TransitionAppendChart {...attr.RateHistoryGraph} currencyRateData={currencyRateData} appendChart={appendCharts[index]} />
                                         </>
                                     );

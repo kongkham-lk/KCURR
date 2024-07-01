@@ -15,8 +15,10 @@ export default function TransitionAppendChart(props) {
         const currCode = () => <HistoricalRateGraph {...props} removeMarginTop={true} />;
         const handleDisplayChart = () => {
             if (appendChart) {
+                console.log(">>> append row!!!")
                 setDisplayChart(currCode);
             } else {
+                // console.log("<<< clear row!!!")
                 setDisplayChart(null);
             }
         }
@@ -30,7 +32,7 @@ export default function TransitionAppendChart(props) {
             </Box>
         );
     };
-
+// console.log("key: ", (currencyRateData.targetCurr + "_Chart"))
     return (
         <>
             {/* {console.log("Include hidden rows!!!")} */}
