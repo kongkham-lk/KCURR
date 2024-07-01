@@ -262,12 +262,12 @@ export default function ExchangeRateTableData(props) {
 
                                     return (
                                         <>
-                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode) }} >
+                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={{ ...sxStyle.paddingNone, ...sxStyle.BorderNone }}
+                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
                                                         <Button
@@ -287,23 +287,29 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderNone }} onClick={() => handleToggleFlags(index)} >
-                                                    {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
-                                                </TableCell>
-                                                {isDisplaySM ? "" :
-                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM) }} onClick={() => handleToggleFlags(index)} >
-                                                        {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
-                                                    </TableCell>
-                                                }
-                                                {/* Chart Cell */}
-                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM) }}>
-                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
-                                                        {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
-                                                    </div>
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
+                                                    <Table>
+                                                        <TableRow>
+                                                            <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
+                                                            </TableCell>
+                                                            {isDisplaySM ? "" :
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                    {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                                </TableCell>
+                                                            }
+                                                            {/* Chart Cell */}
+                                                            <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }}>
+                                                                <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
+                                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </Table>
                                                 </TableCell>
                                                 <TableCell
                                                     align="right"
-                                                    style={{ ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM) }}
+                                                    sx={{ ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM), ...style.TableCell }}
                                                     onClick={() => handleDelete(targetCurrCode)}
                                                 >
                                                     <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
@@ -379,6 +385,11 @@ export default function ExchangeRateTableData(props) {
     );
 };
 
+const commonStyle = {
+    paddingNone: { padding: '0px' },
+    borderNone: { border: 'none' },
+}
+
 const style = {
     span: { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: "3px", maxWidth: "200px" },
     CurrCountriesDropDown: { height: "auto" },
@@ -390,7 +401,12 @@ const style = {
     },
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
-    NoGapTableContainer: { marginTop: "-15px" }
+    NoGapTableContainer: { marginTop: "-15px" },
+    TableRow: { width: "100%", whiteSpace: "nowrap" },
+    TableCell: {
+        lg: { width: "20%", ...commonStyle.borderNone },
+        sm: { width: "10%", padding: "0px 0px 10px 10px", ...commonStyle.borderNone }
+    },
 };
 
 const sxStyle = {
@@ -412,7 +428,7 @@ const sxStyle = {
     },
     hoverButton: {
         main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', },
-        hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px' } },
+        hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px', transition: 'background 0.6s' } },
     },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
@@ -426,8 +442,6 @@ const sxStyle = {
     },
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' },
-    paddingNone: { padding: '0px' },
     paddingXAxisOnly: { padding: '20px 0px' },
     BorderTopOnly: { borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none' },
-    BorderNone: { border: 'none' }
 };
