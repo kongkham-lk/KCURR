@@ -1,3 +1,4 @@
+import '../../App.css';
 import { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -266,7 +267,7 @@ export default function ExchangeRateTableData(props) {
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={{...sxStyle.paddingXAxisNone, ...sxStyle.BorderTopOnly}}
+                                                    sx={{...sxStyle.paddingNone, ...sxStyle.BorderNone }}
                                                 >
                                                     <Box sx={{...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover)}}>
                                                         <Button
@@ -275,6 +276,7 @@ export default function ExchangeRateTableData(props) {
                                                             disabled={index === 0 && true}
                                                             sx={{
                                                                 ...sxStyle.defaultCurrSetterButton.main,
+                                                                ...sxStyle.paddingXAxisOnly,
                                                                 ...(isDisplaySM ? sxStyle.defaultCurrSetterButton.sm : sxStyle.defaultCurrSetterButton.lg)
                                                             }}
                                                         >
@@ -285,23 +287,23 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderTopOnly }}>
+                                                <TableCell align="right" style={{ paddingRight: isDisplaySM && "0px", ...sxStyle.BorderNone }}>
                                                     {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
                                                 </TableCell>
                                                 {isDisplaySM ? "" :
-                                                    <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM), ...sxStyle.BorderTopOnly}}>
+                                                    <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM)}}>
                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                     </TableCell>
                                                 }
                                                 {/* Chart Cell */}
-                                                <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM), ...sxStyle.BorderTopOnly}}>
+                                                <TableCell align="right" style={{...styleTableCell(currList, isDisplaySM)}}>
                                                     <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
                                                         {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell
                                                     align="right"
-                                                    style={{...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM), ...sxStyle.BorderTopOnly}}
+                                                    style={{...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM)}}
                                                     onClick={() => handleDelete(targetCurrCode)}
                                                 >
                                                     <IconButton aria-label="delete" style={{ display: targetCurrCode === defaultCurrCode && "none" }}>
@@ -324,7 +326,7 @@ export default function ExchangeRateTableData(props) {
                     </TableContainer>
 
                     {/* Table Pageination */}
-                    <Box sx={sxStyle.BorderTopOnly}>
+                    <Box>
                         <Box
                             sx={{
                                 ...sxStyle.PaginationSubContainer.main,
@@ -405,12 +407,12 @@ const sxStyle = {
     Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': { padding: 0 } },
     defaultCurrSetterButton: {
         main: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' }, '&:disabled': { color: 'black' } },
-        lg: { marginLeft: "15px" },
-        sm: { marginLeft: "10px", padding: "0px" },
+        lg: { margin: "0px 15px" },
+        sm: { margin: "0px 10px", padding: "0px" },
     },
     hoverButton: {
         main: {height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s',},
-        hover: {'&:hover': { background: '#0000000a', margin: '0px 0.5px', }},
+        hover: {'&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px' }},
     },
     PaginationMainContainer: {
         main: { display: 'flex', justifyContent: 'space-between' },
@@ -424,6 +426,8 @@ const sxStyle = {
     },
     progressBarContainer: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     progressBar: { minWidth: '190px', display: 'flex' },
-    paddingXAxisNone: {padding: '16px 0px'},
-    BorderTopOnly: {borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none'}
+    paddingNone: {padding: '0px'},
+    paddingXAxisOnly: {padding: '20px 0px'},
+    BorderTopOnly: {borderTop: '1px solid rgba(224, 224, 224, 1)', borderBottom: 'none'},
+    BorderNone: {border: 'none'}
 };

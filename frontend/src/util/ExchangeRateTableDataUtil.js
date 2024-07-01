@@ -39,9 +39,9 @@ export function stableSort(array, comparator) {
 export function styleTableCell(currList, isDisplaySM) {
     let paddingVal = isDisplaySM ? "0px" : "16px"
     if (currList.change >= 0 || currList.change === null) {
-        return { color: "green", padding: paddingVal }
+        return { color: "green", padding: paddingVal, ...style.borderNone }
     } else {
-        return { color: "red", padding: paddingVal }
+        return { color: "red", padding: paddingVal, ...style.borderNone }
     }
 };
 
@@ -49,8 +49,16 @@ export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
             backgroundColor: "#1876d259", backgroundClip: "border-box",
-            outline: "10px solid white", outlineOffset: "-2px",
+            outline: "7px solid white", outlineOffset: "-2px",
             borderRadius: "13px", verticalAlign: 'middle',
+            borderBottom: '1px solid rgba(224, 224, 224, 1)'
+        }
+    } else {
+        return {
+            backgroundColor: "transparent", backgroundClip: "border-box",
+            outline: "7px solid transparent", outlineOffset: "-2px",
+            borderRadius: "13px", verticalAlign: 'middle',
+            borderBottom: '1px solid rgba(224, 224, 224, 1)'
         }
     }
 }
@@ -76,13 +84,17 @@ const descendingComparator = (a, b, orderBy) => {
 }
 
 export function styleTableRowInFile(dense, emptyRows) {
-    return { height: (dense ? 33 : 53) * emptyRows }
+    return { height: (dense ? 33 : 53) * emptyRows, ...style.borderNone }
 };
 
 export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
     } else {
-        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
+        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
     }
+};
+
+const style = {
+    borderNone: {border: 'none'},
 };

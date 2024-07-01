@@ -59,7 +59,7 @@ export default function HistoricalRateGraph(props) {
                             <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
                                 <LineGraph timeSeries={timeSeries} displayLabel={true} />
                             </Box>
-                            <div style={{ ...style.divRangeTimeSeriesSelector, marginTop: isDisplaySM ? "4%" : "2.5%", display: !displayFeature && "none" }}>
+                            <div style={{ ...style.divRangeTimeSeriesSelector, margin: isDisplaySM ? "4% 0px" : "2.5% 0px", display: !displayFeature && "none" }}>
                                 <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                             </div>
                         </div>
