@@ -367,6 +367,7 @@ export default function ExchangeRateTableData(props) {
                                 {isDisplaySM &&
                                     <CurrCountriesDropDown
                                         sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                        onAddCurrCountry={handleAddCurrCountry}
                                         {...attr.CurrCountriesDropDown}
                                     />
                                 }
