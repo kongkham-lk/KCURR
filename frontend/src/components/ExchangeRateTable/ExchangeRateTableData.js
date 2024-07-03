@@ -34,7 +34,7 @@ export default function ExchangeRateTableData(props) {
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState("");
     const [appendCharts, setAppendCharts] = useState([false, false, false, false]);
 
-    const timeSeriesRangeLength = "1w";
+    const timeSeriesRangeLength = "1d"; // time range for display chart on the live rate table
     const displayFeature = currentUrl.pathname.toLowerCase().includes("chart");
 
     // retrieved initial exchange rate table list
