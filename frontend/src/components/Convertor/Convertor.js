@@ -12,7 +12,7 @@ export default function Convertor(props) {
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
-    const displayFeature = currentUrl.pathname.toLowerCase().includes("convert");
+    const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
     const currInput = {
         baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD",
         targetCurr: curr != null ? curr.substring(4).toUpperCase() : "THB",
@@ -43,7 +43,7 @@ export default function Convertor(props) {
         RateHistoryGraph: {
             currencyRateData: formData,
             passInRequestState: isNewUpdateRequest,
-            displayFeature,
+            isFeatureDisplay,
             ...props
         }
     };

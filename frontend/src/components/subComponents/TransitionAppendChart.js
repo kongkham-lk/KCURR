@@ -36,10 +36,10 @@ export default function TransitionAppendChart(props) {
     return (
         <>
             {/* {console.log("Include hidden rows!!!")} */}
-            <TableRow key={currencyRateData.targetCurr + "_Chart"}>
-                <TableCell colSpan={5} sx={{ padding: 0, border: 'none' }} >
+            <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
+                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={{ padding: 0, border: 'none' }} >
                     <TransitionGroup>
-                        <Collapse key={displayChart} style={{ transitionDuration: '1000ms' }} >{renderGraph(displayChart)}</Collapse>
+                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{ transitionDuration: '1000ms' }} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>

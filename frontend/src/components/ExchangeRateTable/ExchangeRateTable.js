@@ -12,7 +12,7 @@ export default function ExchangeRateTable(props) {
     
     // enable live rate's display chart feature flag
     // if yes, retrieve timeSeries instead of exchangeRates
-    const displayFeature = currentUrl.pathname.toLowerCase().includes("chart");
+    const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("chart");
 
     useEffect(
         function fetchData() {
@@ -32,7 +32,7 @@ export default function ExchangeRateTable(props) {
     const propsWrapper = {
         initialDefaultCurrExchangeRates,
         initialDefaultCurr,
-        displayFeature,
+        isFeatureDisplay,
         ...props
     }
 

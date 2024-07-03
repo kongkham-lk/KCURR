@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete } from '../../util/ExchangeRateTableDataUtil';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getNewLiveRateFromCurrList, } from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
@@ -27,23 +27,23 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTableData(props) {
-    const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, displayFeature } = props;
+    const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, isFeatureDisplay } = props;
+    const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
+
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr); // set default/main currency that will be used to against the other target currency
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']); // initial currency list that will be displayed on screen
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState([...initialDefaultCurrExchangeRates]);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState(""); // specified the latest update rate of the live rate table
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
-
-    const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, defaultCurrExchangeRates, timeSeriesRangeLength); // retrieved initial exchange rate table list
-    const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [triggerNewTimeDisplay, setTriggerNewTimeDisplay] = useState(false);
+
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, defaultCurrExchangeRates, timeSeriesRangeLength); // retrieved initial exchange rate table list
+    const [currLists, setCurrLists] = useState(initialCurrLists);
 
     useEffect(() => {
         if (isReady) {
@@ -112,28 +112,13 @@ export default function ExchangeRateTableData(props) {
         }
     };
 
-    const getNewLiveRateFromCurrList = async (currCodeArray, newAddCurrDataSet = null) => {
-        // console.log("Fetching latest rate from API!!!")
-        const newLists = [];
-
-        if (newAddCurrDataSet === null) {
-            const initialValue = { baseCurr: currCodeArray[0] };
-            newAddCurrDataSet = await retrieveExchangeRates(initialValue);
-        }
-
-        for (let i in currCodeArray) {
-            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
-        }
-        return newLists;
-    }
-
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
         // console.log("Fetching latest rate from API!!!")
-        const newLists = await getNewLiveRateFromCurrList(currCodeArray);
 
         const initialValue = { baseCurr: currCodeArray[0] };
         const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
+        const newLists = await getNewLiveRateFromCurrList(isFeatureDisplay, currCodeArray, timeSeriesRangeLength, newAddCurrDataSet);
 
         // console.log("check response list of latest rate:  ", newLists);
         setCurrLists(newLists);
@@ -215,7 +200,7 @@ export default function ExchangeRateTableData(props) {
         },
         RateHistoryGraph: {
             passInRequestState: true,
-            displayFeature,
+            isFeatureDisplay,
             ...props
         },
     };
@@ -271,7 +256,7 @@ export default function ExchangeRateTableData(props) {
 
                                     return (
                                         <>
-                                            <TableRow class="clipPath" key={targetCurrCode + "_Main"} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
+                                            <TableRow className="clipPath" key={targetCurrCode + "_Main"} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
@@ -298,22 +283,24 @@ export default function ExchangeRateTableData(props) {
                                                 </TableCell>
                                                 <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
                                                     <Table>
-                                                        <TableRow>
-                                                            <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
-                                                                {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
-                                                            </TableCell>
-                                                            {isDisplaySM ? "" :
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
-                                                                    {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                        <TableBody>
+                                                            <TableRow>
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                    {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
                                                                 </TableCell>
-                                                            }
-                                                            {/* Chart Cell */}
-                                                            <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }}>
-                                                                <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
-                                                                    {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
-                                                                </div>
-                                                            </TableCell>
-                                                        </TableRow>
+                                                                {isDisplaySM ? "" :
+                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                        {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                                    </TableCell>
+                                                                }
+                                                                {/* Chart Cell */}
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }}>
+                                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
+                                                                        {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                                    </div>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        </TableBody>
                                                     </Table>
                                                 </TableCell>
                                                 <TableCell
@@ -326,7 +313,6 @@ export default function ExchangeRateTableData(props) {
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
-                                            {console.log("Hide Chart!!!")}
                                             <TransitionAppendChart {...attr.RateHistoryGraph} currencyRateData={currencyRateData} appendChart={displayRateHistChartFlags[index]} />
                                         </>
                                     );
@@ -341,7 +327,7 @@ export default function ExchangeRateTableData(props) {
                     </TableContainer>
 
                     {/* Table Pageination */}
-                    <Box sx={{...sxStyle.BorderTopOnly}} >
+                    <Box sx={{ ...sxStyle.BorderTopOnly }} >
                         <Box
                             sx={{
                                 ...sxStyle.PaginationSubContainer.main,

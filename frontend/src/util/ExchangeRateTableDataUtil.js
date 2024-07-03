@@ -1,3 +1,6 @@
+import { retrieveExchangeRates } from "./apiClient";
+import { createCurrLists } from "./createCurrLists";
+
 export function getComparator(order, orderBy) {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
@@ -93,6 +96,21 @@ export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
         return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
     }
 };
+
+export async function getNewLiveRateFromCurrList (isFeatureDisplay, currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates = null) {
+    // console.log("Fetching latest rate from API!!!")
+    const newLists = [];
+
+    if (defaultCurrExchangeRates === null) {
+        const initialValue = { baseCurr: currCodeArray[0] };
+        defaultCurrExchangeRates = await retrieveExchangeRates(initialValue);
+    }
+
+    for (let i in currCodeArray) {
+        newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength);
+    }
+    return newLists;
+}
 
 const style = {
     borderNone: { border: 'none' },
