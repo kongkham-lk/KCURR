@@ -29,16 +29,15 @@ import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 export default function ExchangeRateTableData(props) {
     const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl } = props;
     const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
-    const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr);
-    const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']);
-    const [lastUpdateRateTime, setLastUpdateRateTime] = useState("");
-    const [appendCharts, setAppendCharts] = useState([false, false, false, false]);
+    const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr); // set default/main currency that will be used to against the other target currency
+    const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']); // initial currency list that will be displayed on screen
+    const [lastUpdateRateTime, setLastUpdateRateTime] = useState(""); // specified the latest update rate of the live rate table
+    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
 
-    const timeSeriesRangeLength = "1d"; // time range for display chart on the live rate table
-    const displayFeature = currentUrl.pathname.toLowerCase().includes("chart");
+    const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
+    const displayFeature = currentUrl.pathname.toLowerCase().includes("chart"); // enable live rate's display chart feature flag
 
-    // retrieved initial exchange rate table list
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength);
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength); // retrieved initial exchange rate table list
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
@@ -211,10 +210,10 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleToggleFlags = async (index) => {
-        const newAppendCharts = [...appendCharts];
-        const isShow = appendCharts[index]
+        const newAppendCharts = [...displayRateHistChartFlags];
+        const isShow = displayRateHistChartFlags[index]
         newAppendCharts[index] = !isShow;
-        setAppendCharts([...newAppendCharts]);
+        setDisplayRateHistChartFlags([...newAppendCharts]);
     };
 
     return (
@@ -317,7 +316,7 @@ export default function ExchangeRateTableData(props) {
                                                 </TableCell>
                                             </TableRow>
                                             {console.log("Hide Chart!!!")}
-                                            <TransitionAppendChart {...attr.RateHistoryGraph} currencyRateData={currencyRateData} appendChart={appendCharts[index]} />
+                                            <TransitionAppendChart {...attr.RateHistoryGraph} currencyRateData={currencyRateData} appendChart={displayRateHistChartFlags[index]} />
                                         </>
                                     );
                                 })}
