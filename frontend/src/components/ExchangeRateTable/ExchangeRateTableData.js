@@ -27,17 +27,16 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTableData(props) {
-    const { currApiDataSet, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl } = props;
-    const [currDataSet, setCurrDataSet] = useState([...currApiDataSet]);
+    const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, displayFeature } = props;
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr); // set default/main currency that will be used to against the other target currency
     const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']); // initial currency list that will be displayed on screen
+    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState([...initialDefaultCurrExchangeRates]);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState(""); // specified the latest update rate of the live rate table
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
 
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-    const displayFeature = currentUrl.pathname.toLowerCase().includes("chart"); // enable live rate's display chart feature flag
 
-    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, currDataSet, timeSeriesRangeLength); // retrieved initial exchange rate table list
+    const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, defaultCurrExchangeRates, timeSeriesRangeLength); // retrieved initial exchange rate table list
     const [currLists, setCurrLists] = useState(initialCurrLists);
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
@@ -59,7 +58,7 @@ export default function ExchangeRateTableData(props) {
 
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 // console.log("Create new curr list!!!");
-                const currList = await createCurrLists(defaultCurrCode, newCurrCode, currDataSet, timeSeriesRangeLength);
+                const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength);
                 const newLists = [...currLists, currList];
                 setNewCurrCode("");
                 setCurrLists(newLists);
@@ -68,7 +67,7 @@ export default function ExchangeRateTableData(props) {
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, currDataSet, defaultCurrCode, currCodeArray]);
+    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
@@ -106,27 +105,39 @@ export default function ExchangeRateTableData(props) {
             ];
 
             // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
-            await handleUpdateNewLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
+            await handleUpdateDefaultCurrLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
             setCurrCodeArray(newCurrCodeArray);
             setDefaultCurrCode(targetCurr);
         }
     };
 
-    // Refetch new update rate from api
-    const handleUpdateNewLiveRate = async (currCodeArray) => {
+    const getNewLiveRateFromCurrList = async (currCodeArray, newAddCurrDataSet = null) => {
         // console.log("Fetching latest rate from API!!!")
         const newLists = [];
-        const initialValue = { baseCurr: currCodeArray[0] };
-        const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
+
+        if (newAddCurrDataSet === null) {
+            const initialValue = { baseCurr: currCodeArray[0] };
+            newAddCurrDataSet = await retrieveExchangeRates(initialValue);
+        }
 
         for (let i in currCodeArray) {
             newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newAddCurrDataSet, timeSeriesRangeLength);
         }
+        return newLists;
+    }
+
+    // Refetch new default currency rate from api
+    const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
+        // console.log("Fetching latest rate from API!!!")
+        const newLists = await getNewLiveRateFromCurrList(currCodeArray);
+
+        const initialValue = { baseCurr: currCodeArray[0] };
+        const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
 
         // console.log("check response list of latest rate:  ", newLists);
         setCurrLists(newLists);
-        setCurrDataSet(newAddCurrDataSet);
+        setDefaultCurrExchangeRates(newAddCurrDataSet);
         handleUpdateRateTime();
     };
 
@@ -141,7 +152,7 @@ export default function ExchangeRateTableData(props) {
 
     const updateNewLiveRate = (event) => {
         // console.log("Timer trigger!!!")
-        handleUpdateNewLiveRate(currCodeArray);
+        handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
