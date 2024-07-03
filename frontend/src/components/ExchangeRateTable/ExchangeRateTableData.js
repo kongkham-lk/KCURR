@@ -190,7 +190,6 @@ export default function ExchangeRateTableData(props) {
         CurrCountriesDropDown: {
             label: "Add Currency",
             inputCurrType: "targetCurr",
-            onAddCurrCountry: { handleAddCurrCountry },
             currCountiesCodeMapDetail,
             passInStyle: { ...style.CurrCountriesDropDown },
             size: "small",
@@ -342,6 +341,7 @@ export default function ExchangeRateTableData(props) {
                             {!isDisplaySM &&
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
+                                    onAddCurrCountry={handleAddCurrCountry}
                                     {...attr.CurrCountriesDropDown}
                                 />
                             }
