@@ -18,7 +18,7 @@ export default function ExchangeRateTable(props) {
         function fetchData() {
             async function fetchCurrApiData() {
                 try {
-                    const defaultCurrExchangeRates = await retrieveExchangeRates(initialDefaultCurr);
+                    const defaultCurrExchangeRates = isFeatureDisplay ? null : await retrieveExchangeRates(initialDefaultCurr);
                     setInitialDefaultCurrExchangeRates(defaultCurrExchangeRates);
                     setIsReady(true);
                 } catch (e) {

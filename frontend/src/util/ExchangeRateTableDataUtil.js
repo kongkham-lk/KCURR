@@ -97,17 +97,17 @@ export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
     }
 };
 
-export async function getNewLiveRateFromCurrList (isFeatureDisplay, currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates = null) {
+export async function getNewLiveRateFromCurrList (currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates, isFeatureDisplay) {
     // console.log("Fetching latest rate from API!!!")
     const newLists = [];
 
-    if (defaultCurrExchangeRates === null) {
+    if (defaultCurrExchangeRates === null && !isFeatureDisplay) {
         const initialValue = { baseCurr: currCodeArray[0] };
         defaultCurrExchangeRates = await retrieveExchangeRates(initialValue);
     }
 
     for (let i in currCodeArray) {
-        newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength);
+        newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);
     }
     return newLists;
 }
