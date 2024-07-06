@@ -14,11 +14,9 @@ public class RateTimeSeriesResponse
     public double Highest { set; get; }
     [JsonPropertyName("lowest")]
     public double Lowest { set; get; }
-    [JsonPropertyName("latestRate")]
-    public double LatestRate { set; get; }
 
     public RateTimeSeriesResponse(string[] dayRangeIndicator, string[] monthRangeIndicator, double[] changingRates,
-        double highest, double lowest, double latestRate)
+        double highest, double lowest)
     {
         DayRangeIndicator = dayRangeIndicator;
         MonthRangeIndicator = monthRangeIndicator;
@@ -26,6 +24,5 @@ public class RateTimeSeriesResponse
         Highest = highest;
         Lowest = lowest;
         Lowest = lowest;
-        LatestRate = latestRate;
     }
 }

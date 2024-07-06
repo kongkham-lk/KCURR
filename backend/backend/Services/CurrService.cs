@@ -97,12 +97,9 @@ public class CurrService
             }
         }
 
-        if (isNewUpdateRequest)
-            LatestRates = await GetLatestExchangeRates(baseCurr);
-
         IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
-        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange, LatestRates[targetCurr]);
+        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
 
         // Added new currTimeSeries to memo list
         if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
