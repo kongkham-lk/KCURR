@@ -3,14 +3,16 @@ import { retrieveExchangeRatesTimeSeries } from './apiClient';
 export async function createCurrLists(baseCurr, targetCurr, defaultCurrExchangeRates, timeSeriesRange, isFeatureDisplay) {
 
     if (baseCurr === targetCurr) {
-        return { targetCurr: baseCurr, latestRate: 1, change: null, timeSeries: null };
+        return { targetCurr: baseCurr, latestRate: 1, histRate: null, change: null, timeSeries: null };
     } else {
         let timeSeries, latestRate, histRate;
 
-        try {
-            timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
-        } catch (e) {
-            console.log("ERROR ON AWAIT => ", e);
+        if (isFeatureDisplay) {
+            try {
+                timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
+            } catch (e) {
+                console.log("ERROR ON AWAIT => ", e);
+            }
         }
 
         // only grab default curr's exchange rate if it is not featureDisplay, else defaultCurrExchangeRates is null
@@ -25,9 +27,8 @@ export async function createCurrLists(baseCurr, targetCurr, defaultCurrExchangeR
         }
         
         const change = (latestRate - histRate) * 100 / histRate;
-        console.log('change: ', change);
 
-        return { targetCurr, latestRate: latestRate?.toFixed(4), change: change?.toFixed(2), timeSeries };
+        return { targetCurr, latestRate: latestRate?.toFixed(4), histRate:histRate?.toFixed(4), change: change?.toFixed(2), timeSeries };
     }
 }
 

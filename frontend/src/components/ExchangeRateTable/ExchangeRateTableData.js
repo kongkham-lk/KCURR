@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getNewLiveRateFromCurrList, } from '../../util/ExchangeRateTableDataUtil';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getNewLiveRateFromCurrList, getDayRangeDate, getMonthRangeDate} from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
@@ -44,8 +44,11 @@ export default function ExchangeRateTableData(props) {
 
     const { initialCurrLists, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay); // retrieved initial exchange rate table list
     const [currLists, setCurrLists] = useState(initialCurrLists);
+    const [dayRangeIndicator, setDayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
+    const [monthRangeIndicator, setMonthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
 
     useEffect(() => {
+        //console.log("setCurrLists from initialList, isReady status: ", isReady)
         if (isReady) {
             setCurrLists([...initialCurrLists]);
             handleUpdateRateTime();
@@ -258,11 +261,27 @@ export default function ExchangeRateTableData(props) {
                                         targetCurr: currList.targetCurr
                                     };
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    // console.log("currList.latestRate: ", currList.latestRate)
+                                    // console.log("currList.histRate: ", currList.histRate)
+
+                                    // manually assign each curr row's timeSerie
+                                    // this is needed when the live rate table use exchange rate data instead of timeSeries
+                                    if (!isFeatureDisplay && index !== 0) {
+                                        currList.timeSeries = {
+                                            lowest: Math.min(currList.latestRate, currList.histRate),
+                                            highest: Math.max(currList.latestRate, currList.histRate),
+                                            changingRates: [parseFloat(currList.histRate), parseFloat(currList.latestRate)],
+                                            dayRangeIndicator,
+                                            monthRangeIndicator
+                                        }
+                                    }
+
                                     const timeSeries = currList.timeSeries;
+                                    // console.log("check TimeSeries: ", currList)
 
                                     return (
                                         <>
-                                            <TableRow className="clipPath" key={targetCurrCode + "_Main"} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
+                                            <TableRow className="clipPath" key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
@@ -302,7 +321,7 @@ export default function ExchangeRateTableData(props) {
                                                                 {/* Chart Cell */}
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }}>
                                                                     <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
-                                                                        {timeSeries !== null && <LineGraph timeSeries={timeSeries} />}
+                                                                        {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
                                                                     </div>
                                                                 </TableCell>
                                                             </TableRow>

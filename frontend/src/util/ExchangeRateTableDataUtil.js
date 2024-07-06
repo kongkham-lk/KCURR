@@ -112,6 +112,23 @@ export async function getNewLiveRateFromCurrList (currCodeArray, timeSeriesRange
     return newLists;
 }
 
+// invoke when the live rate table use exchange rate data instead of timeSeries
+export function getDayRangeDate(offsetDate) {
+    const date = getEntireDateString(offsetDate)
+    return date.substring(4, 10);
+}
+
+// invoke when the live rate table use exchange rate data instead of timeSeries
+export function getMonthRangeDate(offsetDate) {
+    const date = getEntireDateString(offsetDate)
+    return date.substring(4, 10);
+}
+
+const getEntireDateString = (offsetDate) => {
+    offsetDate *= 1000 * 60 * 60 * 24
+    return (new Date(Date.now() - offsetDate)) + "";
+}
+
 const style = {
     borderNone: { border: 'none' },
 };
