@@ -319,8 +319,8 @@ export default function ExchangeRateTableData(props) {
                                                                     </TableCell>
                                                                 }
                                                                 {/* Chart Cell */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }}>
-                                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} onClick={() => handleToggleFlags(index)} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
                                                                         {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
                                                                     </div>
                                                                 </TableCell>
