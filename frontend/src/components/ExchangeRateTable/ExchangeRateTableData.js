@@ -202,7 +202,6 @@ export default function ExchangeRateTableData(props) {
         },
         CircularProgressWithLabel: {
             ...sxStyle.progressBar,
-            onUpdateNewLiveRate: { updateNewLiveRate },
             lastUpdateRateTime,
             isDisplaySM,
             isDisplayMD,
@@ -380,6 +379,7 @@ export default function ExchangeRateTableData(props) {
                             {!isDisplayMD &&
                                 <CircularProgressWithLabel
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
+                                    onUpdateNewLiveRate={ updateNewLiveRate }
                                     {...attr.CircularProgressWithLabel}
                                 />
                             }
@@ -395,6 +395,7 @@ export default function ExchangeRateTableData(props) {
                                 }
                                 <CircularProgressWithLabel
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
+                                    onUpdateNewLiveRate={ updateNewLiveRate }
                                     {...attr.CircularProgressWithLabel}
                                 />
                             </Box>
