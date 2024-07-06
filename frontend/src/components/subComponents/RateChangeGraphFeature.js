@@ -6,7 +6,7 @@ import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 
-export default function HistoricalRateGraph(props) {
+export default function RateChangeGraphFeature(props) {
     const { currencyRateData, passInRequestState, isDisplaySM, isFeatureDisplay, removeMarginTop = false } = props;
 
     const [timeSeries, setTimeSeries] = useState(null);

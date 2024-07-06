@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Collapse from '@mui/material/Collapse';
 import { TransitionGroup } from 'react-transition-group';
-import HistoricalRateGraph from './HistoricalRateGraph';
+import RateChangeGraphFeature from './RateChangeGraphFeature';
 import { Box } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -12,7 +12,7 @@ export default function TransitionAppendChart(props) {
     const [displayChart, setDisplayChart] = useState(null);
 
     useEffect(() => {
-        const currCode = () => <HistoricalRateGraph {...props} removeMarginTop={true} />;
+        const currCode = () => <RateChangeGraphFeature {...props} removeMarginTop={true} />;
         const handleDisplayChart = () => {
             if (appendChart) {
                 console.log(">>> append row!!!")

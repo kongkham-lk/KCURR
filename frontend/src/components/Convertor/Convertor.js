@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
-import RateHistoryGraph from '../subComponents/HistoricalRateGraph';
+import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 
 export default function Convertor(props) {
     const { isDisplaySM, currentUrl } = props;
