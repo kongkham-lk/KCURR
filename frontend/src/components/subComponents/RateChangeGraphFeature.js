@@ -52,7 +52,7 @@ export default function RateChangeGraphFeature(props) {
                         {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
                     </Typography>
                     <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} >
-                        1 {baseCurr} = {latestRate.toFixed(2)} {targetCurr}
+                        1 {baseCurr} = {latestRate} {targetCurr}
                     </Typography>
                     {isFeatureDisplay &&
                         <div style={style.divChart} >
