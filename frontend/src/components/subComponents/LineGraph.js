@@ -6,6 +6,7 @@ export function LineGraph(props) {
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
+    console.log("timeSeries: ", timeSeries);
     const borderColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
@@ -77,8 +78,8 @@ export function LineGraph(props) {
                 border: {
                     dash: [6, 6]
                 },
-                min: Math.floor(timeSeries.lowest * 1000) / 1000,
-                max: Math.ceil(timeSeries.highest * 1000) / 1000,
+                // min: timeSeries.lowest,
+                // max: timeSeries.highest,
             },
             x: {
                 display: displayLabel, // Hide X axis labels

@@ -27,7 +27,7 @@ export default function TransitionAppendChart(props) {
 
     const renderGraph = (item) => {
         return (
-            <Box sx={{ padding: appendChart ? '16px' : '0px', paddingTop: '0px', opacity: appendChart ? 1 : 0, transition: 'all 5s ease-out' }} >
+            <Box sx={{ padding: appendChart ? '16px' : '0px', paddingTop: '0px', opacity: appendChart ? 1 : 0, transition: 'all 0.6s ease-out' }} >
                 {item}
             </Box>
         );
@@ -39,7 +39,7 @@ export default function TransitionAppendChart(props) {
             <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
                 <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={{ padding: 0, border: 'none' }} >
                     <TransitionGroup>
-                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{ transitionDuration: '1000ms' }} >{renderGraph(displayChart)}</Collapse>
+                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{ transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>
