@@ -118,20 +118,19 @@ export default function ExchangeRateTableData(props) {
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
         // console.log("Fetching latest rate from API!!!")
-        let newLists = [];
         if (defaultCurrExchangeRates === null && !isFeatureDisplay) {
-            const initialValue = { baseCurr: currCodeArray[0] };
-            const newAddCurrDataSet = await retrieveExchangeRates(initialValue);
-            newLists = await getNewLiveRateFromCurrList(currCodeArray, timeSeriesRangeLength, newAddCurrDataSet, isFeatureDisplay);
-            setDefaultCurrExchangeRates(newAddCurrDataSet);
+            const {defaultCurrExchangeRates, newLists} = await getNewLiveRateFromCurrList(currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates, isFeatureDisplay);
+            setDefaultCurrExchangeRates(defaultCurrExchangeRates);
+            // console.log("check response list of latest rate:  ", newLists);
+            setCurrLists(newLists);
         } else {
+            const newUpdateLists = [];
             for (let i in currCodeArray) {
-                newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);;
+                newUpdateLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);;
             }
+            // console.log("check response list of latest rate:  ", newLists);
+            setCurrLists(newUpdateLists);
         }
-
-        // console.log("check response list of latest rate:  ", newLists);
-        setCurrLists(newLists);
         handleUpdateRateTime();
     };
 

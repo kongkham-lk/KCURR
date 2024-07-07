@@ -109,7 +109,7 @@ export async function getNewLiveRateFromCurrList (currCodeArray, timeSeriesRange
     for (let i in currCodeArray) {
         newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);
     }
-    return newLists;
+    return {defaultCurrExchangeRates, newLists};
 }
 
 // invoke when the live rate table use exchange rate data instead of timeSeries
