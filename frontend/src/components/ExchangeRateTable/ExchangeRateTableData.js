@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getNewLiveRateFromCurrList, getDayRangeDate, getMonthRangeDate} from '../../util/ExchangeRateTableDataUtil';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getNewLiveRateFromCurrList, getDayRangeDate, getMonthRangeDate } from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
@@ -117,13 +117,15 @@ export default function ExchangeRateTableData(props) {
 
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
-        // console.log("Fetching latest rate from API!!!")
+        console.log("Fetching latest rate from API!!!")
         if (defaultCurrExchangeRates === null && !isFeatureDisplay) {
-            const {defaultCurrExchangeRates, newLists} = await getNewLiveRateFromCurrList(currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates, isFeatureDisplay);
+            console.log("From New Default Currency!!!")
+            const { defaultCurrExchangeRates, newLists } = await getNewLiveRateFromCurrList(currCodeArray, timeSeriesRangeLength, defaultCurrExchangeRates, isFeatureDisplay);
             setDefaultCurrExchangeRates(defaultCurrExchangeRates);
             // console.log("check response list of latest rate:  ", newLists);
             setCurrLists(newLists);
         } else {
+            console.log("Every Currency!!!") //THE BELOW FUNCTION IS KIND OF EXISTIN WITH getNewLiveRateFromCurrList() AS WELL
             const newUpdateLists = [];
             for (let i in currCodeArray) {
                 newUpdateLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);;
@@ -144,7 +146,7 @@ export default function ExchangeRateTableData(props) {
     };
 
     const updateNewLiveRate = (event) => {
-        // console.log("Timer trigger!!!")
+        console.log("Timer trigger!!!")
         handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
 
@@ -378,7 +380,7 @@ export default function ExchangeRateTableData(props) {
                             {!isDisplayMD &&
                                 <CircularProgressWithLabel
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                    onUpdateNewLiveRate={ updateNewLiveRate }
+                                    onUpdateNewLiveRate={updateNewLiveRate}
                                     {...attr.CircularProgressWithLabel}
                                 />
                             }
@@ -394,7 +396,7 @@ export default function ExchangeRateTableData(props) {
                                 }
                                 <CircularProgressWithLabel
                                     onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
-                                    onUpdateNewLiveRate={ updateNewLiveRate }
+                                    onUpdateNewLiveRate={updateNewLiveRate}
                                     {...attr.CircularProgressWithLabel}
                                 />
                             </Box>

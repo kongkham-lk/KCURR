@@ -101,7 +101,8 @@ export async function getNewLiveRateFromCurrList (currCodeArray, timeSeriesRange
     // console.log("Fetching latest rate from API!!!")
     const newLists = [];
 
-    if (defaultCurrExchangeRates === null && !isFeatureDisplay) {
+    if ((defaultCurrExchangeRates === null && !isFeatureDisplay)) {
+        console.log("Fetching latest exchange rate from API!!!")
         const initialValue = { baseCurr: currCodeArray[0] };
         defaultCurrExchangeRates = await retrieveExchangeRates(initialValue);
     }
