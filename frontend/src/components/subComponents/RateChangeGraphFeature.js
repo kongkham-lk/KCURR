@@ -27,6 +27,8 @@ export default function RateChangeGraphFeature(props) {
         const changingRates = timeSeries.changingRates;
         changeRateInPercent = (changingRates[changingRates.length - 1] - changingRates[0]) / changingRates[0] * 100;
         latestRate = timeSeries.latestRate;
+    } else {
+        latestRate = (currencyRateData.total / currencyRateData.amount).toFixed(2);
     }
 
     useEffect(() => {
@@ -46,26 +48,26 @@ export default function RateChangeGraphFeature(props) {
 
     return (
         <>
-            {timeSeries !== null &&
-                <div style={{ borderTop: !removeMarginTop && "1px solid #adadad60" }}>
+            <div style={{ borderTop: !removeMarginTop && "1px solid #adadad60" }}>
+                {timeSeries !== null &&
                     <Typography variant={isDisplaySM ? "h6" : "h5"} mt={!removeMarginTop ? isDisplaySM ? 1 : 2.5 : 0} fontWeight={400} >
                         {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
                     </Typography>
-                    <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} >
-                        1 {baseCurr} = {latestRate} {targetCurr}
-                    </Typography>
-                    {isFeatureDisplay &&
-                        <div style={style.divChart} >
-                            <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
-                                <LineGraph timeSeries={timeSeries} displayLabel={true} />
-                            </Box>
-                            <div style={{ ...style.divRangeTimeSeriesSelector, margin: isDisplaySM ? "4% 0px" : "2.5% 0px", display: !isFeatureDisplay && "none" }}>
-                                <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
-                            </div>
+                }
+                <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null && 1} >
+                    1 {baseCurr} = {latestRate} {targetCurr}
+                </Typography>
+                {isFeatureDisplay &&
+                    <div style={style.divChart} >
+                        <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
+                            <LineGraph timeSeries={timeSeries} displayLabel={true} />
+                        </Box>
+                        <div style={{ ...style.divRangeTimeSeriesSelector, margin: isDisplaySM ? "4% 0px" : "2.5% 0px", display: !isFeatureDisplay && "none" }}>
+                            <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                         </div>
-                    }
-                </div>
-            }
+                    </div>
+                }
+            </div>
         </>
     );
 }
