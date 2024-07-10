@@ -6,7 +6,7 @@ export function LineGraph(props) {
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
-    console.log("timeSeries: ", timeSeries);
+
     const borderColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';

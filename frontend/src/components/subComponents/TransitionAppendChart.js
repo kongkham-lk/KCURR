@@ -15,7 +15,7 @@ export default function TransitionAppendChart(props) {
         const currCode = () => <RateChangeGraphFeature {...props} removeMarginTop={true} />;
         const handleDisplayChart = () => {
             if (appendChart) {
-                console.log(">>> append row!!!")
+                // console.log(">>> append row!!!")
                 setDisplayChart(currCode);
             } else {
                 // console.log("<<< clear row!!!")
