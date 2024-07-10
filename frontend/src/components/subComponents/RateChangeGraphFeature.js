@@ -30,7 +30,7 @@ export default function RateChangeGraphFeature(props) {
     }
 
     useEffect(() => {
-        if (currencyRateData != null) {
+        if (currencyRateData != null && isFeatureDisplay) {
             async function timeSeriesGetter() {
                 const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
                 setTimeSeries(timeSeriesRes.data[targetCurr])
