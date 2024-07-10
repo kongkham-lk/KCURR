@@ -22,7 +22,6 @@ export default function RateChangeGraphFeature(props) {
         baseCurr = currencyRateData.baseCurr;
         targetCurr = currencyRateData.targetCurr;
         latestRate = (currencyRateData.total / currencyRateData.amount).toFixed(2);
-        console.log(typeof latestRate);
     }
 
     if (timeSeries !== null) {

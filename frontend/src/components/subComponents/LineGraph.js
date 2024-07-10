@@ -25,8 +25,8 @@ export function LineGraph(props) {
         }
     };
 
-    const borderWidth = displayLabel ? 2 : 2.3;
-    const labels = timeSeriesRangeLabel;
+    const borderWidth = displayLabel ? 2 : 2.3; // the graph line's thickness
+    const labels = timeSeriesRangeLabel; // the header of popup tag when hover on lin graph
     const data = {
         labels: labels,
         datasets: [{
