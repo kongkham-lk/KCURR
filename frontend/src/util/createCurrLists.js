@@ -3,10 +3,11 @@ import { retrieveExchangeRatesTimeSeries } from './apiClient';
 export async function createCurrLists(baseCurr, targetCurr, defaultCurrExchangeRates, timeSeriesRange, isFeatureDisplay) {
 
     if (baseCurr === targetCurr) {
-        return { targetCurr: baseCurr, latestRate: 1, histRate: null, change: null, timeSeries: null };
+        return { targetCurr: baseCurr, latestRate: 1, histRate: null, change: null, timeSeries: null }; // skip request data from API for default row
     } else {
         let timeSeries, latestRate, histRate;
 
+        // Only request for timeSeries when on feature page
         if (isFeatureDisplay) {
             try {
                 timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
