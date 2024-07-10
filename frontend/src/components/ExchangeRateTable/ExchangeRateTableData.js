@@ -306,7 +306,7 @@ export default function ExchangeRateTableData(props) {
                                                         <TableBody>
                                                             <TableRow>
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
-                                                                    {isDisplaySM ? parseFloat(currList.latestRate).toFixed(2) : currList.latestRate}
+                                                                    {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {isDisplaySM ? "" :
                                                                     <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
