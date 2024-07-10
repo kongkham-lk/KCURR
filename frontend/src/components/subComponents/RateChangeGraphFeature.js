@@ -21,21 +21,20 @@ export default function RateChangeGraphFeature(props) {
     if (currencyRateData !== null) {
         baseCurr = currencyRateData.baseCurr;
         targetCurr = currencyRateData.targetCurr;
+        latestRate = (currencyRateData.total / currencyRateData.amount).toFixed(2);
+        console.log(typeof latestRate);
     }
 
     if (timeSeries !== null) {
         const changingRates = timeSeries.changingRates;
         changeRateInPercent = (changingRates[changingRates.length - 1] - changingRates[0]) / changingRates[0] * 100;
-        latestRate = timeSeries.latestRate;
-    } else {
-        latestRate = (currencyRateData.total / currencyRateData.amount).toFixed(2);
     }
 
     useEffect(() => {
         if (currencyRateData != null && isFeatureDisplay) {
             async function timeSeriesGetter() {
                 const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
-                setTimeSeries(timeSeriesRes.data[targetCurr])
+                setTimeSeries(timeSeriesRes.data[targetCurr]);
             }
             timeSeriesGetter()
         }
@@ -54,9 +53,11 @@ export default function RateChangeGraphFeature(props) {
                         {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
                     </Typography>
                 }
-                <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null && 1} >
-                    1 {baseCurr} = {latestRate} {targetCurr}
-                </Typography>
+                {latestRate !== "NaN" ?
+                    <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null && 1} >
+                        1 {baseCurr} = {latestRate} {targetCurr}
+                    </Typography> : <br/>
+                }
                 {isFeatureDisplay &&
                     <div style={style.divChart} >
                         <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
