@@ -29,7 +29,7 @@ export async function createCurrLists(baseCurr, targetCurr, defaultCurrExchangeR
         
         const change = (latestRate - histRate) * 100 / histRate;
 
-        return { targetCurr, latestRate: latestRate?.toFixed(4), histRate:histRate?.toFixed(4), change: change?.toFixed(2), timeSeries };
+        return { targetCurr, latestRate, histRate, change: change?.toFixed(2), timeSeries };
     }
 }
 

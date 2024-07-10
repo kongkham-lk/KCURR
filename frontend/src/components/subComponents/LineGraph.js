@@ -7,6 +7,7 @@ export function LineGraph(props) {
     const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
     console.log("timeSeries: ", timeSeries);
+    console.log("timeSeries.changingRates: ", changingRates);
     
     const borderColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
