@@ -210,6 +210,9 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleToggleFlags = async (index) => {
+        if (!isFeatureDisplay)
+            return;
+
         const newAppendCharts = [...displayRateHistChartFlags];
         const isShow = displayRateHistChartFlags[index]
         newAppendCharts[index] = !isShow;
@@ -301,7 +304,7 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
