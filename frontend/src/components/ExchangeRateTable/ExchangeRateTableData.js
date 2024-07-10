@@ -35,6 +35,7 @@ export default function ExchangeRateTableData(props) {
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(isFeatureDisplay ? null : [...initialDefaultCurrExchangeRates]);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState(""); // specified the latest update rate of the live rate table
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
+    const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
     const [newCurrCode, setNewCurrCode] = useState("");
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
@@ -214,8 +215,13 @@ export default function ExchangeRateTableData(props) {
             return;
 
         const newAppendCharts = [...displayRateHistChartFlags];
-        const isShow = displayRateHistChartFlags[index]
-        newAppendCharts[index] = !isShow;
+        newAppendCharts[index] = true;
+
+        // close the prev display chart and display the current row's chart
+        if (prevDisplayChartIndex !== -1)
+            newAppendCharts[prevDisplayChartIndex] = false;
+        setPrevDisplayChartIndex(index);
+
         setDisplayRateHistChartFlags([...newAppendCharts]);
     };
 
