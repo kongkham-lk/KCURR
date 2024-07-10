@@ -39,7 +39,7 @@ export default function TransitionAppendChart(props) {
             <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
                 <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={{ padding: 0, border: 'none' }} >
                     <TransitionGroup>
-                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{ transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
+                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{width: '99%', transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>
