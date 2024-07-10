@@ -117,7 +117,7 @@ export default function ExchangeRateTableData(props) {
 
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
-        console.log("Fetching latest exchange rate from API!!!")
+        // console.log("Fetching latest exchange rate from API!!!")
         const newLists = [];
         const initialValue = { baseCurr: currCodeArray[0] };
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
@@ -141,7 +141,7 @@ export default function ExchangeRateTableData(props) {
     };
 
     const updateNewLiveRate = (event) => {
-        console.log("Timer trigger!!!")
+        // console.log("Timer trigger!!!")
         handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
 
