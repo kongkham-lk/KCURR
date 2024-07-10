@@ -211,18 +211,22 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleToggleFlags = async (index) => {
-        if (!isFeatureDisplay)
-            return;
-
-        const newAppendCharts = [...displayRateHistChartFlags];
-        newAppendCharts[index] = true;
-
-        // close the prev display chart and display the current row's chart
-        if (prevDisplayChartIndex !== -1)
-            newAppendCharts[prevDisplayChartIndex] = false;
-        setPrevDisplayChartIndex(index);
-
-        setDisplayRateHistChartFlags([...newAppendCharts]);
+        if (isFeatureDisplay) {
+            const newAppendCharts = [...displayRateHistChartFlags];
+    
+            if (newAppendCharts[index])
+                newAppendCharts[index] = false;
+            else {
+                newAppendCharts[index] = true;
+                
+                if (prevDisplayChartIndex !== index) {
+                    if (prevDisplayChartIndex !== -1) // close the prev display chart and display the current row's chart
+                        newAppendCharts[prevDisplayChartIndex] = false;
+                    setPrevDisplayChartIndex(index);
+                }
+            }
+            setDisplayRateHistChartFlags([...newAppendCharts]);
+        }
     };
 
     return (
