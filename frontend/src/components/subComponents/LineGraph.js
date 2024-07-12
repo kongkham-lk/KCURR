@@ -1,5 +1,7 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
+import { LineChart } from '@mui/x-charts/LineChart';
+
 
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries = null } = props;
@@ -9,7 +11,7 @@ export function LineGraph(props) {
     // console.log("timeSeries: ", timeSeries);
     // console.log("timeSeries.changingRates: ", changingRates);
     
-    const borderColor = () => {
+    const borderColor = () => { // color of the color label within popup box
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
         } else {
@@ -17,7 +19,7 @@ export function LineGraph(props) {
         }
     };
     
-    const backgroundColor = () => {
+    const backgroundColor = () => { // color of the color label within popup box
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000b0';
         } else {
