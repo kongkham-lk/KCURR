@@ -1,4 +1,4 @@
-import '../App.css';
+import '../../App.css';
 
 export function Loading() {
     return <div className="loader"></div>

@@ -1,3 +1,6 @@
+import { retrieveExchangeRates } from "./apiClient";
+import { createCurrLists } from "./createCurrLists";
+
 export function getComparator(order, orderBy) {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
@@ -36,12 +39,12 @@ export function stableSort(array, comparator) {
     return stabilizedArray.map((el) => el[0]);
 }
 
-export function styleTableCell(currList, isDisplaySM) {
+export function styleTableCell(currList, isDisplaySM, updateColor = true) {
     let paddingVal = isDisplaySM ? "0px" : "16px"
     if (currList.change >= 0 || currList.change === null) {
-        return { color: "green", padding: paddingVal }
+        return { color: updateColor && "green", padding: paddingVal, ...style.borderNone }
     } else {
-        return { color: "red", padding: paddingVal }
+        return { color: updateColor && "red", padding: paddingVal, ...style.borderNone }
     }
 };
 
@@ -49,8 +52,15 @@ export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
             backgroundColor: "#1876d259", backgroundClip: "border-box",
-            outline: "10px solid white", outlineOffset: "-2px",
-            borderRadius: "13px",
+            outline: "7px solid white", outlineOffset: "-2px",
+            borderRadius: "13px", verticalAlign: 'middle',
+        }
+    } else {
+        return {
+            backgroundColor: "transparent", backgroundClip: "border-box",
+            outline: "7px solid transparent", outlineOffset: "-2px",
+            borderRadius: "13px", verticalAlign: 'middle',
+            borderTop: '1px solid rgba(224, 224, 224, 1)'
         }
     }
 }
@@ -76,13 +86,34 @@ const descendingComparator = (a, b, orderBy) => {
 }
 
 export function styleTableRowInFile(dense, emptyRows) {
-    return { height: (dense ? 33 : 53) * emptyRows }
+    return { height: (dense ? 33 : 53) * emptyRows, ...style.borderNone }
 };
 
 export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
+        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
     } else {
-        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px" };
+        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
     }
+};
+
+// invoke when the live rate table use exchange rate data instead of timeSeries
+export function getDayRangeDate(offsetDate) {
+    const date = getEntireDateString(offsetDate)
+    return date.substring(4, 10);
+}
+
+// invoke when the live rate table use exchange rate data instead of timeSeries
+export function getMonthRangeDate(offsetDate) {
+    const date = getEntireDateString(offsetDate)
+    return date.substring(4, 10);
+}
+
+const getEntireDateString = (offsetDate) => {
+    offsetDate *= 1000 * 60 * 60 * 24
+    return (new Date(Date.now() - offsetDate)) + "";
+}
+
+const style = {
+    borderNone: { border: 'none' },
 };

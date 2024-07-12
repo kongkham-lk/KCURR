@@ -72,6 +72,10 @@
     }
 }
 
+.clipPath {
+    clip-path: xywh(0 0 100% 100% round 0.5em);
+}
+
 /* .hoverCard:hover {
   box-shadow: 0px 0px 12px #644e243f;
   transition: 0.2s;

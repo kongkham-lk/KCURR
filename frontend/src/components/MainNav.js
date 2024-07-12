@@ -124,9 +124,9 @@ export default function MainNav(props) {
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
     { label: 'Dashboard', link: "/" },
-    { label: 'Convertor', link: "/convertor" },
-    { label: 'Financial News', link: "/financial-news" },
-    { label: 'Contact', link: "/contact" },
+    { label: 'Convertor', link: "/Convertor" },
+    { label: 'Chart', link: "/Chart" },
+    { label: 'Financial News', link: "/News" },
 ];
 
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTheme }) => {

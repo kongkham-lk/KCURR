@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import InputTextField from '../InputTextField';
-import CurrCountriesDropDown from '../CurrCountriesDropDown';
+import InputTextField from '../subComponents/InputTextField';
+import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import { retrieveConvertValue } from '../../util/apiClient';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';

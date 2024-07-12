@@ -3,8 +3,8 @@ namespace backend;
 public class ApiKeysProvider
 {
     private IConfiguration? _apiKeysConfiguration;
-    private ILogger<ApiKeysProvider> _logger;
-    private IWebHostEnvironment _env;
+    private readonly ILogger<ApiKeysProvider> _logger;
+    private readonly IWebHostEnvironment _env;
     private string CurrentKey { get; set; } = "";
     private List<string> FailKeyList { get; set; } = new();
 

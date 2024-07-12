@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import FinancialNews from './components/FinancialNews/FinancialNews';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { Loading } from './components/Loading';
+import { Loading } from './components/subComponents/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -45,14 +45,14 @@ export default function App() {
     }
 
     const attr = {
-        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags},
-        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags},
-        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags}
+        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl},
+        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl},
+        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl}
     }
 
     return (
         <div className="App">
-            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={
@@ -68,17 +68,17 @@ export default function App() {
                             </Item>
                         </>
                     } ></Route>
-                    <Route path="/convertor/:curr?" element={
-                        <>
-                            <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                    <Route path="/Convertor/:curr?" element={
+                        <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                                 {isReady ? <Convertor {...attr.curr}/> : <Loading />}
-                            </Item>
-                            <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
-                            </Item>
-                        </>
+                        </Item>
                     } ></Route>
-                    <Route exact path="/financial-news" element={
+                    <Route path="/Chart" element={
+                        <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                        </Item>
+                    } ></Route>
+                    <Route exact path="/News" element={
                         <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                             <FinancialNews filter="true" {...attr.news} />
                         </Item>

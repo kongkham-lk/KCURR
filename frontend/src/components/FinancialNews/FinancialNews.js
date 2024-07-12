@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import InputTextField from "../InputTextField";
-import { Loading } from '../Loading';
+import InputTextField from "../subComponents/InputTextField";
+import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
 
 export default function FinancialNews(props) {
@@ -72,7 +72,7 @@ export default function FinancialNews(props) {
                     </div>
                     {filter && <Stack direction="row" style={style.Stack}>
                         {newsTopic?.map((topic, index) => (
-                            <Chip label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
+                            <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
                         ))}
                     </Stack>}
                     {newsLists.map(news => {
