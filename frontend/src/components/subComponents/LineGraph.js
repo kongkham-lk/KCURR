@@ -32,7 +32,7 @@ export function LineGraph(props) {
     const data = {
         labels: labels,
         datasets: [{
-            label: 'Currency History',
+            label: '',
             data: changingRates,
             fill: false,
             borderColor,
