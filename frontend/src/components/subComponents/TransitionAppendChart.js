@@ -27,7 +27,7 @@ export default function TransitionAppendChart(props) {
 
     const renderGraph = (item) => {
         return (
-            <Box sx={{ padding: appendChart ? isDisplaySM ? '0px 0px 10px 10px' : '0px 16px 16px' : '0px', opacity: appendChart ? 1 : 0, transition: 'all 0.6s ease-out' }} >
+            <Box sx={appendChart ? isDisplaySM ? sxStyle.renderGraphSm : sxStyle.renderGraphLg : sxStyle.renderNon} >
                 {item}
             </Box>
         );
@@ -37,12 +37,32 @@ export default function TransitionAppendChart(props) {
         <>
             {/* {console.log("Include hidden rows!!!")} */}
             <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
-                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={6} sx={{ padding: 0, border: 'none' }} >
-                    <TransitionGroup style={{marginRight: isDisplaySM && '-25px', width: isDisplaySM &&  '99%'}}>
-                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{width: !isDisplaySM && '99%', transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
+                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={sxStyle.tableCell} >
+                    <TransitionGroup style={isDisplaySM ? style.TransitionGroupSm : style.TransitionGroupLg}>
+                        <Collapse key={currencyRateData.targetCurr + "Chart"} sx={isDisplaySM ? style.CollapseSm : style.CollapseLg} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>
         </>
     );
+}
+
+const commonStyle = {
+    smallerWidth: { width: '99%' },
+    transition: { transition: 'all 0.6s ease-out' },
+    transitionDuration: { transitionDuration: '600ms' },
+}
+
+const sxStyle = {
+    renderGraphSm: { padding: '0px 0px 10px 10px', opacity: 1, ...commonStyle.transition },
+    renderGraphLg: { padding: '0px 16px 16px', opacity: 1, ...commonStyle.transition },
+    renderNon: { padding: '0px', opacity: 0, ...commonStyle.transition },
+    tableCell: { padding: 0, border: 'none' }
+}
+
+const style = {
+    TransitionGroupSm: { marginRight: '-25px', ...commonStyle.smallerWidth },
+    TransitionGroupLg: { marginRight: '0px', ...commonStyle.smallerWidth },
+    CollapseSm: { ...commonStyle.transitionDuration },
+    CollapseLg: { ...commonStyle.transitionDuration, ...commonStyle.smallerWidth },
 }

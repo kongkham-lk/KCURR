@@ -46,7 +46,7 @@ export default function RateChangeGraphFeature(props) {
 
     return (
         <>
-            <div style={{ borderTop: !removeMarginTop && "1px solid #adadad60" }}>
+            <div style={removeMarginTop ? style.TopBorderNone : style.TopBorderAdded}>
                 {timeSeries !== null &&
                     <Typography variant={isDisplaySM ? "h6" : "h5"} mt={!removeMarginTop ? isDisplaySM ? 1 : 2.5 : 0} fontWeight={400} >
                         {baseCurr} to {targetCurr} Chart <span style={styleSpan(changeRateInPercent)}>{changeRateInPercent >= 0 && "+"}{changeRateInPercent.toFixed(2)}%</span>
@@ -55,14 +55,14 @@ export default function RateChangeGraphFeature(props) {
                 {latestRate !== "NaN" ?
                     <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null && 1} >
                         1 {baseCurr} = {latestRate} {targetCurr}
-                    </Typography> : <br/>
+                    </Typography> : <br />
                 }
                 {isFeatureDisplay &&
                     <div style={style.divChart} >
-                        <Box sx={{ ...sxStyle.lineGraph, height: !isDisplaySM && "300px" }}>
+                        <Box sx={isDisplaySM ? sxStyle.lineGraphSm : sxStyle.lineGraphLg}>
                             <LineGraph timeSeries={timeSeries} displayLabel={true} />
                         </Box>
-                        <div style={{ ...style.divRangeTimeSeriesSelector, margin: isDisplaySM ? "4% 0px" : "2.5% 0px", display: !isFeatureDisplay && "none" }}>
+                        <div style={isFeatureDisplay ? isDisplaySM ? style.divRangeSelectorWrapperSm : style.divRangeSelectorWrapperLg : style.divRangeSelectorNone}>
                             <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                         </div>
                     </div>
@@ -76,11 +76,21 @@ const styleSpan = (changeRateInPercent) => {
     return { color: changeRateInPercent >= 0 ? "green" : "#cd0000" }
 }
 
+const commonStyle = {
+    width: {width: "-webkit-fill-available"},
+    textAlign: {textAlign: "center"}
+}
+
 const style = {
-    divRangeTimeSeriesSelector: { textAlign: "center" },
+    divRangeSelectorWrapperSm: { ...commonStyle.textAlign, margin: "4% 0px" },
+    divRangeSelectorWrapperLg: { ...commonStyle.textAlign, margin: "10px 0px 2% 0px" },
+    divRangeSelectorNone: { display: "none" },
     divChart: { height: "auto", width: "100%" },
+    TopBorderAdded: { borderTop: "1px solid #adadad60" },
+    TopBorderNone: { borderTop: "0px" },
 }
 
 const sxStyle = {
-    lineGraph: { width: "-webkit-fill-available" }
+    lineGraphSm: { ...commonStyle.width },
+    lineGraphLg: { ...commonStyle.width, height: "300px" },
 }
