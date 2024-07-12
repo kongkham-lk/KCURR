@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 
 
 export default function TransitionAppendChart(props) {
-    const { appendChart, currencyRateData } = props;
+    const { appendChart, currencyRateData, isDisplaySM, isDisplayMD } = props;
     const [displayChart, setDisplayChart] = useState(null);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default function TransitionAppendChart(props) {
 
     const renderGraph = (item) => {
         return (
-            <Box sx={{ padding: appendChart ? '16px' : '0px', paddingTop: '0px', opacity: appendChart ? 1 : 0, transition: 'all 0.6s ease-out' }} >
+            <Box sx={{ padding: appendChart ? isDisplaySM ? '0px 0px 10px 10px' : '0px 16px 16px' : '0px', opacity: appendChart ? 1 : 0, transition: 'all 0.6s ease-out' }} >
                 {item}
             </Box>
         );
@@ -37,9 +37,9 @@ export default function TransitionAppendChart(props) {
         <>
             {/* {console.log("Include hidden rows!!!")} */}
             <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
-                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={{ padding: 0, border: 'none' }} >
-                    <TransitionGroup>
-                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{width: '99%', transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
+                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={6} sx={{ padding: 0, border: 'none' }} >
+                    <TransitionGroup style={{marginRight: isDisplaySM && '-25px', width: isDisplaySM &&  '99%'}}>
+                        <Collapse key={currencyRateData.targetCurr + "Chart"} style={{width: !isDisplaySM && '99%', transitionDuration: '600ms' }} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>
