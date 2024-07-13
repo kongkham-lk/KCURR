@@ -10,4 +10,6 @@ public class RateTimeSeriesRequest
     public string TargetCurr { set; get; }
     [JsonPropertyName("timeSeriesRange")]
     public string TimeSeriesRange { set; get; }
+    [JsonPropertyName("isNewUpdateRequest")]
+    public bool IsNewUpdateRequest { set; get; }
 }

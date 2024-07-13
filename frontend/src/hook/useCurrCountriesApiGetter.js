@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { fetchAllCountryFlags } from '../util/getFlag';
 
 export default function useCurrCountriesApiGetter() {
     const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState({});
+    const [sortedCurrsCodeList, setSortedCurrsCodeList] = useState([]);
+    const [validCurFlagList, setValidCurFlagList] = useState([]); // the curr code flag that api return 404 status
     const [isReady, setIsReady] = useState(false);
 
     const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BASEURL : process.env.REACT_APP_PROD_BASEURL;
@@ -11,6 +14,7 @@ export default function useCurrCountriesApiGetter() {
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
+                if (Object.keys(currCountiesCodeMapDetail).length === 0) {
                     let resCurrCountries;
                     let isValidResponse = false;
                     let retryFetching = 5;
@@ -26,7 +30,6 @@ export default function useCurrCountriesApiGetter() {
                         if (resCurrCountries !== undefined) {
                             if (Object.keys(resCurrCountries.data).length) {
                                 setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                                setIsReady(true);
                                 isValidResponse = true; // Stop the loop
                                 // console.log(`Successfully received currency-country data!!!`);
                             }
@@ -41,9 +44,23 @@ export default function useCurrCountriesApiGetter() {
                             retryFetching--;
                         }
                     }
+                } else {
+                    const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
+
+                    // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
+                    // console.log("check all cur code for flag api!!!");
+                    
+                    const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
+
+                    // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
+
+                    setSortedCurrsCodeList(newSortedCurrsCodeList);
+                    setValidCurFlagList(newValidCurrFlagList);
+                    setIsReady(true);
+                }
             }
             fetchCurrOption();
-        }, [baseURL, port]
+        }, [baseURL, currCountiesCodeMapDetail, port]
     );
-    return { currCountiesCodeMapDetail, isReady };
+    return { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady };
 };

@@ -15,41 +15,43 @@ export default function EnhancedTableHead(props) {
 
     return (
         <TableHead>
-            <TableRow style={style.TableRow}>
-                {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                        style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                            style={{
-                                marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px",
-                                marginRight: headCell.id === 'targetCurr' && "-20px",
-                                padding: isDisplaySM && "0px"
-                            }}
+            <>
+                <TableRow style={style.TableRow}>
+                    {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
+                        <TableCell
+                            key={headCell.id}
+                            align={headCell.numeric ? 'right' : 'left'}
+                            padding={headCell.disablePadding ? 'none' : 'normal'}
+                            sortDirection={orderBy === headCell.id ? order : false}
+                            style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                                style={{
+                                    marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px",
+                                    marginRight: headCell.id === 'targetCurr' && "-20px",
+                                    padding: isDisplaySM && "0px"
+                                }}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </Box>
+                                ) : null}
+                            </TableSortLabel>
+                        </TableCell>
+                    ))}
+                    <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
+                        Chart (24h)
                     </TableCell>
-                ))}
-                <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
-                    Chart (24h)
-                </TableCell>
-                <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px" }} align="right" >
-                    {isDisplaySM ? "Del" : "Delete"}
-                </TableCell>
-            </TableRow>
+                    <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px", ...borderNone }} align="right" >
+                        {isDisplaySM ? "Del" : "Delete"}
+                    </TableCell>
+                </TableRow>
+            </>
         </TableHead>
     );
 }
@@ -82,10 +84,12 @@ let headCells = [
     },
 ];
 
+const borderNone = { border: 'none' };
+
 const style = {
     TableRow: { width: "100%", whiteSpace: "nowrap" },
     TableCell: {
-        lg: { width: "20%" },
-        sm: { width: "10%", padding: "0px 0px 10px 10px" }
+        lg: { width: "20%", ...borderNone },
+        sm: { width: "10%", padding: "0px 0px 10px 10px", ...borderNone }
     },
 }

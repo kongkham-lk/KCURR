@@ -8,7 +8,7 @@ import ToggleButtonGroup, {
 export default function RangeTimeSeriesSelector(props) {
     const { updateVal, isDisplaySM } = props;
     const [displayValue, setDisplayValue] = useState("1d")
-    const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m"];
+    const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m", "9m", "1y"];
 
     const handleChange = (event, newDisplayValue) => {
         updateVal(newDisplayValue);
@@ -35,7 +35,7 @@ export default function RangeTimeSeriesSelector(props) {
                 onChange={handleChange}
                 aria-label="time series"
                 color="primary"
-                style={{ borderTop: "1px solid #00000030", borderBottom: "1px solid #00000030" }}
+                style={isDisplaySM ? style.sm : style.lg}
             >
                 {timeSeriesRanges?.map((range) => (
                     <ToggleButton key={range} value={range} aria-label={range}>{range.toUpperCase()}</ToggleButton>
@@ -60,3 +60,13 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
         borderLeft: '1px solid transparent',
     },
 }));
+
+const commonStyle = {
+    borderTop: "1px solid #00000030",
+    borderBottom: "1px solid #00000030",
+}
+
+const style = {
+    sm: { ...commonStyle, width: '60%', overflow: 'scroll' },
+    lg: { ...commonStyle },
+}

@@ -1,32 +1,38 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
-import { Box } from '@mui/material';
+import { LineChart } from '@mui/x-charts/LineChart';
+
 
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries = null } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
-    const borderColor = () => {
+    // console.log("timeSeries: ", timeSeries);
+    // console.log("timeSeries.changingRates: ", changingRates);
+    
+    const borderColor = () => { // color of the color label within popup box
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
         } else {
             return '#0ba50b'
         }
-    }
-    const backgroundColor = () => {
+    };
+    
+    const backgroundColor = () => { // color of the color label within popup box
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000b0';
         } else {
             return '#0ba50bb0'
         }
-    }
-    const borderWidth = displayLabel ? 2 : 2.3;
-    const labels = timeSeriesRangeLabel;
+    };
+
+    const borderWidth = displayLabel ? 2 : 2.3; // the graph line's thickness
+    const labels = timeSeriesRangeLabel; // the header of popup tag when hover on lin graph
     const data = {
         labels: labels,
         datasets: [{
-            label: 'Currency History',
+            label: '',
             data: changingRates,
             fill: false,
             borderColor,
@@ -34,6 +40,7 @@ export function LineGraph(props) {
             tension: 0,
         }]
     };
+
     const plugins = displayLabel ? {
         legend: {
             display: false,
@@ -74,7 +81,9 @@ export function LineGraph(props) {
                 },
                 border: {
                     dash: [6, 6]
-                }
+                },
+                // min: timeSeries.lowest,
+                // max: timeSeries.highest,
             },
             x: {
                 display: displayLabel, // Hide X axis labels
@@ -92,6 +101,7 @@ export function LineGraph(props) {
         pointRadius: 0,
         maintainAspectRatio: false,
     }
+    
     return (
         <Line
             data={data}

@@ -5,7 +5,7 @@ import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable'
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import FinancialNews from './components/FinancialNews/FinancialNews';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { Loading } from './components/Loading';
+import { Loading } from './components/subComponents/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -15,8 +15,8 @@ export default function App() {
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
-    const { currCountiesCodeMapDetail, isReady } = useCurrCountriesApiGetter();
-
+    const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
+    
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
@@ -39,41 +39,48 @@ export default function App() {
         setIsOutLineTheme(event);
     }
 
+    const commonAttr = {
+        themeFlags: {isOutLineTheme},
+        displayFlags: {isDisplaySM, isDisplayMD},
+    }
+
+    const attr = {
+        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl},
+        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl},
+        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl}
+    }
+
     return (
         <div className="App">
-            <MainNav isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} isOutLineTheme={isOutLineTheme} onChangeTheme={handleThemeChange} currentUrl={currentUrl}/>
+            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange}/>
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                <FinancialNews isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                                {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                             </Item>
                         </>
                     } ></Route>
-                    <Route path="/convertor/:curr?" element={
-                        <>
-                            <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} />
-                                    : <Loading />}
-                            </Item>
-                            <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable currCountiesCodeMapDetail={currCountiesCodeMapDetail} isDisplaySM={isDisplaySM} isDisplayMD={isDisplayMD} />
-                                    : <Loading />}
-                            </Item>
-                        </>
+                    <Route path="/Convertor/:curr?" element={
+                        <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
+                        </Item>
                     } ></Route>
-                    <Route exact path="/financial-news" element={
+                    <Route path="/Chart" element={
+                        <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                        </Item>
+                    } ></Route>
+                    <Route exact path="/News" element={
                         <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            <FinancialNews filter="true" isDisplaySM={isDisplaySM} isOutLineTheme={isOutLineTheme} />
+                            <FinancialNews filter="true" {...attr.news} />
                         </Item>
                     } ></Route>
                 </Routes>

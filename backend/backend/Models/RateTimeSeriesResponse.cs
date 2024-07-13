@@ -23,5 +23,6 @@ public class RateTimeSeriesResponse
         ChangingRates = changingRates;
         Highest = highest;
         Lowest = lowest;
+        Lowest = lowest;
     }
 }
