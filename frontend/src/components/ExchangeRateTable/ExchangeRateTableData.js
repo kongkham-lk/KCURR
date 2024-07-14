@@ -434,7 +434,7 @@ const style = {
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" },
-    TableRow: { width: "100%", whiteSpace: "nowrap" },
+    TableRow: { width: "100%", whiteSpace: "nowrap", transform: 'translate(0)' },
     TableCell: {
         lg: { width: "20%", ...commonStyle.borderNone },
         sm: { width: "10%", padding: "0px 0px 10px 10px", ...commonStyle.borderNone }
@@ -459,7 +459,7 @@ const sxStyle = {
         sm: { margin: "0px 10px", padding: "0px" },
     },
     hoverButton: {
-        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', },
+        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', display: 'flex', alignItems: 'center'},
         hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px', transition: 'background 0.6s' } },
     },
     PaginationMainContainer: {
