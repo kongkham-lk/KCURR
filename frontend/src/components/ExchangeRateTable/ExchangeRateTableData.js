@@ -314,7 +314,7 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
