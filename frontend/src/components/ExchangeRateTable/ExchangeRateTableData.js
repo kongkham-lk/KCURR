@@ -294,12 +294,12 @@ export default function ExchangeRateTableData(props) {
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell }}
+                                                    onClick={() => handleSetDefaultCurr(targetCurrCode)}
+                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell, ...(index !== 0 && sxStyle.hoverButton.hover) }}
                                                 >
-                                                    <Box sx={{ ...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
+                                                    <Box sx={{ ...sxStyle.hoverButton.main }}>
                                                         <Button
                                                             variant="text"
-                                                            onClick={() => handleSetDefaultCurr(targetCurrCode)}
                                                             disabled={index === 0 && true}
                                                             sx={{
                                                                 ...sxStyle.defaultCurrSetterButton.main,
