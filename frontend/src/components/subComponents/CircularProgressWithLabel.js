@@ -20,7 +20,7 @@ function CircularProgressWithLabel(props) {
                 <Box
                     sx={sxStyle.CenterPos}
                 >
-                    <Typography variant="button" component="div" color="text.secondary">
+                    <Typography variant="BUTTON" component="div" color="text.secondary">
                         {`${Math.round(props.value / 1.6667)}`}
                     </Typography>
                 </Box>
@@ -100,7 +100,7 @@ export default function CircularWithValueLabel(props) {
 const sxStyle = {
     Container: { display: 'flex', alignItems: 'center' },
     Box: { position: 'relative', display: 'inline-flex' },
-    CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800], '& svg': { position: 'inherit' } },
+    CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 300 : 800], '& svg': { position: 'inherit' } },
     CenterPos: {
         top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center',
         justifyContent: 'center'
