@@ -23,28 +23,31 @@ export default function EnhancedTableHead(props) {
                             align={headCell.numeric ? 'right' : 'left'}
                             padding={headCell.disablePadding ? 'none' : 'normal'}
                             sortDirection={orderBy === headCell.id ? order : false}
-                            style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg}
+                            style={isDisplaySM ? (headCell.id === 'latestRate' ? style.TableCell.sm.latestRate : style.TableCell.sm.main) : style.TableCell.lg}
                         >
-                            <TableSortLabel
-                                active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                                style={{
-                                    marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? "0px" : "25px") : "-30px",
-                                    marginRight: headCell.id === 'targetCurr' && "-20px",
-                                    padding: isDisplaySM && "0px"
-                                }}
-                            >
-                                {headCell.label}
-                                {orderBy === headCell.id ? (
-                                    <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                    </Box>
-                                ) : null}
-                            </TableSortLabel>
+                            {!isDisplaySM ?
+                                <TableSortLabel
+                                    active={orderBy === headCell.id}
+                                    direction={orderBy === headCell.id ? order : 'asc'}
+                                    onClick={createSortHandler(headCell.id)}
+                                    style={{
+                                        marginLeft: headCell.id === 'targetCountry' ? (isDisplaySM ? "0px" : "25px") : "-30px",
+                                        marginRight: headCell.id === 'targetCountry' && "-20px",
+                                        padding: isDisplaySM && "0px",
+                                    }}
+                                >
+                                    {headCell.label}
+                                    {orderBy === headCell.id ? (
+                                        <Box component="span" sx={visuallyHidden}>
+                                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        </Box>
+                                    ) : null}
+                                </TableSortLabel>
+                                : <Box sx={{ width: 'min-content' }}>{headCell.label}</Box>
+                            }
                         </TableCell>
                     ))}
-                    <TableCell style={isDisplaySM ? style.TableCell.sm : style.TableCell.lg} align="right" >
+                    <TableCell style={isDisplaySM ? style.TableCell.sm.main : style.TableCell.lg} align="right" >
                         Chart (24h)
                     </TableCell>
                     <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px", ...borderNone }} align="right" >
@@ -65,7 +68,7 @@ EnhancedTableHead.propTypes = {
 
 let headCells = [
     {
-        id: 'targetCurr',
+        id: 'targetCountry',
         numeric: false,
         disablePadding: true,
         label: 'Countries',
@@ -90,6 +93,9 @@ const style = {
     TableRow: { width: "100%", whiteSpace: "nowrap" },
     TableCell: {
         lg: { width: "20%", ...borderNone },
-        sm: { width: "10%", padding: "0px 0px 10px 10px", ...borderNone }
+        sm: {
+            main: { width: "10%", padding: "0px 0px 10px 10px", ...borderNone },
+            latestRate: { width: "10%", padding: "0px 12px 10px 0px", ...borderNone },
+        },
     },
 }
