@@ -10,6 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
+import { Box } from '@mui/material';
 
 export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
@@ -52,40 +53,42 @@ export default function App() {
     }
 
     return (
-        <div className="App">
+        <div className="App" >
             <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} />
-            <ThemeProvider theme={lightTheme}>
-                <Routes>
-                    <Route exact path="/" element={
-                        <>
+            <Box sx={{ minHeight: '55vh' }}>
+                <ThemeProvider theme={lightTheme}>
+                    <Routes>
+                        <Route exact path="/" element={
+                            <>
+                                <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                    {isReady ? <Convertor {...attr.curr} /> : <Loading />}
+                                </Item>
+                                <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                    {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                                </Item>
+                                <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                    {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
+                                </Item>
+                            </>
+                        } ></Route>
+                        <Route path="/Convertor/:curr?" element={
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                                 {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
+                        } ></Route>
+                        <Route path="/Chart" element={
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                                 {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
+                        } ></Route>
+                        <Route exact path="/News" element={
                             <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
+                                <FinancialNews filter="true" {...attr.news} />
                             </Item>
-                        </>
-                    } ></Route>
-                    <Route path="/Convertor/:curr?" element={
-                        <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            {isReady ? <Convertor {...attr.curr} /> : <Loading />}
-                        </Item>
-                    } ></Route>
-                    <Route path="/Chart" element={
-                        <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
-                        </Item>
-                    } ></Route>
-                    <Route exact path="/News" element={
-                        <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                            <FinancialNews filter="true" {...attr.news} />
-                        </Item>
-                    } ></Route>
-                </Routes>
-            </ThemeProvider>
+                        } ></Route>
+                    </Routes>
+                </ThemeProvider>
+            </Box>
             <Footer {...attr.navBar} />
         </div >
     );

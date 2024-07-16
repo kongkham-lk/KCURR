@@ -28,13 +28,14 @@ export default function Footer(props) {
         <Box
             display='flex'
             sx={{
+                ...sxStyle.footerWrapper,
                 ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
             }}
         >
             <Box sx={sxStyle.BoxSub}>
                 <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
                     <ListItem key="product" sx={{ ml: 4.5, mt: 1 }} disablePadding>
-                        <Typography variant="h6" sx={{fontWeight: 600,}} gutterBottom>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
                             Product
                         </Typography>
                     </ListItem>
@@ -42,17 +43,17 @@ export default function Footer(props) {
                         return (
                             <ListItem key={item.label} disablePadding >
                                 <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
-                                    <Typography variant="subtitle1">
+                                    <Typography variant="overline">
                                         {item.label}
                                     </Typography>
                                 </ListItemButton>
                             </ListItem>
                         )
                     })}
-                    <ListItem key="toolAndResource" sx={{ ml: 3.5, mt: 1.5 }} disablePadding>
+                    <ListItem key="toolAndResource" sx={{ ml: 3.5, mt: 1 }} disablePadding>
                         <Stack direction="row" alignItems="center">
                             <IconButton aria-label="github" size="large" >
-                                <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}`}} />
+                                <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
                             </IconButton>
                             <IconButton aria-label="linkedin" size="large" >
                                 <LinkedInIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
@@ -100,6 +101,7 @@ const commonStyles = {
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
+    footerWrapper: { width: '-webkit-fill-available', mt: 5 },
     IconButton: { mr: 1, display: { sm: 'none' } },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
     Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
@@ -110,8 +112,8 @@ const sxStyle = {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
     BoxPopupSideBar: { color: `#${baseColor.sub}` },
-    ListPopupSideBar: { my: 3 },
-    ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0.25 },
+    ListPopupSideBar: { mt: '36px', mb: '12px' },
+    ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
     Theme: {
         Elevate: {
             color: 'white',
