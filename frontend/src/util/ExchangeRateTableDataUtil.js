@@ -100,18 +100,20 @@ export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
 // invoke when the live rate table use exchange rate data instead of timeSeries
 export function getDayRangeDate(offsetDate) {
     const date = getEntireDateString(offsetDate)
-    return date.substring(4, 10);
+    return date.substring(0, 6);
 }
 
 // invoke when the live rate table use exchange rate data instead of timeSeries
 export function getMonthRangeDate(offsetDate) {
-    const date = getEntireDateString(offsetDate)
-    return date.substring(4, 10);
+    return getEntireDateString(offsetDate);
 }
 
 const getEntireDateString = (offsetDate) => {
     offsetDate *= 1000 * 60 * 60 * 24
-    return (new Date(Date.now() - offsetDate)) + "";
+    const date = new Date(Date.now() - offsetDate);
+    return date.toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      }) + "";
 }
 
 const style = {

@@ -36,7 +36,7 @@ public class TimeseriesTransformer
                 string monthAbbr = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(monthNum); // get the abbr. of the month
                 string day = fullDate.Substring(fullDate.Length - 2); // get dd
                 dayRange[index] = day + " " + monthAbbr;
-                monthRange[index] = monthAbbr + " " + year;
+                monthRange[index] = day + " " + monthAbbr + " " + year;
                 double rate = timeSeries.Values[i]; // return rate
                 changingRates[index] = rate;
                 index--;
