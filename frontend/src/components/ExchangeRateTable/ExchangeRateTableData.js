@@ -333,7 +333,7 @@ export default function ExchangeRateTableData(props) {
                                                                 }
                                                                 {/* Chart Cell */}
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
-                                                                    {!isDisplaySM ? 
+                                                                    {!isDisplaySM || !isFeatureDisplay? 
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
                                                                             {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
                                                                         </div> : <Button variant="text" size="small" sx={{padding: 0, float: 'right', color: index === 0 && 'transparent'}}>View Chart</Button>
