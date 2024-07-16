@@ -9,6 +9,7 @@ import { Loading } from './components/subComponents/Loading';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import Footer from './components/Footer';
 
 export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
@@ -16,7 +17,7 @@ export default function App() {
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
-    
+
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
@@ -40,25 +41,25 @@ export default function App() {
     }
 
     const commonAttr = {
-        themeFlags: {isOutLineTheme},
-        displayFlags: {isDisplaySM, isDisplayMD},
+        themeFlags: { isOutLineTheme },
+        displayFlags: { isDisplaySM, isDisplayMD },
     }
 
     const attr = {
-        navBar: {...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl},
-        curr: {currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl},
-        news: {...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl}
+        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl },
+        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl },
+        news: { ...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl }
     }
 
     return (
         <div className="App">
-            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange}/>
+            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} />
             <ThemeProvider theme={lightTheme}>
                 <Routes>
                     <Route exact path="/" element={
                         <>
                             <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
+                                {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
                             <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
                                 {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
@@ -70,12 +71,12 @@ export default function App() {
                     } ></Route>
                     <Route path="/Convertor/:curr?" element={
                         <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <Convertor {...attr.curr}/> : <Loading />}
+                            {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                         </Item>
                     } ></Route>
                     <Route path="/Chart" element={
                         <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                            {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                         </Item>
                     } ></Route>
                     <Route exact path="/News" element={
@@ -85,6 +86,7 @@ export default function App() {
                     } ></Route>
                 </Routes>
             </ThemeProvider>
+            <Footer {...attr.navBar} />
         </div >
     );
 };
