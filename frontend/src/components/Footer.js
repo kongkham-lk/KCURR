@@ -102,13 +102,12 @@ const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
     footerWrapper: { width: '-webkit-fill-available', mt: 5 },
-    IconButton: { mr: 1, display: { sm: 'none' } },
+    IconButton: { mr: 1 },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
     Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
     mainLogo: { ...commonStyles.inheritColor, ...commonStyles.noneTextDeco, },
-    BoxSub: { display: { xs: 'none', sm: 'flex' }, alignItems: 'stretch' },
+    BoxSub: { alignItems: 'stretch' },
     Drawer: {
-        display: { xs: 'block', sm: 'none' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
     BoxPopupSideBar: { color: `#${baseColor.sub}` },
