@@ -252,7 +252,7 @@ const sxStyle = {
 }
 
 const style = {
-    logo: { width: "35px", height: "35px", margin: "0 8px 0 0" },
+    logo: { width: "30px", height: "30px", margin: "0 8px 0 0" },
     Link: { color: "black", ...commonStyles.noneTextDeco },
     logoImg: { ...commonStyles.alignItemsCenter, marginLeft: "15px" },
 }
