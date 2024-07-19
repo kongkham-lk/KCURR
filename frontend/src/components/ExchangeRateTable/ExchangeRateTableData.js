@@ -450,7 +450,7 @@ const style = {
 
 const sxStyle = {
     Box: { width: 1, overflowY: "auto" },
-    Paper: { width: 1, boxShadow: "none" },
+    Paper: { width: 1, boxShadow: "none", backgroundColor: 'inherit' },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: {

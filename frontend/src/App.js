@@ -14,6 +14,7 @@ import { Box } from '@mui/material';
 
 export default function App() {
     const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
+
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
@@ -37,8 +38,8 @@ export default function App() {
         elevation: 8,
     };
 
-    const Theme = {
-        ...(isOutLineTheme ? outlinedProps : elevationProps)
+    const MuiProps = {
+        ...(isOutLineTheme ? outlinedProps : elevationProps),
     }
 
     const handleThemeChange = (event) => {
@@ -57,43 +58,48 @@ export default function App() {
     }
 
     return (
-        <div className="App" >
-            <MainNav {...attr.navBar} onChangeTheme={handleThemeChange} />
-            <Box sx={{ minHeight: isDisplaySM ? '38vh' : '55vh' }}>
-                <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={lightTheme} >
+            <div className="App" >
+                <MainNav {...attr.navBar} onChangeTheme={handleThemeChange}/>
+                <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5 }}>
                     <Routes>
                         <Route exact path="/" element={
                             <>
-                                <Item key="Convertor" {...Theme}>
+                                <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
-                                <Item key="ExchangeRateTable" {...Theme}>
+                                <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                                 </Item>
-                                <Item key="FinancialNews" {...Theme}>
+                                <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                 </Item>
                             </>
                         } ></Route>
                         <Route path="/Convertor/:curr?" element={
-                            <Item key="Convertor" {...Theme}>
+                            <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                 {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route path="/Chart" element={
-                            <Item key="ExchangeRateTable" {...Theme}>
+                            <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                 {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/News" element={
-                            <Item key="FinancialNews" {...Theme}>
+                            <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                 <FinancialNews filter="true" {...attr.news} />
                             </Item>
                         } ></Route>
                     </Routes>
-                </ThemeProvider>
-            </Box>
-            <Footer {...attr.navBar} />
-        </div >
+                </Box>
+                <Footer {...attr.navBar} />
+            </div >
+        </ThemeProvider>
     );
 };
+
+const sxStyle = {
+    backgroundColor: 'inherit',
+    color: 'inherit',
+}

@@ -1,21 +1,9 @@
-import { useState } from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Stack from '@mui/material/Stack';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -43,7 +31,7 @@ export default function Footer(props) {
                     {navItems.map((item) => {
                         return (
                             <ListItem key={item.label} disablePadding >
-                                <ListItemButton sx={{p: 0}} href={item.link} >
+                                <ListItemButton sx={{ p: 0 }} href={item.link} >
                                     <Typography variant="overline">
                                         {item.label}
                                     </Typography>
@@ -53,7 +41,7 @@ export default function Footer(props) {
                     })}
                     <ListItem key="toolAndResource" disablePadding>
                         <Stack direction="row" alignItems="center">
-                            <IconButton aria-label="github" size="large" sx={{pl: 0}} >
+                            <IconButton aria-label="github" size="large" sx={{ pl: 0 }} >
                                 <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
                             </IconButton>
                             <IconButton aria-label="linkedin" size="large" >
@@ -107,7 +95,7 @@ const commonStyles = {
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
-    footerWrapper: { width: '-webkit-fill-available', mt: 4 },
+    footerWrapper: { width: '-webkit-fill-available' },
     IconButton: { mr: 1 },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
     Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
@@ -117,7 +105,7 @@ const sxStyle = {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
     BoxPopupSideBar: { color: `#${baseColor.sub}` },
-    ListPopupSideBar: { mt: '36px', mb: '12px' },
+    ListPopupSideBar: { mt: '36px' },
     ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
     Theme: {
         Elevate: {
