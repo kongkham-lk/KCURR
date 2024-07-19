@@ -37,6 +37,10 @@ export default function App() {
         elevation: 8,
     };
 
+    const Theme = {
+        ...(isOutLineTheme ? outlinedProps : elevationProps)
+    }
+
     const handleThemeChange = (event) => {
         setIsOutLineTheme(event);
     }
@@ -60,29 +64,29 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={
                             <>
-                                <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                <Item key="Convertor" {...Theme}>
                                     {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
-                                <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                <Item key="ExchangeRateTable" {...Theme}>
                                     {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                                 </Item>
-                                <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                                <Item key="FinancialNews" {...Theme}>
                                     {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                 </Item>
                             </>
                         } ></Route>
                         <Route path="/Convertor/:curr?" element={
-                            <Item key="Convertor" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                            <Item key="Convertor" {...Theme}>
                                 {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route path="/Chart" element={
-                            <Item key="ExchangeRateTable" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                            <Item key="ExchangeRateTable" {...Theme}>
                                 {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/News" element={
-                            <Item key="FinancialNews" {...(isOutLineTheme ? outlinedProps : elevationProps)}>
+                            <Item key="FinancialNews" {...Theme}>
                                 <FinancialNews filter="true" {...attr.news} />
                             </Item>
                         } ></Route>
