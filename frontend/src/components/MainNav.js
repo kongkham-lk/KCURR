@@ -43,7 +43,6 @@ export default function MainNav(props) {
             sx={{
                 ...(isDisplaySM ? sxStyle.StarterGapForMobile : sxStyle.StarterGap),
                 ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
-                ...sxStyle.Theme.ApplyAll,
             }}
         >
             <AppBar component="nav" sx={{ ...sxStyle.bringToTop, ...commonStyles.inheritColor }}>
@@ -214,7 +213,7 @@ const commonStyles = {
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
-    StarterGap: { mb: 14, '& #subNav': { ...commonStyles.alignItemsStretch } },
+    StarterGap: { mb: 13, '& #subNav': { ...commonStyles.alignItemsStretch } },
     StarterGapForMobile: { mb: 12 },
     IconButton: { mr: 1, display: { sm: 'none' } },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },

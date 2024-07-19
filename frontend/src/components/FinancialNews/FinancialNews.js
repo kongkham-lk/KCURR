@@ -28,9 +28,9 @@ export default function FinancialNews(props) {
     }, [newsTopic]
     )
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [isOutLineTheme])
+    // }, [isOutLineTheme])
 
     const handleAddNewsTopic = (e) => {
         const updateNewsTopic = [...newsTopic];

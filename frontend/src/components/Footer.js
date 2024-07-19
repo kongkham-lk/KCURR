@@ -28,13 +28,14 @@ export default function Footer(props) {
         <Box
             display='flex'
             sx={{
+                minHeight: isDisplaySM ? '42vh' : '30vh',
                 ...sxStyle.footerWrapper,
                 ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
             }}
         >
             <Box sx={sxStyle.BoxSub}>
                 <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
-                    <ListItem key="product" sx={{ ml: 4.5, mt: 1 }} disablePadding>
+                    <ListItem key="product" disablePadding>
                         <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
                             Product
                         </Typography>
@@ -42,7 +43,7 @@ export default function Footer(props) {
                     {navItems.map((item) => {
                         return (
                             <ListItem key={item.label} disablePadding >
-                                <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
+                                <ListItemButton sx={{p: 0}} href={item.link} >
                                     <Typography variant="overline">
                                         {item.label}
                                     </Typography>
@@ -50,9 +51,9 @@ export default function Footer(props) {
                             </ListItem>
                         )
                     })}
-                    <ListItem key="toolAndResource" sx={{ ml: 3.5, mt: 1 }} disablePadding>
+                    <ListItem key="toolAndResource" disablePadding>
                         <Stack direction="row" alignItems="center">
-                            <IconButton aria-label="github" size="large" >
+                            <IconButton aria-label="github" size="large" sx={{pl: 0}} >
                                 <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
                             </IconButton>
                             <IconButton aria-label="linkedin" size="large" >
@@ -62,6 +63,11 @@ export default function Footer(props) {
                                 <InstagramIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
                             </IconButton>
                         </Stack>
+                    </ListItem>
+                    <ListItem key="copyRight" disablePadding>
+                        <Typography variant="overline">
+                            © 2023 KCURR Inc.
+                        </Typography>
                     </ListItem>
                 </List>
             </Box>
@@ -101,12 +107,12 @@ const commonStyles = {
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
-    footerWrapper: { width: '-webkit-fill-available', mt: 5 },
+    footerWrapper: { width: '-webkit-fill-available', mt: 4 },
     IconButton: { mr: 1 },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
     Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
     mainLogo: { ...commonStyles.inheritColor, ...commonStyles.noneTextDeco, },
-    BoxSub: { alignItems: 'stretch' },
+    BoxSub: { alignItems: 'stretch', ml: 5 },
     Drawer: {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
