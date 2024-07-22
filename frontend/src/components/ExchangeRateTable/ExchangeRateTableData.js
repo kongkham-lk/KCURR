@@ -27,11 +27,11 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTableData(props) {
-    const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, isFeatureDisplay } = props;
+    const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, isFeatureDisplay, userId, userPreference } = props;
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-
+console.log(userPreference.currencyCountries)
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr); // set default/main currency that will be used to against the other target currency
-    const [currCodeArray, setCurrCodeArray] = useState(['USD', 'CAD', 'EUR', 'GBP']); // initial currency list that will be displayed on screen
+    const [currCodeArray, setCurrCodeArray] = useState([...userPreference.currencyCountries]); // initial currency list that will be displayed on screen
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(isFeatureDisplay ? null : [...initialDefaultCurrExchangeRates]);
     const [lastUpdateRateTime, setLastUpdateRateTime] = useState(""); // specified the latest update rate of the live rate table
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
@@ -111,6 +111,7 @@ export default function ExchangeRateTableData(props) {
             // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
             await handleUpdateDefaultCurrLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
+            userPreference.currencyCountries = newCurrCodeArray;
             setCurrCodeArray(newCurrCodeArray);
             setDefaultCurrCode(targetCurr);
         }

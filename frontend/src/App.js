@@ -11,9 +11,13 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
+import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './util/userController';
 
 export default function App() {
-    const [isOutLineTheme, setIsOutLineTheme] = useState(false); // setting theme
+    const userId = getUserIdentifier();
+    console.log("userId: ", userId);
+    const [userPreference, setUserPreference] = useState(getUserPreferences(userId));
+    const [isOutLineTheme, setIsOutLineTheme] = useState(userPreference.theme === "outlined" ? true : false); // setting theme
 
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
@@ -44,6 +48,10 @@ export default function App() {
 
     const handleThemeChange = (event) => {
         setIsOutLineTheme(event);
+        const newPreference = {...userPreference};
+        newPreference.theme = event === true ? "outlined" : 'elevation';
+        setUserPreference(newPreference);
+        saveUserPreferences(userId, userPreference);
     }
 
     const commonAttr = {
@@ -52,9 +60,9 @@ export default function App() {
     }
 
     const attr = {
-        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl },
-        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl },
-        news: { ...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl }
+        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl, userPreference },
+        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl, userId, userPreference },
+        news: { ...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl, userPreference }
     }
 
     return (
