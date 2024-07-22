@@ -18,26 +18,19 @@ export function getUserIdentifier () {
 
 export async function saveUserPreferences (userId, preferences) {
     localStorage.setItem(`preferences_${userId}`, JSON.stringify(preferences));
-    // fetch(`/api/user/preferences/${userId}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(preferences),
-    // });
     await axios.post(`${baseURL}:${port}/update-preferences/${userId}`, preferences);
 };
 
 export async function getUserPreferences(userId) {
     const savedPreferences = localStorage.getItem(`preferences_${userId}`);
-    console.log("check savedPreference: ", savedPreferences)
+    // console.log("check savedPreference: ", savedPreferences)
     if (savedPreferences) {
         return JSON.parse(savedPreferences);
     } else {
         try {
-            console.log("Sending request for preference!!!");
+            // console.log("Sending request for preference!!!");
             const userPrefereneces = await axios.get(`${baseURL}:${port}/preferences/${userId}`);
-            console.log("userPreferences return: ", userPrefereneces);
+            // console.log("userPreferences return: ", userPrefereneces);
             return userPrefereneces.data;
         } catch {
             console.log("Fail to get user preferece!!!")
