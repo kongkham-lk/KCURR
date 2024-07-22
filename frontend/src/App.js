@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
@@ -15,14 +15,21 @@ import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './ut
 
 export default function App() {
     const userId = getUserIdentifier();
-    console.log("userId: ", userId);
-    const [userPreference, setUserPreference] = useState(getUserPreferences(userId));
+    const [userPreference, setUserPreference] = useState({});
     const [isOutLineTheme, setIsOutLineTheme] = useState(userPreference.theme === "outlined" ? true : false); // setting theme
 
+    console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
+
+    useEffect(() => {
+        async function fetchPreference() {
+            setUserPreference(await getUserPreferences(userId));
+        }
+        fetchPreference();
+    }, [])
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -51,6 +58,7 @@ export default function App() {
         const newPreference = {...userPreference};
         newPreference.theme = event === true ? "outlined" : 'elevation';
         setUserPreference(newPreference);
+        console.log("Save Theme!!!")
         saveUserPreferences(userId, userPreference);
     }
 
