@@ -38,6 +38,9 @@ builder.Services.AddControllers();
 // Add support for making HTTP requests
 builder.Services.AddHttpClient();
 
+// Add support for memory cache
+builder.Services.AddMemoryCache();
+
 // Configure dependency injection for various services
 builder.Services.AddSingleton<CurrService>();
 builder.Services.AddSingleton<FinancialNewsService>();
