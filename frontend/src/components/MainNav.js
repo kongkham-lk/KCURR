@@ -18,14 +18,14 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isDisplayMD, isOutLineTheme, onChangeTheme, currentUrl } = props;
+    const { isDisplaySM, isDisplayMD, isOutLineTheme, onUpdateTheme, currentUrl } = props;
 
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
     const handleChange = (newState) => {
         setState(newState);
-        onChangeTheme(newState);
+        onUpdateTheme(newState);
     };
 
     const handleDrawerToggle = () => {
@@ -106,7 +106,7 @@ export default function MainNav(props) {
                         navItems={navItems}
                         handleDrawerToggle={handleDrawerToggle}
                         isOutLineTheme={isOutLineTheme}
-                        onChangeTheme={onChangeTheme}
+                        onChangeTheme={onUpdateTheme}
                     />
                 </Drawer>
             </Box>

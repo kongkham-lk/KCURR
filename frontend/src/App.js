@@ -76,7 +76,7 @@ export default function App() {
     return (
         <ThemeProvider theme={lightTheme} >
             <div className="App" >
-                <MainNav {...attr.navBar} onChangeTheme={handleThemeChange}/>
+                <MainNav {...attr.navBar} onUpdateTheme={handleThemeChange}/>
                 <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5 }}>
                     <Routes>
                         <Route exact path="/" element={

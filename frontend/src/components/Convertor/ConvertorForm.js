@@ -8,9 +8,9 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, currInput, isDisplaySM } = props;
+    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetCurrencies, isDisplaySM } = props;
 
-    const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
+    const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: targetCurrencies.baseCurr, targetCurr: targetCurrencies.targetCurr });
     const [isError, setIsError] = useState(false);
 
     const handleAmountInput = (e) => {

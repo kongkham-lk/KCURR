@@ -13,7 +13,7 @@ export default function Convertor(props) {
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
-    const currInput = {
+    const targetCurrencies = {
         baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD",
         targetCurr: curr != null ? curr.substring(4).toUpperCase() : "THB",
     };
@@ -53,7 +53,7 @@ export default function Convertor(props) {
             <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
-            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} currInput={currInput} {...props} /> 
+            <ConvertorForm setFormDataToConvertor={setFormDataToConvertor} targetCurrencies={targetCurrencies} {...props} /> 
             {formData !== null && (
                 <>
                     <Typography variant={isDisplaySM ? "h5" : "h4"} mt={3} mb={isDisplaySM ? 1 : 2} sx={{ fontSize: isDisplaySM ? "1.7rem" : "2.125rem" }}>
