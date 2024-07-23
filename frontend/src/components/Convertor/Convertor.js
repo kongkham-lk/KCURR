@@ -8,14 +8,14 @@ import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 export default function Convertor(props) {
     const { isDisplaySM, currentUrl } = props;
     //console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
-    const { curr } = useParams();
+    // const { curr } = useParams();
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
     const targetCurrencies = {
-        baseCurr: curr != null ? curr.substring(0, 3).toUpperCase() : "USD",
-        targetCurr: curr != null ? curr.substring(4).toUpperCase() : "THB",
+        baseCurr: "USD",
+        targetCurr: "THB",
     };
 
     let baseCurr;

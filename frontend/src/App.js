@@ -92,12 +92,12 @@ export default function App() {
                                 </Item>
                             </>
                         } ></Route>
-                        <Route path="/Convertor/:curr?" element={
+                        <Route exact path="/Convertor" element={
                             <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                 {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
-                        <Route path="/Chart" element={
+                        <Route exact path="/Chart" element={
                             <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                 {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
