@@ -11,5 +11,7 @@ public class Preferences
     public List<string> CurrencyCountries { set; get; }
     [JsonPropertyName("newsCategoryies")]
     public List<string> NewsCategories { set; get; }
+    [JsonPropertyName("conversionPair")]
+    public string[] ConversionPair { set; get; }
 }
 
