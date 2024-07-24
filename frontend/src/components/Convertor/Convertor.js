@@ -9,7 +9,6 @@ export default function Convertor(props) {
     const { isDisplaySM, currentUrl } = props;
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
-    const [isSwapCurr, setIsSwapCurr] = useState(false);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
     const [targetConvertCurrPair, setTargetConvertCurrPair] = useState(["USD", "THB"]);
@@ -35,7 +34,6 @@ export default function Convertor(props) {
     const handleConvertCurrSwap = (e) => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
         setTargetConvertCurrPair(newCurrPair);
-        setIsSwapCurr(true); // enable flag to prevent conversion logic run
     }
 
     // Invode when click convert button on the screen
