@@ -20,7 +20,7 @@ export default function ConvertorForm(props) {
             setIsError(true);
         }
 
-        const convertAmountInput = parseFloat(e.value);
+        const convertAmountInput = parseFloat(e.value); // the total amount to convert
 
         setFormInputs((oldFormInputs) => {
             return {
@@ -49,6 +49,16 @@ export default function ConvertorForm(props) {
     const onSubmit = (e) => {
         e.preventDefault();
         retrieveConvertValue(setFormDataToConvertor, formInputs);
+        // this -> 
+            // 1. when submit, trigger function outside => to do the conversion -> setFormDataToConvertor(targetAmount, targetCurrencies)
+            // 5. change name and structure: 
+                // name: "formInput" -> "targetConvertAmount"
+                // structure: store only number, maybe float
+            // 6. when onSubmit click, retrieveConvertValue()
+        // parent -> 
+            // 2. call retrieveConvertValue(targetAmount, targetCurrencies)
+            // 7. within retrieveConvertValue(), should update targetCurrencies as well.
+        // in func -> 3. edit retrieveConvertValue() to return the conversion result
     };
 
     const commonAttr = {
