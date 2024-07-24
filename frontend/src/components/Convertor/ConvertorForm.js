@@ -8,9 +8,9 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetCurrencies, isDisplaySM } = props;
+    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetCurrencies, isDisplaySM, onTargetConvertCurrUpdate } = props;
 
-    const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: targetCurrencies.baseCurr, targetCurr: targetCurrencies.targetCurr });
+    const [formInputs, setFormInputs] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
     const handleAmountInput = (e) => {
@@ -20,14 +20,9 @@ export default function ConvertorForm(props) {
             setIsError(true);
         }
 
-        const convertAmountInput = parseFloat(e.value); // the total amount to convert
-
-        setFormInputs((oldFormInputs) => {
-            return {
-                ...oldFormInputs,
-                [e.name]: convertAmountInput,
-            };
-        });
+        // the total amount to convert
+        const convertAmountInput = parseFloat(e.value);
+        setFormInputs(convertAmountInput);
     }
 
     const handleCurrCountryUpdate = (e) => {
@@ -63,7 +58,7 @@ export default function ConvertorForm(props) {
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
-        onAddCurrCountryUpdate: handleCurrCountryUpdate,
+        onTargetConvertCurrUpdate,
         currCountiesCodeMapDetail,
         sortedCurrsCodeList, 
         validCurFlagList
@@ -72,14 +67,14 @@ export default function ConvertorForm(props) {
     const attr = {
         baseCurr: {
             label: "From",
-            isBaseCurrency: true,
-            baseCurrVal: formInputs.baseCurr,
+            isBaseCurrency: 0,
+            baseCurrVal: targetCurrencies[0],
             ...commonAttr
         },
         targetCurr: {
             label: "To",
-            isBaseCurrency: false,
-            baseCurrVal: formInputs.targetCurr,
+            isBaseCurrency: 1,
+            baseCurrVal: targetCurrencies[1],
             ...commonAttr
         },
     };
@@ -87,7 +82,7 @@ export default function ConvertorForm(props) {
     return (
         <form onSubmit={onSubmit} >
             <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
-                <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
+                <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={targetCurrencies[0]} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
                 <CurrCountriesDropDown {...attr.baseCurr} />
                 <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}
