@@ -12,6 +12,7 @@ export default function Convertor(props) {
     // const { curr } = useParams();
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
+    const [isSwapCurr, setIsSwapCurr] = useState(false);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
     const [targetConvertCurrPair, setTargetConvertCurrPair] = useState(["USD", "THB"]);
@@ -40,7 +41,6 @@ export default function Convertor(props) {
     };
 
     const handleTargetConvertCurrUpdate = (e) => {
-        console.log("e.isBaseCurrency: ", e.isBaseCurrency)
         const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
         setTargetConvertCurrPair(newConvertCurrPair);
@@ -49,19 +49,23 @@ export default function Convertor(props) {
     const handleConvertCurrSwap = (e) => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
         setTargetConvertCurrPair(newCurrPair);
+        setIsSwapCurr(true);
     }
 
     const handleConversionFormDataUpdate = async (targetConvertAmount) => {
-        setIsNewUpdateRequest(true);
-        const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
-        setFormData(() => {
-            return {
-                amount: targetConvertAmount,
-                baseCurr: targetConvertCurrPair[0],
-                targetCurr: targetConvertCurrPair[1],
-                total: response.data
-            }
-        });
+        if (!isSwapCurr) {
+            setIsNewUpdateRequest(true);
+            const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
+            setFormData(() => {
+                return {
+                    amount: targetConvertAmount,
+                    baseCurr: targetConvertCurrPair[0],
+                    targetCurr: targetConvertCurrPair[1],
+                    total: response.data
+                }
+            });
+        } else
+            setIsSwapCurr(false);
     };
 
     const attr = {

@@ -8,7 +8,6 @@ export default function InputTextField(props) {
 
     return (
         <TextField
-            required
             error={isError ? true : false}
             label={inputFieldLabel.charAt(0).toUpperCase() + inputFieldLabel.substring(1)}
             id={inputFieldLabel}
