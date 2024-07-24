@@ -1,15 +1,12 @@
 import '../../App.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
-import { useParams } from 'react-router-dom';
 import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function Convertor(props) {
     const { isDisplaySM, currentUrl } = props;
-    //console.log("log sortedCurrsCodeList in convertor: ", sortedCurrsCodeList)
-    // const { curr } = useParams();
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
     const [isSwapCurr, setIsSwapCurr] = useState(false);
@@ -17,22 +14,9 @@ export default function Convertor(props) {
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
     const [targetConvertCurrPair, setTargetConvertCurrPair] = useState(["USD", "THB"]);
 
-    // useEffect(() => {
-    //     async function updatePreference() {
-    //         console.log("Update New conversion pair!!!");
-    //         // if (isNewPrefUpdate ) {
-    //         //     await updatePreference(userId, userPreference);
-    //         //     setIsNewPrefUpdate(false);
-    //         // }
-    //     }
-    //     updatePreference();
-    // }, [targetConvertCurrPair])
+    let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
 
-    let baseCurr;
-    let targetCurr;
-    let amount;
-    let total;
-
+    // Display conversion result
     if (formData !== null) {
         baseCurr = formData.baseCurr;
         targetCurr = formData.targetCurr;
@@ -40,20 +24,23 @@ export default function Convertor(props) {
         total = formData.total;
     };
 
+    // Invoke when new currency code is set through the dropdown menu
     const handleTargetConvertCurrUpdate = (e) => {
         const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
         setTargetConvertCurrPair(newConvertCurrPair);
     }
 
+    // Invoke when swap currency code
     const handleConvertCurrSwap = (e) => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
         setTargetConvertCurrPair(newCurrPair);
-        setIsSwapCurr(true);
+        setIsSwapCurr(true); // enable flag to prevent conversion logic run
     }
 
+    // Invode when click convert button on the screen
     const handleConversionFormDataUpdate = async (targetConvertAmount) => {
-        if (!isSwapCurr) {
+        if (!isSwapCurr) { // reventing conversion logic to run when click swap button
             setIsNewUpdateRequest(true);
             const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
             setFormData(() => {
@@ -65,7 +52,7 @@ export default function Convertor(props) {
                 }
             });
         } else
-            setIsSwapCurr(false);
+            setIsSwapCurr(false); // reset flag
     };
 
     const attr = {

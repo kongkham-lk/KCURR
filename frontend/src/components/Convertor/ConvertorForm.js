@@ -12,7 +12,7 @@ export default function ConvertorForm(props) {
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
-    const handleAmountInput = (e) => {
+    const handleConvertAmountUpdate = (e) => {
         if (checkIfContainsOnlyNumbers(e.value) || e.value === "") {
             setIsError(false);
         } else {
@@ -24,26 +24,9 @@ export default function ConvertorForm(props) {
         setTargetConvertAmount(convertAmountInput);
     }
 
-    // const handleSwap = () => {
-    //     const { amount, baseCurr, targetCurr } = targetConvertAmount;
-    //     const newFormInput = { amount: amount, baseCurr: targetCurr, targetCurr: baseCurr };
-    //     setTargetConvertAmount(newFormInput);
-    // }
-
     const onSubmit = (e) => {
         e.preventDefault();
-        // retrieveConvertValue(onConversionFormDataUpdate, targetConvertAmount);
-        onConversionFormDataSubmit(targetConvertAmount)
-        // this -> 
-            //### 1. when submit, trigger function outside => to do the conversion -> onConversionFormDataUpdate(targetConvertAmount)
-            //### 5. change name and structure: 
-                // name: "formInput" -> "targetConvertAmount"
-                // structure: store only number, maybe float
-            //### 6. when onSubmit click, retrieveConvertValue()
-        // parent -> 
-            //### 2. call retrieveConvertValue(targetConvertAmount, targetConvertCurrPair)
-            // 7. within retrieveConvertValue(), should update targetConvertCurrPair as well.
-        //### in func -> 3. edit retrieveConvertValue() to return the conversion result
+        onConversionFormDataSubmit(targetConvertAmount);
     };
 
     const commonAttr = {
@@ -55,6 +38,14 @@ export default function ConvertorForm(props) {
     }
 
     const attr = {
+        InputTextField: {
+            onConvertAmountUpdate: handleConvertAmountUpdate,
+            isError,
+            baseCurr: targetConvertCurrPair[0],
+            currCountiesCodeMapDetail,
+            inputFieldLabel: "amount",
+            placeHolder: "Enter Number"
+        },
         baseCurr: {
             label: "From",
             isBaseCurrency: 0,
@@ -72,7 +63,7 @@ export default function ConvertorForm(props) {
     return (
         <form onSubmit={onSubmit} >
             <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
-                <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={targetConvertCurrPair[0]} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
+                <InputTextField {...attr.InputTextField} />
                 <CurrCountriesDropDown {...attr.baseCurr} />
                 <Button variant="outlined" type="submit" onClick={onConvertCurrSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}

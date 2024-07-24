@@ -1,10 +1,9 @@
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 
 export default function InputTextField(props) {
-    const { updateVal, isError = false, inputFieldLabel, placeHolder, size = "large", displayInput } = props;
+    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "large", displayInput } = props;
 
-    const handleChange = (e) => { updateVal(e.target) };
+    const handleChange = (e) => { onConvertAmountUpdate(e.target) };
 
     return (
         <TextField
