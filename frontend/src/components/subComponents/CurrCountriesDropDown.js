@@ -6,17 +6,18 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, updateVal: onAddCurrCountry, stateInputField: inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+    const { label, onAddCurrCountryUpdate, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, size, passInStyle = { height: "56.5px" } } = props;
-
-    const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
+        console.log(isBaseCurrency)
+    const handleChange = (e) => onAddCurrCountryUpdate({ isBaseCurrency, value: e.target.value });
+    const id = isBaseCurrency ? "baseCurr" : "targetCurr"
 
     return (
         <FormControl sx={sxStyle} size={size}>
-            <InputLabel id={inputCurrType} >{label}</InputLabel>
+            <InputLabel id={id } >{label}</InputLabel>
             <Select
-                labelId={inputCurrType}
-                id={inputCurrType}
+                labelId={id}
+                id={id}
                 value={baseCurrVal}
                 label={label}
                 onChange={handleChange}

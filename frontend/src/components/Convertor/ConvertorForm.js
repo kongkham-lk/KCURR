@@ -30,11 +30,12 @@ export default function ConvertorForm(props) {
         });
     }
 
-    const handleCurrCountryForm = (e) => {
+    const handleCurrCountryUpdate = (e) => {
+        const targetCurrBase = e.isBaseCurrency ? "baseCurr" : "targetCurr";
         setFormInputs((oldFormInputs) => {
             return {
                 ...oldFormInputs,
-                [e.name]: e.value,
+                [targetCurrBase]: e.value,
             };
         });
     };
@@ -52,7 +53,7 @@ export default function ConvertorForm(props) {
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
-        updateVal: handleCurrCountryForm,
+        onAddCurrCountryUpdate: handleCurrCountryUpdate,
         currCountiesCodeMapDetail,
         sortedCurrsCodeList, 
         validCurFlagList
@@ -61,13 +62,13 @@ export default function ConvertorForm(props) {
     const attr = {
         baseCurr: {
             label: "From",
-            stateInputField: "baseCurr",
+            isBaseCurrency: true,
             baseCurrVal: formInputs.baseCurr,
             ...commonAttr
         },
         targetCurr: {
             label: "To",
-            stateInputField: "targetCurr",
+            isBaseCurrency: false,
             baseCurrVal: formInputs.targetCurr,
             ...commonAttr
         },
