@@ -8,7 +8,6 @@ import { getFlag } from '../../util/getFlag';
 export default function CurrCountriesDropDown(props) {
     const { label, onTargetConvertCurrUpdate, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, size, passInStyle = { height: "56.5px" } } = props;
-        console.log(isBaseCurrency)
     const handleChange = (e) => onTargetConvertCurrUpdate({ isBaseCurrency, value: e.target.value });
     const id = isBaseCurrency === 0 ? "baseCurr" : "targetCurr"
 

@@ -21,7 +21,11 @@ export default function ConvertorForm(props) {
 
         // the total amount to convert
         const convertAmountInput = parseFloat(e.value);
-        setTargetConvertAmount(convertAmountInput);
+        console.log("convertAmountInput: ", convertAmountInput)
+        if (!isNaN(convertAmountInput))
+            setTargetConvertAmount(convertAmountInput);
+        else
+            setTargetConvertAmount(0);
     }
 
     const onSubmit = (e) => {

@@ -20,7 +20,7 @@ export default function Convertor(props) {
     if (formData !== null) {
         baseCurr = formData.baseCurr;
         targetCurr = formData.targetCurr;
-        amount = formData.amount;
+        amount = isNaN(formData.amount) ? 1 : formData.amount;
         total = formData.total;
     };
 
@@ -40,7 +40,7 @@ export default function Convertor(props) {
 
     // Invode when click convert button on the screen
     const handleConversionFormDataUpdate = async (targetConvertAmount) => {
-        if (!isSwapCurr) { // reventing conversion logic to run when click swap button
+        if (targetConvertAmount !== 0 || isNaN(targetConvertAmount)) {
             setIsNewUpdateRequest(true);
             const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
             setFormData(() => {
@@ -51,8 +51,7 @@ export default function Convertor(props) {
                     total: response.data
                 }
             });
-        } else
-            setIsSwapCurr(false); // reset flag
+        }
     };
 
     const attr = {
