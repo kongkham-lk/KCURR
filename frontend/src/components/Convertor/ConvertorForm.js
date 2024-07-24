@@ -7,11 +7,12 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetConvertCurrPair, isDisplaySM, onTargetConvertCurrUpdate, onConvertCurrSwap } = props;
-
+    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetConvertCurrPair, isDisplaySM, 
+        onTargetConvertCurrUpdate, onConvertCurrSwap } = props;
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
+    // Store new user input for conversion amount
     const handleConvertAmountUpdate = (e) => {
         if (checkIfContainsOnlyNumbers(e.value) || e.value === "") {
             setIsError(false);
@@ -19,15 +20,17 @@ export default function ConvertorForm(props) {
             setIsError(true);
         }
 
-        // the total amount to convert
+        // The total amount to convert
         const convertAmountInput = parseFloat(e.value);
-        console.log("convertAmountInput: ", convertAmountInput)
+        
+        // Determined if the input value is valid or user just delete all and no new value input
         if (!isNaN(convertAmountInput))
             setTargetConvertAmount(convertAmountInput);
         else
             setTargetConvertAmount(0);
     }
-
+    
+    // Submit form to start runniing the conversion logic
     const onSubmit = (e) => {
         e.preventDefault();
         onConversionFormDataSubmit(targetConvertAmount);

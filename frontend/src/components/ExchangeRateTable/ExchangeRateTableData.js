@@ -29,7 +29,9 @@ import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 export default function ExchangeRateTableData(props) {
     const { initialDefaultCurrExchangeRates, currCountiesCodeMapDetail, validCurFlagList, initialDefaultCurr, sortedCurrsCodeList, isDisplaySM, isDisplayMD, isFeatureDisplay, userId, userPreference } = props;
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-console.log(userPreference.currencyCountries)
+
+    console.log("userPreference.currencyCountries: ", userPreference.currencyCountries);
+
     const [defaultCurrCode, setDefaultCurrCode] = useState(initialDefaultCurr.baseCurr); // set default/main currency that will be used to against the other target currency
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.currencyCountries]); // initial currency list that will be displayed on screen
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(isFeatureDisplay ? null : [...initialDefaultCurrExchangeRates]);
@@ -214,15 +216,15 @@ console.log(userPreference.currencyCountries)
     const handleToggleFlags = async (index) => {
         if (index === 0)
             return;
-        
+
         if (isFeatureDisplay) {
             const newAppendCharts = [...displayRateHistChartFlags];
-    
+
             if (newAppendCharts[index])
                 newAppendCharts[index] = false;
             else {
                 newAppendCharts[index] = true;
-                
+
                 if (prevDisplayChartIndex !== index) {
                     if (prevDisplayChartIndex !== -1) // close the prev display chart and display the current row's chart
                         newAppendCharts[prevDisplayChartIndex] = false;
@@ -246,7 +248,7 @@ console.log(userPreference.currencyCountries)
                         >
                             {isDisplaySM ? "Live Rates" : "Live Exchange Rates"}
                         </Typography>
-                        {!isDisplaySM && 
+                        {!isDisplaySM &&
                             <Tooltip title="Reset Filter" style={{ margin: isDisplaySM ? "0px" : "16px" }} onClick={handleResetFilter}>
                                 <IconButton>
                                     <FilterListOffIcon />
@@ -334,10 +336,10 @@ console.log(userPreference.currencyCountries)
                                                                 }
                                                                 {/* Chart Cell */}
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
-                                                                    {!isDisplaySM || !isFeatureDisplay? 
+                                                                    {!isDisplaySM || !isFeatureDisplay ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
                                                                             {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
-                                                                        </div> : <Button variant="text" size="small" sx={{padding: 0, float: 'right', color: index === 0 && 'transparent'}}>View Chart</Button>
+                                                                        </div> : <Button variant="text" size="small" sx={{ padding: 0, float: 'right', color: index === 0 && 'transparent' }}>View Chart</Button>
                                                                     }
                                                                 </TableCell>
                                                             </TableRow>
@@ -467,7 +469,7 @@ const sxStyle = {
         sm: { margin: "0px 10px", padding: "0px" },
     },
     hoverButton: {
-        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', display: 'flex', alignItems: 'center'},
+        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', display: 'flex', alignItems: 'center' },
         hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px', transition: 'background 0.6s' } },
     },
     PaginationMainContainer: {

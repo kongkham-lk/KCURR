@@ -10,10 +10,10 @@ export async function retrieveConvertValue(targetConvertAmount, targetConvertCur
         baseCurr: targetConvertCurrencies[0],
         targetCurr: targetConvertCurrencies[1]
     };
-    console.log("Form inputs: ", formInputs)
+    // console.log("Form inputs: ", formInputs)
     try {
         const response = await axios.post(`${baseURL}:${port}/curr/convert`, formInputs);
-        console.log("response: ", response)
+        // console.log("response: ", response)
         return response;
     } catch (e) {
         console.log(e.code, "\n", e.stack);
