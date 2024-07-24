@@ -16,6 +16,7 @@ import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './ut
 export default function App() {
     const userId = getUserIdentifier();
     const [userPreference, setUserPreference] = useState({});
+    const [isNewPrefUpdate, setIsNewPrefUpdate] = useState(false);
     const [isOutLineTheme, setIsOutLineTheme] = useState(userPreference.theme === "outlined" ? true : false); // setting theme
 
     console.log("APP() - userPreference: ", userPreference);
@@ -26,10 +27,23 @@ export default function App() {
 
     useEffect(() => {
         async function fetchPreference() {
-            setUserPreference(await getUserPreferences(userId));
+            const pref = await getUserPreferences(userId);
+            console.log("Return Pref: ", pref)
+            setUserPreference(pref);
         }
         fetchPreference();
     }, [])
+
+    useEffect(() => {
+        async function updatePreference() {
+            if (isNewPrefUpdate ) {
+                console.log("Update New Preference!!!");
+                await updatePreference(userId, userPreference);
+                setIsNewPrefUpdate(false);
+            }
+        }
+        updatePreference();
+    }, [isNewPrefUpdate])
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -57,9 +71,29 @@ export default function App() {
         setIsOutLineTheme(event);
         const newPreference = {...userPreference};
         newPreference.theme = event === true ? "outlined" : 'elevation';
+        console.log("Save new Theme!!!");
         setUserPreference(newPreference);
-        console.log("Save Theme!!!")
-        saveUserPreferences(userId, userPreference);
+    }
+
+    const handleConversionPairChange = (event) => {
+        const newPreference = {...userPreference};
+        newPreference.conversionPair = [...event];
+        console.log("Save new ConversionPair Array!!!");
+        setUserPreference(newPreference);
+    }
+
+    const handleLiveRateRowDisplayChange = (event) => {
+        const newPreference = {...userPreference};
+        newPreference.currencyCountries = [...event];
+        console.log("Save new LiveRateRow List!!!");
+        setUserPreference(newPreference);
+    }
+
+    const handleNewsCategoriesChange = (event) => {
+        const newPreference = {...userPreference};
+        newPreference.newsCategoryies = [...event];
+        console.log("Save new NewsCategories List!!!");
+        setUserPreference(newPreference);
     }
 
     const commonAttr = {
@@ -82,29 +116,29 @@ export default function App() {
                         <Route exact path="/" element={
                             <>
                                 <Item key="Convertor" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <Convertor {...attr.curr} /> : <Loading />}
+                                    {isReady ? <Convertor {...attr.curr} onConversionPairUpdate={handleConversionPairChange} /> : <Loading />}
                                 </Item>
                                 <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                                    {isReady ? <ExchangeRateTable {...attr.curr} onLiveRateRowDisplayUpdate={handleLiveRateRowDisplayChange} /> : <Loading />}
                                 </Item>
                                 <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
+                                    {isReady ? <FinancialNews {...attr.news} onNewsCategoriesUpdate={handleNewsCategoriesChange} /> : <Loading />}
                                 </Item>
                             </>
                         } ></Route>
                         <Route exact path="/Convertor" element={
                             <Item key="Convertor" {...MuiProps} sx={sxStyle}>
-                                {isReady ? <Convertor {...attr.curr} /> : <Loading />}
+                                {isReady ? <Convertor {...attr.curr} onConversionPairUpdate={handleConversionPairChange} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/Chart" element={
                             <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} onLiveRateRowDisplayUpdate={handleLiveRateRowDisplayChange} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/News" element={
                             <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                <FinancialNews filter="true" {...attr.news} />
+                                <FinancialNews filter="true" {...attr.news} onNewsCategoriesUpdate={handleNewsCategoriesChange} />
                             </Item>
                         } ></Route>
                     </Routes>
