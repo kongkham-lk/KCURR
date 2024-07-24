@@ -4,6 +4,7 @@ import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
 import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
+import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function Convertor(props) {
     const { isDisplaySM, currentUrl } = props;
@@ -13,7 +14,7 @@ export default function Convertor(props) {
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
-    const [targetCurrencies, setTargetCurrencies] = useState(["USD", "THB"]);
+    const [targetConvertCurrPair, setTargetConvertCurrPair] = useState(["USD", "THB"]);
 
     // useEffect(() => {
     //     async function updatePreference() {
@@ -24,7 +25,7 @@ export default function Convertor(props) {
     //         // }
     //     }
     //     updatePreference();
-    // }, [targetCurrencies])
+    // }, [targetConvertCurrPair])
 
     let baseCurr;
     let targetCurr;
@@ -40,32 +41,35 @@ export default function Convertor(props) {
 
     const handleTargetConvertCurrUpdate = (e) => {
         console.log("e.isBaseCurrency: ", e.isBaseCurrency)
-        // const targetCurrBase = e.isBaseCurrency === 0 ? "baseCurr" : "targetCurr";
-        // setTargetCurrencies((oldFormInputs) => {
-        //     return {
-        //         ...oldFormInputs,
-        //         [targetCurrBase]: e.value,
-        //     };
-        // });
-        const newConvertCurrPair = [...targetCurrencies];
+        const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
-        setTargetCurrencies(newConvertCurrPair);
+        setTargetConvertCurrPair(newConvertCurrPair);
     }
 
-    const setFormDataToConvertor = (inputData, response) => {
+    const handleConvertCurrSwap = (e) => {
+        const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
+        setTargetConvertCurrPair(newCurrPair);
+    }
+
+    const handleConversionFormDataUpdate = async (targetConvertAmount) => {
         setIsNewUpdateRequest(true);
+        const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
         setFormData(() => {
             return {
-                ...inputData, total: response.data
+                amount: targetConvertAmount,
+                baseCurr: targetConvertCurrPair[0],
+                targetCurr: targetConvertCurrPair[1],
+                total: response.data
             }
         });
     };
 
     const attr = {
         convertorForm: {
-            setFormDataToConvertor,
-            targetCurrencies,
+            onConversionFormDataSubmit: handleConversionFormDataUpdate,
+            targetConvertCurrPair,
             onTargetConvertCurrUpdate: handleTargetConvertCurrUpdate,
+            onConvertCurrSwap: handleConvertCurrSwap,
             ...props
         },
         RateHistoryGraph: {

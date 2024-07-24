@@ -4,10 +4,17 @@ import axios from 'axios';
 const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BASEURL : process.env.REACT_APP_PROD_BASEURL;
 const port = process.env.REACT_APP_TARGET_PORT;
 
-export async function retrieveConvertValue(getFormData, formInputs) {
+export async function retrieveConvertValue(targetConvertAmount, targetConvertCurrencies) {
+    const formInputs = {
+        amount: targetConvertAmount,
+        baseCurr: targetConvertCurrencies[0],
+        targetCurr: targetConvertCurrencies[1]
+    };
+    console.log("Form inputs: ", formInputs)
     try {
         const response = await axios.post(`${baseURL}:${port}/curr/convert`, formInputs);
-        getFormData(formInputs, response);
+        console.log("response: ", response)
+        return response;
     } catch (e) {
         console.log(e.code, "\n", e.stack);
     }
