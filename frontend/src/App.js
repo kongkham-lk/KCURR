@@ -17,9 +17,9 @@ export default function App() {
     const userId = getUserIdentifier();
     const [userPreference, setUserPreference] = useState({});
     const [isNewPrefUpdate, setIsNewPrefUpdate] = useState(false);
-    const [isOutLineTheme, setIsOutLineTheme] = useState(userPreference.theme === "outlined" ? true : false); // setting theme
+    const [isOutLineTheme, setIsOutLineTheme] = useState(); // setting theme
 
-    console.log("APP() - userPreference: ", userPreference);
+    // console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
@@ -30,15 +30,17 @@ export default function App() {
             const pref = await getUserPreferences(userId);
             console.log("Return Pref: ", pref)
             setUserPreference(pref);
+            console.log("update isOutline!!!")
+            setIsOutLineTheme(pref.theme === "outlined" ? true : false)
         }
         fetchPreference();
     }, [])
 
     useEffect(() => {
         async function updatePreference() {
-            if (isNewPrefUpdate ) {
+            if (isNewPrefUpdate) {
                 console.log("Update New Preference!!!");
-                await updatePreference(userId, userPreference);
+                await saveUserPreferences(userId, userPreference);
                 setIsNewPrefUpdate(false);
             }
         }
@@ -67,30 +69,37 @@ export default function App() {
         ...(isOutLineTheme ? outlinedProps : elevationProps),
     }
 
-    const handleThemeChange = (event) => {
-        setIsOutLineTheme(event);
-        const newPreference = {...userPreference};
-        newPreference.theme = event === true ? "outlined" : 'elevation';
-        console.log("Save new Theme!!!");
+    const handlePreferenceUpdate = async (newPreference) => {
+        console.log("handle New Preference!!!");
         setUserPreference(newPreference);
+        setIsOutLineTheme(newPreference.theme === "outlined" ? true : false);
+        setIsNewPrefUpdate(true);
     }
 
+    // const handleThemeChange = (event) => {
+    //     setIsOutLineTheme(event);
+    //     const newPreference = { ...userPreference };
+    //     newPreference.theme = event === true ? "outlined" : 'elevation';
+    //     console.log("Save new Theme!!!");
+    //     setUserPreference(newPreference);
+    // }
+
     const handleConversionPairChange = (event) => {
-        const newPreference = {...userPreference};
+        const newPreference = { ...userPreference };
         newPreference.conversionPair = [...event];
         console.log("Save new ConversionPair Array!!!");
         setUserPreference(newPreference);
     }
 
     const handleLiveRateRowDisplayChange = (event) => {
-        const newPreference = {...userPreference};
+        const newPreference = { ...userPreference };
         newPreference.currencyCountries = [...event];
         console.log("Save new LiveRateRow List!!!");
         setUserPreference(newPreference);
     }
 
     const handleNewsCategoriesChange = (event) => {
-        const newPreference = {...userPreference};
+        const newPreference = { ...userPreference };
         newPreference.newsCategoryies = [...event];
         console.log("Save new NewsCategories List!!!");
         setUserPreference(newPreference);
@@ -102,7 +111,7 @@ export default function App() {
     }
 
     const attr = {
-        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl, userPreference },
+        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl, userPreference, onPreferenceUpdate: handlePreferenceUpdate },
         curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl, userId, userPreference },
         news: { ...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl, userPreference }
     }
@@ -110,11 +119,12 @@ export default function App() {
     return (
         <ThemeProvider theme={lightTheme} >
             <div className="App" >
-                <MainNav {...attr.navBar} onUpdateTheme={handleThemeChange}/>
+                <MainNav {...attr.navBar} />
                 <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5 }}>
                     <Routes>
                         <Route exact path="/" element={
                             <>
+                            {console.log("MuiProps: ", MuiProps)}
                                 <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <Convertor {...attr.curr} onConversionPairUpdate={handleConversionPairChange} /> : <Loading />}
                                 </Item>
