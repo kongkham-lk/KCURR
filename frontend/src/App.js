@@ -84,12 +84,12 @@ export default function App() {
     //     setUserPreference(newPreference);
     // }
 
-    const handleConversionPairChange = (event) => {
-        const newPreference = { ...userPreference };
-        newPreference.conversionPair = [...event];
-        console.log("Save new ConversionPair Array!!!");
-        setUserPreference(newPreference);
-    }
+    // const handleConversionPairChange = (event) => {
+    //     const newPreference = { ...userPreference };
+    //     newPreference.conversionPair = [...event];
+    //     console.log("Save new ConversionPair Array!!!");
+    //     setUserPreference(newPreference);
+    // }
 
     const handleLiveRateRowDisplayChange = (event) => {
         const newPreference = { ...userPreference };
@@ -106,14 +106,14 @@ export default function App() {
     }
 
     const commonAttr = {
-        themeFlags: { isOutLineTheme },
         displayFlags: { isDisplaySM, isDisplayMD },
+        pref: { userPreference, onPreferenceUpdate: handlePreferenceUpdate },
     }
 
     const attr = {
-        navBar: { ...commonAttr.displayFlags, ...commonAttr.themeFlags, currentUrl, userPreference, onPreferenceUpdate: handlePreferenceUpdate },
-        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl, userId, userPreference },
-        news: { ...commonAttr.themeFlags, ...commonAttr.displayFlags, currentUrl, userPreference }
+        navBar: { ...commonAttr.displayFlags, isOutLineTheme, currentUrl, ...commonAttr.pref },
+        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl, ...commonAttr.pref },
+        news: { isOutLineTheme, ...commonAttr.displayFlags, currentUrl, ...commonAttr.pref }
     }
 
     return (
@@ -124,9 +124,9 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={
                             <>
-                            {console.log("MuiProps: ", MuiProps)}
+                                {console.log("MuiProps: ", MuiProps)}
                                 <Item key="Convertor" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <Convertor {...attr.curr} onConversionPairUpdate={handleConversionPairChange} /> : <Loading />}
+                                    {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
                                 <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <ExchangeRateTable {...attr.curr} onLiveRateRowDisplayUpdate={handleLiveRateRowDisplayChange} /> : <Loading />}
@@ -138,7 +138,7 @@ export default function App() {
                         } ></Route>
                         <Route exact path="/Convertor" element={
                             <Item key="Convertor" {...MuiProps} sx={sxStyle}>
-                                {isReady ? <Convertor {...attr.curr} onConversionPairUpdate={handleConversionPairChange} /> : <Loading />}
+                                {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/Chart" element={

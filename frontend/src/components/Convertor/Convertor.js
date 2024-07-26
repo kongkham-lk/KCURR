@@ -1,19 +1,24 @@
 import '../../App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function Convertor(props) {
-    const { isDisplaySM, currentUrl } = props;
+    const { isDisplaySM, currentUrl, userPreference, onPreferenceUpdate } = props;
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("convert");
-    const [targetConvertCurrPair, setTargetConvertCurrPair] = useState(["USD", "THB"]);
+    const [targetConvertCurrPair, setTargetConvertCurrPair] = useState([]);
+    const [isCurrPairUpdate, setCurrPairUpdate] = useState(false);
 
     let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
+
+    useEffect(() => {
+        setTargetConvertCurrPair([...userPreference.conversionPair])
+    }, [userPreference])
 
     // Display conversion result
     if (formData !== null) {
@@ -27,13 +32,21 @@ export default function Convertor(props) {
     const handleTargetConvertCurrUpdate = (e) => {
         const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
-        setTargetConvertCurrPair(newConvertCurrPair);
+        requestUpdateCurrPair(newConvertCurrPair);
     }
 
     // Invoke when swap currency code
     const handleConvertCurrSwap = (e) => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
+        requestUpdateCurrPair(newCurrPair);
+    }
+
+    const requestUpdateCurrPair = (newCurrPair) => {
         setTargetConvertCurrPair(newCurrPair);
+        const newPreference = { ...userPreference };
+        newPreference.conversionPair = newCurrPair;
+        console.log("Save new conversion curr pair!!!");
+        onPreferenceUpdate(newPreference);
     }
 
     // Invode when click convert button on the screen
