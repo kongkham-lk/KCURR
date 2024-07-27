@@ -87,7 +87,7 @@ export default function MainNav(props) {
                             <FormControlLabel
                                 sx={sxStyle.NonMargin}
                                 control={
-                                    <Switch checked={!state} onChange={() => handleThemeUpdate(!state)} defaultChecked />
+                                    <Switch checked={!state} onChange={() => handleThemeUpdate(!state)} />
                                 }
                             />
                         </FormControl>
