@@ -39,7 +39,7 @@ export default function ExchangeRateTable(props) {
 
     // Initialized currency's visible row proeprty
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
-    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([false, false, false, false]); // each live rate row's display chart flags
+    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.currencyCountries.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
 
     // Setting property of mui table
