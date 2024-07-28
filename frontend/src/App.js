@@ -30,7 +30,7 @@ export default function App() {
             const pref = await getUserPreferences(userId);
             console.log("Return Pref: ", pref)
             setUserPreference(pref);
-            console.log("update isOutline!!!")
+            // console.log("update isOutline!!!")
             setIsOutLineTheme(pref.theme === "outlined" ? true : false)
         }
         fetchPreference();
@@ -124,7 +124,6 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={
                             <>
-                                {console.log("MuiProps: ", MuiProps)}
                                 <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
