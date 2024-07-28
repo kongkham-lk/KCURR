@@ -6,9 +6,12 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, onTargetConvertCurrUpdate, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+    const { label, onNewCurrCodeAssigned, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, size, passInStyle = { height: "56.5px" } } = props;
-    const handleChange = (e) => onTargetConvertCurrUpdate({ isBaseCurrency, value: e.target.value }); // differentiate the currCode setter base on indexNumber or as boolean in binary
+    
+    // Differentiate the currCode setter base on indexNumber or as boolean in binary
+    // The isBaseCurrency will be only use in conversion page (differentiate which dropdown setter refers to)
+    const handleChange = (e) => onNewCurrCodeAssigned({ isBaseCurrency, value: e.target.value });
     const id = isBaseCurrency === 0 ? "baseCurr" : "targetCurr"
 
     return (

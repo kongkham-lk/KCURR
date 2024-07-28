@@ -8,7 +8,7 @@ import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
     const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetConvertCurrPair, isDisplaySM, 
-        onTargetConvertCurrUpdate, onConvertCurrSwap } = props;
+        onNewCurrCodeAssigned, onConvertCurrSwap } = props;
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
@@ -38,7 +38,7 @@ export default function ConvertorForm(props) {
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
-        onTargetConvertCurrUpdate,
+        onNewCurrCodeAssigned,
         currCountiesCodeMapDetail,
         sortedCurrsCodeList, 
         validCurFlagList

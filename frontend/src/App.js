@@ -39,7 +39,7 @@ export default function App() {
     useEffect(() => {
         async function updatePreference() {
             if (isNewPrefUpdate) {
-                console.log("Update New Preference!!!");
+                // console.log("Update New Preference!!!");
                 await saveUserPreferences(userId, userPreference);
                 setIsNewPrefUpdate(false);
             }
@@ -70,7 +70,7 @@ export default function App() {
     }
 
     const handlePreferenceUpdate = async (newPreference) => {
-        console.log("handle New Preference!!!");
+        // console.log("handle New Preference!!!");
         setUserPreference(newPreference);
         setIsOutLineTheme(newPreference.theme === "outlined" ? true : false);
         setIsNewPrefUpdate(true);

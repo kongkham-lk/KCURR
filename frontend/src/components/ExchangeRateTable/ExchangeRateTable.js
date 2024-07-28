@@ -174,7 +174,7 @@ export default function ExchangeRateTable(props) {
     );
 
     const handleAddCurrCountry = (e) => {
-        // console.log("Add new item to list: ", e.value);
+        console.log("Add new item to list: ", e);
         setNewCurrCode(e.value);
         setCurrCodeArray([...currCodeArray, e.value])
     };
@@ -394,7 +394,7 @@ export default function ExchangeRateTable(props) {
                             {!isDisplaySM &&
                                 <CurrCountriesDropDown
                                     sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                    onAddCurrCountry={handleAddCurrCountry}
+                                    onNewCurrCodeAssigned={handleAddCurrCountry}
                                     {...attr.CurrCountriesDropDown}
                                 />
                             }
@@ -422,7 +422,7 @@ export default function ExchangeRateTable(props) {
                                 {isDisplaySM &&
                                     <CurrCountriesDropDown
                                         sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
-                                        onAddCurrCountry={handleAddCurrCountry}
+                                        onNewCurrCodeAssigned={handleAddCurrCountry}
                                         {...attr.CurrCountriesDropDown}
                                     />
                                 }

@@ -69,7 +69,7 @@ export default function Convertor(props) {
         convertorForm: {
             onConversionFormDataSubmit: handleConversionFormDataUpdate,
             targetConvertCurrPair,
-            onTargetConvertCurrUpdate: handleTargetConvertCurrUpdate,
+            onNewCurrCodeAssigned: handleTargetConvertCurrUpdate,
             onConvertCurrSwap: handleConvertCurrSwap,
             ...props
         },
