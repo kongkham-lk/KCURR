@@ -19,7 +19,7 @@ export default function App() {
     const [isNewPrefUpdate, setIsNewPrefUpdate] = useState(false);
     const [isOutLineTheme, setIsOutLineTheme] = useState(); // setting theme
 
-    // console.log("APP() - userPreference: ", userPreference);
+    console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
@@ -28,7 +28,7 @@ export default function App() {
     useEffect(() => {
         async function fetchPreference() {
             const pref = await getUserPreferences(userId);
-            console.log("Return Pref: ", pref)
+            // console.log("Return Pref: ", pref)
             setUserPreference(pref);
             // console.log("update isOutline!!!")
             setIsOutLineTheme(pref.theme === "outlined" ? true : false)

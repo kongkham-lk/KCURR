@@ -27,12 +27,12 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTable(props) {
-    const { currCountiesCodeMapDetail, validCurFlagList,  sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl, userPreference, onPreferenceUpdate } = props;
+    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl, userPreference, onPreferenceUpdate } = props;
 
     // Enable live rate's display chart feature flag
     // If yes, retrieve timeSeries instead of exchangeRates
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("chart");
-    
+
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.currencyCountries]); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
