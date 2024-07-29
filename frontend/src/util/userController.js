@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const baseURL = process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BASEURL : process.env.REACT_APP_PROD_BASEURL;
 const port = process.env.REACT_APP_TARGET_PORT;
 
-export function getUserIdentifier () {
+export function getUserIdentifier() {
     // Check if the identifier is already stored in local storage
     let userId = localStorage.getItem('userId');
     if (!userId) {
@@ -16,24 +16,31 @@ export function getUserIdentifier () {
     return userId;
 };
 
-export async function saveUserPreferences (userId, preferences) {
+export async function saveUserPreferences(userId, preferences) {
     localStorage.setItem(`preferences_${userId}`, JSON.stringify(preferences));
     await axios.post(`${baseURL}:${port}/update-preferences/${userId}`, preferences);
 };
 
 export async function getUserPreferences(userId) {
     const savedPreferences = localStorage.getItem(`preferences_${userId}`);
-    // console.log("check savedPreference: ", savedPreferences)
+    console.log("check savedPreference: ", savedPreferences)
+    // Check if savedPreferences has any
     if (savedPreferences) {
-        return JSON.parse(savedPreferences);
-    } else {
-        try {
-            // console.log("Sending request for preference!!!");
-            const userPrefereneces = await axios.get(`${baseURL}:${port}/preferences/${userId}`);
-            // console.log("userPreferences return: ", userPrefereneces);
-            return userPrefereneces.data;
-        } catch {
-            console.log("Fail to get user preferece!!!")
-        }
+        const transformPref = JSON.parse(savedPreferences);
+
+        // Only use cookie (userPreference cookie) if it contain all the require neccessary fields,
+        // including: theme, currCodePair, currCodeRowList, newsCategoryList
+        if (Object.keys(transformPref).length > 3)
+            return JSON.parse(savedPreferences);
+    }
+
+    // Retreived user preference from backend
+    try {
+        console.log("Sending request for new preference!!!");
+        const userPrefereneces = await axios.get(`${baseURL}:${port}/preferences/${userId}`);
+        // console.log("userPreferences return: ", userPrefereneces);
+        return userPrefereneces.data;
+    } catch {
+        console.log("Fail to get user preferece!!!")
     }
 };
