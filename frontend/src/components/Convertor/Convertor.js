@@ -17,7 +17,7 @@ export default function Convertor(props) {
     let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
 
     useEffect(() => {
-        setTargetConvertCurrPair([...userPreference.conversionPair])
+        setTargetConvertCurrPair([...userPreference.convertedCurrPair])
     }, [userPreference])
 
     // Display conversion result
@@ -44,7 +44,7 @@ export default function Convertor(props) {
     const requestUpdateCurrPair = (newCurrPair) => {
         setTargetConvertCurrPair(newCurrPair);
         const newPreference = { ...userPreference };
-        newPreference.conversionPair = newCurrPair;
+        newPreference.convertedCurrPair = newCurrPair;
         console.log("Save new conversion curr pair!!!");
         onPreferenceUpdate(newPreference);
     }

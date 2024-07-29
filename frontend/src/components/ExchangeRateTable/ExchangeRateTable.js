@@ -34,12 +34,12 @@ export default function ExchangeRateTable(props) {
     const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("chart");
 
     // Setting property base on save preference
-    const [currCodeArray, setCurrCodeArray] = useState([...userPreference.currencyCountries]); // initial currency list that will be displayed on screen
+    const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
 
     // Initialized currency's visible row proeprty
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
-    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.currencyCountries.length)].map(i => false)); // each live rate row's display chart flags
+    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
 
     // Setting property of mui table
@@ -126,9 +126,10 @@ export default function ExchangeRateTable(props) {
             // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
             await handleUpdateDefaultCurrLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
-            userPreference.currencyCountries = newCurrCodeArray;
+            userPreference.liveRateCurrCodes = newCurrCodeArray;
             setCurrCodeArray(newCurrCodeArray);
             setDefaultCurrCode(targetCurr);
+            handleUpdateLiveRateRowToAPI(newCurrCodeArray);
         }
     };
 
@@ -176,7 +177,9 @@ export default function ExchangeRateTable(props) {
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e);
         setNewCurrCode(e.value);
-        setCurrCodeArray([...currCodeArray, e.value])
+        const newCurrCodeArray = [...currCodeArray, e.value];
+        setCurrCodeArray(newCurrCodeArray);
+        handleUpdateLiveRateRowToAPI(newCurrCodeArray);
     };
 
     const handleDelete = (targetCurr) => {
@@ -199,6 +202,7 @@ export default function ExchangeRateTable(props) {
         // console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
         setCurrCodeArray(oldTargetCurrCodeArray);
+        handleUpdateLiveRateRowToAPI(oldTargetCurrCodeArray);
     }
 
     const handleResetFilter = () => setOrderBy('');
@@ -247,6 +251,13 @@ export default function ExchangeRateTable(props) {
             setDisplayRateHistChartFlags([...newAppendCharts]);
         }
     };
+
+    const handleUpdateLiveRateRowToAPI = (newCurrCodeArray) => {
+        const newPreference = { ...userPreference };
+        newPreference.liveRateCurrCodes = newCurrCodeArray;
+        console.log("Save new currCodeArray to API!!! ", newCurrCodeArray);
+        onPreferenceUpdate(newPreference);
+    }
 
     return (
         <>

@@ -25,9 +25,9 @@ public class UserController : ControllerBase
         return new Preferences
         {
             Theme = "elevation",
-            CurrencyCountries = new List<string> { "USD", "CAD", "EUR", "GBP" },
+            LiveRateCurrCodes = new List<string> { "USD", "CAD", "EUR", "GBP" },
             NewsCategories = new List<string> { "Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency" },
-            ConversionPair = new string[2] { "USD", "THB" }
+            ConvertedCurrPair = new string[2] { "USD", "THB" }
         };
     }
 

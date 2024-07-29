@@ -84,23 +84,23 @@ export default function App() {
     //     setUserPreference(newPreference);
     // }
 
-    // const handleConversionPairChange = (event) => {
+    // const handleConvertedCurrPairChange = (event) => {
     //     const newPreference = { ...userPreference };
-    //     newPreference.conversionPair = [...event];
-    //     console.log("Save new ConversionPair Array!!!");
+    //     newPreference.convertedCurrPair = [...event];
+    //     console.log("Save new convertedCurrPair Array!!!");
     //     setUserPreference(newPreference);
     // }
 
-    const handleLiveRateRowDisplayChange = (event) => {
-        const newPreference = { ...userPreference };
-        newPreference.currencyCountries = [...event];
-        console.log("Save new LiveRateRow List!!!");
-        setUserPreference(newPreference);
-    }
+    // const handleLiveRateRowDisplayChange = (event) => {
+    //     const newPreference = { ...userPreference };
+    //     newPreference.liveRateCurrCodes = [...event];
+    //     console.log("Save new LiveRateRow List!!!");
+    //     setUserPreference(newPreference);
+    // }
 
     const handleNewsCategoriesChange = (event) => {
         const newPreference = { ...userPreference };
-        newPreference.newsCategoryies = [...event];
+        newPreference.newsCategories = [...event];
         console.log("Save new NewsCategories List!!!");
         setUserPreference(newPreference);
     }
@@ -128,7 +128,7 @@ export default function App() {
                                     {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
                                 <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <ExchangeRateTable {...attr.curr} onLiveRateRowDisplayUpdate={handleLiveRateRowDisplayChange} /> : <Loading />}
+                                    {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                                 </Item>
                                 <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <FinancialNews {...attr.news} onNewsCategoriesUpdate={handleNewsCategoriesChange} /> : <Loading />}
@@ -142,7 +142,7 @@ export default function App() {
                         } ></Route>
                         <Route exact path="/Chart" element={
                             <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} onLiveRateRowDisplayUpdate={handleLiveRateRowDisplayChange} /> : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/News" element={
