@@ -69,7 +69,7 @@ export default function App() {
         ...(isOutLineTheme ? outlinedProps : elevationProps),
     }
 
-    const handlePreferenceUpdate = async (newPreference) => {
+    const handlePreferenceUpdate = (newPreference) => {
         // console.log("handle New Preference!!!");
         setUserPreference(newPreference);
         setIsOutLineTheme(newPreference.theme === "outlined" ? true : false);
