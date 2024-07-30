@@ -83,7 +83,7 @@ const commonStyle = {
 
 const style = {
     divRangeSelectorWrapperSm: { ...commonStyle.textAlign, margin: "4% 0px" },
-    divRangeSelectorWrapperLg: { ...commonStyle.textAlign, margin: "10px 0px 2% 0px" },
+    divRangeSelectorWrapperLg: { ...commonStyle.textAlign, margin: "20px 0px 2% 0px" },
     divRangeSelectorNone: { display: "none" },
     divChart: { height: "auto", width: "100%" },
     TopBorderAdded: { borderTop: "1px solid #adadad60" },
