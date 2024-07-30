@@ -38,16 +38,9 @@ export default function MainNav(props) {
     }
 
     return (
-        <Box
-            display='flex'
-            sx={{
-                ...(isDisplaySM ? sxStyle.StarterGapForMobile : sxStyle.StarterGap),
-                ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
-                ...sxStyle.Theme.ApplyAll,
-            }}
-        >
+        <Box display='flex' sx={isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate}>
             <AppBar component="nav" sx={{ ...sxStyle.bringToTop, ...commonStyles.inheritColor }}>
-                <Toolbar id="subNav">
+                <Toolbar id="subNav" sx={commonStyles.alignItemsStretch}>
                     <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
                         <Link to={mainLogo.link} style={sxStyle.mainLogo}>
                             <div style={style.logoImg}>
@@ -214,8 +207,6 @@ const commonStyles = {
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
 const sxStyle = {
-    StarterGap: { mb: 14, '& #subNav': { ...commonStyles.alignItemsStretch } },
-    StarterGapForMobile: { mb: 12 },
     IconButton: { mr: 1, display: { sm: 'none' } },
     Typography: { flexGrow: 1, ...commonStyles.alignItemsCenter, justifyContent: 'left', },
     Link: { ...commonStyles.inheritColor, margin: "15px", ...commonStyles.noneTextDeco, ...commonStyles.alignItemsCenter },
@@ -252,7 +243,7 @@ const sxStyle = {
 }
 
 const style = {
-    logo: { width: "35px", height: "35px", margin: "0 8px 0 0" },
+    logo: { width: "30px", height: "30px", margin: "0 8px 0 0" },
     Link: { color: "black", ...commonStyles.noneTextDeco },
     logoImg: { ...commonStyles.alignItemsCenter, marginLeft: "15px" },
 }

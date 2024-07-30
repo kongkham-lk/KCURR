@@ -211,6 +211,9 @@ export default function ExchangeRateTableData(props) {
     };
 
     const handleToggleFlags = async (index) => {
+        if (index === 0)
+            return;
+        
         if (isFeatureDisplay) {
             const newAppendCharts = [...displayRateHistChartFlags];
     
@@ -242,11 +245,13 @@ export default function ExchangeRateTableData(props) {
                         >
                             {isDisplaySM ? "Live Rates" : "Live Exchange Rates"}
                         </Typography>
-                        <Tooltip title="Reset Filter" style={{ margin: isDisplaySM ? "0px" : "16px" }} onClick={handleResetFilter}>
-                            <IconButton>
-                                <FilterListOffIcon />
-                            </IconButton>
-                        </Tooltip>
+                        {!isDisplaySM && 
+                            <Tooltip title="Reset Filter" style={{ margin: isDisplaySM ? "0px" : "16px" }} onClick={handleResetFilter}>
+                                <IconButton>
+                                    <FilterListOffIcon />
+                                </IconButton>
+                            </Tooltip>
+                        }
                     </div>
                     <TableContainer style={isDisplaySM ? { margin: "0" } : style.NoGapTableContainer}>
                         <Table
@@ -314,23 +319,25 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isFeatureDisplay && sxStyle.hoverButton.hover) }} onClick={() => handleToggleFlags(index)} >
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {isDisplaySM ? "" :
-                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
+                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
                                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                                     </TableCell>
                                                                 }
                                                                 {/* Chart Cell */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} onClick={() => handleToggleFlags(index)} >
-                                                                    <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
-                                                                        {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
-                                                                    </div>
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
+                                                                    {!isDisplaySM || !isFeatureDisplay? 
+                                                                        <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
+                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
+                                                                        </div> : <Button variant="text" size="small" sx={{padding: 0, float: 'right', color: index === 0 && 'transparent'}}>View Chart</Button>
+                                                                    }
                                                                 </TableCell>
                                                             </TableRow>
                                                         </TableBody>
@@ -443,7 +450,7 @@ const style = {
 
 const sxStyle = {
     Box: { width: 1, overflowY: "auto" },
-    Paper: { width: 1, boxShadow: "none" },
+    Paper: { width: 1, boxShadow: "none", backgroundColor: 'inherit' },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: {
