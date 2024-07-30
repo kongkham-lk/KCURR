@@ -294,12 +294,12 @@ export default function ExchangeRateTableData(props) {
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
-                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell }}
+                                                    onClick={() => handleSetDefaultCurr(targetCurrCode)}
+                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell, ...(index !== 0 && sxStyle.hoverButton.hover) }}
                                                 >
-                                                    <Box sx={{ ...sxStyle.hoverButton.main, ...(index !== 0 && sxStyle.hoverButton.hover) }}>
+                                                    <Box sx={{ ...sxStyle.hoverButton.main }}>
                                                         <Button
                                                             variant="text"
-                                                            onClick={() => handleSetDefaultCurr(targetCurrCode)}
                                                             disabled={index === 0 && true}
                                                             sx={{
                                                                 ...sxStyle.defaultCurrSetterButton.main,
@@ -314,7 +314,7 @@ export default function ExchangeRateTableData(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isFeatureDisplay && sxStyle.hoverButton.hover) }}>
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
@@ -434,7 +434,7 @@ const style = {
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" },
-    TableRow: { width: "100%", whiteSpace: "nowrap" },
+    TableRow: { width: "100%", whiteSpace: "nowrap", transform: 'translate(0)' },
     TableCell: {
         lg: { width: "20%", ...commonStyle.borderNone },
         sm: { width: "10%", padding: "0px 0px 10px 10px", ...commonStyle.borderNone }
@@ -459,7 +459,7 @@ const sxStyle = {
         sm: { margin: "0px 10px", padding: "0px" },
     },
     hoverButton: {
-        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', },
+        main: { height: '-webkit-fill-available', borderRadius: '7px', transition: 'background 0.3s', display: 'flex', alignItems: 'center'},
         hover: { '&:hover': { background: '#9fbee354', margin: '0.5px', borderRadius: '10px', transition: 'background 0.6s' } },
     },
     PaginationMainContainer: {

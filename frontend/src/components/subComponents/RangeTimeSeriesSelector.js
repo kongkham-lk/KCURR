@@ -67,6 +67,6 @@ const commonStyle = {
 }
 
 const style = {
-    sm: { ...commonStyle, width: '60%', overflow: 'scroll' },
+    sm: { ...commonStyle, width: '65%', overflow: 'scroll' },
     lg: { ...commonStyle },
 }
