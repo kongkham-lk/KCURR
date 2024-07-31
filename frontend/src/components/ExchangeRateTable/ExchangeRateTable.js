@@ -27,7 +27,7 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 
 export default function ExchangeRateTable(props) {
-    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl, userPreference, onPreferenceUpdate } = props;
+    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl, userPreference, onPreferenceUpdateToAPI } = props;
 
     // Enable live rate's display chart feature flag
     // If yes, retrieve timeSeries instead of exchangeRates
@@ -63,7 +63,7 @@ export default function ExchangeRateTable(props) {
     const [currLists, setCurrLists] = useState(initialCurrLists);
 
     useEffect(() => {
-        //console.log("setCurrLists from initialList, isReady status: ", isReady)
+        // console.log("setCurrLists from initialList, isReady status: ", isReady)
         if (isReady) {
             setCurrLists([...initialCurrLists]);
             handleDisplayLatestFetchTimeUpdate();
@@ -256,7 +256,7 @@ export default function ExchangeRateTable(props) {
         const newPreference = { ...userPreference };
         newPreference.liveRateCurrCodes = newCurrCodeArray;
         console.log("Save new currCodeArray to API!!! ", newCurrCodeArray);
-        onPreferenceUpdate(newPreference);
+        onPreferenceUpdateToAPI(newPreference);
     }
 
     return (

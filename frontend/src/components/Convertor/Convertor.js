@@ -6,7 +6,7 @@ import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 
 export default function Convertor(props) {
-    const { isDisplaySM, currentUrl, userPreference, onPreferenceUpdate } = props;
+    const { isDisplaySM, currentUrl, userPreference, onPreferenceUpdateToAPI } = props;
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
@@ -46,7 +46,7 @@ export default function Convertor(props) {
         const newPreference = { ...userPreference };
         newPreference.convertedCurrPair = newCurrPair;
         console.log("Save new conversion curr pair!!!");
-        onPreferenceUpdate(newPreference);
+        onPreferenceUpdateToAPI(newPreference);
     }
 
     // Invode when click convert button on the screen

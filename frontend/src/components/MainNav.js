@@ -18,7 +18,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function MainNav(props) {
-    const { isDisplayMD, isOutLineTheme, userPreference, onPreferenceUpdate, currentUrl } = props;
+    const { isDisplayMD, isOutLineTheme, userPreference, onPreferenceUpdateToAPI, currentUrl } = props;
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
@@ -33,7 +33,7 @@ export default function MainNav(props) {
         const newPreference = { ...userPreference };
         newPreference.theme = newState === true ? "outlined" : 'elevation';
         console.log("Save new Theme!!!");
-        onPreferenceUpdate(newPreference);
+        onPreferenceUpdateToAPI(newPreference);
     };
 
     // determined if it is on mobile screen

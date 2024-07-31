@@ -69,7 +69,7 @@ export default function App() {
         ...(isOutLineTheme ? outlinedProps : elevationProps),
     }
 
-    const handlePreferenceUpdate = (newPreference) => {
+    const handlePreferenceUpdateToAPI = (newPreference) => {
         // console.log("handle New Preference!!!");
         setUserPreference(newPreference);
         setIsOutLineTheme(newPreference.theme === "outlined" ? true : false);
@@ -107,7 +107,7 @@ export default function App() {
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        pref: { userPreference, onPreferenceUpdate: handlePreferenceUpdate },
+        pref: { userPreference, onPreferenceUpdateToAPI: handlePreferenceUpdateToAPI },
     }
 
     const attr = {
