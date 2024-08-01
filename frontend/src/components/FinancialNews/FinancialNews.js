@@ -14,29 +14,34 @@ import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM, isOutLineTheme } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme, userPreference, onPreferenceUpdateToAPI } = props;
+    // console.log("Load News!!! ", userPreference);
     const [newsLists, setNewsLists] = useState([]);
     const [tempTopic, setTempTopic] = useState("");
-    const [newsTopic, setNewsTopic] = useState(["Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency",]);
+    const [newsTopics, setNewsTopics] = useState([]);
+
+    useEffect(() => {
+        // console.log("userPreference: ", userPreference)
+        if (isNaN(userPreference)) {
+            // console.log("setNewsTopics!!!")
+            setNewsTopics([...userPreference.newsCategories])
+        }
+    }, [userPreference])
 
     useEffect(() => {
         async function fetchNewsLists() {
-            const newsRes = await retrieveFinancialNews(newsTopic);
+            const newsRes = await retrieveFinancialNews(newsTopics);
             setNewsLists(newsRes.data);
         }
         fetchNewsLists();
-    }, [newsTopic]
-    )
+    }, [newsTopics])
 
-    // useEffect(() => {
-
-    // }, [isOutLineTheme])
-
-    const handleAddNewsTopic = (e) => {
-        const updateNewsTopic = [...newsTopic];
+    const handleAddNewsTopic = () => {
+        const updateNewsTopic = [...userPreference.newsCategories];
         updateNewsTopic.push(tempTopic);
         setTempTopic("")
-        setNewsTopic(updateNewsTopic);
+        setNewsTopics(updateNewsTopic);
+        handleNewsCategoriesChange(updateNewsTopic);
     }
 
     const handleInput = (e) => {
@@ -45,9 +50,18 @@ export default function FinancialNews(props) {
     }
 
     const handleDelete = (index) => {
-        newsTopic.splice(index, 1);
-        const updateNewsTopic = [...newsTopic];
-        setNewsTopic(updateNewsTopic);
+        const newsTopics = [...userPreference.newsCategories];
+        newsTopics.splice(index, 1);
+        const updateNewsTopic = [...newsTopics];
+        setNewsTopics(updateNewsTopic);
+        handleNewsCategoriesChange(updateNewsTopic);
+    }
+
+    const handleNewsCategoriesChange = (newNewsTopics) => {
+        const newPreference = { ...userPreference };
+        newPreference.newsCategories = [...newNewsTopics];
+        console.log("Save new NewsCategories List to API!!!");
+        onPreferenceUpdateToAPI(newPreference);
     }
 
     return (
@@ -64,14 +78,14 @@ export default function FinancialNews(props) {
                             {isDisplaySM ? "News" : "Financial News"}
                         </Typography>
                         {filter && <div style={{ ...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg) }}>
-                            <InputTextField updateVal={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
+                            <InputTextField onConvertAmountUpdate={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
                             <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
                                 Add
                             </Button>
                         </div>}
                     </div>
                     {filter && <Stack direction="row" style={style.Stack}>
-                        {newsTopic?.map((topic, index) => (
+                        {(newsTopics)?.map((topic, index) => (
                             <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
                         ))}
                     </Stack>}

@@ -24,7 +24,7 @@ export async function saveUserPreferences(userId, preferences) {
 
 export async function getUserPreferences(userId) {
     const savedPreferences = localStorage.getItem(`preferences_${userId}`);
-    console.log("check savedPreference: ", savedPreferences)
+    // console.log("check savedPreference: ", savedPreferences)
     // Check if savedPreferences has any
     if (savedPreferences) {
         const transformPref = JSON.parse(savedPreferences);

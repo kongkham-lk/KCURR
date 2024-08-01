@@ -15,7 +15,7 @@ import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './ut
 
 export default function App() {
     const userId = getUserIdentifier();
-    const [userPreference, setUserPreference] = useState({});
+    const [userPreference, setUserPreference] = useState(NaN);
 
     console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
@@ -25,9 +25,11 @@ export default function App() {
 
     useEffect(() => {
         async function fetchPreference() {
-            const pref = await getUserPreferences(userId);
-            // console.log("Return Pref: ", pref)
-            setUserPreference(pref);
+            if (isNaN(userPreference)) {
+                console.log("Get initial Pref!!!")
+                const pref = await getUserPreferences(userId);
+                setUserPreference(pref);
+            }
         }
         fetchPreference();
     }, [])
@@ -51,25 +53,18 @@ export default function App() {
     };
 
     const MuiProps = {
-        ...(userPreference.theme === "outlined" ? outlinedProps : elevationProps),
+        ...(isNaN(userPreference) ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
     }
 
     const handlePreferenceUpdateToAPI = async (newPreference) => {
-        // console.log("handle New Preference!!!");
+        console.log("handle New Preference!!!");
         await saveUserPreferences(userId, newPreference);
-        setUserPreference(newPreference);
-    }
-
-    const handleNewsCategoriesChange = (event) => {
-        const newPreference = { ...userPreference };
-        newPreference.newsCategories = [...event];
-        console.log("Save new NewsCategories List!!!");
         setUserPreference(newPreference);
     }
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        themeFlag: { isOutLineTheme: userPreference.theme === "outlined" },
+        themeFlag: { isOutLineTheme: isNaN(userPreference) ? userPreference.theme === "outlined" : "" },
         pref: { userPreference, onPreferenceUpdateToAPI: handlePreferenceUpdateToAPI },
     }
 
@@ -94,7 +89,7 @@ export default function App() {
                                     {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
                                 </Item>
                                 <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <FinancialNews {...attr.news} onNewsCategoriesUpdate={handleNewsCategoriesChange} /> : <Loading />}
+                                    {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                 </Item>
                             </>
                         } ></Route>
@@ -110,7 +105,7 @@ export default function App() {
                         } ></Route>
                         <Route exact path="/News" element={
                             <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                <FinancialNews filter="true" {...attr.news} onNewsCategoriesUpdate={handleNewsCategoriesChange} />
+                                <FinancialNews filter="true" {...attr.news} />
                             </Item>
                         } ></Route>
                     </Routes>
