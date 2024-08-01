@@ -4,9 +4,10 @@ import ConvertorForm from "./ConvertorForm";
 import Typography from '@mui/material/Typography';
 import RateHistoryGraph from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
+import { savePrefCovertedPair } from '../../util/userController';
 
 export default function Convertor(props) {
-    const { isDisplaySM, currentUrl, userPreference, onPreferenceUpdateToAPI } = props;
+    const { isDisplaySM, currentUrl, userId, userPreference, onPreferenceCookieUpdate } = props;
     const [formData, setFormData] = useState(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
 
@@ -33,21 +34,22 @@ export default function Convertor(props) {
     const handleTargetConvertCurrUpdate = (e) => {
         const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
-        requestUpdateCurrPair(newConvertCurrPair);
+        handleCurrPairCookieUpdate(newConvertCurrPair);
     }
 
     // Invoke when swap currency code
     const handleConvertCurrSwap = (e) => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
-        requestUpdateCurrPair(newCurrPair);
+        handleCurrPairCookieUpdate(newCurrPair);
     }
 
-    const requestUpdateCurrPair = (newCurrPair) => {
+    const handleCurrPairCookieUpdate = (newCurrPair) => {
         setTargetConvertCurrPair(newCurrPair);
-        const newPreference = { ...userPreference };
-        newPreference.convertedCurrPair = newCurrPair;
+        // const newPreference = { ...userPreference };
+        // newPreference.convertedCurrPair = newCurrPair;
         console.log("Save new conversion curr pair!!!");
-        onPreferenceUpdateToAPI(newPreference);
+        // onPreferenceCookieUpdate(newPreference);
+        savePrefCovertedPair(userId, newCurrPair);
     }
 
     // Invode when click convert button on the screen

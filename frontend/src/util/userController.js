@@ -16,8 +16,36 @@ export function getUserIdentifier() {
     return userId;
 };
 
+export async function savePrefTheme(userId, newTheme) {
+    const preferences = await getUserPreferences(userId);
+    preferences.theme = newTheme;
+    console.log("Save newTheme!!! ", preferences)
+    await saveUserPreferences(userId, preferences);
+};
+
+export async function savePrefCovertedPair(userId, newConvertedPair) {
+    const preferences = await getUserPreferences(userId);
+    preferences.convertedCurrPair = newConvertedPair;
+    console.log("Save newConvertedPair!!! ", preferences)
+    await saveUserPreferences(userId, preferences);
+};
+
+export async function savePrefCurrCodes(userId, newCurrCodes) {
+    const preferences = await getUserPreferences(userId);
+    preferences.liveRateCurrCodes = newCurrCodes;
+    console.log("Save newCurrCodes!!! ", preferences)
+    await saveUserPreferences(userId, preferences);
+};
+
+export async function savePrefNewsCategories(userId, newNewsCategories) {
+    const preferences = await getUserPreferences(userId);
+    preferences.newsCategories = newNewsCategories;
+    console.log("Save newNewsCategories!!! ", preferences)
+    await saveUserPreferences(userId, preferences);
+};
+
 export async function saveUserPreferences(userId, preferences) {
-    console.log("Update User Pref to API!!! ", preferences)
+    // console.log("Save User Pref!!! ", preferences)
     localStorage.setItem(`preferences_${userId}`, JSON.stringify(preferences));
     await axios.post(`${baseURL}:${port}/update-preferences/${userId}`, preferences);
 };

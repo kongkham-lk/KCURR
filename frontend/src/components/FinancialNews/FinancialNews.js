@@ -12,9 +12,10 @@ import Button from '@mui/material/Button';
 import InputTextField from "../subComponents/InputTextField";
 import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
+import { savePrefNewsCategories } from "../../util/userController";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM, isOutLineTheme, userPreference, onPreferenceUpdateToAPI } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme, userId, userPreference, onPreferenceCookieUpdate } = props;
     // console.log("Load News!!! ", userPreference);
     const [newsLists, setNewsLists] = useState([]);
     const [tempTopic, setTempTopic] = useState("");
@@ -41,7 +42,7 @@ export default function FinancialNews(props) {
         updateNewsTopic.push(tempTopic);
         setTempTopic("")
         setNewsTopics(updateNewsTopic);
-        handleNewsCategoriesChange(updateNewsTopic);
+        handleNewsCategoriesCookieUpdate(updateNewsTopic);
     }
 
     const handleInput = (e) => {
@@ -54,14 +55,15 @@ export default function FinancialNews(props) {
         newsTopics.splice(index, 1);
         const updateNewsTopic = [...newsTopics];
         setNewsTopics(updateNewsTopic);
-        handleNewsCategoriesChange(updateNewsTopic);
+        handleNewsCategoriesCookieUpdate(updateNewsTopic);
     }
 
-    const handleNewsCategoriesChange = (newNewsTopics) => {
-        const newPreference = { ...userPreference };
-        newPreference.newsCategories = [...newNewsTopics];
+    const handleNewsCategoriesCookieUpdate = (newNewsTopics) => {
+        // const newPreference = { ...userPreference };
+        // newPreference.newsCategories = [...newNewsTopics];
         console.log("Save new NewsCategories List to API!!!");
-        onPreferenceUpdateToAPI(newPreference);
+        // onPreferenceCookieUpdate(newPreference);
+        savePrefNewsCategories(userId, newNewsTopics)
     }
 
     return (

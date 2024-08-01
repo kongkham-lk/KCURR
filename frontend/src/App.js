@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
-import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './util/userController';
+import { getUserPreferences, getUserIdentifier } from './util/userController';
 
 export default function App() {
     const userId = getUserIdentifier();
@@ -56,22 +56,22 @@ export default function App() {
         ...(isNaN(userPreference) ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
     }
 
-    const handlePreferenceUpdateToAPI = async (newPreference) => {
+    const handlePreferenceCookieUpdate = async (newPreference) => {
         console.log("handle New Preference!!!");
-        await saveUserPreferences(userId, newPreference);
+        // await saveUserPreferences(userId, newPreference);
         setUserPreference(newPreference);
     }
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
         themeFlag: { isOutLineTheme: isNaN(userPreference) ? userPreference.theme === "outlined" : "" },
-        pref: { userPreference, onPreferenceUpdateToAPI: handlePreferenceUpdateToAPI },
+        pref: { userId, userPreference, onPreferenceCookieUpdate: handlePreferenceCookieUpdate },
     }
 
     const attr = {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
-        curr:   { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList },
-        news:   { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag }
+        curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList },
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag }
     }
 
     return (

@@ -16,9 +16,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { savePrefTheme } from '../util/userController';
 
 export default function MainNav(props) {
-    const { isDisplayMD, isOutLineTheme, userPreference, onPreferenceUpdateToAPI, currentUrl } = props;
+    const { isDisplayMD, isOutLineTheme, userId, userPreference, onPreferenceCookieUpdate, currentUrl } = props;
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
@@ -30,10 +31,12 @@ export default function MainNav(props) {
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
     const handleThemeUpdate = (newState) => {
         setState(newState);
+        const newTheme = newState === true ? "outlined" : 'elevation';
         const newPreference = { ...userPreference };
-        newPreference.theme = newState === true ? "outlined" : 'elevation';
+        newPreference.theme = newTheme;
         console.log("Save new Theme!!!");
-        onPreferenceUpdateToAPI(newPreference);
+        onPreferenceCookieUpdate(newPreference);
+        savePrefTheme(userId, newTheme)
     };
 
     // determined if it is on mobile screen
