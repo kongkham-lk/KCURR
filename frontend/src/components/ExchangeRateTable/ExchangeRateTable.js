@@ -60,13 +60,14 @@ export default function ExchangeRateTable(props) {
 
     // Fetch data from API
     const { initialCurrLists, initialCurrExchangeRates, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, timeSeriesRangeLength, isFeatureDisplay); // retrieved initial exchange rate table list
-    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(initialCurrExchangeRates !== null ? [...initialCurrExchangeRates] : null); // consist of all the currCode exchange rate, 1 day range
+    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(null); // consist of all the currCode exchange rate, 1 day range
     const [currLists, setCurrLists] = useState(initialCurrLists);
 
     useEffect(() => {
         // console.log("setCurrLists from initialList, isReady status: ", isReady)
         if (isReady) {
             setCurrLists([...initialCurrLists]);
+            setDefaultCurrExchangeRates([...initialCurrExchangeRates]) // Update defaultCurrExchangeRate list again when isReady
             handleDisplayLatestFetchTimeUpdate();
         }
     }, [isReady, initialCurrLists]);
