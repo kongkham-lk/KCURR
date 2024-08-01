@@ -17,13 +17,14 @@ export function getUserIdentifier() {
 };
 
 export async function saveUserPreferences(userId, preferences) {
+    console.log("Update User Pref to API!!! ", preferences)
     localStorage.setItem(`preferences_${userId}`, JSON.stringify(preferences));
     await axios.post(`${baseURL}:${port}/update-preferences/${userId}`, preferences);
 };
 
 export async function getUserPreferences(userId) {
     const savedPreferences = localStorage.getItem(`preferences_${userId}`);
-    // console.log("check savedPreference: ", savedPreferences)
+    console.log("check savedPreference: ", savedPreferences)
     // Check if savedPreferences has any
     if (savedPreferences) {
         const transformPref = JSON.parse(savedPreferences);

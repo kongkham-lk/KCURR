@@ -16,8 +16,6 @@ import { getUserPreferences, getUserIdentifier, saveUserPreferences } from './ut
 export default function App() {
     const userId = getUserIdentifier();
     const [userPreference, setUserPreference] = useState({});
-    const [isNewPrefUpdate, setIsNewPrefUpdate] = useState(false);
-    const [isOutLineTheme, setIsOutLineTheme] = useState(); // setting theme
 
     console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
@@ -30,22 +28,9 @@ export default function App() {
             const pref = await getUserPreferences(userId);
             // console.log("Return Pref: ", pref)
             setUserPreference(pref);
-            // console.log("update isOutline!!!")
-            setIsOutLineTheme(pref.theme === "outlined" ? true : false)
         }
         fetchPreference();
     }, [])
-
-    useEffect(() => {
-        async function updatePreference() {
-            if (isNewPrefUpdate) {
-                // console.log("Update New Preference!!!");
-                await saveUserPreferences(userId, userPreference);
-                setIsNewPrefUpdate(false);
-            }
-        }
-        updatePreference();
-    }, [isNewPrefUpdate])
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -66,37 +51,14 @@ export default function App() {
     };
 
     const MuiProps = {
-        ...(isOutLineTheme ? outlinedProps : elevationProps),
+        ...(userPreference.theme === "outlined" ? outlinedProps : elevationProps),
     }
 
-    const handlePreferenceUpdateToAPI = (newPreference) => {
+    const handlePreferenceUpdateToAPI = async (newPreference) => {
         // console.log("handle New Preference!!!");
+        await saveUserPreferences(userId, newPreference);
         setUserPreference(newPreference);
-        setIsOutLineTheme(newPreference.theme === "outlined" ? true : false);
-        setIsNewPrefUpdate(true);
     }
-
-    // const handleThemeChange = (event) => {
-    //     setIsOutLineTheme(event);
-    //     const newPreference = { ...userPreference };
-    //     newPreference.theme = event === true ? "outlined" : 'elevation';
-    //     console.log("Save new Theme!!!");
-    //     setUserPreference(newPreference);
-    // }
-
-    // const handleConvertedCurrPairChange = (event) => {
-    //     const newPreference = { ...userPreference };
-    //     newPreference.convertedCurrPair = [...event];
-    //     console.log("Save new convertedCurrPair Array!!!");
-    //     setUserPreference(newPreference);
-    // }
-
-    // const handleLiveRateRowDisplayChange = (event) => {
-    //     const newPreference = { ...userPreference };
-    //     newPreference.liveRateCurrCodes = [...event];
-    //     console.log("Save new LiveRateRow List!!!");
-    //     setUserPreference(newPreference);
-    // }
 
     const handleNewsCategoriesChange = (event) => {
         const newPreference = { ...userPreference };
@@ -107,13 +69,14 @@ export default function App() {
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
+        themeFlag: { isOutLineTheme: userPreference.theme === "outlined" },
         pref: { userPreference, onPreferenceUpdateToAPI: handlePreferenceUpdateToAPI },
     }
 
     const attr = {
-        navBar: { ...commonAttr.displayFlags, isOutLineTheme, currentUrl, ...commonAttr.pref },
-        curr: { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, ...commonAttr.displayFlags, currentUrl, ...commonAttr.pref },
-        news: { isOutLineTheme, ...commonAttr.displayFlags, currentUrl, ...commonAttr.pref }
+        navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
+        curr:   { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList },
+        news:   { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag }
     }
 
     return (
