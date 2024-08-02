@@ -51,16 +51,12 @@ export function styleTableCell(currList, isDisplaySM, updateColor = true) {
 export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
-            backgroundColor: "#b5d0f0", backgroundClip: "border-box",
-            outline: "7px solid white", outlineOffset: "-2px",
-            borderRadius: "13px", verticalAlign: 'middle',
+            backgroundColor: "#b5d0f0", backgroundClip: "border-box", verticalAlign: 'middle',
         }
     } else {
         return {
-            backgroundColor: "transparent", backgroundClip: "border-box",
-            outline: "7px solid transparent", outlineOffset: "-2px",
-            borderRadius: "13px", verticalAlign: 'middle',
-            borderTop: '1px solid rgba(224, 224, 224, 1)'
+            backgroundColor: "transparent", backgroundClip: "border-box", 
+            verticalAlign: 'middle', borderTop: '1px solid rgba(224, 224, 224, 1)'
         }
     }
 }
