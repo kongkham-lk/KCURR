@@ -19,7 +19,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { savePrefTheme } from '../util/userController';
 
 export default function MainNav(props) {
-    const { isDisplayMD, isOutLineTheme, userId, userPreference, onPreferenceCookieUpdate, currentUrl } = props;
+    const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
@@ -35,7 +35,7 @@ export default function MainNav(props) {
         const newPreference = { ...userPreference };
         newPreference.theme = newTheme;
         console.log("Save new Theme!!!");
-        onPreferenceCookieUpdate(newPreference);
+        onThemeUpdate(newState);
         savePrefTheme(userId, newTheme)
     };
 

@@ -56,10 +56,12 @@ export default function App() {
         ...(isNaN(userPreference) ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
     }
 
-    const handlePreferenceCookieUpdate = async (newPreference) => {
-        console.log("handle New Preference!!!");
-        // await saveUserPreferences(userId, newPreference);
-        setUserPreference(newPreference);
+    const handleThemeUpdate = async (newTheme) => {
+        console.log("        # handle New Theme!!!");
+        // setIsOutLineTheme(newTheme);
+        const newPref = {...userPreference};
+        newPref.theme = newTheme === true ? "outlined" : 'elevation';
+        setUserPreference(newPref);
     }
 
     const commonAttr = {
