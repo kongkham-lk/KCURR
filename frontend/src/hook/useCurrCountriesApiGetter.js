@@ -14,53 +14,59 @@ export default function useCurrCountriesApiGetter() {
     useEffect(
         function fetchData() {
             async function fetchCurrOption() {
-                if (Object.keys(currCountiesCodeMapDetail).length === 0) {
-                    let resCurrCountries;
-                    let isValidResponse = false;
-                    let retryFetching = 5;
+                let resCurrCountries;
+                let isValidResponse = false;
+                let retryFetching = 5;
 
-                    while (!isValidResponse && retryFetching > 0) {
-                        // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
+                while (!isValidResponse && retryFetching > 0) {
+                    // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
 
-                        try {
-                            resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
-                        } catch (e) {
-                            console.log(e.stack);
+                    try {
+                        resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
+                    } catch (e) {
+                        console.log(e.stack);
+                    }
+                    if (resCurrCountries !== undefined) {
+                        if (Object.keys(resCurrCountries.data).length) {
+                            setCurrCountiesCodeMapDetail(resCurrCountries.data);
+                            isValidResponse = true; // Stop the loop
+                            // console.log(`Successfully received currency-country data!!!`);
                         }
-                        if (resCurrCountries !== undefined) {
-                            if (Object.keys(resCurrCountries.data).length) {
-                                setCurrCountiesCodeMapDetail(resCurrCountries.data);
-                                isValidResponse = true; // Stop the loop
-                                // console.log(`Successfully received currency-country data!!!`);
-                            }
-                            else {
-                                console.log(`Data not found!!!`);
-                            }
-                        }
-
-                        if (!isValidResponse) {
-                            // Optionally, you can add a delay before retrying
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay before retrying
-                            retryFetching--;
+                        else {
+                            console.log(`Data not found!!!`);
                         }
                     }
-                } else {
-                    const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
 
-                    // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
-                    // console.log("check all cur code for flag api!!!");
-                    
-                    const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
-
-                    // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
-
-                    setSortedCurrsCodeList(newSortedCurrsCodeList);
-                    setValidCurFlagList(newValidCurrFlagList);
-                    setIsReady(true);
+                    if (!isValidResponse) {
+                        // Optionally, you can add a delay before retrying
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay before retrying
+                        retryFetching--;
+                    }
                 }
             }
             fetchCurrOption();
-        }, [baseURL, currCountiesCodeMapDetail, port]
+        }, [baseURL, port]
     );
+
+    useEffect(() => {
+        async function fetchCountriesFlags() {
+            if (Object.keys(currCountiesCodeMapDetail).length !== 0) {
+                const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
+
+                // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
+                // console.log("check all cur code for flag api!!!");
+
+                const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
+
+                // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
+
+                setSortedCurrsCodeList(newSortedCurrsCodeList);
+                setValidCurFlagList(newValidCurrFlagList);
+                setIsReady(true);
+            }
+        }
+        fetchCountriesFlags();
+    }, [currCountiesCodeMapDetail]);
+
     return { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady };
 };
