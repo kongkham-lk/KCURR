@@ -15,7 +15,7 @@ import { getUserPreferences, getUserIdentifier } from './util/userController';
 
 export default function App() {
     const userId = getUserIdentifier();
-    const [userPreference, setUserPreference] = useState(NaN);
+    const [userPreference, setUserPreference] = useState(null);
 
     console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
@@ -25,14 +25,14 @@ export default function App() {
 
     useEffect(() => {
         async function fetchPreference() {
-            if (isNaN(userPreference)) {
+            if (userPreference === null) {
                 console.log("Get initial Pref!!!")
                 const pref = await getUserPreferences(userId);
                 setUserPreference(pref);
             }
         }
         fetchPreference();
-    }, [])
+    }, [userId, userPreference])
 
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
@@ -40,20 +40,8 @@ export default function App() {
         padding: isDisplaySM ? '25px' : '32px'
     }));
 
-    const lightTheme = createTheme({ palette: { mode: 'light' } });
-
-    const outlinedProps = {
-        variant: 'outlined',
-        square: true,
-    };
-
-    const elevationProps = {
-        variant: 'elevation',
-        elevation: 8,
-    };
-
     const MuiProps = {
-        ...(isNaN(userPreference) ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
+        ...(userPreference !== null ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
     }
 
     const handleThemeUpdate = async (newTheme) => {
@@ -66,8 +54,8 @@ export default function App() {
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        themeFlag: { isOutLineTheme: isNaN(userPreference) ? userPreference.theme === "outlined" : "" },
-        pref: { userId, userPreference, onPreferenceCookieUpdate: handlePreferenceCookieUpdate },
+        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme === "outlined" : "" },
+        pref: { userId, userPreference, onThemeUpdate: handleThemeUpdate },
     }
 
     const attr = {
@@ -122,3 +110,15 @@ const sxStyle = {
     backgroundColor: 'inherit',
     color: 'inherit',
 }
+
+const lightTheme = createTheme({ palette: { mode: 'light' } });
+
+const outlinedProps = {
+    variant: 'outlined',
+    square: true,
+};
+
+const elevationProps = {
+    variant: 'elevation',
+    elevation: 8,
+};

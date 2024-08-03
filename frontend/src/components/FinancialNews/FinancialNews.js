@@ -23,7 +23,7 @@ export default function FinancialNews(props) {
 
     useEffect(() => {
         // console.log("userPreference: ", userPreference)
-        if (isNaN(userPreference)) {
+        if (userPreference !== null) {
             // console.log("setNewsTopics!!!")
             setNewsTopics([...userPreference.newsCategories])
         }
