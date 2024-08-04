@@ -61,16 +61,17 @@ export default function ExchangeRateTable(props) {
     // Fetch data from API
     const { initialCurrLists, initialCurrExchangeRates, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, timeSeriesRangeLength, isFeatureDisplay); // retrieved initial exchange rate table list
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(null); // consist of all the currCode exchange rate, 1 day range
-    const [currLists, setCurrLists] = useState(initialCurrLists);
+    const [currLists, setCurrLists] = useState([]);
+
 
     useEffect(() => {
-        // console.log("setCurrLists from initialList, isReady status: ", isReady)
         if (isReady) {
+            console.log("setCurrLists from initialList, isReady status: ", isReady)
             setCurrLists([...initialCurrLists]);
-            setDefaultCurrExchangeRates([...initialCurrExchangeRates]) // Update defaultCurrExchangeRate list again when isReady
+            setDefaultCurrExchangeRates(initialCurrExchangeRates !== null && [...initialCurrExchangeRates]); // Do not set anything if currently load feature page
             handleDisplayLatestFetchTimeUpdate();
         }
-    }, [isReady, initialCurrLists]);
+    }, [isReady]);
 
     // Update new added currency code to visibl row
     useEffect(() => {
