@@ -18,7 +18,7 @@ export default function App() {
     const userId = getUserIdentifier();
     const [userPreference, setUserPreference] = useState(null);
 
-    console.log("APP() - userPreference: ", userPreference);
+    // console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
@@ -56,7 +56,7 @@ export default function App() {
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
         // setIsOutLineTheme(newTheme);
-        const newPref = {...userPreference};
+        const newPref = { ...userPreference };
         newPref.theme = newTheme === true ? "outlined" : 'elevation';
         setUserPreference(newPref);
     }

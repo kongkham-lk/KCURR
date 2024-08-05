@@ -78,8 +78,8 @@ const styleSpan = (changeRateInPercent) => {
 }
 
 const commonStyle = {
-    width: {width: "-webkit-fill-available"},
-    textAlign: {textAlign: "center"}
+    width: { width: "-webkit-fill-available" },
+    textAlign: { textAlign: "center" }
 }
 
 const style = {

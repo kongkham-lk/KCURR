@@ -43,7 +43,7 @@ export default function ExchangeRateTable(props) {
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
 
-    // Setting property of mui table
+    // Mui table's setting property
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
@@ -85,8 +85,11 @@ export default function ExchangeRateTable(props) {
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
-        // console.log("Update new display time!!!");
-        handleDisplayLatestFetchTimeUpdate();
+        if (triggerNewTimeDisplay) {
+            // console.log("Update new display time!!!");
+            handleDisplayLatestFetchTimeUpdate();
+            setTriggerNewTimeDisplay(false)
+        }
     }, [triggerNewTimeDisplay]);
 
     const handleRequestSort = (event, property) => {
@@ -418,7 +421,7 @@ export default function ExchangeRateTable(props) {
                             />
                             {!isDisplayMD &&
                                 <CircularProgressWithLabel
-                                    onUpdateDisplayTime={() => setTriggerNewTimeDisplay(!triggerNewTimeDisplay)}
+                                    onUpdateDisplayTime={() => setTriggerNewTimeDisplay(true)}
                                     onUpdateNewLiveRate={updateNewLiveRate}
                                     {...attr.CircularProgressWithLabel}
                                 />

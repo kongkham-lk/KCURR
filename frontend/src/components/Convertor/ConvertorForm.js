@@ -7,8 +7,8 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, targetConvertCurrPair, isDisplaySM, 
-        onNewCurrCodeAssigned, onConvertCurrSwap } = props;
+    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+        targetConvertCurrPair, isDisplaySM, onNewCurrCodeAssigned, onConvertCurrSwap } = props;
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
@@ -22,14 +22,14 @@ export default function ConvertorForm(props) {
 
         // The total amount to convert
         const convertAmountInput = parseFloat(e.value);
-        
+
         // Determined if the input value is valid or user just delete all and no new value input
         if (!isNaN(convertAmountInput))
             setTargetConvertAmount(convertAmountInput);
         else
             setTargetConvertAmount(0);
     }
-    
+
     // Submit form to start runniing the conversion logic
     const onSubmit = (e) => {
         e.preventDefault();
@@ -40,7 +40,7 @@ export default function ConvertorForm(props) {
         sxStyle: sxStyle.CurrCountriesDropDown,
         onNewCurrCodeAssigned,
         currCountiesCodeMapDetail,
-        sortedCurrsCodeList, 
+        sortedCurrsCodeList,
         validCurFlagList
     }
 
