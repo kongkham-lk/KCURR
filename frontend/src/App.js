@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
 import { getUserPreferences, getUserIdentifier } from './util/userController';
+import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter.js';
 
 export default function App() {
     const userId = getUserIdentifier();
@@ -23,6 +24,14 @@ export default function App() {
     const currentUrl = useLocation();
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
 
+    // retrieved initial data for live rate feature
+    // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
+    // Observation: When react state in App.js is updated, all the sub component's state also reset
+    const currentPath = currentUrl.pathname.toLowerCase();
+    const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
+    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference); // retrieved initial exchange rate table list
+
+    // Initialized userPreference
     useEffect(() => {
         async function fetchPreference() {
             if (userPreference === null) {
@@ -60,7 +69,8 @@ export default function App() {
 
     const attr = {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
-        curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList },
+        curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
+        chart: { initialCurrLists, initialCurrExchangeRates, isCurrListReady },
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag }
     }
 
@@ -76,7 +86,7 @@ export default function App() {
                                     {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                 </Item>
                                 <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                    {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                                    {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                 </Item>
                                 <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                     {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
@@ -90,7 +100,7 @@ export default function App() {
                         } ></Route>
                         <Route exact path="/Chart" element={
                             <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                {isReady ? <ExchangeRateTable {...attr.curr} /> : <Loading />}
+                                {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                             </Item>
                         } ></Route>
                         <Route exact path="/News" element={

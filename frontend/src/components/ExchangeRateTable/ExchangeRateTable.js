@@ -22,23 +22,23 @@ import { createCurrLists } from '../../util/createCurrLists.js';
 import { getFlag } from '../../util/getFlag.js';
 import { retrieveExchangeRates } from '../../util/apiClient.js';
 import { LineGraph } from '../subComponents/LineGraph.js';
-import useInitialCurrListsGetter from '../../hook/useInitialCurrListsGetter.js';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel.js';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
 import { savePrefCurrCodes } from '../../util/userController.js';
 
 export default function ExchangeRateTable(props) {
-    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, currentUrl, userId, userPreference, onPreferenceCookieUpdate } = props;
-
-    // Enable live rate's display chart feature flag
-    // If yes, retrieve timeSeries instead of exchangeRates
-    const isFeatureDisplay = currentUrl.pathname.toLowerCase().includes("chart");
-
+    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
+        initialCurrLists, initialCurrExchangeRates, isCurrListReady: isReady, isChartFeatureEnable } = props;
+        
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
 
     // Initialized currency's visible row proeprty
+    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(initialCurrExchangeRates !== null ? [...initialCurrExchangeRates] : null); // consist of all the currCode exchange rate, 1 day range. Do not set anything if currently load feature page
+    const [currLists, setCurrLists] = useState([...initialCurrLists]);
+
+    // Initialized flags
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
@@ -58,17 +58,8 @@ export default function ExchangeRateTable(props) {
     const [dayRangeIndicator, setDayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
     const [monthRangeIndicator, setMonthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
 
-    // Fetch data from API
-    const { initialCurrLists, initialCurrExchangeRates, isReady } = useInitialCurrListsGetter(defaultCurrCode, currCodeArray, timeSeriesRangeLength, isFeatureDisplay); // retrieved initial exchange rate table list
-    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(null); // consist of all the currCode exchange rate, 1 day range
-    const [currLists, setCurrLists] = useState([]);
-
-
     useEffect(() => {
         if (isReady) {
-            console.log("setCurrLists from initialList, isReady status: ", isReady)
-            setCurrLists([...initialCurrLists]);
-            setDefaultCurrExchangeRates(initialCurrExchangeRates !== null && [...initialCurrExchangeRates]); // Do not set anything if currently load feature page
             handleDisplayLatestFetchTimeUpdate();
         }
     }, [isReady]);
@@ -80,7 +71,8 @@ export default function ExchangeRateTable(props) {
 
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 // console.log("Create new curr list!!!");
-                const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);
+                console.log("    >>> createCurrLists!!!")
+                const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
                 const newLists = [...currLists, currList];
                 setNewCurrCode("");
                 setCurrLists(newLists);
@@ -144,7 +136,8 @@ export default function ExchangeRateTable(props) {
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
 
         for (let i in currCodeArray) {
-            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, timeSeriesRangeLength, isFeatureDisplay);
+            console.log("    >>> createCurrLists!!!")
+            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         }
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
@@ -236,7 +229,6 @@ export default function ExchangeRateTable(props) {
         },
         RateHistoryGraph: {
             passInRequestState: true,
-            isFeatureDisplay,
             ...props
         },
     };
@@ -245,7 +237,7 @@ export default function ExchangeRateTable(props) {
         if (index === 0)
             return;
 
-        if (isFeatureDisplay) {
+        if (isChartFeatureEnable) {
             const newAppendCharts = [...displayRateHistChartFlags];
 
             if (newAppendCharts[index])
@@ -311,7 +303,7 @@ export default function ExchangeRateTable(props) {
                                     // Manually assign each curr row's timeSerie.
                                     // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
                                     // Which means the currList that is initialized base on exchangrRateList does not contain timeSeries object
-                                    if (!isFeatureDisplay && index !== 0) {
+                                    if (!isChartFeatureEnable && index !== 0) {
                                         currList.timeSeries = {
                                             lowest: Math.min(currList.latestRate, currList.histRate),
                                             highest: Math.max(currList.latestRate, currList.histRate),
@@ -351,7 +343,7 @@ export default function ExchangeRateTable(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isFeatureDisplay && sxStyle.hoverButton.hover) }} onClick={() => handleToggleFlags(index)} >
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover) }} onClick={() => handleToggleFlags(index)} >
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
@@ -365,9 +357,9 @@ export default function ExchangeRateTable(props) {
                                                                 }
                                                                 {/* Chart Cell */}
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
-                                                                    {!isDisplaySM || !isFeatureDisplay ?
+                                                                    {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
-                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isFeatureDisplay} />}
+                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isChartFeatureEnable} />}
                                                                         </div> : <Button variant="text" size="small" sx={{ padding: 0, float: 'right', color: index === 0 && 'transparent' }}>View Chart</Button>
                                                                     }
                                                                 </TableCell>
