@@ -23,11 +23,6 @@ export default function MainNav(props) {
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
-    // need to update isOurlineTheme flag again after the actual userPref is retrieved from API
-    useEffect(() => {
-        setState(isOutLineTheme);
-    }, [isOutLineTheme])
-
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
     const handleThemeUpdate = (newState) => {
         setState(newState);
