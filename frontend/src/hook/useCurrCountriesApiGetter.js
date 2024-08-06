@@ -20,7 +20,6 @@ export default function useCurrCountriesApiGetter() {
 
                 while (!isValidResponse && retryFetching > 0) {
                     // console.log(`Requesting data on: ${baseURL}:${port}`); // Debugging frontend request and backend response
-
                     try {
                         resCurrCountries = await axios.get(`${baseURL}:${port}/curr/currency-country`);
                     } catch (e) {
@@ -51,18 +50,14 @@ export default function useCurrCountriesApiGetter() {
     useEffect(() => {
         async function fetchCountriesFlags() {
             if (Object.keys(currCountiesCodeMapDetail).length !== 0) {
-                const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
-
-                // console.log("log newSortedCurrsCodeList: ", newSortedCurrsCodeList);
                 // console.log("check all cur code for flag api!!!");
-
+                const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
                 const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
-
-                // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
-
+                
                 setSortedCurrsCodeList(newSortedCurrsCodeList);
                 setValidCurFlagList(newValidCurrFlagList);
                 setIsReady(true);
+                // console.log("return newValidCurrFlagList: ", newValidCurrFlagList);
             }
         }
         fetchCountriesFlags();

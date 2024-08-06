@@ -43,7 +43,7 @@ export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, da
                 }
             }
             fetchCurrApiData();
-        }, [dayRange, defaultCurr, isFeatureDisplay, currCodeArray]
+        }, [dayRange, defaultCurr, isFeatureDisplay, currCodeArray, initialCurrLists.length]
     );
 
     return { initialCurrLists, initialCurrExchangeRates, isReady };

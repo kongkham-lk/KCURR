@@ -134,7 +134,7 @@ export default function FinancialNews(props) {
 
 const sxStyle = {
     Box: {
-        display: 'flex', flexDirection: 'column', width: "100%", flex: '1 0 auto', justifyContent: "space-between",
+        display: 'flex', flexDirection: 'column', flex: '1 0 auto', justifyContent: "space-between",
         width: "min-content", padding: "20px"
     },
     Link: { width: '100%', textDecoration: "none", margin: "7px 0" },

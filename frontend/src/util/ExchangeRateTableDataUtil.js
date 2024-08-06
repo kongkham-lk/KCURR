@@ -18,7 +18,6 @@ export function stableSort(array, comparator) {
         if (order !== 0) {
             return order; // If they are not equal, return the comparison result.
         }
-
         return a[1] - b[1]; // If they are equal, compare their original index to maintain stability.
     });
 
@@ -42,7 +41,7 @@ export function styleTableRow(currKey, defaultCurr) {
         }
     } else {
         return {
-            backgroundColor: "transparent", backgroundClip: "border-box", 
+            backgroundColor: "transparent", backgroundClip: "border-box",
             verticalAlign: 'middle', borderTop: '1px solid rgba(224, 224, 224, 1)'
         }
     }
@@ -59,13 +58,12 @@ export function getDisplayList(currList) {
 }
 
 const descendingComparator = (a, b, orderBy) => {
-    if (b[orderBy] < a[orderBy]) {
+    if (b[orderBy] < a[orderBy])
         return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
+    else if (b[orderBy] > a[orderBy])
         return 1;
-    }
-    return 0;
+    else 
+        return 0;
 }
 
 export function styleTableRowInFile(dense, emptyRows) {
@@ -74,9 +72,15 @@ export function styleTableRowInFile(dense, emptyRows) {
 
 export function styleTableCellDelete(targetCurr, defaultCurr, isDisplaySM) {
     if (targetCurr !== defaultCurr) {
-        return { width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
+        return {
+            width: "10%", color: "rgba(0, 0, 0, 0.54)", paddingLeft: isDisplaySM && "5px",
+            paddingRight: isDisplaySM && "0px", ...style.borderNone
+        };
     } else {
-        return { width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px", paddingRight: isDisplaySM && "0px", ...style.borderNone };
+        return {
+            width: "10%", color: "transparent", paddingLeft: isDisplaySM && "5px",
+            paddingRight: isDisplaySM && "0px", ...style.borderNone
+        };
     }
 };
 
@@ -96,7 +100,7 @@ const getEntireDateString = (offsetDate) => {
     const date = new Date(Date.now() - offsetDate);
     return date.toLocaleDateString('en-GB', {
         day: 'numeric', month: 'short', year: 'numeric'
-      }) + "";
+    }) + "";
 }
 
 const style = {

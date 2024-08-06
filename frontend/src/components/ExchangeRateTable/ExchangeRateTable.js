@@ -55,8 +55,8 @@ export default function ExchangeRateTable(props) {
 
     // Initialized time property
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-    const [dayRangeIndicator, setDayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
-    const [monthRangeIndicator, setMonthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
+    const [dayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
+    const [monthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
 
     useEffect(() => {
         if (isReady) {
@@ -81,7 +81,7 @@ export default function ExchangeRateTable(props) {
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray]);
+    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
@@ -198,17 +198,13 @@ export default function ExchangeRateTable(props) {
                 oldTargetCurrCodeArray.splice(i, 1);
             }
         }
-        // console.log("check Curr List after delete:  ", oldCurrLists);
         setCurrLists(oldCurrLists);
         setCurrCodeArray(oldTargetCurrCodeArray);
         handleLiveRateRowCookieUpdate(oldTargetCurrCodeArray);
     }
 
     const handleLiveRateRowCookieUpdate = (newCurrCodeArray) => {
-        // const newPreference = { ...userPreference };
-        // newPreference.liveRateCurrCodes = newCurrCodeArray;
         console.log("Save new currCodeArray to API!!! ", newCurrCodeArray);
-        // onPreferenceCookieUpdate(newPreference);
         savePrefCurrCodes(userId, newCurrCodeArray);
     }
 
@@ -236,7 +232,7 @@ export default function ExchangeRateTable(props) {
         },
     };
 
-    const handleToggleFlags = async (index) => {
+    const handleToggleFlags = (index) => {
         if (index === 0)
             return;
 
@@ -300,8 +296,6 @@ export default function ExchangeRateTable(props) {
                                         targetCurr: currList.targetCurr
                                     };
                                     const labelId = `enhanced-table-checkbox-${index}`;
-                                    // console.log("currList.latestRate: ", currList.latestRate)
-                                    // console.log("currList.histRate: ", currList.histRate)
 
                                     // Manually assign each curr row's timeSerie.
                                     // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
@@ -317,11 +311,11 @@ export default function ExchangeRateTable(props) {
                                     }
 
                                     const timeSeries = currList.timeSeries;
-                                    // console.log("check TimeSeries: ", currList)
 
                                     return (
                                         <>
                                             <TableRow className="clipPath" key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
+                                                {/* Currency Code and flag */}
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
@@ -346,13 +340,16 @@ export default function ExchangeRateTable(props) {
                                                         </Button>
                                                     </Box>
                                                 </TableCell>
+                                                {/* Currency rate change wrapper */}
                                                 <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover) }} onClick={() => handleToggleFlags(index)} >
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
+                                                                {/* Currency amount */}
                                                                 <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
+                                                                {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
                                                                     <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
                                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
@@ -370,6 +367,7 @@ export default function ExchangeRateTable(props) {
                                                         </TableBody>
                                                     </Table>
                                                 </TableCell>
+                                                {/* Delete button */}
                                                 <TableCell
                                                     align="right"
                                                     sx={{ ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM), ...style.TableCell }}

@@ -30,7 +30,6 @@ export default function RateChangeGraphFeature(props) {
 
     useEffect(() => {
         async function timeSeriesGetter() {
-
             if (currencyRateData != null && isChartFeatureEnable) {
                 console.log("retrieveExchangeRatesTimeSeries!!!")
                 const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
@@ -38,7 +37,7 @@ export default function RateChangeGraphFeature(props) {
             }
         }
         timeSeriesGetter()
-    }, [currencyRateData, timeSeriesRange])
+    }, [baseCurr, currencyRateData, isChartFeatureEnable, isNewUpdateRequest, targetCurr, timeSeriesRange])
 
     const handleClick = (range) => {
         setIsNewUpdateRequest(false)

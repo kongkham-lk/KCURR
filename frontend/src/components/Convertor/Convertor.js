@@ -16,7 +16,7 @@ export default function Convertor(props) {
     let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
 
     useEffect(() => {
-        console.log("Reassign initial convertPair (when userPref not null)!!!")
+        console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
         setTargetConvertCurrPair([...userPreference.convertedCurrPair])
     }, [userPreference])
 
@@ -43,10 +43,7 @@ export default function Convertor(props) {
 
     const handleCurrPairCookieUpdate = (newCurrPair) => {
         setTargetConvertCurrPair(newCurrPair);
-        // const newPreference = { ...userPreference };
-        // newPreference.convertedCurrPair = newCurrPair;
         console.log("Save new conversion curr pair!!!");
-        // onPreferenceCookieUpdate(newPreference);
         savePrefCovertedPair(userId, newCurrPair);
     }
 
