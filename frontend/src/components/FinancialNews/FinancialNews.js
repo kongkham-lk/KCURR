@@ -15,34 +15,32 @@ import FinancialNewsLists from "./FinancialNewsLists";
 import { savePrefNewsCategories } from "../../util/userController";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM, isOutLineTheme, userId, userPreference, onPreferenceCookieUpdate } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme, userId, userPreference, newsListsRes } = props;
     // console.log("Load News!!! ", userPreference);
-    const [newsLists, setNewsLists] = useState([]);
+    const [isInitialLoad, setIsInitialLoad] = useState(true); // everytime theme is set, all the state seems to be reset.
+    const [newsLists, setNewsLists] = useState([...newsListsRes]);
     const [tempTopic, setTempTopic] = useState("");
-    const [newsTopics, setNewsTopics] = useState([]);
-
-    useEffect(() => {
-        // console.log("userPreference: ", userPreference)
-        if (userPreference !== null) {
-            // console.log("setNewsTopics!!!")
-            setNewsTopics([...userPreference.newsCategories])
-        }
-    }, [userPreference])
+    const [newsTopics, setNewsTopics] = useState([...userPreference.newsCategories]);
 
     useEffect(() => {
         async function fetchNewsLists() {
-            const newsRes = await retrieveFinancialNews(newsTopics);
-            setNewsLists(newsRes.data);
+            if (!isInitialLoad) { // Do not fetch new newsList if set new theme
+                const newsRes = await retrieveFinancialNews(newsTopics);
+                setNewsLists(newsRes.data);
+            } else {
+                setIsInitialLoad(false);
+            }
         }
         fetchNewsLists();
-    }, [newsTopics])
+    }, [isInitialLoad, newsTopics])
+
 
     const handleAddNewsTopic = () => {
-        const updateNewsTopic = [...userPreference.newsCategories];
-        updateNewsTopic.push(tempTopic);
+        // console.log("Set News!!!")
+        const newNewsTopicList = [...userPreference.newsCategories];
+        newNewsTopicList.push(tempTopic);
         setTempTopic("")
-        setNewsTopics(updateNewsTopic);
-        handleNewsCategoriesCookieUpdate(updateNewsTopic);
+        handleNewTopicsUpdate(newNewsTopicList);
     }
 
     const handleInput = (e) => {
@@ -51,18 +49,20 @@ export default function FinancialNews(props) {
     }
 
     const handleDelete = (index) => {
+        // console.log("Set News!!!")
         const newsTopics = [...userPreference.newsCategories];
         newsTopics.splice(index, 1);
-        const updateNewsTopic = [...newsTopics];
-        setNewsTopics(updateNewsTopic);
-        handleNewsCategoriesCookieUpdate(updateNewsTopic);
+        const newNewsTopicList = [...newsTopics];
+        handleNewTopicsUpdate(newNewsTopicList);
+    }
+
+    const handleNewTopicsUpdate = (newNewsTopicList) => {
+        setNewsTopics(newNewsTopicList);
+        handleNewsCategoriesCookieUpdate(newNewsTopicList);
     }
 
     const handleNewsCategoriesCookieUpdate = (newNewsTopics) => {
-        // const newPreference = { ...userPreference };
-        // newPreference.newsCategories = [...newNewsTopics];
         console.log("Save new NewsCategories List to API!!!");
-        // onPreferenceCookieUpdate(newPreference);
         savePrefNewsCategories(userId, newNewsTopics)
     }
 

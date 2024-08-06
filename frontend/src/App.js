@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import { Box } from '@mui/material';
 import { getUserPreferences, getUserIdentifier } from './util/userController';
 import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter.js';
+import { retrieveFinancialNews } from "./util/apiClient";
 
 export default function App() {
     const userId = getUserIdentifier();
@@ -31,13 +32,17 @@ export default function App() {
     const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
     const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference); // retrieved initial exchange rate table list
 
+    const [newsListsRes, setNewsListsRes] = useState({});
+
     // Initialized userPreference
     useEffect(() => {
         async function fetchPreference() {
             if (userPreference === null) {
                 console.log("Get initial Pref!!!")
                 const pref = await getUserPreferences(userId);
+                const newsRes = await retrieveFinancialNews(pref.newsCategories);
                 setUserPreference(pref);
+                setNewsListsRes(newsRes.data);
             }
         }
         fetchPreference();
@@ -71,7 +76,7 @@ export default function App() {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag }
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag, newsListsRes }
     }
 
     return (
