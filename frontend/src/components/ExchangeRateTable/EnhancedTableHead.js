@@ -31,9 +31,9 @@ export default function EnhancedTableHead(props) {
                                     direction={orderBy === headCell.id ? order : 'asc'}
                                     onClick={createSortHandler(headCell.id)}
                                     style={{
-                                        marginLeft: headCell.id === 'targetCountry' ? (isDisplaySM ? "0px" : "25px") : "-30px",
-                                        marginRight: headCell.id === 'targetCountry' && "-20px",
-                                        padding: isDisplaySM && "0px",
+                                        marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? 0 : 16) : -32,
+                                        marginRight: headCell.id === 'targetCurr' ? -20 : -8,
+                                        padding: isDisplaySM && 0,
                                     }}
                                 >
                                     {headCell.label}
@@ -68,7 +68,7 @@ EnhancedTableHead.propTypes = {
 
 let headCells = [
     {
-        id: 'targetCountry',
+        id: 'targetCurr',
         numeric: false,
         disablePadding: true,
         label: 'Countries',
