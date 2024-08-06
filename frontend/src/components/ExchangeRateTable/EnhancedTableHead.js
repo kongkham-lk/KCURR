@@ -17,13 +17,15 @@ export default function EnhancedTableHead(props) {
         <TableHead>
             <>
                 <TableRow style={style.TableRow}>
-                    {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
+                    {headCells.map((headCell) => (
                         <TableCell
                             key={headCell.id}
                             align={headCell.numeric ? 'right' : 'left'}
                             padding={headCell.disablePadding ? 'none' : 'normal'}
                             sortDirection={orderBy === headCell.id ? order : false}
-                            style={isDisplaySM ? (headCell.id === 'latestRate' ? style.TableCell.sm.latestRate : style.TableCell.sm.main) : style.TableCell.lg}
+                            style={!isDisplaySM ? style.TableCell.lg :
+                                    (headCell.id === 'latestRate' ? style.TableCell.sm.latestRate : 
+                                        (headCell.id === 'change' ? style.hidden : style.TableCell.sm.main))}
                         >
                             {!isDisplaySM ?
                                 <TableSortLabel
@@ -98,4 +100,5 @@ const style = {
             latestRate: { width: "10%", padding: "0px 12px 10px 0px", ...borderNone },
         },
     },
+    hidden: {display: "none"},
 }
