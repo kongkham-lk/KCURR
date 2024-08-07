@@ -15,7 +15,7 @@ import FinancialNewsLists from "./FinancialNewsLists";
 import { savePrefNewsCategories } from "../../util/userController";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM, isOutLineTheme, userId, userPreference, newsListsRes } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
     // console.log("Load News!!! ", userPreference);
     const [isInitialLoad, setIsInitialLoad] = useState(true); // everytime theme is set, all the state seems to be reset.
     const [newsLists, setNewsLists] = useState([...newsListsRes]);
@@ -73,7 +73,7 @@ export default function FinancialNews(props) {
                     <div style={style.subDivHeading}>
                         <Typography
                             variant="h5"
-                            color="black"
+                            color="inherit"
                             component="div"
                             style={{ margin: filter ? "16px 0px" : "16px 0 0 0" }}
                         >
@@ -105,6 +105,7 @@ export default function FinancialNews(props) {
                                             ...sxStyle.Card, borderRadius: isOutLineTheme ? 0 : 1,
                                             border: isOutLineTheme && 0,
                                             borderBottom: isOutLineTheme && '1px solid rgba(0, 0, 0, 0.12)',
+                                            background: "none",
                                             padding: isOutLineTheme && '15px 0px',
                                             '&:hover': !isOutLineTheme && { boxShadow: '0px 0px 12px #644e243f', transition: '0.2s' },
                                             '&:hover .hoverLink': !isOutLineTheme && { color: '#0060cd' }

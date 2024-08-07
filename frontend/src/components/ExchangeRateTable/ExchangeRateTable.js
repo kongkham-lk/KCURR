@@ -29,7 +29,7 @@ import { savePrefCurrCodes } from '../../util/userController.js';
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
         initialCurrLists, initialCurrExchangeRates, isCurrListReady: isReady, isChartFeatureEnable } = props;
-        
+
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
@@ -314,14 +314,14 @@ export default function ExchangeRateTable(props) {
 
                                     return (
                                         <>
-                                            <TableRow className="clipPath" key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow }} >
+                                            <TableRow className="clipPath" key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow, color: index === 0 ? "white" : "black" }} >
                                                 {/* Currency Code and flag */}
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
                                                     onClick={() => handleSetDefaultCurr(targetCurrCode)}
-                                                    sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...style.TableCell, ...(index !== 0 && sxStyle.hoverButton.hover) }}
+                                                    sx={{ ...commonStyle.paddingNone, ...style.TableCell, ...(index !== 0 && sxStyle.hoverButton.hover), color: "inherit" }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton.main }}>
                                                         <Button
@@ -341,12 +341,12 @@ export default function ExchangeRateTable(props) {
                                                     </Box>
                                                 </TableCell>
                                                 {/* Currency rate change wrapper */}
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover) }} onClick={() => handleToggleFlags(index)} >
+                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover), color: "inherit" }} onClick={() => handleToggleFlags(index)} >
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
                                                                 {/* Currency amount */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%' }} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%', color: index === 0 && "inherit" }} >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
@@ -475,7 +475,7 @@ const style = {
 
 const sxStyle = {
     Box: { width: 1, overflowY: "auto" },
-    Paper: { width: 1, boxShadow: "none", backgroundColor: 'inherit' },
+    Paper: { width: 1, boxShadow: "none", backgroundColor: 'inherit', backgroundImage: "none" },
     Table: { minWidth: 450 },
     TableBody: { width: 1 },
     CurrCountriesDropDown: {
@@ -486,7 +486,7 @@ const sxStyle = {
     Typography: { flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center", },
     Pageination: { padding: '0px', display: 'flex', flex: 'auto', justifyContent: 'center', '& div': { padding: 0 } },
     defaultCurrSetterButton: {
-        main: { display: "flex", alignItems: "center", color: "black", fontWeight: 400, '&:hover': { background: 'none' }, '&:disabled': { color: 'black' } },
+        main: { display: "flex", alignItems: "center", color: "inherit", fontWeight: 400, '&:hover': { background: 'none' }, '&:disabled': { color: 'inherit' } },
         lg: { margin: "0px 15px" },
         sm: { margin: "0px 10px", padding: "0px" },
     },

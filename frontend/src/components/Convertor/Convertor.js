@@ -80,7 +80,7 @@ export default function Convertor(props) {
 
     return (
         <>
-            <Typography variant="h5" color="black" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
+            <Typography variant="h5" color="inherit" component="div" my={2} sx={{ marginBottom: isDisplaySM ? "16px" : "25px" }}>
                 Convertor
             </Typography>
             <ConvertorForm {...attr.convertorForm} />

@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import AppBar from '@mui/material/AppBar';
 
 export default function Footer(props) {
     const { isDisplaySM, isOutLineTheme } = props;
@@ -18,47 +19,56 @@ export default function Footer(props) {
             sx={{
                 minHeight: isDisplaySM ? '42vh' : '30vh',
                 ...sxStyle.footerWrapper,
-                ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate),
             }}
         >
-            <Box sx={sxStyle.BoxSub}>
-                <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
-                    <ListItem key="product" disablePadding>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
-                            Product
-                        </Typography>
-                    </ListItem>
-                    {navItems.map((item) => {
-                        return (
-                            <ListItem key={item.label} disablePadding >
-                                <ListItemButton sx={{ p: 0 }} href={item.link} >
-                                    <Typography variant="overline">
-                                        {item.label}
-                                    </Typography>
-                                </ListItemButton>
-                            </ListItem>
-                        )
-                    })}
-                    <ListItem key="toolAndResource" disablePadding>
-                        <Stack direction="row" alignItems="center">
-                            <IconButton aria-label="github" size="large" sx={{ pl: 0 }} >
-                                <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
-                            </IconButton>
-                            <IconButton aria-label="linkedin" size="large" >
-                                <LinkedInIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
-                            </IconButton>
-                            <IconButton aria-label="instagram" size="large">
-                                <InstagramIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
-                            </IconButton>
-                        </Stack>
-                    </ListItem>
-                    <ListItem key="copyRight" disablePadding>
-                        <Typography variant="overline">
-                            © 2023 KCURR Inc.
-                        </Typography>
-                    </ListItem>
-                </List>
-            </Box>
+            <AppBar component="nav" sx={{ ...sxStyle.bringToTop, position: "relative", ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate), }}>
+                <Box sx={sxStyle.BoxSub}>
+                    <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
+                        <ListItem key="product" disablePadding>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
+                                Product
+                            </Typography>
+                        </ListItem>
+                        {navItems.map((item) => {
+                            return (
+                                <ListItem key={item.label} disablePadding sx={{ width: "fit-content" }} >
+                                    <ListItemButton sx={{
+                                        p: 0, '&:hover': {
+                                            borderLeft: "3px solid",
+                                            margin: "0 0 0 -18px",
+                                            padding: "0 0 0 15px",
+                                            background: "none",
+                                            filter: "saturate(0.5) brightness(1.5)"
+                                        }
+                                    }} href={item.link} >
+                                        <Typography variant="overline">
+                                            {item.label}
+                                        </Typography>
+                                    </ListItemButton>
+                                </ListItem>
+                            )
+                        })}
+                        <ListItem key="toolAndResource" disablePadding>
+                            <Stack direction="row" alignItems="center">
+                                <IconButton aria-label="github" size="large" sx={{ ml: -1.5 }} >
+                                    <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                </IconButton>
+                                <IconButton aria-label="linkedin" size="large" >
+                                    <LinkedInIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                </IconButton>
+                                <IconButton aria-label="instagram" size="large">
+                                    <InstagramIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                </IconButton>
+                            </Stack>
+                        </ListItem>
+                        <ListItem key="copyRight" disablePadding>
+                            <Typography variant="overline">
+                                © 2023 KCURR Inc.
+                            </Typography>
+                        </ListItem>
+                    </List>
+                </Box>
+            </AppBar>
         </Box>
     );
 };
@@ -109,19 +119,24 @@ const sxStyle = {
     ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
     Theme: {
         Elevate: {
-            color: 'white',
-            background: `#${baseColor.main}`,
+            // color: 'white',
+            // background: `#${baseColor.main}`,
             '& img': { filter: 'saturate(0) brightness(100)' },
             '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
             color: `#${baseColor.main}`,
+            background: "white",
             borderTop: `1.5px solid #${baseColor.main}55`
         },
     },
-    themeSetter: { justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px' },
+    themeSetter: { justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', margin: '2px -10px 0 0' },
     bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
     FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
-    NonMargin: { margin: '0px' }
+    NonMargin: { margin: '0px' },
+    ListItemButton: {
+        borderLeft: "3px solid", margin: "0 0 0 -18px", padding: "0 0 0 15px", background: "none",
+        filter: "saturate(0.5) brightness(1.5)"
+    },
 }
