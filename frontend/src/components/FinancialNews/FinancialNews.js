@@ -79,12 +79,27 @@ export default function FinancialNews(props) {
                         >
                             {isDisplaySM ? "News" : "Financial News"}
                         </Typography>
-                        {filter && <div style={{ ...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg) }}>
-                            <InputTextField onConvertAmountUpdate={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={tempTopic} />
-                            <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
-                                Add
-                            </Button>
-                        </div>}
+                        {filter &&
+                            <div style={{
+                                ...style.subDivInputField.main,
+                                ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg)
+                            }}
+                            >
+                                <InputTextField
+                                    onConvertAmountUpdate={handleInput}
+                                    inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"}
+                                    size="small" displayInput={tempTopic}
+                                />
+                                <Button
+                                    variant="contained"
+                                    type="submit"
+                                    onClick={handleAddNewsTopic}
+                                    style={style.convertButton}
+                                >
+                                    Add
+                                </Button>
+                            </div>
+                        }
                     </div>
                     {filter && <Stack direction="row" style={style.Stack}>
                         {(newsTopics)?.map((topic, index) => (
@@ -97,7 +112,7 @@ export default function FinancialNews(props) {
                                 key={news.title}
                                 href={news.link}
                                 className="hoverCard"
-                                sx={isOutLineTheme ? { margin: 0, textDecoration: 'none' } : sxStyle.Link}>
+                                sx={isOutLineTheme ? sxStyle.Link.outline : sxStyle.Link.elevate}>
                                 {!isDisplaySM ?
                                     <Card
                                         variant={isOutLineTheme ? "outlined" : "elevation"}
@@ -138,7 +153,10 @@ const sxStyle = {
         display: 'flex', flexDirection: 'column', flex: '1 0 auto', justifyContent: "space-between",
         width: "min-content", padding: "20px"
     },
-    Link: { width: '100%', textDecoration: "none", margin: "7px 0" },
+    Link: {
+        elevate: { width: '100%', textDecoration: "none", margin: "7px 0" },
+        outline: { margin: 0, textDecoration: 'none', color: "inherit" },
+    },
     Card: { display: 'flex', width: '100%', },
     CardMedia: { width: 240, height: 180, objectFit: "cover" },
 }
