@@ -29,7 +29,7 @@ import { saveCurrListsToCookie, savePrefCurrCodes } from '../../util/userControl
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
         initialCurrLists, initialCurrExchangeRates, isCurrListReady: isReady, isChartFeatureEnable } = props;
-        
+
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
@@ -190,14 +190,14 @@ export default function ExchangeRateTable(props) {
         }
 
         // console.log("Delete an item to list: ", targetCurr);
-        const oldCurrLists = [...currLists];
-        const oldTargetCurrCodeArray = [...currCodeArray];
+        const newCurrLists = [...currLists];
+        const newCurrCodeArray = [...currCodeArray];
 
-        for (let i in oldCurrLists) {
+        for (let i in newCurrLists) {
             // only delete the currency in the list that match targetCurr, but not defaultCurr 
-            if (oldCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
-                oldCurrLists.splice(i, 1);
-                oldTargetCurrCodeArray.splice(i, 1);
+            if (newCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
+                newCurrLists.splice(i, 1);
+                newCurrCodeArray.splice(i, 1);
             }
         }
         setCurrLists(newCurrLists);
