@@ -61,7 +61,7 @@ export default function App() {
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
         // setIsOutLineTheme(newTheme);
-        const newPref = { ...userPreference };
+        const newPref = await getUserPreferences(userId);
         newPref.theme = newTheme === true ? "outlined" : 'elevation';
         setUserPreference(newPref);
     }
