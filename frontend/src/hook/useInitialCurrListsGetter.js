@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createCurrLists } from '../util/createCurrLists';
 import { retrieveExchangeRates } from '../util/apiClient';
-import { getCurrListsFromCookie } from '../util/userController';
+import { getCurrListsFromCookie } from './userController';
 
 export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, dayRange, isFeatureDisplay, userPreference = null, userId) {
     const [initialCurrLists, setInitialCurrLists] = useState([]);

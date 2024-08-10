@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
-import { getUserPreferences, getUserIdentifier } from './util/userController.js';
+import { getUserPreferences, getUserIdentifier } from './hook/userController.js';
 import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter.js';
 import { retrieveFinancialNews } from "./util/apiClient";
 

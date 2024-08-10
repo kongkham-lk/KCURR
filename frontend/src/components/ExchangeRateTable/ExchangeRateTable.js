@@ -24,7 +24,7 @@ import { retrieveExchangeRates } from '../../util/apiClient.js';
 import { LineGraph } from '../subComponents/LineGraph.js';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel.js';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
-import { saveCurrListsToCookie, savePrefCurrCodes } from '../../util/userController.js';
+import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController.js';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
