@@ -24,7 +24,7 @@ import { retrieveExchangeRates } from '../../util/apiClient.js';
 import { LineGraph } from '../subComponents/LineGraph.js';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel.js';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
-import { savePrefCurrCodes } from '../../util/userController.js';
+import { saveCurrListsToCookie, savePrefCurrCodes } from '../../util/userController.js';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
@@ -76,6 +76,7 @@ export default function ExchangeRateTable(props) {
                 const newLists = [...currLists, currList];
                 setNewCurrCode("");
                 setCurrLists(newLists);
+                saveCurrListsToCookie(userId, newLists);
             }
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
@@ -125,9 +126,9 @@ export default function ExchangeRateTable(props) {
             await handleUpdateDefaultCurrLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
             userPreference.liveRateCurrCodes = newCurrCodeArray;
-            setCurrCodeArray(newCurrCodeArray);
             setDefaultCurrCode(targetCurr);
-            handleLiveRateRowCookieUpdate(newCurrCodeArray);
+            setCurrCodeArray(newCurrCodeArray);
+            handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
         }
     };
 
@@ -145,6 +146,7 @@ export default function ExchangeRateTable(props) {
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
         setCurrLists(newLists);
+        saveCurrListsToCookie(userId, newLists);
         handleDisplayLatestFetchTimeUpdate();
     };
 
@@ -178,7 +180,7 @@ export default function ExchangeRateTable(props) {
         setNewCurrCode(e.value);
         const newCurrCodeArray = [...currCodeArray, e.value];
         setCurrCodeArray(newCurrCodeArray);
-        handleLiveRateRowCookieUpdate(newCurrCodeArray);
+        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     };
 
     const handleDelete = (targetCurr) => {
@@ -198,12 +200,13 @@ export default function ExchangeRateTable(props) {
                 oldTargetCurrCodeArray.splice(i, 1);
             }
         }
-        setCurrLists(oldCurrLists);
-        setCurrCodeArray(oldTargetCurrCodeArray);
-        handleLiveRateRowCookieUpdate(oldTargetCurrCodeArray);
+        setCurrLists(newCurrLists);
+        saveCurrListsToCookie(userId, newCurrLists);
+        setCurrCodeArray(newCurrCodeArray);
+        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
 
-    const handleLiveRateRowCookieUpdate = (newCurrCodeArray) => {
+    const handleCurrCodeArrayCookieUpdate = (newCurrCodeArray) => {
         console.log("Save new currCodeArray to API!!! ", newCurrCodeArray);
         savePrefCurrCodes(userId, newCurrCodeArray);
     }

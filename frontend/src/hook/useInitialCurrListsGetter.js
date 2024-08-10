@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createCurrLists } from '../util/createCurrLists';
 import { retrieveExchangeRates } from '../util/apiClient';
+import { getCurrListsFromCookie } from '../util/userController';
 
-export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, dayRange, isFeatureDisplay, userPreference = null) {
+export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, dayRange, isFeatureDisplay, userPreference = null, userId) {
     const [initialCurrLists, setInitialCurrLists] = useState([]);
     const [initialCurrExchangeRates, setInitialCurrExchangeRates] = useState([]);
     const [isReady, setIsReady] = useState(false);
@@ -25,6 +26,7 @@ export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, da
         function fetchData() {
             async function fetchCurrApiData() {
                 if (initialCurrLists.length === 0) {
+                    // This will be triggered whenever the page is refreshed
                     try {
                         const currLists = [];
                         // console.log("defaultCurr: ", defaultCurr)
@@ -39,6 +41,18 @@ export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, da
                         setIsReady(true);
                     } catch (e) {
                         console.log(e.stack);
+                    }
+                } else {
+                    // Update initialCurrLists if not match with currList that save in browser's cookie
+                    if (initialCurrLists[0].targetCurr !== currCodeArray[0]) {
+                        // console.log("initialCurrLists: ", initialCurrLists)
+                        // console.log("currCodeArray: ", currCodeArray)
+                        const savedCurrLists = getCurrListsFromCookie(userId);
+                        // console.log("savedCurrLists: ", savedCurrLists)
+                        if (savedCurrLists !== null) {
+                            // console.log("setInitialCurrLists!!!")
+                            setInitialCurrLists(savedCurrLists);
+                        }
                     }
                 }
             }

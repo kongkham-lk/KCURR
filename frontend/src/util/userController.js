@@ -72,4 +72,21 @@ export async function getUserPreferences(userId) {
     } catch {
         console.log("Fail to get user preferece!!!")
     }
-};
+}
+
+// Save currList to Cookie is needed as whenever user set new theme, the initialCurrList will not be updated
+export async function saveCurrListsToCookie(userId, currLists) {
+    console.log("saveCurrListsToCookie: ", currLists)
+    localStorage.setItem(`currLists_${userId}`, JSON.stringify(currLists));
+}
+
+// Invoke to update the initialCurrList whenever user set new theme
+export function getCurrListsFromCookie(userId) {
+    const savedCurrLists = localStorage.getItem(`currLists_${userId}`);
+    console.log("check savedCurrLists: ", savedCurrLists)
+    // Check if savedData has any
+    if (savedCurrLists)
+        return JSON.parse(savedCurrLists);
+    else
+        return null;
+}
