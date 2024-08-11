@@ -37,10 +37,10 @@ export default function FinancialNews(props) {
 
     const handleAddNewsTopic = () => {
         // console.log("Set News!!!")
-        const newNewsTopicList = [...userPreference.newsCategories];
+        const newNewsTopicList = [...newsTopics];
         newNewsTopicList.push(tempTopic);
-        setTempTopic("")
         handleNewTopicsUpdate(newNewsTopicList);
+        setTempTopic("")
     }
 
     const handleInput = (e) => {
@@ -50,9 +50,8 @@ export default function FinancialNews(props) {
 
     const handleDelete = (index) => {
         // console.log("Set News!!!")
-        const newsTopics = [...userPreference.newsCategories];
-        newsTopics.splice(index, 1);
         const newNewsTopicList = [...newsTopics];
+        newNewsTopicList.splice(index, 1);
         handleNewTopicsUpdate(newNewsTopicList);
     }
 
