@@ -73,7 +73,7 @@
 }
 
 .clipPath {
-    clip-path: xywh(0 0 100% 100% round 0.5em);
+    clip-path: xywh(0px 2px 100% 95% round 0.8em);
 }
 
 /* .hoverCard:hover {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -16,22 +16,30 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { savePrefTheme } from '../hook/userController';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isDisplayMD, isOutLineTheme, onChangeTheme, currentUrl } = props;
-
+    const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
     const [mobileScreen, setMobileScreen] = useState(false);
     const [state, setState] = useState(isOutLineTheme);
 
-    const handleChange = (newState) => {
+    // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
+    const handleThemeUpdate = (newState) => {
         setState(newState);
-        onChangeTheme(newState);
+        const newTheme = newState === true ? "outlined" : 'elevation';
+        const newPreference = { ...userPreference };
+        newPreference.theme = newTheme;
+        console.log("Save new Theme!!!");
+        onThemeUpdate(newState);
+        savePrefTheme(userId, newTheme)
     };
 
+    // determined if it is on mobile screen
     const handleDrawerToggle = () => {
         setMobileScreen((horizontalScreen) => !horizontalScreen);
     };
 
+    // refresh webpage manually when the same link is clicked
     const handleRefreshPage = (link) => {
         if (link === currentUrl.pathname)
             window.location.reload();
@@ -77,7 +85,7 @@ export default function MainNav(props) {
                             <FormControlLabel
                                 sx={sxStyle.NonMargin}
                                 control={
-                                    <Switch checked={state.gilad} onChange={() => handleChange(!state)} defaultChecked />
+                                    <Switch checked={!state} onChange={() => handleThemeUpdate(!state)} />
                                 }
                             />
                         </FormControl>
@@ -106,7 +114,7 @@ export default function MainNav(props) {
                         navItems={navItems}
                         handleDrawerToggle={handleDrawerToggle}
                         isOutLineTheme={isOutLineTheme}
-                        onChangeTheme={onChangeTheme}
+                        onThemeUpdate={handleThemeUpdate}
                     />
                 </Drawer>
             </Box>
@@ -122,7 +130,7 @@ const navItems = [
     { label: 'Financial News', link: "/News" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTheme }) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate }) => {
 
     const Theme = {
         Outline: { name: 'outline', isOutline: true },
@@ -138,9 +146,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
         setAlignment(newAlignment);
 
         if (event.target.value === Theme.Outline.name)
-            onChangeTheme(Theme.Outline.isOutline);
+            onThemeUpdate(Theme.Outline.isOutline);
         else if (event.target.value === Theme.Elevate.name)
-            onChangeTheme(Theme.Elevate.isOutline);
+            onThemeUpdate(Theme.Elevate.isOutline);
     };
 
     const checkToggleDrawer = (event) => {
