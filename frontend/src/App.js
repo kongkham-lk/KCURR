@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
-import { getUserPreferences, getUserIdentifier } from './util/userController';
+import { getUserPreferences, getUserIdentifier } from './hook/userController.js';
 import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter.js';
 import { retrieveFinancialNews } from "./util/apiClient";
 
@@ -30,8 +30,7 @@ export default function App() {
     // Observation: When react state in App.js is updated, all the sub component's state also reset
     const currentPath = currentUrl.pathname.toLowerCase();
     const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
-    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference); // retrieved initial exchange rate table list
-
+    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
     const [newsListsRes, setNewsListsRes] = useState({});
 
     // Initialized userPreference
@@ -62,7 +61,7 @@ export default function App() {
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
         // setIsOutLineTheme(newTheme);
-        const newPref = { ...userPreference };
+        const newPref = await getUserPreferences(userId);
         newPref.theme = newTheme === true ? "outlined" : 'elevation';
         setUserPreference(newPref);
     }

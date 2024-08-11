@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import InputTextField from "../subComponents/InputTextField";
 import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
-import { savePrefNewsCategories } from "../../util/userController";
+import { savePrefNewsCategories } from "../../hook/userController";
 
 export default function FinancialNews(props) {
     const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
