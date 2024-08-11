@@ -137,13 +137,13 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
         Elevate: { name: 'elevate', isOutline: false },
     }
 
-    const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline.name : Theme.Elevate.name);
+    const [theme, setTheme] = useState(isOutLineTheme ? Theme.Outline.name : Theme.Elevate.name);
 
-    const handleChange = (event, newAlignment) => {
-        if (newAlignment === null || newAlignment === alignment)
+    const handleChange = (event, newTheme) => {
+        if (newTheme === null || newTheme === theme)
             return;
 
-        setAlignment(newAlignment);
+        setTheme(newTheme);
 
         if (event.target.value === Theme.Outline.name)
             onThemeUpdate(Theme.Outline.isOutline);
@@ -163,7 +163,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                     <Typography variant="overline" display="block" color='gray'>Theme</Typography>
                     <ToggleButtonGroup
                         color="primary"
-                        value={alignment}
+                        value={theme}
                         exclusive
                         onChange={handleChange}
                         aria-label="Platform"
