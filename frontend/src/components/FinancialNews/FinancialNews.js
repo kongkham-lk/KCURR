@@ -18,46 +18,45 @@ export default function FinancialNews(props) {
     const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
     // console.log("Load News!!! ", userPreference);
     const [isInitialLoad, setIsInitialLoad] = useState(true); // everytime theme is set, all the state seems to be reset.
-    const [newsLists, setNewsLists] = useState([...newsListsRes]);
-    const [tempTopic, setTempTopic] = useState("");
-    const [newsTopics, setNewsTopics] = useState([...userPreference.newsCategories]);
+    const [newsHeadlinesList, setNewsHeadlinesList] = useState([...newsListsRes]);
+    const [inputTrackerTopic, setInputTrackerTopic] = useState("");
+    const [newCategories, setNewCategories] = useState([...userPreference.newsCategories]);
 
     useEffect(() => {
         async function fetchNewsLists() {
             if (!isInitialLoad) { // Do not fetch new newsList if set new theme
-                const newsRes = await retrieveFinancialNews(newsTopics);
-                setNewsLists(newsRes.data);
+                const newsRes = await retrieveFinancialNews(newCategories);
+                setNewsHeadlinesList(newsRes.data);
             } else {
                 setIsInitialLoad(false);
             }
         }
         fetchNewsLists();
-    }, [isInitialLoad, newsTopics])
+    }, [isInitialLoad, newCategories])
 
 
     const handleAddNewsTopic = () => {
         // console.log("Set News!!!")
-        const newNewsTopicList = [...userPreference.newsCategories];
-        newNewsTopicList.push(tempTopic);
-        setTempTopic("")
+        const newNewsTopicList = [...newCategories];
+        newNewsTopicList.push(inputTrackerTopic);
         handleNewTopicsUpdate(newNewsTopicList);
+        setInputTrackerTopic("")
     }
 
     const handleInput = (e) => {
         const newTempInput = e.value;
-        setTempTopic(newTempInput);
+        setInputTrackerTopic(newTempInput);
     }
 
     const handleDelete = (index) => {
         // console.log("Set News!!!")
-        const newsTopics = [...userPreference.newsCategories];
-        newsTopics.splice(index, 1);
-        const newNewsTopicList = [...newsTopics];
+        const newNewsTopicList = [...newCategories];
+        newNewsTopicList.splice(index, 1);
         handleNewTopicsUpdate(newNewsTopicList);
     }
 
     const handleNewTopicsUpdate = (newNewsTopicList) => {
-        setNewsTopics(newNewsTopicList);
+        setNewCategories(newNewsTopicList);
         handleNewsCategoriesCookieUpdate(newNewsTopicList);
     }
 
@@ -68,7 +67,7 @@ export default function FinancialNews(props) {
 
     return (
         <div style={style.div}>
-            {newsLists.length > 0 ?
+            {newsHeadlinesList.length > 0 ?
                 <>
                     <div style={style.subDivHeading}>
                         <Typography
@@ -79,34 +78,19 @@ export default function FinancialNews(props) {
                         >
                             {isDisplaySM ? "News" : "Financial News"}
                         </Typography>
-                        {filter &&
-                            <div style={{
-                                ...style.subDivInputField.main,
-                                ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg)
-                            }}
-                            >
-                                <InputTextField
-                                    onConvertAmountUpdate={handleInput}
-                                    inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"}
-                                    size="small" displayInput={tempTopic}
-                                />
-                                <Button
-                                    variant="contained"
-                                    type="submit"
-                                    onClick={handleAddNewsTopic}
-                                    style={style.convertButton}
-                                >
-                                    Add
-                                </Button>
-                            </div>
-                        }
+                        {filter && <div style={{ ...style.subDivInputField.main, ...(isDisplaySM ? style.subDivInputField.sm : style.subDivInputField.lg) }}>
+                            <InputTextField onConvertAmountUpdate={handleInput} inputFieldLabel={isDisplaySM ? "Categories" : "Input Categories"} size="small" displayInput={inputTrackerTopic} />
+                            <Button variant="contained" type="submit" onClick={handleAddNewsTopic} style={style.convertButton} >
+                                Add
+                            </Button>
+                        </div>}
                     </div>
                     {filter && <Stack direction="row" style={style.Stack}>
-                        {(newsTopics)?.map((topic, index) => (
+                        {(newCategories)?.map((topic, index) => (
                             <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
                         ))}
                     </Stack>}
-                    {newsLists.map(news => {
+                    {newsHeadlinesList.map(news => {
                         return (
                             <Link
                                 key={news.title}
