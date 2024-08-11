@@ -317,7 +317,7 @@ export default function ExchangeRateTable(props) {
 
                                     return (
                                         <>
-                                            <TableRow className="clipPath" key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow, color: index === 0 ? "white" : "black" }} >
+                                            <TableRow className={userPreference.theme !== "outlined" && "clipPath"} key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow, color: index === 0 ? "white" : "black" }} >
                                                 {/* Currency Code and flag */}
                                                 <TableCell
                                                     component="th"
