@@ -2,7 +2,6 @@ import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
 import { LineChart } from '@mui/x-charts/LineChart';
 
-
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries = null } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data

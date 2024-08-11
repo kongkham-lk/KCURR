@@ -40,7 +40,7 @@ export default function FinancialNews(props) {
         const newNewsTopicList = [...newCategories];
         newNewsTopicList.push(inputTrackerTopic);
         handleNewTopicsUpdate(newNewsTopicList);
-        setInputTrackerTopic("")
+        setInputTrackerTopic("") // reset the input tracker, the textbox, after added the news category
     }
 
     const handleInput = (e) => {

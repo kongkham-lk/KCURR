@@ -11,19 +11,19 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Footer from './components/Footer';
 import { Box } from '@mui/material';
-import { getUserPreferences, getUserIdentifier } from './hook/userController.js';
-import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter.js';
+import { getUserPreferences, getUserIdentifier } from './hook/userController';
+import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter';
 import { retrieveFinancialNews } from "./util/apiClient";
 
 export default function App() {
     const userId = getUserIdentifier();
     const [userPreference, setUserPreference] = useState(null);
-
-    // console.log("APP() - userPreference: ", userPreference);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
+
+    // console.log("APP() - userPreference: ", userPreference);
 
     // retrieved initial data for live rate feature
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
@@ -59,7 +59,6 @@ export default function App() {
 
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
-        // setIsOutLineTheme(newTheme);
         const newPref = await getUserPreferences(userId);
         newPref.theme = newTheme === true ? "outlined" : 'elevation';
         setUserPreference(newPref);
