@@ -42,6 +42,7 @@ export default function ExchangeRateTable(props) {
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
+    const isDarkTheme = userPreference.theme === "dark";
 
     // Mui table's setting property
     const [order, setOrder] = useState('desc');
@@ -257,6 +258,9 @@ export default function ExchangeRateTable(props) {
         }
     };
 
+    const targetBaseColor = isDarkTheme ? baseColor.darkPrimary : baseColor.lightPrimary;
+    const targetWidth = isDisplaySM ? '17.5%' : '33.5%';
+
     return (
         <>
             {isReady && <Box sx={sxStyle.Box} >
@@ -317,14 +321,29 @@ export default function ExchangeRateTable(props) {
 
                                     return (
                                         <>
-                                            <TableRow className={userPreference.theme !== "outlined" && "clipPath"} key={targetCurrCode} height={'72.5px'} style={{ ...styleTableRow(targetCurrCode, defaultCurrCode), ...style.TableRow, color: index === 0 ? "white" : "black" }} >
+                                            <TableRow
+                                                className={userPreference.theme !== "outlined" && "clipPath"}
+                                                key={targetCurrCode}
+                                                height={'72.5px'}
+                                                style={{
+                                                    ...styleTableRow(targetCurrCode, defaultCurrCode),
+                                                    ...style.TableRow,
+                                                    color: index === 0 ? !isDarkTheme ? "white" : "black" : "black",
+                                                    backgroundColor: index === 0 && `#${targetBaseColor}`,
+                                                }}
+                                            >
                                                 {/* Currency Code and flag */}
                                                 <TableCell
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
                                                     onClick={() => handleSetDefaultCurr(targetCurrCode)}
-                                                    sx={{ ...commonStyle.paddingNone, ...style.TableCell, ...(index !== 0 && sxStyle.hoverButton.hover), color: "inherit" }}
+                                                    sx={{
+                                                        ...commonStyle.paddingNone,
+                                                        ...style.TableCell,
+                                                        ...(index !== 0 && sxStyle.hoverButton.hover),
+                                                        color: index === 0 && "inherit"
+                                                    }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton.main }}>
                                                         <Button
@@ -344,22 +363,31 @@ export default function ExchangeRateTable(props) {
                                                     </Box>
                                                 </TableCell>
                                                 {/* Currency rate change wrapper */}
-                                                <TableCell colSpan={isDisplaySM ? 2 : 3} sx={{ ...commonStyle.paddingNone, ...commonStyle.borderNone, ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover), color: "inherit" }} onClick={() => handleToggleFlags(index)} >
+                                                <TableCell
+                                                    colSpan={isDisplaySM ? 2 : 3}
+                                                    sx={{
+                                                        ...commonStyle.paddingNone,
+                                                        ...commonStyle.borderNone,
+                                                        ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverButton.hover),
+                                                        color: "inherit"
+                                                    }}
+                                                    onClick={() => handleToggleFlags(index)}
+                                                >
                                                     <Table>
                                                         <TableBody>
                                                             <TableRow>
                                                                 {/* Currency amount */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: isDisplaySM ? '17.5%' : '33.5%', color: index === 0 && "inherit" }} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: targetWidth, color: index === 0 && "inherit" }} >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
-                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
+                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: targetWidth }} >
                                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                                     </TableCell>
                                                                 }
                                                                 {/* Chart Cell */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: isDisplaySM ? '17.5%' : '33.5%' }} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: targetWidth }} >
                                                                     {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
                                                                             {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isChartFeatureEnable} />}
@@ -450,6 +478,12 @@ export default function ExchangeRateTable(props) {
             }
         </>
     );
+};
+
+const baseColor = {
+    lightPrimary: "1876d2",
+    darkPrimary: "90caf9",
+    white: "ffffff",
 };
 
 const commonStyle = {
