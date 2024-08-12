@@ -55,20 +55,20 @@ export default function App() {
     }));
 
     const MuiProps = {
-        ...(userPreference !== null ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
+        ...(userPreference !== null ? userPreference.theme === "color" ? elevationProps : outlinedProps : ""),
     }
 
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
         // setIsOutLineTheme(newTheme);
         const newPref = await getUserPreferences(userId);
-        newPref.theme = newTheme === true ? "outlined" : 'elevation';
+        newPref.theme = newTheme;
         setUserPreference(newPref);
     }
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme === "outlined" : "" },
+        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme !== "color" : "" },
         pref: { userId, userPreference, onThemeUpdate: handleThemeUpdate },
     }
 
@@ -79,12 +79,10 @@ export default function App() {
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
 
-    const isOutLineTheme = userPreference !== null && userPreference.theme === "outlined";
-
     return (
         <>
             {userPreference !== null &&
-                <ThemeProvider theme={lightTheme} >
+                <ThemeProvider theme={userPreference.theme === "dark" ? darkTheme : lightTheme} >
                     <div className="App" >
                         <MainNav {...attr.navBar} />
                         <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
