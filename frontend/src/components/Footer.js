@@ -11,7 +11,10 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AppBar from '@mui/material/AppBar';
 
 export default function Footer(props) {
-    const { isDisplaySM, isOutLineTheme } = props;
+    const { isDisplaySM, isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
+    const isLightTheme = userPreference.theme === "light";
+    const targetBaseColor = isOutLineTheme ? isLightTheme ? baseColor.lightPrimary : baseColor.darkPrimary : baseColor.white;
+
 
     return (
         <Box
@@ -21,7 +24,11 @@ export default function Footer(props) {
                 ...sxStyle.footerWrapper,
             }}
         >
-            <AppBar component="nav" sx={{ ...sxStyle.bringToTop, position: "relative", ...(isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate), }}>
+            <AppBar component="nav" position="relative" sx={{ 
+                ...(isOutLineTheme ?
+                    isLightTheme ? sxStyle.Theme.Outline.light
+                        : sxStyle.Theme.Outline.dark
+                    : sxStyle.Theme.Elevate) }}>
                 <Box sx={sxStyle.BoxSub}>
                     <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
                         <ListItem key="product" disablePadding>
@@ -34,11 +41,10 @@ export default function Footer(props) {
                                 <ListItem key={item.label} disablePadding sx={{ width: "fit-content" }} >
                                     <ListItemButton sx={{
                                         p: 0, '&:hover': {
-                                            borderLeft: "3px solid",
+                                            borderLeft: `3px solid #${targetBaseColor}`,
                                             margin: "0 0 0 -18px",
-                                            padding: "0 0 0 15px",
-                                            background: "none",
-                                            filter: "saturate(0.5) brightness(1.5)"
+                                            padding: "0 15px",
+                                            background: `none`,
                                         }
                                     }} href={item.link} >
                                         <Typography variant="overline">
@@ -51,13 +57,13 @@ export default function Footer(props) {
                         <ListItem key="toolAndResource" disablePadding>
                             <Stack direction="row" alignItems="center">
                                 <IconButton aria-label="github" size="large" sx={{ ml: -1.5 }} >
-                                    <GitHubIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                    <GitHubIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
                                 </IconButton>
                                 <IconButton aria-label="linkedin" size="large" >
-                                    <LinkedInIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                    <LinkedInIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
                                 </IconButton>
                                 <IconButton aria-label="instagram" size="large">
-                                    <InstagramIcon sx={{ color: !isOutLineTheme ? 'white' : `#${baseColor.main}` }} />
+                                    <InstagramIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
                                 </IconButton>
                             </Stack>
                         </ListItem>
@@ -74,8 +80,9 @@ export default function Footer(props) {
 };
 
 const baseColor = {
-    main: "1876d2",
-    sub: "1976d2"
+    lightPrimary: "1876d2",
+    darkPrimary: "90caf9",
+    white: "ffffff",
 };
 
 const navItems = [
@@ -88,9 +95,9 @@ const navItems = [
 const commonStyles = {
     navPageBorderBottom: {
         Elevate: { borderBottom: '4px solid white' },
-        Outline: { borderBottom: `4px solid #${baseColor.main}` },
+        Outline: { borderBottom: `4px solid #${baseColor.lightPrimary}` },
         ElevateHover: { borderBottom: '4px solid #ffffff99' },
-        OutlineHover: { borderBottom: `4px solid #${baseColor.main}55` },
+        OutlineHover: { borderBottom: `4px solid #${baseColor.lightPrimary}55` },
     },
     subNavPageMargin: { marginBottom: '11px' },
     alignItemsStretch: { display: 'flex', alignItems: 'stretch' },
@@ -114,25 +121,44 @@ const sxStyle = {
     Drawer: {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: `#${baseColor.sub}` },
+    BoxPopupSideBar: { color: `#${baseColor.lightPrimary}` },
     ListPopupSideBar: { mt: '36px' },
     ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
+    // Theme: {
+    //     Elevate: {
+    //         // color: 'white',
+    //         // background: `#${baseColor.main}`,
+    //         '& img': { filter: 'saturate(0) brightness(100)' },
+    //         '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
+    //         '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
+    //     },
+    //     Outline: {
+    //         color: `#${baseColor.main}`,
+    //         background: "white",
+    //         borderTop: `1.5px solid #${baseColor.main}55`
+    //     },
+    // },
     Theme: {
         Elevate: {
             // color: 'white',
-            // background: `#${baseColor.main}`,
             '& img': { filter: 'saturate(0) brightness(100)' },
-            '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
+            '& #navPage:hover': { borderBottom: `4px solid #${baseColor.white}99` },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
-            color: `#${baseColor.main}`,
-            background: "white",
-            borderTop: `1.5px solid #${baseColor.main}55`
+            light: {
+                color: `#${baseColor.lightPrimary}`,
+                background: `#${baseColor.white}`,
+                borderTop: `1.5px solid #${baseColor.lightPrimary}55`
+            },
+            dark: {
+                color: `#${baseColor.white}`,
+                background: `#${baseColor.dark}`,
+                borderTop: `1.5px solid #${baseColor.darkPrimary}55`
+            }
         },
     },
     themeSetter: { justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', margin: '2px -10px 0 0' },
-    bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
     FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
     NonMargin: { margin: '0px' },
     ListItemButton: {
