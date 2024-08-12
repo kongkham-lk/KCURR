@@ -7,14 +7,6 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const options = [
-    { iconType: 'light', label: 'Light' },
-    { iconType: 'color', label: 'Color' },
-    { iconType: 'dark', label: 'Dark' },
-];
-
-const ITEM_HEIGHT = 48;
-
 export default function ThemeSetter(props) {
     const { userPreference, onThemeUpdate } = props;
     const [theme, setTheme] = useState(userPreference.theme)
@@ -92,3 +84,11 @@ export default function ThemeSetter(props) {
         </div>
     );
 }
+
+const options = [
+    { iconType: 'light', label: 'Light' },
+    { iconType: 'color', label: 'Color' },
+    { iconType: 'dark', label: 'Dark' },
+];
+
+const ITEM_HEIGHT = 48;
