@@ -164,13 +164,14 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
     };
 
     const checkToggleDrawer = (newTheme) => {
-        const checkEachTargetTheme = obj => obj.iconType == newTheme;
-        if (!themeOptions.some(checkEachTargetTheme))
+        // console.log(newTheme)
+        // const checkEachTargetTheme = obj => obj.iconType == newTheme;
+        // if (!themeOptions.some(checkEachTargetTheme))
             handleDrawerToggle();
     }
 
     return (
-        <Box height={commonStyles.prop.fillAvailSpace}>
+        <Box onClick={checkToggleDrawer} height={commonStyles.prop.fillAvailSpace}>
             <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
                 <Box pt={1} px={3} pb={2.5} sx={{ ...sxStyle.FillAllWidth }}>
                     <Typography variant="overline" display="block" color='gray'>Theme</Typography>
@@ -183,7 +184,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                         sx={sxStyle.FillAllWidth}
                     >
                         {themeOptions.map((option) => (
-                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType} onClick={() => checkToggleDrawer(option.iconType)}>
+                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType}> {/* onClick={() => checkToggleDrawer(option.iconType)}> */}
                                 {getThemeIcon(option.iconType)}<span style={{ marginLeft: "10px" }}>{option.label}</span>
                             </ToggleButton>
                         ))}
