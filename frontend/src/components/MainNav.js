@@ -153,9 +153,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
     const handleChange = (event, newTheme) => {
         if (newTheme === null || newTheme === theme)
             return;
-
+        console.log("Save theme!!! ", newTheme)
         setTheme(newTheme);
-        onThemeUpdate(event.target.value);
+        onThemeUpdate(newTheme);
     };
 
     const checkToggleDrawer = (event) => {
