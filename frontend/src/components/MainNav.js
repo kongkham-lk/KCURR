@@ -15,7 +15,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { savePrefTheme } from '../hook/userController';
 import ThemeSetter from './subComponents/ThemeSetter';
-import { dark } from '@mui/material/styles/createPalette';
 
 export default function MainNav(props) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
@@ -120,6 +119,7 @@ export default function MainNav(props) {
                         handleDrawerToggle={handleDrawerToggle}
                         isOutLineTheme={isOutLineTheme}
                         onThemeUpdate={handleThemeUpdate}
+                        userPreference={userPreference}
                     />
                 </Drawer>
             </Box>
@@ -135,29 +135,32 @@ const navItems = [
     { label: 'Financial News', link: "/News" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate }) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
 
     const Theme = {
         Outline: { name: 'outline', isOutline: true },
         Elevate: { name: 'elevate', isOutline: false },
     }
 
-    const [theme, setTheme] = useState(isOutLineTheme ? Theme.Outline.name : Theme.Elevate.name);
+    const themeOptions = [
+        { iconType: 'color', label: 'Color' },
+        { iconType: 'light', label: 'Light' },
+        { iconType: 'dark', label: 'Dark' },
+    ];
+
+    const [theme, setTheme] = useState(userPreference.theme);
 
     const handleChange = (event, newTheme) => {
         if (newTheme === null || newTheme === theme)
             return;
 
         setTheme(newTheme);
-
-        if (event.target.value === Theme.Outline.name)
-            onThemeUpdate(Theme.Outline.isOutline);
-        else if (event.target.value === Theme.Elevate.name)
-            onThemeUpdate(Theme.Elevate.isOutline);
+        onThemeUpdate(event.target.value);
     };
 
     const checkToggleDrawer = (event) => {
-        if (event.target.value !== Theme.Outline.name && event.target.value !== Theme.Elevate.name)
+        const checkEachTargetTheme = obj => obj.iconType === event.target.value;
+        if (!themeOptions.some(checkEachTargetTheme))
             handleDrawerToggle();
     }
 
@@ -174,8 +177,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                         aria-label="Platform"
                         sx={sxStyle.FillAllWidth}
                     >
-                        <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
-                        <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
+                        {themeOptions.map((option) => (
+                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType}>{option.iconType}</ToggleButton>
+                        ))}
                     </ToggleButtonGroup>
                 </Box>
                 {navItems.map((item) => (
@@ -192,7 +196,6 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
 
 const baseColor = {
     lightPrimary: "1876d2",
-    lightPrimarySub: "1976d2",
     darkPrimary: "90caf9",
     white: "ffffff",
 };
@@ -229,7 +232,7 @@ const sxStyle = {
         display: { xs: 'block', sm: 'none' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: `#${baseColor.lightPrimarySub}` },
+    BoxPopupSideBar: { color: `#${baseColor.lightPrimary}` },
     ListPopupSideBar: { my: 8 },
     ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
     Theme: {
