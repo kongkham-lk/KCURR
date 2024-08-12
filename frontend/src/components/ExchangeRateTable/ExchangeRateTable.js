@@ -14,17 +14,17 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
-import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown.js';
-import EnhancedTableHead from './EnhancedTableHead.js';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getDayRangeDate, getMonthRangeDate } from '../../util/ExchangeRateTableDataUtil.js';
-import { checkIfExist } from '../../util/checkingMethods.js';
-import { createCurrLists } from '../../util/createCurrLists.js';
-import { getFlag } from '../../util/getFlag.js';
-import { retrieveExchangeRates } from '../../util/apiClient.js';
-import { LineGraph } from '../subComponents/LineGraph.js';
-import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel.js';
-import TransitionAppendChart from '../subComponents/TransitionAppendChart.js';
-import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController.js';
+import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
+import EnhancedTableHead from './EnhancedTableHead';
+import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getDayRangeDate, getMonthRangeDate } from '../../util/ExchangeRateTableDataUtil';
+import { checkIfExist } from '../../util/checkingMethods';
+import { createCurrLists } from '../../util/createCurrLists';
+import { getFlag } from '../../util/getFlag';
+import { retrieveExchangeRates } from '../../util/apiClient';
+import { LineGraph } from '../subComponents/LineGraph';
+import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
+import TransitionAppendChart from '../subComponents/TransitionAppendChart';
+import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
@@ -83,7 +83,7 @@ export default function ExchangeRateTable(props) {
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable]);
+    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
@@ -115,7 +115,6 @@ export default function ExchangeRateTable(props) {
         // Do nth if new default currency is not exist or already set as default currency
         if (targetCurrIndex > -1 && targetCurrIndex !== 0) {
             // console.log("Rearrage list!!!");
-
             // Copy the target currency to the front and construct the new array in one step
             const newCurrCodeArray = [
                 currCodeArray[targetCurrIndex],
