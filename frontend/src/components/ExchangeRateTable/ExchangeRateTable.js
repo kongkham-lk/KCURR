@@ -38,12 +38,6 @@ export default function ExchangeRateTable(props) {
     const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(initialCurrExchangeRates !== null ? [...initialCurrExchangeRates] : null); // consist of all the currCode exchange rate, 1 day range. Do not set anything if currently load feature page
     const [currLists, setCurrLists] = useState([...initialCurrLists]);
 
-    // Initialized flags
-    const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
-    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
-    const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
-    const isDarkTheme = userPreference.theme === "dark";
-
     // Mui table's setting property
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
@@ -58,6 +52,22 @@ export default function ExchangeRateTable(props) {
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
     const [dayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
     const [monthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
+
+    // Initialized flags
+    const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
+    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
+    const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
+    const isDarkTheme = userPreference.theme === "dark";
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+
+    const visibleRows = useMemo(
+        () =>
+            stableSort(currLists, getComparator(order, orderBy)).slice(
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage,
+            ),
+        [currLists, order, orderBy, page, rowsPerPage],
+    );
 
     useEffect(() => {
         if (isReady) {
@@ -163,17 +173,6 @@ export default function ExchangeRateTable(props) {
         // console.log("Timer trigger!!!")
         handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
-
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
-
-    const visibleRows = useMemo(
-        () =>
-            stableSort(currLists, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [currLists, order, orderBy, page, rowsPerPage],
-    );
 
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e);
