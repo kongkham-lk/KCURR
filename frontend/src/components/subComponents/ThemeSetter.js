@@ -8,8 +8,8 @@ import ContrastIcon from '@mui/icons-material/Contrast';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const options = [
-    { iconType: 'color', label: 'Color' },
     { iconType: 'light', label: 'Light' },
+    { iconType: 'color', label: 'Color' },
     { iconType: 'dark', label: 'Dark' },
 ];
 
@@ -20,8 +20,6 @@ export default function ThemeSetter(props) {
     const [theme, setTheme] = useState(userPreference.theme)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-
-    console.log("theme: ", theme)
 
     useEffect(() => {
 
@@ -49,9 +47,9 @@ export default function ThemeSetter(props) {
         onThemeUpdate(newTheme.iconType);
         setTheme(newTheme.iconType);
     }
-console.log(theme)
+    
     const sxStyle = {
-        mainTheme: { width: "30px", height: "30px", color: theme === "light" ? "" : "white", },
+        mainTheme: { color: theme === "light" ? "" : "white", },
     }
 
     return (

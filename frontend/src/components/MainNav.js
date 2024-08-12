@@ -15,6 +15,9 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { savePrefTheme } from '../hook/userController';
 import ThemeSetter from './subComponents/ThemeSetter';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import ContrastIcon from '@mui/icons-material/Contrast';
 
 export default function MainNav(props) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
@@ -23,13 +26,11 @@ export default function MainNav(props) {
     const isLightTheme = state === "light";
 
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
-    const handleThemeUpdate = (newState) => {
+    const handleThemeUpdate = async (newState) => {
         setState(newState);
-        const newPreference = { ...userPreference };
-        newPreference.theme = newState;
-        console.log("Save new Theme!!!");
+        console.log("Save new Theme!!!", newState);
         onThemeUpdate(newState);
-        savePrefTheme(userId, newState)
+        await savePrefTheme(userId, newState);
     };
 
     // determined if it is on mobile screen
@@ -137,16 +138,20 @@ const navItems = [
 
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
 
-    const Theme = {
-        Outline: { name: 'outline', isOutline: true },
-        Elevate: { name: 'elevate', isOutline: false },
-    }
-
     const themeOptions = [
-        { iconType: 'color', label: 'Color' },
         { iconType: 'light', label: 'Light' },
+        { iconType: 'color', label: 'Color' },
         { iconType: 'dark', label: 'Dark' },
     ];
+
+    const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
+        if (targetTheme === "light")
+            return <LightModeIcon sx={styling} color={isPrimary ? "primary" : ""} />
+        else if (targetTheme === "dark")
+            return <DarkModeIcon sx={styling} />
+        else
+            return <ContrastIcon sx={styling} />
+    }
 
     const [theme, setTheme] = useState(userPreference.theme);
 
@@ -178,7 +183,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                         sx={sxStyle.FillAllWidth}
                     >
                         {themeOptions.map((option) => (
-                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType}>{option.iconType}</ToggleButton>
+                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType}>
+                                {getThemeIcon(option.iconType)}<span style={{ marginLeft: "10px" }}>{option.label}</span>
+                            </ToggleButton>
                         ))}
                     </ToggleButtonGroup>
                 </Box>
