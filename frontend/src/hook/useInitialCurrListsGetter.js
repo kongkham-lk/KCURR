@@ -25,33 +25,36 @@ export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, da
     useEffect(
         function fetchData() {
             async function fetchCurrApiData() {
-                if (initialCurrLists.length === 0) {
-                    // This will be triggered whenever the page is refreshed
-                    try {
-                        const currLists = [];
-                        // console.log("defaultCurr: ", defaultCurr)
-                        const currExchangeRates = isFeatureDisplay ? null : await fetchExchangeRatesDayRange(defaultCurr);
-                        // console.log("currExchangeRates: ", currExchangeRates)
-                        console.log("    >>> createCurrLists!!!")
-                        for (let i in currCodeArray) {
-                            currLists[i] = await createCurrLists(defaultCurr, currCodeArray[i], currExchangeRates, dayRange, isFeatureDisplay)
+                if (currCodeArray !== null) {
+                    if (initialCurrLists.length === 0) {
+                        // This will be triggered whenever the page is refreshed
+                        try {
+                            const currLists = [];
+                            // console.log("defaultCurr: ", defaultCurr)
+                            const currExchangeRates = isFeatureDisplay ? null : await fetchExchangeRatesDayRange(defaultCurr);
+                            // console.log("currExchangeRates: ", currExchangeRates)
+                            console.log("    >>> createCurrLists!!! ", currCodeArray)
+                            for (let i in currCodeArray) {
+                                currLists[i] = await createCurrLists(defaultCurr, currCodeArray[i], currExchangeRates, dayRange, isFeatureDisplay)
+                            }
+                            console.log(currLists);
+                            setInitialCurrExchangeRates(currExchangeRates);
+                            setInitialCurrLists(currLists);
+                            setIsReady(true);
+                        } catch (e) {
+                            console.log(e.stack);
                         }
-                        setInitialCurrExchangeRates(currExchangeRates);
-                        setInitialCurrLists(currLists);
-                        setIsReady(true);
-                    } catch (e) {
-                        console.log(e.stack);
-                    }
-                } else {
-                    // Update initialCurrLists if not match with currList that save in browser's cookie
-                    if (initialCurrLists[0].targetCurr !== currCodeArray[0]) {
-                        // console.log("initialCurrLists: ", initialCurrLists)
-                        // console.log("currCodeArray: ", currCodeArray)
-                        const savedCurrLists = getCurrListsFromCookie(userId);
-                        // console.log("savedCurrLists: ", savedCurrLists)
-                        if (savedCurrLists !== null) {
-                            // console.log("setInitialCurrLists!!!")
-                            setInitialCurrLists(savedCurrLists);
+                    } else {
+                        // Update initialCurrLists if not match with currList that save in browser's cookie
+                        if (initialCurrLists[0].targetCurr !== currCodeArray[0]) {
+                            // console.log("initialCurrLists: ", initialCurrLists)
+                            // console.log("currCodeArray: ", currCodeArray)
+                            const savedCurrLists = getCurrListsFromCookie(userId);
+                            // console.log("savedCurrLists: ", savedCurrLists)
+                            if (savedCurrLists !== null) {
+                                // console.log("setInitialCurrLists!!!")
+                                setInitialCurrLists(savedCurrLists);
+                            }
                         }
                     }
                 }
