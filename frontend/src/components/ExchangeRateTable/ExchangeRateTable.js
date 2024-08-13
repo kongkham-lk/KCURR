@@ -25,6 +25,7 @@ import { LineGraph } from '../subComponents/LineGraph';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
+import { getBaseColor } from '../../util/globalVariable';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
@@ -256,9 +257,6 @@ export default function ExchangeRateTable(props) {
         }
     };
 
-    const targetBaseColor = isDarkTheme ? baseColor.darkPrimary : baseColor.lightPrimary;
-    const targetWidth = isDisplaySM ? '17.5%' : '33.5%';
-
     return (
         <>
             {isReady && <Box sx={sxStyle.Box} >
@@ -270,19 +268,19 @@ export default function ExchangeRateTable(props) {
                             id="tableTitle"
                             component="div"
                         >
-                            {isDisplaySM ? "Live Rates" : "Live Exchange Rates"}
+                            {getTargetPros(isDisplaySM).displayText}
                         </Typography>
                         {!isDisplaySM &&
-                            <Tooltip title="Reset Filter" style={{ margin: isDisplaySM ? "0px" : "16px" }} onClick={handleResetFilter}>
+                            <Tooltip title="Reset Filter" style={{ margin: getTargetPros(isDisplaySM).margin }} onClick={handleResetFilter}>
                                 <IconButton>
                                     <FilterListOffIcon />
                                 </IconButton>
                             </Tooltip>
                         }
                     </div>
-                    <TableContainer style={isDisplaySM ? { margin: "0" } : style.NoGapTableContainer}>
+                    <TableContainer style={isDisplaySM ? style.marginNone : style.NoGapTableContainer}>
                         <Table
-                            sx={isDisplaySM ? { whiteSpace: "nowrap", padding: "0" } : sxStyle.Table}
+                            sx={isDisplaySM ? sxStyle.Table.sm : sxStyle.Table.lg}
                             aria-labelledby="tableTitle"
                             size='medium'
                         >
@@ -326,8 +324,8 @@ export default function ExchangeRateTable(props) {
                                                 style={{
                                                     ...styleTableRow(targetCurrCode, defaultCurrCode),
                                                     ...style.TableRow,
-                                                    color: index === 0 ? !isDarkTheme ? "white" : "black" : "black",
-                                                    backgroundColor: index === 0 && `#${targetBaseColor}`,
+                                                    color: getTargetPros(index === 0 && !isDarkTheme).colorChrome,
+                                                    backgroundColor: index === 0 && `#${getTargetPros(isDarkTheme).baseColor}`,
                                                 }}
                                             >
                                                 {/* Currency Code and flag */}
@@ -340,7 +338,7 @@ export default function ExchangeRateTable(props) {
                                                         ...commonStyle.paddingNone,
                                                         ...style.TableCell,
                                                         ...(index !== 0 && sxStyle.hoverButton.hover),
-                                                        color: index === 0 && "inherit"
+                                                        color: getTargetPros(index === 0).colorInherit,
                                                     }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton.main }}>
@@ -375,21 +373,28 @@ export default function ExchangeRateTable(props) {
                                                         <TableBody>
                                                             <TableRow>
                                                                 {/* Currency amount */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: targetWidth, color: index === 0 && "inherit" }} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM, false), width: getTargetPros(isDisplaySM).width, color: getTargetPros(index === 0).colorInherit }} >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
-                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: targetWidth }} >
+                                                                    <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: getTargetPros(isDisplaySM).width }} >
                                                                         {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                                     </TableCell>
                                                                 }
                                                                 {/* Chart Cell */}
-                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: targetWidth }} >
+                                                                <TableCell align="right" style={{ ...styleTableCell(currList, isDisplaySM), width: getTargetPros(isDisplaySM).width }} >
                                                                     {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
                                                                             {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isChartFeatureEnable} />}
-                                                                        </div> : <Button variant="text" size="small" sx={{ padding: 0, float: 'right', color: index === 0 && 'transparent' }}>View Chart</Button>
+                                                                        </div> :
+                                                                        <Button
+                                                                            variant="text"
+                                                                            size="small"
+                                                                            sx={{ padding: 0, float: 'right', color: getTargetPros(index === 0).colorNone }}
+                                                                        >
+                                                                            View Chart
+                                                                        </Button>
                                                                     }
                                                                 </TableCell>
                                                             </TableRow>
@@ -443,7 +448,7 @@ export default function ExchangeRateTable(props) {
                                 page={page}
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
-                                labelRowsPerPage={isDisplaySM ? "Rows:" : "Rows per page:"}
+                                labelRowsPerPage={getTargetPros(isDisplaySM).labelRowsPerPage}
                                 sx={{ ...(isDisplaySM && sxStyle.Pageination) }}
                             />
                             {!isDisplayMD &&
@@ -455,7 +460,7 @@ export default function ExchangeRateTable(props) {
                             }
                         </Box>
                         {isDisplayMD &&
-                            <Box sx={{ ...sxStyle.progressBarContainer, justifyContent: isDisplaySM ? 'space-between' : 'flex-end' }}>
+                            <Box sx={{ ...sxStyle.progressBarContainer, justifyContent: getTargetPros(isDisplaySM).justifyContent }}>
                                 {isDisplaySM &&
                                     <CurrCountriesDropDown
                                         sxStyle={isDisplaySM ? sxStyle.CurrCountriesDropDown.sm : sxStyle.CurrCountriesDropDown.lg}
@@ -478,11 +483,21 @@ export default function ExchangeRateTable(props) {
     );
 };
 
-const baseColor = {
-    lightPrimary: "1876d2",
-    darkPrimary: "90caf9",
-    white: "ffffff",
-};
+const baseColor = getBaseColor();
+
+const getTargetPros = (isChecked) => {
+    return {
+        baseColor: isChecked ? baseColor.darkPrimary : baseColor.lightPrimary,
+        width: isChecked ? '17.5%' : '33.5%',
+        margin: isChecked ? "0px" : "16px",
+        displayText: isChecked ? "Live Rates" : "Live Exchange Rates",
+        justifyContent: isChecked ? 'space-between' : 'flex-end',
+        labelRowsPerPage: isChecked ? "Rows:" : "Rows per page:",
+        colorChrome: isChecked ? "white" : "black",
+        colorNone: isChecked && "inherit",
+        colorInherit: isChecked && 'transparent',
+    }
+}
 
 const commonStyle = {
     paddingNone: { padding: '0px' },
@@ -501,6 +516,7 @@ const style = {
     Tooltip: { margin: "16px" },
     PaperDiv: { display: "flex" },
     NoGapTableContainer: { marginTop: "-15px" },
+    marginNone: { marginTop: "-15px" },
     TableRow: { width: "100%", whiteSpace: "nowrap", transform: 'translate(0)' },
     TableCell: {
         lg: { width: "20%", ...commonStyle.borderNone },
@@ -511,7 +527,10 @@ const style = {
 const sxStyle = {
     Box: { width: 1, overflowY: "auto" },
     Paper: { width: 1, boxShadow: "none", backgroundColor: 'inherit', backgroundImage: "none" },
-    Table: { minWidth: 450 },
+    Table: {
+        lg: { minWidth: 450 },
+        sm: { whiteSpace: "nowrap", padding: "0" },
+    },
     TableBody: { width: 1 },
     CurrCountriesDropDown: {
         lg: { minWidth: 150, width: 170, },

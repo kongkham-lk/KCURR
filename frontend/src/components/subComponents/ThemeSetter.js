@@ -6,6 +6,7 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getThemeOptions } from '../../util/globalVariable';
 
 export default function ThemeSetter(props) {
     const { userPreference, onThemeUpdate } = props;
@@ -75,7 +76,7 @@ export default function ThemeSetter(props) {
                 <MenuItem key="Back" onClick={handleClose}>
                     <ArrowBackIcon /> <span style={{ marginLeft: "10px" }}>Back</span>
                 </MenuItem>
-                {options.map((option) => (
+                {themeOptions.map((option) => (
                     <MenuItem key={option.iconType} selected={option.iconType.toLowerCase() === theme} onClick={() => handleThemeUpdate(option)}>
                         {getThemeIcon(option.iconType)} <span style={{ marginLeft: "10px" }}>{option.label}</span>
                     </MenuItem>
@@ -85,10 +86,6 @@ export default function ThemeSetter(props) {
     );
 }
 
-const options = [
-    { iconType: 'light', label: 'Light' },
-    { iconType: 'color', label: 'Color' },
-    { iconType: 'dark', label: 'Dark' },
-];
+const themeOptions = getThemeOptions();
 
 const ITEM_HEIGHT = 48;

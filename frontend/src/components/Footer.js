@@ -9,13 +9,13 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AppBar from '@mui/material/AppBar';
+import { getBaseColor, getTargetBaseColor } from '../util/globalVariable';
 
 export default function Footer(props) {
-    const { isDisplaySM, isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
+    const { isDisplaySM, isOutLineTheme, userPreference } = props;
     const isLightTheme = userPreference.theme === "light";
-    const targetBaseColor = isOutLineTheme ? isLightTheme ? baseColor.lightPrimary : baseColor.darkPrimary : baseColor.white;
-
-
+    const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
+    
     return (
         <Box
             display='flex'
@@ -24,11 +24,12 @@ export default function Footer(props) {
                 ...sxStyle.footerWrapper,
             }}
         >
-            <AppBar component="nav" position="relative" sx={{ 
+            <AppBar component="nav" position="relative" sx={{
                 ...(isOutLineTheme ?
                     isLightTheme ? sxStyle.Theme.Outline.light
                         : sxStyle.Theme.Outline.dark
-                    : sxStyle.Theme.Elevate) }}>
+                    : sxStyle.Theme.Elevate)
+            }}>
                 <Box sx={sxStyle.BoxSub}>
                     <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
                         <ListItem key="product" disablePadding>
@@ -79,11 +80,7 @@ export default function Footer(props) {
     );
 };
 
-const baseColor = {
-    lightPrimary: "1876d2",
-    darkPrimary: "90caf9",
-    white: "ffffff",
-};
+const baseColor =  getBaseColor();
 
 const navItems = [
     { label: 'Dashboard', link: "/" },
@@ -124,23 +121,8 @@ const sxStyle = {
     BoxPopupSideBar: { color: `#${baseColor.lightPrimary}` },
     ListPopupSideBar: { mt: '36px' },
     ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
-    // Theme: {
-    //     Elevate: {
-    //         // color: 'white',
-    //         // background: `#${baseColor.main}`,
-    //         '& img': { filter: 'saturate(0) brightness(100)' },
-    //         '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
-    //         '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
-    //     },
-    //     Outline: {
-    //         color: `#${baseColor.main}`,
-    //         background: "white",
-    //         borderTop: `1.5px solid #${baseColor.main}55`
-    //     },
-    // },
     Theme: {
         Elevate: {
-            // color: 'white',
             '& img': { filter: 'saturate(0) brightness(100)' },
             '& #navPage:hover': { borderBottom: `4px solid #${baseColor.white}99` },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },

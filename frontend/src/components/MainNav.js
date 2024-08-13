@@ -18,6 +18,7 @@ import ThemeSetter from './subComponents/ThemeSetter';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ContrastIcon from '@mui/icons-material/Contrast';
+import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
 
 export default function MainNav(props) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
@@ -44,7 +45,7 @@ export default function MainNav(props) {
             window.location.reload();
     }
 
-    const targetBaseColor = isOutLineTheme ? isLightTheme ? baseColor.lightPrimary : baseColor.darkPrimary : 'baseColor.white';
+    const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
 
     return (
         <Box
@@ -138,11 +139,7 @@ const navItems = [
 
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
 
-    const themeOptions = [
-        { iconType: 'light', label: 'Light' },
-        { iconType: 'color', label: 'Color' },
-        { iconType: 'dark', label: 'Dark' },
-    ];
+    const themeOptions = getThemeOptions();
 
     const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
         if (targetTheme === "light")
@@ -202,11 +199,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
     )
 };
 
-const baseColor = {
-    lightPrimary: "1876d2",
-    darkPrimary: "90caf9",
-    white: "ffffff",
-};
+const baseColor = getBaseColor();
 
 const embbedLogo = {
     link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.lightPrimary}/currency-exchange.png`,
