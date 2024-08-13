@@ -494,8 +494,8 @@ const getTargetPros = (isChecked) => {
         justifyContent: isChecked ? 'space-between' : 'flex-end',
         labelRowsPerPage: isChecked ? "Rows:" : "Rows per page:",
         colorChrome: isChecked ? "white" : "black",
-        colorNone: isChecked && "inherit",
-        colorInherit: isChecked && 'transparent',
+        colorInherit: isChecked && "inherit",
+        colorNone: isChecked && 'transparent',
     }
 }
 
