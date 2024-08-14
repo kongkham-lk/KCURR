@@ -3,6 +3,7 @@ export function getBaseColor() {
         lightPrimary: "1876d2",
         darkPrimary: "90caf9",
         white: "ffffff",
+        black: "272727",
     }
 };
 
