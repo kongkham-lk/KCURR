@@ -54,7 +54,7 @@ export default function ThemeSetter(props) {
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
-                iconStyle={sxStyle.mainTheme}
+                iconstyle={sxStyle.mainTheme}
             >
                 {getThemeIcon(theme, sxStyle.mainTheme, true)}
             </IconButton>

@@ -181,7 +181,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                         sx={sxStyle.FillAllWidth}
                     >
                         {themeOptions.map((option) => (
-                            <ToggleButton sx={sxStyle.FillAllWidth} value={option.iconType}> {/* onClick={() => checkToggleDrawer(option.iconType)}> */}
+                            <ToggleButton key={option.iconType} sx={sxStyle.FillAllWidth} value={option.iconType}> {/* onClick={() => checkToggleDrawer(option.iconType)}> */}
                                 {getThemeIcon(option.iconType)}<span style={{ marginLeft: "10px" }}>{option.label}</span>
                             </ToggleButton>
                         ))}

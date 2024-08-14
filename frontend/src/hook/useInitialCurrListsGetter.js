@@ -33,11 +33,10 @@ export default function useInitialCurrListsGetter(defaultCurr, currCodeArray, da
                             // console.log("defaultCurr: ", defaultCurr)
                             const currExchangeRates = isFeatureDisplay ? null : await fetchExchangeRatesDayRange(defaultCurr);
                             // console.log("currExchangeRates: ", currExchangeRates)
-                            console.log("    >>> createCurrLists!!! ", currCodeArray)
+                            // console.log("    >>> createCurrLists!!! ", currCodeArray)
                             for (let i in currCodeArray) {
                                 currLists[i] = await createCurrLists(defaultCurr, currCodeArray[i], currExchangeRates, dayRange, isFeatureDisplay)
                             }
-                            console.log(currLists);
                             setInitialCurrExchangeRates(currExchangeRates);
                             setInitialCurrLists(currLists);
                             setIsReady(true);
