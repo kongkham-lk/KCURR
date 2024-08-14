@@ -1,9 +1,11 @@
 export function getBaseColor() {
     return {
-        lightPrimary: "1876d2",
-        darkPrimary: "90caf9",
-        white: "ffffff",
-        black: "272727",
+        lightPrimary: "#1876d2",
+        darkPrimary: "#90caf9",
+        white: "#ffffff",
+        black: "#272727",
+        greyLight: "#bdbdbd",
+        greyDark: "#9e9e9e"
     }
 };
 

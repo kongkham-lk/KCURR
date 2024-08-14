@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+// import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getThemeOptions } from '../../util/globalVariable';
+import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
+import { getBaseColor, getThemeOptions } from '../../util/globalVariable';
 
 export default function ThemeSetter(props) {
     const { userPreference, onThemeUpdate } = props;
     const [theme, setTheme] = useState(userPreference.theme)
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const isDarkTheme = userPreference.theme === "dark";
+    const targetGrey = !isDarkTheme ? baseColor.greyDark : baseColor.greyLight;
+
 
     useEffect(() => {
 
@@ -28,11 +32,11 @@ export default function ThemeSetter(props) {
 
     const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
         if (targetTheme === "light")
-            return <LightModeIcon sx={styling} color={isPrimary ? "primary" : ""}/>
+            return <LightModeOutlinedIcon fontSize="smaller" sx={styling} color={isPrimary ? "primary" : ""} />
         else if (targetTheme === "dark")
-            return <DarkModeIcon sx={styling} />
+            return <DarkModeOutlinedIcon fontSize="smaller" sx={styling} />
         else
-            return <ContrastIcon sx={styling} />
+            return <ContrastIcon fontSize="smaller" sx={styling} />
     }
 
     const handleThemeUpdate = (newTheme) => {
@@ -40,7 +44,7 @@ export default function ThemeSetter(props) {
         onThemeUpdate(newTheme.iconType);
         setTheme(newTheme.iconType);
     }
-    
+
     const sxStyle = {
         mainTheme: { color: theme === "light" ? "" : "white", },
     }
@@ -67,14 +71,16 @@ export default function ThemeSetter(props) {
                 open={open}
                 onClose={handleClose}
                 PaperProps={{
-                    style: {
+                    sx: {
                         maxHeight: ITEM_HEIGHT * 4.5,
-                        // width: '20ch',
+                        width: '15ch',
+                        p: 1,
+                        '& ul': {p: 0}
                     },
                 }}
             >
                 <MenuItem key="Back" onClick={handleClose}>
-                    <ArrowBackIcon /> <span style={{ marginLeft: "10px" }}>Back</span>
+                    <ArrowBackIosOutlinedIcon fontSize="smaller" sx={{ color: targetGrey }} /> <span style={{ marginLeft: "10px", color: targetGrey }}>Back</span>
                 </MenuItem>
                 {themeOptions.map((option) => (
                     <MenuItem key={option.iconType} selected={option.iconType.toLowerCase() === theme} onClick={() => handleThemeUpdate(option)}>
@@ -87,5 +93,6 @@ export default function ThemeSetter(props) {
 }
 
 const themeOptions = getThemeOptions();
+const baseColor = getBaseColor();
 
 const ITEM_HEIGHT = 48;

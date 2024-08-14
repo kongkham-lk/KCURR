@@ -15,8 +15,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { savePrefTheme } from '../hook/userController';
 import ThemeSetter from './subComponents/ThemeSetter';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
 
@@ -143,9 +143,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
 
     const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
         if (targetTheme === "light")
-            return <LightModeIcon sx={styling} color={isPrimary ? "primary" : ""} />
+            return <LightModeOutlinedIcon sx={styling} color={isPrimary ? "primary" : ""} />
         else if (targetTheme === "dark")
-            return <DarkModeIcon sx={styling} />
+            return <DarkModeOutlinedIcon sx={styling} />
         else
             return <ContrastIcon sx={styling} />
     }
@@ -202,7 +202,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
 const baseColor = getBaseColor();
 
 const embbedLogo = {
-    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.lightPrimary}/currency-exchange.png`,
+    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.lightPrimary.substring(1)}/currency-exchange.png`,
     alt: "KCURR App Logo",
 };
 
@@ -233,28 +233,28 @@ const sxStyle = {
         display: { xs: 'block', sm: 'none' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: `#${baseColor.lightPrimary}` },
+    BoxPopupSideBar: { color: baseColor.lightPrimary },
     ListPopupSideBar: { my: 8 },
     ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
     Theme: {
         Elevate: {
-            color: 'white',
+            color: baseColor.white,
             '& img': { filter: 'saturate(0) brightness(100)' },
-            '& #navPage:hover': { borderBottom: `4px solid #${baseColor.white}99` },
+            '& #navPage:hover': { borderBottom: `4px solid ${baseColor.white}99` },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
             light: {
                 ...mainOutlineStyle,
-                '& nav': { color: `#${baseColor.lightPrimary}`, boxShadow: 'none' },
-                '& #subNav': { borderBottom: `1.5px solid #${baseColor.lightPrimary}55`, ...commonStyles.alignItemsStretch },
-                '& #navPage:hover': { borderBottom: `4px solid #${baseColor.lightPrimary}55` },
+                '& nav': { color: baseColor.lightPrimary, boxShadow: 'none' },
+                '& #subNav': { borderBottom: `1.5px solid ${baseColor.lightPrimary}55`, ...commonStyles.alignItemsStretch },
+                '& #navPage:hover': { borderBottom: `4px solid ${baseColor.lightPrimary}55` },
             },
             dark: {
                 ...mainOutlineStyle,
-                '& nav': { color: "white", boxShadow: 'none' },
-                '& #subNav': { borderBottom: `1.5px solid #${baseColor.darkPrimary}55`, ...commonStyles.alignItemsStretch },
-                '& #navPage:hover': { borderBottom: `4px solid #${baseColor.darkPrimary}55` },
+                '& nav': { color: baseColor.white, boxShadow: 'none' },
+                '& #subNav': { borderBottom: `1.5px solid ${baseColor.darkPrimary}55`, ...commonStyles.alignItemsStretch },
+                '& #navPage:hover': { borderBottom: `4px solid ${baseColor.darkPrimary}55` },
             }
         },
     },

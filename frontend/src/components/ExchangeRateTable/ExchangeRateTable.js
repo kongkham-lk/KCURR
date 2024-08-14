@@ -524,7 +524,7 @@ const getTargetPros = (isChecked) => {
     return {
         displayText: isChecked ? "Live Rates" : "Live Exchange Rates",
         labelRowsPerPage: isChecked ? "Rows:" : "Rows per page:",
-        baseColor: { backgroundColor: `#${isChecked ? baseColor.darkPrimary : baseColor.lightPrimary}` },
+        baseColor: { backgroundColor: isChecked ? baseColor.darkPrimary : baseColor.lightPrimary },
         colorChrome: { color: isChecked ? "white" : "black" },
         width: { width: isChecked ? '17.5%' : '33.5%' },
         margin: { margin: isChecked ? "0px" : "16px" },
@@ -533,7 +533,6 @@ const getTargetPros = (isChecked) => {
         hoverOverride: {
             '&:hover': {
                 background: '#9fbee354', margin: '0.5px', transition: 'background 0.6s',
-                outline: `1px solid #${isChecked ? baseColor.dark : baseColor.white}`,
             }
         },
     }

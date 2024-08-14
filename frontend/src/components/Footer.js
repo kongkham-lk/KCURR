@@ -42,7 +42,7 @@ export default function Footer(props) {
                                 <ListItem key={item.label} disablePadding sx={{ width: "fit-content" }} >
                                     <ListItemButton sx={{
                                         p: 0, '&:hover': {
-                                            borderLeft: `3px solid #${targetBaseColor}`,
+                                            borderLeft: `3px solid ${targetBaseColor}`,
                                             margin: "0 0 0 -18px",
                                             padding: "0 15px",
                                             background: `none`,
@@ -58,13 +58,13 @@ export default function Footer(props) {
                         <ListItem key="toolAndResource" disablePadding>
                             <Stack direction="row" alignItems="center">
                                 <IconButton aria-label="github" size="large" sx={{ ml: -1.5 }} >
-                                    <GitHubIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
+                                    <GitHubIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
                                 <IconButton aria-label="linkedin" size="large" >
-                                    <LinkedInIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
+                                    <LinkedInIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
                                 <IconButton aria-label="instagram" size="large">
-                                    <InstagramIcon sx={{ color: !isLightTheme ? 'white' : `#${baseColor.lightPrimary}` }} />
+                                    <InstagramIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
                             </Stack>
                         </ListItem>
@@ -91,10 +91,10 @@ const navItems = [
 
 const commonStyles = {
     navPageBorderBottom: {
-        Elevate: { borderBottom: '4px solid white' },
-        Outline: { borderBottom: `4px solid #${baseColor.lightPrimary}` },
-        ElevateHover: { borderBottom: '4px solid #ffffff99' },
-        OutlineHover: { borderBottom: `4px solid #${baseColor.lightPrimary}55` },
+        Elevate: { borderBottom: `4px solid ${baseColor.white}` },
+        Outline: { borderBottom: `4px solid ${baseColor.lightPrimary}` },
+        ElevateHover: { borderBottom: `4px solid ${baseColor.white}99` },
+        OutlineHover: { borderBottom: `4px solid ${baseColor.lightPrimary}55` },
     },
     subNavPageMargin: { marginBottom: '11px' },
     alignItemsStretch: { display: 'flex', alignItems: 'stretch' },
@@ -118,25 +118,25 @@ const sxStyle = {
     Drawer: {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: `#${baseColor.lightPrimary}` },
+    BoxPopupSideBar: { color: baseColor.lightPrimary },
     ListPopupSideBar: { mt: '36px' },
     ListItemButtonPopupSideBar: { textAlign: 'left', margin: "0px 20px", py: 0 },
     Theme: {
         Elevate: {
             '& img': { filter: 'saturate(0) brightness(100)' },
-            '& #navPage:hover': { borderBottom: `4px solid #${baseColor.white}99` },
+            '& #navPage:hover': { borderBottom: `4px solid ${baseColor.white}99` },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
             light: {
-                color: `#${baseColor.lightPrimary}`,
-                background: `#${baseColor.white}`,
-                borderTop: `1.5px solid #${baseColor.lightPrimary}55`
+                color: baseColor.lightPrimary,
+                background: baseColor.white,
+                borderTop: `1.5px solid ${baseColor.lightPrimary}55`
             },
             dark: {
-                color: `#${baseColor.white}`,
-                background: `#${baseColor.dark}`,
-                borderTop: `1.5px solid #${baseColor.darkPrimary}55`
+                color: baseColor.white,
+                background: baseColor.dark,
+                borderTop: `1.5px solid ${baseColor.darkPrimary}55`
             }
         },
     },

@@ -78,10 +78,13 @@ export default function App() {
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
 
+    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
+    const targetTheme = userPreference !== null && isDarkTheme ? darkTheme : lightTheme;
+
     return (
         <>
             {userPreference !== null &&
-                <ThemeProvider theme={userPreference.theme === "dark" ? darkTheme : lightTheme} >
+                <ThemeProvider theme={targetTheme} >
                     <div className="App" >
                         <MainNav {...attr.navBar} />
                         <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
