@@ -81,8 +81,8 @@ export default function MainNav(props) {
                                     style={{
                                         ...sxStyle.Link,
                                         ...sxStyle.NonMargin,
-                                        borderBottom: isCurrentPage && `4px solid #${targetBaseColor}`,
-                                        '& :hover': { borderBottom: `4px solid #${targetBaseColor}99` }
+                                        borderBottom: isCurrentPage && `4px solid ${targetBaseColor}`,
+                                        '& :hover': { borderBottom: `4px solid ${targetBaseColor}99` }
                                     }}
                                     onClick={() => handleRefreshPage(item.link)}
                                 >
