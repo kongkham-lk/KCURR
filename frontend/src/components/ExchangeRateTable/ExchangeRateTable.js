@@ -235,8 +235,8 @@ export default function ExchangeRateTable(props) {
         },
     };
 
-    const handleToggleFlags = (index) => {
-        if (index === 0)
+    const handleToggleFlags = (index, isDefaultCurr) => {
+        if (isDefaultCurr)
             return;
 
         if (isChartFeatureEnable) {
@@ -302,11 +302,12 @@ export default function ExchangeRateTable(props) {
                                         targetCurr: currList.targetCurr
                                     };
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    const isDefaultCurr = currList.targetCurr === currCodeArray[0];
 
                                     // Manually assign each curr row's timeSerie.
                                     // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
                                     // Which means the currList that is initialized base on exchangrRateList does not contain timeSeries object
-                                    if (!isChartFeatureEnable && index !== 0) {
+                                    if (!isChartFeatureEnable && isDefaultCurr) {
                                         currList.timeSeries = {
                                             lowest: Math.min(currList.latestRate, currList.histRate),
                                             highest: Math.max(currList.latestRate, currList.histRate),
@@ -327,7 +328,7 @@ export default function ExchangeRateTable(props) {
                                                 style={{
                                                     ...styleTableRow(targetCurrCode, defaultCurrCode),
                                                     ...sxStyle.TableRow,
-                                                    ...(index === 0
+                                                    ...(isDefaultCurr
                                                         ? { ...getTargetPros(!isDarkTheme).colorChrome, ...getTargetPros(isDarkTheme).baseColor }
                                                         : getTargetPros(isDarkTheme).borderTop),
                                                 }}
@@ -341,13 +342,13 @@ export default function ExchangeRateTable(props) {
                                                     sx={{
                                                         ...commonStyle.paddingNone,
                                                         ...(isDisplaySM ? sxStyle.TableCell.sm : sxStyle.TableCell.lg),
-                                                        ...(index === 0 ? commonStyle.colorInherit : getTargetPros(isDarkTheme).hoverOverride),
+                                                        ...(isDefaultCurr ? commonStyle.colorInherit : getTargetPros(isDarkTheme).hoverOverride),
                                                     }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton }}>
                                                         <Button
                                                             variant="text"
-                                                            disabled={index === 0 && true}
+                                                            disabled={isDefaultCurr && true}
                                                             sx={{
                                                                 ...sxStyle.defaultCurrSetterButton.main,
                                                                 ...sxStyle.paddingXAxisOnly,
@@ -370,7 +371,7 @@ export default function ExchangeRateTable(props) {
                                                         ...commonStyle.colorInherit,
                                                         ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && getTargetPros(isDarkTheme).hoverOverride),
                                                     }}
-                                                    onClick={() => handleToggleFlags(index)}
+                                                    onClick={() => handleToggleFlags(index, isDefaultCurr)}
                                                 >
                                                     <Table>
                                                         <TableBody>
@@ -381,7 +382,7 @@ export default function ExchangeRateTable(props) {
                                                                     sx={{
                                                                         ...styleTableCell(currList, isDisplaySM, false),
                                                                         ...getTargetPros(isDisplaySM).width,
-                                                                        ...(index === 0 && commonStyle.colorInherit)
+                                                                        ...(isDefaultCurr && commonStyle.colorInherit)
                                                                     }}
                                                                 >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
@@ -410,7 +411,7 @@ export default function ExchangeRateTable(props) {
                                                                             sx={{
                                                                                 ...commonStyle.paddingNone,
                                                                                 ...commonStyle.floatRight,
-                                                                                ...(index === 0 && commonStyle.colorNone)
+                                                                                ...(isDefaultCurr && commonStyle.colorNone)
                                                                             }}
                                                                         >
                                                                             View Chart
