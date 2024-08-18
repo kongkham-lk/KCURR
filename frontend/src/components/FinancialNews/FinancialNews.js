@@ -15,7 +15,7 @@ import FinancialNewsLists from "./FinancialNewsLists";
 import { savePrefNewsCategories } from "../../hook/userController";
 
 export default function FinancialNews(props) {
-    const { filter = false, isDisplaySM, isOutLineTheme, userId, userPreference, newsListsRes } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
     // console.log("Load News!!! ", userPreference);
     const [isInitialLoad, setIsInitialLoad] = useState(true); // everytime theme is set, all the state seems to be reset.
     const [newsHeadlinesList, setNewsHeadlinesList] = useState([...newsListsRes]);
@@ -72,7 +72,7 @@ export default function FinancialNews(props) {
                     <div style={style.subDivHeading}>
                         <Typography
                             variant="h5"
-                            color="black"
+                            color="inherit"
                             component="div"
                             style={{ margin: filter ? "16px 0px" : "16px 0 0 0" }}
                         >
@@ -96,7 +96,7 @@ export default function FinancialNews(props) {
                                 key={news.title}
                                 href={news.link}
                                 className="hoverCard"
-                                sx={isOutLineTheme ? { margin: 0, textDecoration: 'none' } : sxStyle.Link}>
+                                sx={isOutLineTheme ? sxStyle.Link.outline : sxStyle.Link.elevate}>
                                 {!isDisplaySM ?
                                     <Card
                                         variant={isOutLineTheme ? "outlined" : "elevation"}
@@ -104,6 +104,7 @@ export default function FinancialNews(props) {
                                             ...sxStyle.Card, borderRadius: isOutLineTheme ? 0 : 1,
                                             border: isOutLineTheme && 0,
                                             borderBottom: isOutLineTheme && '1px solid rgba(0, 0, 0, 0.12)',
+                                            background: "none",
                                             padding: isOutLineTheme && '15px 0px',
                                             '&:hover': !isOutLineTheme && { boxShadow: '0px 0px 12px #644e243f', transition: '0.2s' },
                                             '&:hover .hoverLink': !isOutLineTheme && { color: '#0060cd' }
@@ -136,7 +137,10 @@ const sxStyle = {
         display: 'flex', flexDirection: 'column', flex: '1 0 auto', justifyContent: "space-between",
         width: "min-content", padding: "20px"
     },
-    Link: { width: '100%', textDecoration: "none", margin: "7px 0" },
+    Link: {
+        elevate: { width: '100%', textDecoration: "none", margin: "7px 0" },
+        outline: { margin: 0, textDecoration: 'none', color: "inherit" },
+    },
     Card: { display: 'flex', width: '100%', },
     CardMedia: { width: 240, height: 180, objectFit: "cover" },
 }

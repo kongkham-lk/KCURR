@@ -37,7 +37,7 @@ export function styleTableCell(currList, isDisplaySM, updateColor = true) {
 export function styleTableRow(currKey, defaultCurr) {
     if (currKey === defaultCurr) {
         return {
-            backgroundColor: "#b5d0f0", backgroundClip: "border-box", verticalAlign: 'middle',
+            backgroundColor: "#1876d2", backgroundClip: "border-box", verticalAlign: 'middle',
         }
     } else {
         return {

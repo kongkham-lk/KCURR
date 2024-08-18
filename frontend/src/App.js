@@ -50,23 +50,24 @@ export default function App() {
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
-        padding: isDisplaySM ? '25px' : '32px'
+        padding: isDisplaySM ? '25px' : '32px', 
+        background: "none"
     }));
 
     const MuiProps = {
-        ...(userPreference !== null ? userPreference.theme === "outlined" ? outlinedProps : elevationProps : ""),
+        ...(userPreference !== null ? userPreference.theme === "color" ? elevationProps : outlinedProps : ""),
     }
 
     const handleThemeUpdate = async (newTheme) => {
         console.log("        # handle New Theme!!!");
         const newPref = await getUserPreferences(userId);
-        newPref.theme = newTheme === true ? "outlined" : 'elevation';
+        newPref.theme = newTheme;
         setUserPreference(newPref);
     }
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme === "outlined" : "" },
+        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme !== "color" : "" },
         pref: { userId, userPreference, onThemeUpdate: handleThemeUpdate },
     }
 
@@ -74,16 +75,19 @@ export default function App() {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag, newsListsRes }
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
+
+    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
+    const targetTheme = userPreference !== null && isDarkTheme ? darkTheme : lightTheme;
 
     return (
         <>
             {userPreference !== null &&
-                <ThemeProvider theme={lightTheme} >
+                <ThemeProvider theme={targetTheme} >
                     <div className="App" >
                         <MainNav {...attr.navBar} />
-                        <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5 }}>
+                        <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
                             <Routes>
                                 <Route exact path="/" element={
                                     <>
@@ -124,11 +128,12 @@ export default function App() {
 };
 
 const sxStyle = {
-    backgroundColor: 'inherit',
-    color: 'inherit',
+    // backgroundColor: 'inherit',
+    // color: 'inherit',
 }
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
+const darkTheme = createTheme({ palette: { mode: 'dark' } });
 
 const outlinedProps = {
     variant: 'outlined',

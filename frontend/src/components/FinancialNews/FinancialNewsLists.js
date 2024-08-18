@@ -23,7 +23,7 @@ export default function FinancialNews(props) {
                         fontSize={20}
                         fontWeight={700}
                         underline="none"
-                        color="black"
+                        color="inherit"
                         mb={3}
                     >
                         {news.title}
@@ -36,7 +36,7 @@ export default function FinancialNews(props) {
             <Typography
                 variant="subtitle1"
                 fontSize={14}
-                color="#858585"
+                color="inherit"
                 component="div"
             >
                 {news.diffTimeInHour > 23 ? news.publishTime : news.diffTimeInHour + 'h'}
@@ -53,6 +53,6 @@ const sxStyle = {
 }
 
 const style = {
-    newsPublisher: { width: "fit-content", marginBottom: "12px", color: "black", borderBottom: "1px solid #cbcbcb" },
+    newsPublisher: { width: "fit-content", marginBottom: "12px", color: "inherit", borderBottom: "1px solid #cbcbcb" },
     smallThumbnamil: { width: "72px", height: "72px", margin: "0 0 0 10px", borderRadius: "8px" },
 }
