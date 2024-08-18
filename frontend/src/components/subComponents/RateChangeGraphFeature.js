@@ -7,8 +7,7 @@ import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 
 export default function RateChangeGraphFeature(props) {
-    const { currencyRateData, passInRequestState, isDisplaySM, isFeatureDisplay, removeMarginTop = false } = props;
-
+    const { currencyRateData, passInRequestState, isDisplaySM, removeMarginTop = false, isChartFeatureEnable } = props;
     const [timeSeries, setTimeSeries] = useState(null);
     const [timeSeriesRange, setTimeSeriesRange] = useState("1d");
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(passInRequestState);
@@ -30,14 +29,15 @@ export default function RateChangeGraphFeature(props) {
     }
 
     useEffect(() => {
-        if (currencyRateData != null && isFeatureDisplay) {
-            async function timeSeriesGetter() {
+        async function timeSeriesGetter() {
+            if (currencyRateData != null && isChartFeatureEnable) {
+                console.log("retrieveExchangeRatesTimeSeries!!!")
                 const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
                 setTimeSeries(timeSeriesRes.data[targetCurr]);
             }
-            timeSeriesGetter()
         }
-    }, [currencyRateData, timeSeriesRange])
+        timeSeriesGetter()
+    }, [baseCurr, currencyRateData, isChartFeatureEnable, isNewUpdateRequest, targetCurr, timeSeriesRange])
 
     const handleClick = (range) => {
         setIsNewUpdateRequest(false)
@@ -57,12 +57,12 @@ export default function RateChangeGraphFeature(props) {
                         1 {baseCurr} = {latestRate} {targetCurr}
                     </Typography> : <br />
                 }
-                {isFeatureDisplay &&
+                {isChartFeatureEnable &&
                     <div style={style.divChart} >
                         <Box sx={isDisplaySM ? sxStyle.lineGraphSm : sxStyle.lineGraphLg}>
                             <LineGraph timeSeries={timeSeries} displayLabel={true} />
                         </Box>
-                        <div style={isFeatureDisplay ? isDisplaySM ? style.divRangeSelectorWrapperSm : style.divRangeSelectorWrapperLg : style.divRangeSelectorNone}>
+                        <div style={isChartFeatureEnable ? isDisplaySM ? style.divRangeSelectorWrapperSm : style.divRangeSelectorWrapperLg : style.divRangeSelectorNone}>
                             <RangeTimeSeriesSelector updateVal={handleClick} isDisplaySM={isDisplaySM} />
                         </div>
                     </div>
@@ -77,8 +77,8 @@ const styleSpan = (changeRateInPercent) => {
 }
 
 const commonStyle = {
-    width: {width: "-webkit-fill-available"},
-    textAlign: {textAlign: "center"}
+    width: { width: "-webkit-fill-available" },
+    textAlign: { textAlign: "center" }
 }
 
 const style = {

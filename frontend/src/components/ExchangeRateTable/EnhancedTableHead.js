@@ -17,13 +17,15 @@ export default function EnhancedTableHead(props) {
         <TableHead>
             <>
                 <TableRow style={style.TableRow}>
-                    {(isDisplaySM ? headCells = headCells.filter(item => item.id !== 'change') : headCells).map((headCell) => (
+                    {headCells.map((headCell) => (
                         <TableCell
                             key={headCell.id}
                             align={headCell.numeric ? 'right' : 'left'}
                             padding={headCell.disablePadding ? 'none' : 'normal'}
                             sortDirection={orderBy === headCell.id ? order : false}
-                            style={isDisplaySM ? (headCell.id === 'latestRate' ? style.TableCell.sm.latestRate : style.TableCell.sm.main) : style.TableCell.lg}
+                            style={!isDisplaySM ? style.TableCell.lg :
+                                    (headCell.id === 'latestRate' ? style.TableCell.sm.latestRate : 
+                                        (headCell.id === 'change' ? style.hidden : style.TableCell.sm.main))}
                         >
                             {!isDisplaySM ?
                                 <TableSortLabel
@@ -31,9 +33,9 @@ export default function EnhancedTableHead(props) {
                                     direction={orderBy === headCell.id ? order : 'asc'}
                                     onClick={createSortHandler(headCell.id)}
                                     style={{
-                                        marginLeft: headCell.id === 'targetCountry' ? (isDisplaySM ? "0px" : "25px") : "-30px",
-                                        marginRight: headCell.id === 'targetCountry' && "-20px",
-                                        padding: isDisplaySM && "0px",
+                                        marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? 0 : 16) : -32,
+                                        marginRight: headCell.id === 'targetCurr' ? -20 : -8,
+                                        padding: isDisplaySM && 0,
                                     }}
                                 >
                                     {headCell.label}
@@ -68,7 +70,7 @@ EnhancedTableHead.propTypes = {
 
 let headCells = [
     {
-        id: 'targetCountry',
+        id: 'targetCurr',
         numeric: false,
         disablePadding: true,
         label: 'Countries',
@@ -98,4 +100,5 @@ const style = {
             latestRate: { width: "10%", padding: "0px 12px 10px 0px", ...borderNone },
         },
     },
+    hidden: {display: "none"},
 }

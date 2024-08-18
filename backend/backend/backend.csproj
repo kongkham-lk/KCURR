@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
         <UserSecretsId>bb0d4de3-d8e3-40b3-a4e9-1793285a1c45</UserSecretsId>
+        <BuildWithMSBuildOnMono>false</BuildWithMSBuildOnMono>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings> <!-- suppress warning message -->
     </PropertyGroup>
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />

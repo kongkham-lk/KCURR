@@ -3,72 +3,66 @@ import Button from '@mui/material/Button';
 import InputTextField from '../subComponents/InputTextField';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
-import { retrieveConvertValue } from '../../util/apiClient';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 export default function ConvertorForm(props) {
-    const { setFormDataToConvertor, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, currInput, isDisplaySM } = props;
-
-    const [formInputs, setFormInputs] = useState({ amount: 0, baseCurr: currInput.baseCurr, targetCurr: currInput.targetCurr });
+    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+        targetConvertCurrPair, isDisplaySM, onNewCurrCodeAssigned, onConvertCurrSwap } = props;
+    const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
-    const handleAmountInput = (e) => {
+    // Store new user input for conversion amount
+    const handleConvertAmountUpdate = (e) => {
         if (checkIfContainsOnlyNumbers(e.value) || e.value === "") {
             setIsError(false);
         } else {
             setIsError(true);
         }
 
+        // The total amount to convert
         const convertAmountInput = parseFloat(e.value);
 
-        setFormInputs((oldFormInputs) => {
-            return {
-                ...oldFormInputs,
-                [e.name]: convertAmountInput,
-            };
-        });
+        // Determined if the input value is valid or user just delete all and no new value input
+        if (!isNaN(convertAmountInput))
+            setTargetConvertAmount(convertAmountInput);
+        else
+            setTargetConvertAmount(0);
     }
 
-    const handleCurrCountryForm = (e) => {
-        setFormInputs((oldFormInputs) => {
-            return {
-                ...oldFormInputs,
-                [e.name]: e.value,
-            };
-        });
-    };
-
-    const handleSwap = () => {
-        const { amount, baseCurr, targetCurr } = formInputs;
-        const newFormInput = { amount: amount, baseCurr: targetCurr, targetCurr: baseCurr };
-        setFormInputs(newFormInput);
-    }
-
+    // Submit form to start runniing the conversion logic
     const onSubmit = (e) => {
         e.preventDefault();
-        retrieveConvertValue(setFormDataToConvertor, formInputs);
+        onConversionFormDataSubmit(targetConvertAmount);
     };
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
-        updateVal: handleCurrCountryForm,
+        onNewCurrCodeAssigned,
         currCountiesCodeMapDetail,
-        sortedCurrsCodeList, 
+        sortedCurrsCodeList,
         validCurFlagList
     }
 
     const attr = {
+        InputTextField: {
+            onConvertAmountUpdate: handleConvertAmountUpdate,
+            isError,
+            baseCurr: targetConvertCurrPair[0],
+            currCountiesCodeMapDetail,
+            inputFieldLabel: "amount",
+            placeHolder: "Enter Number"
+        },
         baseCurr: {
             label: "From",
-            stateInputField: "baseCurr",
-            baseCurrVal: formInputs.baseCurr,
+            isBaseCurrency: 0,
+            baseCurrVal: targetConvertCurrPair[0],
             ...commonAttr
         },
         targetCurr: {
             label: "To",
-            stateInputField: "targetCurr",
-            baseCurrVal: formInputs.targetCurr,
+            isBaseCurrency: 1,
+            baseCurrVal: targetConvertCurrPair[1],
             ...commonAttr
         },
     };
@@ -76,9 +70,9 @@ export default function ConvertorForm(props) {
     return (
         <form onSubmit={onSubmit} >
             <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
-                <InputTextField updateVal={handleAmountInput} isError={isError} baseCurr={formInputs.baseCurr} currCountiesCodeMapDetail={currCountiesCodeMapDetail} inputFieldLabel="amount" placeHolder="Enter Number" />
+                <InputTextField {...attr.InputTextField} />
                 <CurrCountriesDropDown {...attr.baseCurr} />
-                <Button variant="outlined" type="submit" onClick={handleSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
+                <Button variant="outlined" type="submit" onClick={onConvertCurrSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}
                 </Button>
                 <CurrCountriesDropDown {...attr.targetCurr} />

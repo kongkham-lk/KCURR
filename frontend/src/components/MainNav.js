@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -11,35 +11,55 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { savePrefTheme } from '../hook/userController';
+import ThemeSetter from './subComponents/ThemeSetter';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import ContrastIcon from '@mui/icons-material/Contrast';
+import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
 
 export default function MainNav(props) {
-    const { isDisplaySM, isDisplayMD, isOutLineTheme, onChangeTheme, currentUrl } = props;
-
+    const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
     const [mobileScreen, setMobileScreen] = useState(false);
-    const [state, setState] = useState(isOutLineTheme);
+    const [state, setState] = useState(userPreference.theme);
+    const isLightTheme = state === "light";
 
-    const handleChange = (newState) => {
+    // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
+    const handleThemeUpdate = async (newState) => {
         setState(newState);
-        onChangeTheme(newState);
+        console.log("Save new Theme!!!", newState);
+        onThemeUpdate(newState);
+        await savePrefTheme(userId, newState);
     };
 
+    // determined if it is on mobile screen
     const handleDrawerToggle = () => {
         setMobileScreen((horizontalScreen) => !horizontalScreen);
     };
 
+    // refresh webpage manually when the same link is clicked
     const handleRefreshPage = (link) => {
         if (link === currentUrl.pathname)
             window.location.reload();
     }
 
+    const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
+
     return (
-        <Box display='flex' sx={isOutLineTheme ? sxStyle.Theme.Outline : sxStyle.Theme.Elevate}>
-            <AppBar component="nav" sx={{ ...sxStyle.bringToTop, ...commonStyles.inheritColor }}>
+        <Box
+            display='flex'
+            sx={
+                isOutLineTheme ?
+                    isLightTheme ? sxStyle.Theme.Outline.light
+                        : sxStyle.Theme.Outline.dark
+                    : sxStyle.Theme.Elevate
+            }>
+            <AppBar
+                component="nav"
+                sx={{ ...sxStyle.bringToTop, backgroundColor: isOutLineTheme && state === "light" && "white" }}
+            >
                 <Toolbar id="subNav" sx={commonStyles.alignItemsStretch}>
                     <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
                         <Link to={mainLogo.link} style={sxStyle.mainLogo}>
@@ -52,7 +72,7 @@ export default function MainNav(props) {
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
                             const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
-                                                    || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
+                                || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
                                 <Link
                                     id="navPage"
@@ -61,9 +81,8 @@ export default function MainNav(props) {
                                     style={{
                                         ...sxStyle.Link,
                                         ...sxStyle.NonMargin,
-                                        ...(isCurrentPage && {
-                                            ...(isOutLineTheme ? commonStyles.navPageBorderBottom.Outline : commonStyles.navPageBorderBottom.Elevate),
-                                        }),
+                                        borderBottom: isCurrentPage && `4px solid ${targetBaseColor}`,
+                                        '& :hover': { borderBottom: `4px solid ${targetBaseColor}99` }
                                     }}
                                     onClick={() => handleRefreshPage(item.link)}
                                 >
@@ -73,14 +92,9 @@ export default function MainNav(props) {
                                 </Link>
                             )
                         })}
-                        <FormControl component="fieldset" variant="standard" sx={sxStyle.themeSetter}>
-                            <FormControlLabel
-                                sx={sxStyle.NonMargin}
-                                control={
-                                    <Switch checked={state.gilad} onChange={() => handleChange(!state)} defaultChecked />
-                                }
-                            />
-                        </FormControl>
+                        <Box sx={{ ...sxStyle.themeSetter, display: "flex", alignItems: "center" }} >
+                            <ThemeSetter userPreference={userPreference} onThemeUpdate={handleThemeUpdate} />
+                        </Box>
                     </Box>
                     <IconButton
                         color="inherit"
@@ -106,7 +120,8 @@ export default function MainNav(props) {
                         navItems={navItems}
                         handleDrawerToggle={handleDrawerToggle}
                         isOutLineTheme={isOutLineTheme}
-                        onChangeTheme={onChangeTheme}
+                        onThemeUpdate={handleThemeUpdate}
+                        userPreference={userPreference}
                     />
                 </Drawer>
             </Box>
@@ -122,29 +137,33 @@ const navItems = [
     { label: 'Financial News', link: "/News" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTheme }) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
 
-    const Theme = {
-        Outline: { name: 'outline', isOutline: true },
-        Elevate: { name: 'elevate', isOutline: false },
+    const themeOptions = getThemeOptions();
+
+    const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
+        if (targetTheme === "light")
+            return <LightModeOutlinedIcon sx={styling} color={isPrimary ? "primary" : ""} />
+        else if (targetTheme === "dark")
+            return <DarkModeOutlinedIcon sx={styling} />
+        else
+            return <ContrastIcon sx={styling} />
     }
 
-    const [alignment, setAlignment] = useState(isOutLineTheme ? Theme.Outline.name : Theme.Elevate.name);
+    const [theme, setTheme] = useState(userPreference.theme);
 
-    const handleChange = (event, newAlignment) => {
-        if (newAlignment === null || newAlignment === alignment)
+    const handleChange = (event, newTheme) => {
+        if (newTheme === null || newTheme === theme)
             return;
-
-        setAlignment(newAlignment);
-
-        if (event.target.value === Theme.Outline.name)
-            onChangeTheme(Theme.Outline.isOutline);
-        else if (event.target.value === Theme.Elevate.name)
-            onChangeTheme(Theme.Elevate.isOutline);
+        console.log("Save theme!!! ", newTheme)
+        setTheme(newTheme);
+        onThemeUpdate(newTheme);
     };
 
-    const checkToggleDrawer = (event) => {
-        if (event.target.value !== Theme.Outline.name && event.target.value !== Theme.Elevate.name)
+    const checkToggleDrawer = (newTheme) => {
+        // console.log(newTheme)
+        // const checkEachTargetTheme = obj => obj.iconType == newTheme;
+        // if (!themeOptions.some(checkEachTargetTheme))
             handleDrawerToggle();
     }
 
@@ -155,14 +174,17 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
                     <Typography variant="overline" display="block" color='gray'>Theme</Typography>
                     <ToggleButtonGroup
                         color="primary"
-                        value={alignment}
+                        value={theme}
                         exclusive
                         onChange={handleChange}
                         aria-label="Platform"
                         sx={sxStyle.FillAllWidth}
                     >
-                        <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Elevate.name}>{Theme.Elevate.name}</ToggleButton>
-                        <ToggleButton sx={sxStyle.FillAllWidth} value={Theme.Outline.name}>{Theme.Outline.name}</ToggleButton>
+                        {themeOptions.map((option) => (
+                            <ToggleButton key={option.iconType} sx={sxStyle.FillAllWidth} value={option.iconType}> {/* onClick={() => checkToggleDrawer(option.iconType)}> */}
+                                {getThemeIcon(option.iconType)}<span style={{ marginLeft: "10px" }}>{option.label}</span>
+                            </ToggleButton>
+                        ))}
                     </ToggleButtonGroup>
                 </Box>
                 {navItems.map((item) => (
@@ -177,32 +199,27 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onChangeTh
     )
 };
 
-const baseColor = {
-    main: "1876d2",
-    sub: "1976d2"
-};
+const baseColor = getBaseColor();
 
 const embbedLogo = {
-    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.main}/currency-exchange.png`,
+    link: `https://img.icons8.com/sf-regular-filled/48/${baseColor.lightPrimary.substring(1)}/currency-exchange.png`,
     alt: "KCURR App Logo",
 };
 
 const commonStyles = {
-    navPageBorderBottom: {
-        Elevate: { borderBottom: '4px solid white' },
-        Outline: { borderBottom: `4px solid #${baseColor.main}` },
-        ElevateHover: { borderBottom: '4px solid #ffffff99' },
-        OutlineHover: { borderBottom: `4px solid #${baseColor.main}55` },
-    },
     subNavPageMargin: { marginBottom: '11px' },
     alignItemsStretch: { display: 'flex', alignItems: 'stretch' },
     alignItemsCenter: { display: 'flex', alignItems: 'center' },
     inheritColor: { color: 'inherit' },
     noneTextDeco: { textDecoration: "none", },
-    prop: {
-        fillAvailSpace: '-webkit-fill-available'
-    },
+    prop: { fillAvailSpace: '-webkit-fill-available' },
 };
+
+const mainOutlineStyle = {
+    fontWeight: 500,
+    '& #navMain': { fontWeight: 600, },
+    '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
+}
 
 const drawerWidth = commonStyles.prop.fillAvailSpace;
 
@@ -216,27 +233,32 @@ const sxStyle = {
         display: { xs: 'block', sm: 'none' },
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
     },
-    BoxPopupSideBar: { color: `#${baseColor.sub}` },
+    BoxPopupSideBar: { color: baseColor.lightPrimary },
     ListPopupSideBar: { my: 8 },
     ListItemButtonPopupSideBar: { textAlign: 'left', borderBottom: "1px solid #00000030", margin: "0px 20px" },
     Theme: {
         Elevate: {
-            color: 'white',
+            color: baseColor.white,
             '& img': { filter: 'saturate(0) brightness(100)' },
-            '& #navPage:hover': { ...commonStyles.navPageBorderBottom.ElevateHover },
+            '& #navPage:hover': { borderBottom: `4px solid ${baseColor.white}99` },
             '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
         },
         Outline: {
-            color: `#${baseColor.main}`,
-            fontWeight: 500,
-            '& nav': { boxShadow: 'none', background: 'white' },
-            '& #navMain': { fontWeight: 600, },
-            '& #subNav': { borderBottom: `1.5px solid #${baseColor.main}55`, ...commonStyles.alignItemsStretch },
-            '& #navPage:hover': { ...commonStyles.navPageBorderBottom.OutlineHover },
-            '& #navPage:hover div': { ...commonStyles.subNavPageMargin },
+            light: {
+                ...mainOutlineStyle,
+                '& nav': { color: baseColor.lightPrimary, boxShadow: 'none' },
+                '& #subNav': { borderBottom: `1.5px solid ${baseColor.lightPrimary}55`, ...commonStyles.alignItemsStretch },
+                '& #navPage:hover': { borderBottom: `4px solid ${baseColor.lightPrimary}55` },
+            },
+            dark: {
+                ...mainOutlineStyle,
+                '& nav': { color: baseColor.white, boxShadow: 'none' },
+                '& #subNav': { borderBottom: `1.5px solid ${baseColor.darkPrimary}55`, ...commonStyles.alignItemsStretch },
+                '& #navPage:hover': { borderBottom: `4px solid ${baseColor.darkPrimary}55` },
+            }
         },
     },
-    themeSetter: { justifyContent: 'center', filter: 'brightness(0.61) contrast(4) saturate(0.3)', marginTop: '2px', marginRight: '-10px' },
+    themeSetter: { justifyContent: 'center', marginTop: '2px', marginRight: '-10px' },
     bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
     FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
     NonMargin: { margin: '0px' }

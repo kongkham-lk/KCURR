@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from 'react';
 import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,17 +5,20 @@ import Select from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
 
 export default function CurrCountriesDropDown(props) {
-    const { label, onAddCurrCountry, inputCurrType, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+    const { label, onNewCurrCodeAssigned, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, size, passInStyle = { height: "56.5px" } } = props;
-
-    const handleChange = (e) => onAddCurrCountry({ name: inputCurrType, value: e.target.value });
+    
+    // Differentiate the currCode setter base on indexNumber or as boolean in binary
+    // The isBaseCurrency will be only use in conversion page (differentiate which dropdown setter refers to)
+    const handleChange = (e) => onNewCurrCodeAssigned({ isBaseCurrency, value: e.target.value });
+    const id = isBaseCurrency === 0 ? "baseCurr" : "targetCurr"
 
     return (
         <FormControl sx={sxStyle} size={size}>
-            <InputLabel id={inputCurrType} >{label}</InputLabel>
+            <InputLabel id={id } >{label}</InputLabel>
             <Select
-                labelId={inputCurrType}
-                id={inputCurrType}
+                labelId={id}
+                id={id}
                 value={baseCurrVal}
                 label={label}
                 onChange={handleChange}

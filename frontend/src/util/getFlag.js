@@ -1,5 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+
 export function getFlag(currCountry, validCurFlagList) {
     if (isValidParam(currCountry) && validCurFlagList.includes(currCountry.substring(0, 2).toUpperCase()))
         return <img style={style.flagImg} src={getBaseUrl(currCountry)} alt=""/>

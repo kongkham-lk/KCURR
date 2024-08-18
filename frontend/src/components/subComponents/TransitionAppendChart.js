@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 
 
 export default function TransitionAppendChart(props) {
-    const { appendChart, currencyRateData, isDisplaySM, isDisplayMD } = props;
+    const { appendChart, currencyRateData, isDisplaySM } = props;
     const [displayChart, setDisplayChart] = useState(null);
 
     useEffect(() => {

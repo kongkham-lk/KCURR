@@ -6,27 +6,23 @@ export async function createCurrLists(baseCurr, targetCurr, defaultCurrExchangeR
         return { targetCurr: baseCurr, latestRate: 1, histRate: null, change: null, timeSeries: null }; // skip request data from API for default row
     } else {
         let timeSeries, latestRate, histRate;
-
-        // Only request for timeSeries when on feature page
-        if (isFeatureDisplay) {
-            try {
-                timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
-            } catch (e) {
-                console.log("ERROR ON AWAIT => ", e);
-            }
-        }
-
+        
         // only grab default curr's exchange rate if it is not featureDisplay, else defaultCurrExchangeRates is null
         if (defaultCurrExchangeRates !== null && !isFeatureDisplay) {
             const latestRates = defaultCurrExchangeRates[0];
             const histRates = defaultCurrExchangeRates[1];
             latestRate = latestRates[targetCurr]; // accessing by key as ExchangeRate is key-value pair
             histRate = histRates[targetCurr];
-        } else { // grabbing timeSeries's changeRates when display chart feature is on
-            latestRate = timeSeries.changingRates[timeSeries.changingRates.length - 1]; // accessing by index as originally timeSeries only consist 1 targetCurr
-            histRate = timeSeries.changingRates[0];
+        } else { // Only request for timeSeries for each visible currency row when display chart feature is on
+            try {
+                timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
+                latestRate = timeSeries.changingRates[timeSeries.changingRates.length - 1]; // accessing by index as originally timeSeries only consist 1 targetCurr
+                histRate = timeSeries.changingRates[0];
+            } catch (e) {
+                console.log("ERROR ON AWAIT => ", e);
+            }
         }
-        
+
         const change = (latestRate - histRate) * 100 / histRate;
 
         return { targetCurr, latestRate, histRate, change: change?.toFixed(2), timeSeries };

@@ -2,16 +2,14 @@ import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
 import { LineChart } from '@mui/x-charts/LineChart';
 
-
 export function LineGraph(props) {
     const { displayLabel = false, timeSeries = null } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
-    // console.log("timeSeries: ", timeSeries);
-    // console.log("timeSeries.changingRates: ", changingRates);
     
-    const borderColor = () => { // color of the color label within popup box
+    // color of the color label within popup box
+    const borderColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000';
         } else {
@@ -19,7 +17,8 @@ export function LineGraph(props) {
         }
     };
     
-    const backgroundColor = () => { // color of the color label within popup box
+    // color of the color label within popup box
+    const backgroundColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
             return '#cd0000b0';
         } else {
@@ -82,8 +81,6 @@ export function LineGraph(props) {
                 border: {
                     dash: [6, 6]
                 },
-                // min: timeSeries.lowest,
-                // max: timeSeries.highest,
             },
             x: {
                 display: displayLabel, // Hide X axis labels
