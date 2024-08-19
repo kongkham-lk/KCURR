@@ -82,14 +82,10 @@ export default function ExchangeRateTable(props) {
             // console.log("refresh page!!!");
 
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
-                // console.log("Create new curr list!!!");
-                console.log("    >>> createCurrLists!!!")
-                const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
-                const newLists = [...currLists, currList];
-                setNewCurrCode("");
-                setCurrLists(newLists);
-                saveCurrListsToCookie(userId, newLists);
+                updateCurrCodeArray()
+                await updateCurrLists()
             }
+            setNewCurrCode("");
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
@@ -104,6 +100,20 @@ export default function ExchangeRateTable(props) {
             setTriggerNewTimeDisplay(false)
         }
     }, [triggerNewTimeDisplay]);
+
+    const updateCurrCodeArray = () => {
+        const newCurrCodeArray = [...currCodeArray, newCurrCode];
+        setCurrCodeArray(newCurrCodeArray);
+        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
+    }
+
+    const updateCurrLists = async () => {
+        console.log("    >>> createCurrLists!!!")
+        const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
+        const newLists = [...currLists, currList];
+        setCurrLists(newLists);
+        saveCurrListsToCookie(userId, newLists);
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -178,9 +188,6 @@ export default function ExchangeRateTable(props) {
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e);
         setNewCurrCode(e.value);
-        const newCurrCodeArray = [...currCodeArray, e.value];
-        setCurrCodeArray(newCurrCodeArray);
-        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     };
 
     const handleDelete = (targetCurr) => {
