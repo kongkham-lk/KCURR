@@ -161,7 +161,7 @@ export default function ExchangeRateTable(props) {
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
 
         for (let i in currCodeArray) {
-            console.log("    >>> createCurrLists!!!")
+            // console.log("    >>> createCurrLists!!!")
             newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         }
 
