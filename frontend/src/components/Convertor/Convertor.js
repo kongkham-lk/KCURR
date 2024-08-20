@@ -16,7 +16,7 @@ export default function Convertor(props) {
     let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
 
     useEffect(() => {
-        console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
+        // console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
         setTargetConvertCurrPair([...userPreference.convertedCurrPair])
     }, [userPreference])
 

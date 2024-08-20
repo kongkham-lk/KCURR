@@ -37,7 +37,7 @@ export default function App() {
     useEffect(() => {
         async function fetchPreference() {
             if (userPreference === null) {
-                console.log("Get initial Pref!!!")
+                // console.log("Get initial Pref!!!")
                 const pref = await getUserPreferences(userId);
                 const newsRes = await retrieveFinancialNews(pref.newsCategories);
                 setUserPreference(pref);
