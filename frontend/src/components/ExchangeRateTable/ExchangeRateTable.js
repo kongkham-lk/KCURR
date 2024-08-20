@@ -24,7 +24,7 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../subComponents/LineGraph';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
-import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
+import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
 
 export default function ExchangeRateTable(props) {
@@ -58,8 +58,10 @@ export default function ExchangeRateTable(props) {
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
+    const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference.theme === "dark";
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+    // console.log("--  >>> Load Live Rate Table!!! ")
 
     const visibleRows = useMemo(
         () =>
@@ -80,7 +82,6 @@ export default function ExchangeRateTable(props) {
     useEffect(() => {
         async function checkNewRow() {
             // console.log("refresh page!!!");
-
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 // console.log("Create new curr list!!!");
                 console.log("    >>> createCurrLists!!!")
@@ -90,16 +91,24 @@ export default function ExchangeRateTable(props) {
                 setCurrLists(newLists);
                 saveCurrListsToCookie(userId, newLists);
             }
+            else if (isInitialLoad) {
+                const newPref = await getUserPreferences(userId);
+                const newCurrCodeArray = newPref.liveRateCurrCodes;
+                const newCurrLists = await getCurrListsFromCookie(userId);
+                setCurrCodeArray(newCurrCodeArray);
+                setCurrLists(newCurrLists);
+                setIsInitialLoad(false);
+            }
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId]);
+    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId, isInitialLoad]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
         if (triggerNewTimeDisplay) {
-            // console.log("Update new display time!!!");
+            console.log("Update new display time!!!");
             handleDisplayLatestFetchTimeUpdate();
             setTriggerNewTimeDisplay(false)
         }
