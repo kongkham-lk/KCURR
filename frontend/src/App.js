@@ -78,8 +78,8 @@ export default function App() {
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
 
-    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
-    const targetTheme = userPreference !== null && isDarkTheme ? darkTheme : lightTheme;
+    const isDarkTheme = userPreference !== null ? userPreference.theme === "dark" : false; // set default theme as white theme
+    const targetTheme = isDarkTheme ? darkTheme : lightTheme;
 
     return (
         <>
