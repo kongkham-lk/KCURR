@@ -78,15 +78,12 @@ export default function ExchangeRateTable(props) {
         }
     }, [isReady]);
 
-    // Update new added currency code to visibl row
+    // Fetch the latest CurrCodeArray and CurrLists from cookie.
+    // This is needed since react fetch all all the neccessary data once, where the new update will be brought along 
+    // when user switch to different tab.
     useEffect(() => {
-        async function checkNewRow() {
-            // console.log("refresh page!!!");
-            if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
-                updateCurrCodeArray()
-                await updateCurrLists()
-            }
-            else if (isInitialLoad) {
+        async function fetchUpdateOnInitialLoad() {
+            if (isInitialLoad) { // THIS NEED TO BREAK INTO ITS USEEFFECT
                 const newPref = await getUserPreferences(userId);
                 const newCurrCodeArray = newPref.liveRateCurrCodes;
                 const newCurrLists = await getCurrListsFromCookie(userId);
@@ -94,12 +91,24 @@ export default function ExchangeRateTable(props) {
                 setCurrLists(newCurrLists);
                 setIsInitialLoad(false);
             }
+        }
+        fetchUpdateOnInitialLoad();
+    }, [isInitialLoad, userId])
+
+    // Update new added currency code to visible row
+    useEffect(() => {
+        async function checkNewRow() {
+            // console.log("refresh page!!!");
+            if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
+                updateCurrCodeArray()
+                await updateCurrLists()
+            }
             setNewCurrCode("");
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId, isInitialLoad]);
+    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
