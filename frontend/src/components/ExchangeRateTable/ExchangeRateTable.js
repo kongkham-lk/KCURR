@@ -24,7 +24,7 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../subComponents/LineGraph';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
-import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
+import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
 
 export default function ExchangeRateTable(props) {
@@ -58,8 +58,10 @@ export default function ExchangeRateTable(props) {
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
+    const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference.theme === "dark";
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+    // console.log("--  >>> Load Live Rate Table!!! ")
 
     const visibleRows = useMemo(
         () =>
@@ -76,11 +78,27 @@ export default function ExchangeRateTable(props) {
         }
     }, [isReady]);
 
-    // Update new added currency code to visibl row
+    // Fetch the latest CurrCodeArray and CurrLists from cookie.
+    // This is needed since react fetch all all the neccessary data once, where the new update will be brought along 
+    // when user switch to different tab.
+    useEffect(() => {
+        async function fetchUpdateOnInitialLoad() {
+            if (isInitialLoad) { // THIS NEED TO BREAK INTO ITS USEEFFECT
+                const newPref = await getUserPreferences(userId);
+                const newCurrCodeArray = newPref.liveRateCurrCodes;
+                const newCurrLists = await getCurrListsFromCookie(userId);
+                setCurrCodeArray(newCurrCodeArray);
+                setCurrLists(newCurrLists);
+                setIsInitialLoad(false);
+            }
+        }
+        fetchUpdateOnInitialLoad();
+    }, [isInitialLoad, userId])
+
+    // Update new added currency code to visible row
     useEffect(() => {
         async function checkNewRow() {
             // console.log("refresh page!!!");
-
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
                 updateCurrCodeArray()
                 await updateCurrLists()
@@ -95,7 +113,7 @@ export default function ExchangeRateTable(props) {
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
         if (triggerNewTimeDisplay) {
-            // console.log("Update new display time!!!");
+            console.log("Update new display time!!!");
             handleDisplayLatestFetchTimeUpdate();
             setTriggerNewTimeDisplay(false)
         }

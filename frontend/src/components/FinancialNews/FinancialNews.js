@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import InputTextField from "../subComponents/InputTextField";
 import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
-import { savePrefNewsCategories } from "../../hook/userController";
+import { getUserPreferences, savePrefNewsCategories } from "../../hook/userController";
 
 export default function FinancialNews(props) {
     const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
@@ -24,10 +24,13 @@ export default function FinancialNews(props) {
 
     useEffect(() => {
         async function fetchNewsLists() {
+            // console.log("--  >>> fetchNewsLists!!! ", newCategories)
             if (!isInitialLoad) { // Do not fetch new newsList if set new theme
                 const newsRes = await retrieveFinancialNews(newCategories);
                 setNewsHeadlinesList(newsRes.data);
             } else {
+                const newPref = await getUserPreferences(userId);
+                setNewCategories(newPref.newsCategories);
                 setIsInitialLoad(false);
             }
         }
