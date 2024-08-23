@@ -37,7 +37,7 @@ export default function App() {
     useEffect(() => {
         async function fetchPreference() {
             if (userPreference === null) {
-                console.log("Get initial Pref!!!")
+                // console.log("Get initial Pref!!!")
                 const pref = await getUserPreferences(userId);
                 const newsRes = await retrieveFinancialNews(pref.newsCategories);
                 setUserPreference(pref);
@@ -78,8 +78,8 @@ export default function App() {
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
 
-    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
-    const targetTheme = userPreference !== null && isDarkTheme ? darkTheme : lightTheme;
+    const isDarkTheme = userPreference !== null ? userPreference.theme === "dark" : false; // set default theme as white theme
+    const targetTheme = isDarkTheme ? darkTheme : lightTheme;
 
     return (
         <>

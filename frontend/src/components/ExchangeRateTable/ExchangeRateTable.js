@@ -24,7 +24,7 @@ import { retrieveExchangeRates } from '../../util/apiClient';
 import { LineGraph } from '../subComponents/LineGraph';
 import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabel';
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
-import { saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
+import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
 
 export default function ExchangeRateTable(props) {
@@ -58,15 +58,19 @@ export default function ExchangeRateTable(props) {
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
+    const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference.theme === "dark";
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+    const emptyRows = page > 0 && currLists !== null ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+    // console.log("--  >>> Load Live Rate Table!!! ", initialCurrLists, currLists)
 
     const visibleRows = useMemo(
         () =>
-            stableSort(currLists, getComparator(order, orderBy)).slice(
+            currLists !== null 
+            ? stableSort(currLists, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
-            ),
+            )
+            : [],
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
@@ -76,20 +80,36 @@ export default function ExchangeRateTable(props) {
         }
     }, [isReady]);
 
-    // Update new added currency code to visibl row
+    // Fetch the latest CurrCodeArray and CurrLists from cookie.
+    // This is needed since react fetch all all the neccessary data once, where the new update will be brought along 
+    // when user switch to different tab.
+    useEffect(() => {
+        async function fetchUpdateOnInitialLoad() {
+            if (isInitialLoad) { // THIS NEED TO BREAK INTO ITS USEEFFECT
+                const newPref = await getUserPreferences(userId);
+                const newCurrCodeArray = newPref.liveRateCurrCodes;
+                const newCurrLists = await getCurrListsFromCookie(userId);
+
+                // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
+                if (newCurrLists !== null) {
+                    setCurrLists(newCurrLists);
+                    setCurrCodeArray(newCurrCodeArray);
+                }
+                setIsInitialLoad(false);
+            }
+        }
+        fetchUpdateOnInitialLoad();
+    }, [isInitialLoad, userId])
+
+    // Update new added currency code to visible row
     useEffect(() => {
         async function checkNewRow() {
             // console.log("refresh page!!!");
-
             if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
-                // console.log("Create new curr list!!!");
-                console.log("    >>> createCurrLists!!!")
-                const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
-                const newLists = [...currLists, currList];
-                setNewCurrCode("");
-                setCurrLists(newLists);
-                saveCurrListsToCookie(userId, newLists);
+                updateCurrCodeArray()
+                await updateCurrLists()
             }
+            setNewCurrCode("");
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
@@ -99,11 +119,25 @@ export default function ExchangeRateTable(props) {
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
         if (triggerNewTimeDisplay) {
-            // console.log("Update new display time!!!");
+            console.log("Update new display time!!!");
             handleDisplayLatestFetchTimeUpdate();
             setTriggerNewTimeDisplay(false)
         }
     }, [triggerNewTimeDisplay]);
+
+    const updateCurrCodeArray = () => {
+        const newCurrCodeArray = [...currCodeArray, newCurrCode];
+        setCurrCodeArray(newCurrCodeArray);
+        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
+    }
+
+    const updateCurrLists = async () => {
+        console.log("    >>> createCurrLists!!!")
+        const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
+        const newLists = [...currLists, currList];
+        setCurrLists(newLists);
+        saveCurrListsToCookie(userId, newLists);
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -151,7 +185,7 @@ export default function ExchangeRateTable(props) {
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
 
         for (let i in currCodeArray) {
-            console.log("    >>> createCurrLists!!!")
+            // console.log("    >>> createCurrLists!!!")
             newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         }
 
@@ -178,9 +212,6 @@ export default function ExchangeRateTable(props) {
     const handleAddCurrCountry = (e) => {
         console.log("Add new item to list: ", e);
         setNewCurrCode(e.value);
-        const newCurrCodeArray = [...currCodeArray, e.value];
-        setCurrCodeArray(newCurrCodeArray);
-        handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     };
 
     const handleDelete = (targetCurr) => {
@@ -235,8 +266,8 @@ export default function ExchangeRateTable(props) {
         },
     };
 
-    const handleToggleFlags = (index) => {
-        if (index === 0)
+    const handleToggleFlags = (index, isDefaultCurr) => {
+        if (isDefaultCurr)
             return;
 
         if (isChartFeatureEnable) {
@@ -291,7 +322,7 @@ export default function ExchangeRateTable(props) {
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
-                                rowCount={currLists.length}
+                                rowCount={currLists !== null ? currLists.length : 0}
                                 isDisplaySM={isDisplaySM}
                             />
                             <TableBody sx={sxStyle.TableBody}>
@@ -302,11 +333,12 @@ export default function ExchangeRateTable(props) {
                                         targetCurr: currList.targetCurr
                                     };
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    const isDefaultCurr = currList.targetCurr === currCodeArray[0];
 
                                     // Manually assign each curr row's timeSerie.
                                     // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
                                     // Which means the currList that is initialized base on exchangrRateList does not contain timeSeries object
-                                    if (!isChartFeatureEnable && index !== 0) {
+                                    if (!isChartFeatureEnable && isDefaultCurr) {
                                         currList.timeSeries = {
                                             lowest: Math.min(currList.latestRate, currList.histRate),
                                             highest: Math.max(currList.latestRate, currList.histRate),
@@ -327,7 +359,7 @@ export default function ExchangeRateTable(props) {
                                                 style={{
                                                     ...styleTableRow(targetCurrCode, defaultCurrCode),
                                                     ...sxStyle.TableRow,
-                                                    ...(index === 0
+                                                    ...(isDefaultCurr
                                                         ? { ...getTargetPros(!isDarkTheme).colorChrome, ...getTargetPros(isDarkTheme).baseColor }
                                                         : getTargetPros(isDarkTheme).borderTop),
                                                 }}
@@ -341,13 +373,13 @@ export default function ExchangeRateTable(props) {
                                                     sx={{
                                                         ...commonStyle.paddingNone,
                                                         ...(isDisplaySM ? sxStyle.TableCell.sm : sxStyle.TableCell.lg),
-                                                        ...(index === 0 ? commonStyle.colorInherit : getTargetPros(isDarkTheme).hoverOverride),
+                                                        ...(isDefaultCurr ? commonStyle.colorInherit : getTargetPros(isDarkTheme).hoverOverride),
                                                     }}
                                                 >
                                                     <Box sx={{ ...sxStyle.hoverButton }}>
                                                         <Button
                                                             variant="text"
-                                                            disabled={index === 0 && true}
+                                                            disabled={isDefaultCurr && true}
                                                             sx={{
                                                                 ...sxStyle.defaultCurrSetterButton.main,
                                                                 ...sxStyle.paddingXAxisOnly,
@@ -370,7 +402,7 @@ export default function ExchangeRateTable(props) {
                                                         ...commonStyle.colorInherit,
                                                         ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && getTargetPros(isDarkTheme).hoverOverride),
                                                     }}
-                                                    onClick={() => handleToggleFlags(index)}
+                                                    onClick={() => handleToggleFlags(index, isDefaultCurr)}
                                                 >
                                                     <Table>
                                                         <TableBody>
@@ -381,7 +413,7 @@ export default function ExchangeRateTable(props) {
                                                                     sx={{
                                                                         ...styleTableCell(currList, isDisplaySM, false),
                                                                         ...getTargetPros(isDisplaySM).width,
-                                                                        ...(index === 0 && commonStyle.colorInherit)
+                                                                        ...(isDefaultCurr && commonStyle.colorInherit)
                                                                     }}
                                                                 >
                                                                     {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
@@ -410,7 +442,7 @@ export default function ExchangeRateTable(props) {
                                                                             sx={{
                                                                                 ...commonStyle.paddingNone,
                                                                                 ...commonStyle.floatRight,
-                                                                                ...(index === 0 && commonStyle.colorNone)
+                                                                                ...(isDefaultCurr && commonStyle.colorNone)
                                                                             }}
                                                                         >
                                                                             View Chart
@@ -478,7 +510,7 @@ export default function ExchangeRateTable(props) {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={currLists.length}
+                                count={currLists !== null ? currLists.length : 0}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}
