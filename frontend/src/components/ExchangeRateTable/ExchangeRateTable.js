@@ -60,15 +60,17 @@ export default function ExchangeRateTable(props) {
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
     const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference.theme === "dark";
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
-    console.log("--  >>> Load Live Rate Table!!! ", currLists)
+    const emptyRows = page > 0 && currLists !== null ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
+    console.log("--  >>> Load Live Rate Table!!! ", initialCurrLists, currLists)
 
     const visibleRows = useMemo(
         () =>
-            stableSort(currLists, getComparator(order, orderBy)).slice(
+            currLists !== null 
+            ? stableSort(currLists, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
-            ),
+            )
+            : [],
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
@@ -87,8 +89,12 @@ export default function ExchangeRateTable(props) {
                 const newPref = await getUserPreferences(userId);
                 const newCurrCodeArray = newPref.liveRateCurrCodes;
                 const newCurrLists = await getCurrListsFromCookie(userId);
-                setCurrCodeArray(newCurrCodeArray);
-                setCurrLists(newCurrLists);
+
+                // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
+                if (newCurrLists !== null) {
+                    setCurrLists(newCurrLists);
+                    setCurrCodeArray(newCurrCodeArray);
+                }
                 setIsInitialLoad(false);
             }
         }
@@ -316,7 +322,7 @@ export default function ExchangeRateTable(props) {
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
-                                rowCount={currLists.length}
+                                rowCount={currLists !== null ? currLists.length : 0}
                                 isDisplaySM={isDisplaySM}
                             />
                             <TableBody sx={sxStyle.TableBody}>
@@ -504,7 +510,7 @@ export default function ExchangeRateTable(props) {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={currLists.length}
+                                count={currLists !== null ? currLists.length : 0}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}

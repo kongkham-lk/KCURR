@@ -27,7 +27,7 @@ public class UserController : ControllerBase
             Theme = "color",
             ConvertedCurrPair = new string[2] { "USD", "THB" },
             LiveRateCurrCodes = new List<string> { "USD", "CAD", "EUR", "GBP" },
-            NewsCategories = new List<string> { "Stock", "Business", "Finance", "Bank", "Investment", "Trading", "Tesla", "Apple", "Facebook", "Cryptocurrency" },
+            NewsCategories = new List<string> { "Business", "Finance", "Bank", "Investment" },
         };
     }
 
