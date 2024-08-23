@@ -61,7 +61,7 @@ export default function ExchangeRateTable(props) {
     const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference.theme === "dark";
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
-    // console.log("--  >>> Load Live Rate Table!!! ")
+    console.log("--  >>> Load Live Rate Table!!! ", currLists)
 
     const visibleRows = useMemo(
         () =>
