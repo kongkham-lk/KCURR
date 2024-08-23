@@ -21,6 +21,7 @@ export default function FinancialNews(props) {
     const [newsHeadlinesList, setNewsHeadlinesList] = useState([...newsListsRes]);
     const [inputTrackerTopic, setInputTrackerTopic] = useState("");
     const [newCategories, setNewCategories] = useState([...userPreference.newsCategories]);
+    // console.log("Load News!!! ", newCategories)
 
     useEffect(() => {
         async function fetchNewsLists() {
