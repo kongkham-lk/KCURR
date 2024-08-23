@@ -23,7 +23,7 @@ export default function App() {
     const currentUrl = useLocation();
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
 
-    // console.log("APP() - userPreference: ", userPreference);
+    console.log("APP() - userPreference: ", userPreference);
 
     // retrieved initial data for live rate feature
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
