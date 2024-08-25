@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
@@ -17,7 +17,7 @@ import { retrieveFinancialNews } from "./util/apiClient";
 
 export default function App() {
     const userId = getUserIdentifier();
-    const [userPreference, setUserPreference] = useState(null);
+    const [userPreference, setUserPreference] = useState<Preference | null>(null);
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
@@ -38,10 +38,12 @@ export default function App() {
         async function fetchPreference() {
             if (userPreference === null) {
                 // console.log("Get initial Pref!!!")
-                const pref = await getUserPreferences(userId);
-                const newsRes = await retrieveFinancialNews(pref.newsCategories);
-                setUserPreference(pref);
-                setNewsListsRes(newsRes.data);
+                const pref: Preference | undefined = await getUserPreferences(userId);
+                if (pref !== undefined) {
+                    const newsRes = await retrieveFinancialNews(pref.newsCategories);
+                    setUserPreference(pref);
+                    setNewsListsRes(newsRes.data);
+                }
             }
         }
         fetchPreference();
@@ -50,7 +52,7 @@ export default function App() {
     const Item = styled(Paper)(({ theme }) => ({
         height: 'auto',
         margin: isDisplaySM ? '20px' : '32px',
-        padding: isDisplaySM ? '25px' : '32px', 
+        padding: isDisplaySM ? '25px' : '32px',
         background: "none"
     }));
 
@@ -58,11 +60,13 @@ export default function App() {
         ...(userPreference !== null ? userPreference.theme === "color" ? elevationProps : outlinedProps : ""),
     }
 
-    const handleThemeUpdate = async (newTheme) => {
+    const handleThemeUpdate = async (newTheme: string) => {
         console.log("        # handle New Theme!!!");
-        const newPref = await getUserPreferences(userId);
-        newPref.theme = newTheme;
-        setUserPreference(newPref);
+        const newPref: Preference | undefined = await getUserPreferences(userId);
+        if (newPref !== undefined) {
+            newPref.theme = newTheme;
+            setUserPreference(newPref);
+        }
     }
 
     const commonAttr = {
@@ -89,7 +93,7 @@ export default function App() {
                         <MainNav {...attr.navBar} />
                         <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
                             <Routes>
-                                <Route exact path="/" element={
+                                <Route path="/" element={
                                     <>
                                         <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                             {isReady ? <Convertor {...attr.curr} /> : <Loading />}
@@ -102,17 +106,17 @@ export default function App() {
                                         </Item>
                                     </>
                                 } ></Route>
-                                <Route exact path="/Convertor" element={
+                                <Route path="/Convertor" element={
                                     <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                         {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                     </Item>
                                 } ></Route>
-                                <Route exact path="/Chart" element={
+                                <Route path="/Chart" element={
                                     <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                         {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                     </Item>
                                 } ></Route>
-                                <Route exact path="/News" element={
+                                <Route path="/News" element={
                                     <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                         <FinancialNews filter="true" {...attr.news} />
                                     </Item>
