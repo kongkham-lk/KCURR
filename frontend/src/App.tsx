@@ -14,6 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
+import { type Preference } from './lib/types';
 
 export default function App() {
     const userId = getUserIdentifier();

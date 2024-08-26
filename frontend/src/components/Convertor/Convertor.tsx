@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
+import { type ConversionData, type ConvertorProps } from '../../lib/types';
 
  const Convertor: FC<ConvertorProps> = (props) => {
     const { isDisplaySM, userId, userPreference } = props;

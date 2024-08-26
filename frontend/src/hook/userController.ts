@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { type Preference, type CurrList } from '../lib/types';
 
 const baseURL: string | undefined = process.env.NODE_ENV === "development"
     ? process.env.REACT_APP_DEV_BASEURL
