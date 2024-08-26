@@ -1,4 +1,4 @@
-interface TimeSerie {
+type TimeSerie = {
     changingRates: number[];
     highest: number;
     lowest: number;

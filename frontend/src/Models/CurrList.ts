@@ -1,4 +1,4 @@
-interface CurrList {
+type CurrList = {
     change?: string;
     histRate?: number;
     latestRate: number;

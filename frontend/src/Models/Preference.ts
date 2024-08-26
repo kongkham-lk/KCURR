@@ -1,4 +1,4 @@
-interface Preference {
+type Preference = {
     theme?: string;
     convertedCurrPair?: string[];
     liveRateCurrCodes?: string[];

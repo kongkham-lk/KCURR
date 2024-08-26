@@ -1,4 +1,4 @@
-interface ConversionData {
+type ConversionData = {
     amount: number;
     baseCurr: string;
     targetCurr: string;
