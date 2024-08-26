@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
+import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter';
+import { getUserPreferences, getUserIdentifier } from './hook/userController';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
-import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
 import FinancialNews from './components/FinancialNews/FinancialNews';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import Footer from './components/Footer';
 import { Loading } from './components/subComponents/Loading';
+import { retrieveFinancialNews } from "./util/apiClient";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import Footer from './components/Footer';
 import { Box } from '@mui/material';
-import { getUserPreferences, getUserIdentifier } from './hook/userController';
-import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter';
-import { retrieveFinancialNews } from "./util/apiClient";
 
 export default function App() {
     const userId = getUserIdentifier();
@@ -38,8 +38,8 @@ export default function App() {
         async function fetchPreference() {
             if (userPreference === null) {
                 // console.log("Get initial Pref!!!")
-                const pref: Preference | undefined = await getUserPreferences(userId);
-                if (pref !== undefined) {
+                const pref: Preference | null = await getUserPreferences(userId);
+                if (pref !== null) {
                     const newsRes = await retrieveFinancialNews(pref.newsCategories);
                     setUserPreference(pref);
                     setNewsListsRes(newsRes.data);
@@ -62,8 +62,8 @@ export default function App() {
 
     const handleThemeUpdate = async (newTheme: string) => {
         console.log("        # handle New Theme!!!");
-        const newPref: Preference | undefined = await getUserPreferences(userId);
-        if (newPref !== undefined) {
+        const newPref: Preference | null = await getUserPreferences(userId);
+        if (newPref !== null) {
             newPref.theme = newTheme;
             setUserPreference(newPref);
         }
@@ -95,29 +95,29 @@ export default function App() {
                             <Routes>
                                 <Route path="/" element={
                                     <>
-                                        <Item key="Convertor" {...MuiProps} sx={sxStyle}>
+                                        <Item key="Convertor" {...MuiProps} >
                                             {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                         </Item>
-                                        <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
+                                        <Item key="ExchangeRateTable" {...MuiProps} >
                                             {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                         </Item>
-                                        <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
+                                        <Item key="FinancialNews" {...MuiProps} >
                                             {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                         </Item>
                                     </>
                                 } ></Route>
                                 <Route path="/Convertor" element={
-                                    <Item key="Convertor" {...MuiProps} sx={sxStyle}>
+                                    <Item key="Convertor" {...MuiProps} >
                                         {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                     </Item>
                                 } ></Route>
                                 <Route path="/Chart" element={
-                                    <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
+                                    <Item key="ExchangeRateTable" {...MuiProps} >
                                         {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                     </Item>
                                 } ></Route>
                                 <Route path="/News" element={
-                                    <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
+                                    <Item key="FinancialNews" {...MuiProps} >
                                         <FinancialNews filter="true" {...attr.news} />
                                     </Item>
                                 } ></Route>
@@ -130,11 +130,6 @@ export default function App() {
         </>
     );
 };
-
-const sxStyle = {
-    // backgroundColor: 'inherit',
-    // color: 'inherit',
-}
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 const darkTheme = createTheme({ palette: { mode: 'dark' } });

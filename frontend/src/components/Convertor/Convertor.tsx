@@ -1,23 +1,26 @@
 import '../../App.css';
-import { useEffect, useState } from 'react';
-import ConvertorForm from "./ConvertorForm";
+import React, { FC, useEffect, useState } from 'react';
+import ConvertorForm from './ConvertorForm';
 import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
 
-export default function Convertor(props) {
+ const Convertor: FC<ConvertorProps> = (props) => {
     const { isDisplaySM, userId, userPreference } = props;
 
-    const [formData, setFormData] = useState(null);
-    const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(true);
-    const [targetConvertCurrPair, setTargetConvertCurrPair] = useState([]);
+    const [formData, setFormData] = useState<ConversionData | null>(null);
+    const [isNewUpdateRequest, setIsNewUpdateRequest] = useState<boolean>(true);
+    const [targetConvertCurrPair, setTargetConvertCurrPair] = useState<string[]>([]);
 
-    let baseCurr = "", targetCurr = "", amount = 0.0, total = 0.0; // declare default variable to insert into the markup content
+    let baseCurr: string = "";
+    let targetCurr: string = "";
+    let amount: number = 0.0;
+    let total: number = 0.0; // declare default variable to insert into the markup content
 
     useEffect(() => {
         // console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
-        setTargetConvertCurrPair([...userPreference.convertedCurrPair])
+        setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair))
     }, [userPreference])
 
     // Display conversion result
@@ -41,14 +44,14 @@ export default function Convertor(props) {
         handleCurrPairCookieUpdate(newCurrPair);
     }
 
-    const handleCurrPairCookieUpdate = (newCurrPair) => {
+    const handleCurrPairCookieUpdate = (newCurrPair: string[]) => {
         setTargetConvertCurrPair(newCurrPair);
         console.log("Save new conversion curr pair!!!");
         savePrefCovertedPair(userId, newCurrPair);
     }
 
     // Invode when click convert button on the screen
-    const handleConversionFormDataUpdate = async (targetConvertAmount) => {
+    const handleConversionFormDataUpdate = async (targetConvertAmount: number) => {
         if (targetConvertAmount !== 0 || isNaN(targetConvertAmount)) {
             setIsNewUpdateRequest(true);
             const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
@@ -95,3 +98,5 @@ export default function Convertor(props) {
         </>
     )
 }
+
+export default Convertor;
