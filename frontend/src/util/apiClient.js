@@ -19,9 +19,9 @@ export async function retrieveConvertValue(targetConvertAmount, targetConvertCur
     }
 };
 
-export async function retrieveExchangeRates(initialValue) {
-    const resExchangeRatesLast = await axios.post(`${baseURL}:${port}/curr/rate-latest`, initialValue);
-    const resExchangeRatesHist = await axios.post(`${baseURL}:${port}/curr/rate-hist`, initialValue);
+export async function retrieveExchangeRates(defaultCurr) {
+    const resExchangeRatesLast = await axios.post(`${baseURL}:${port}/curr/rate-latest`, defaultCurr);
+    const resExchangeRatesHist = await axios.post(`${baseURL}:${port}/curr/rate-hist`, defaultCurr);
     return [resExchangeRatesLast.data, resExchangeRatesHist.data];
 }
 

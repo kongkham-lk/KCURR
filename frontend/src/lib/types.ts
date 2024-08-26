@@ -70,8 +70,8 @@ export type ConvertorProps = DisplayFlags & User & {
 export type ChartProps = ConvertorProps & {
     initialCurrLists: CurrList[];
     initialCurrExchangeRates: string[];
-    isCurrListReady: boolean;
-}
+    isReady: boolean;
+};
 
 export type NewsProps = DisplayFlags & User & {
     currentUrl: string;

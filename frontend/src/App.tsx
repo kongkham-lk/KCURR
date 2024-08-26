@@ -14,7 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { type Preference } from './lib/types';
+import { type NewsHeadlines, type Preference } from './lib/types';
 
 export default function App() {
     const userId = getUserIdentifier();
@@ -22,6 +22,8 @@ export default function App() {
     const isDisplaySM = useMediaQuery('(max-width:414px)');
     const isDisplayMD = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
+    const currentPath: string = currentUrl.pathname.toLowerCase();
+    const isChartFeatureEnable: boolean = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
     const { currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isReady } = useCurrCountriesApiGetter();
 
     // console.log("APP() - userPreference: ", userPreference);
@@ -29,10 +31,8 @@ export default function App() {
     // retrieved initial data for live rate feature
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
     // Observation: When react state in App.js is updated, all the sub component's state also reset
-    const currentPath = currentUrl.pathname.toLowerCase();
-    const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
-    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
-    const [newsListsRes, setNewsListsRes] = useState({});
+    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsApiGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
+    const [newsListsRes, setNewsListsRes] = useState<NewsHeadlines[]>([]);
 
     // Initialized userPreference
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function App() {
     const attr = {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
-        chart: { initialCurrLists, initialCurrExchangeRates, isCurrListReady },
+        chart: { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady },
         news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
     }
 
@@ -92,7 +92,13 @@ export default function App() {
                 <ThemeProvider theme={targetTheme} >
                     <div className="App" >
                         <MainNav {...attr.navBar} />
-                        <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
+                        <Box
+                            sx={{
+                                minHeight: isDisplaySM ? '48vh' : '63vh',
+                                pt: isDisplaySM ? 7.5 : 8.5,
+                                pb: 0.5,
+                                backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727"
+                            }}>
                             <Routes>
                                 <Route path="/" element={
                                     <>

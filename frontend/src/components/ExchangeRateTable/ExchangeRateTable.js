@@ -29,7 +29,7 @@ import { getBaseColor } from '../../util/globalVariable';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
-        initialCurrLists, initialCurrExchangeRates, isCurrListReady: isReady, isChartFeatureEnable } = props;
+        initialCurrLists, initialCurrExchangeRates, isReady, isChartFeatureEnable } = props;
 
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
