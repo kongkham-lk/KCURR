@@ -1,3 +1,16 @@
+export type User = {
+    userId: string;
+    userPreference: Preference;
+    onThemeUpdate: () => Promise<void>;
+};
+
+export type Preference = {
+    theme?: string;
+    convertedCurrPair?: string[];
+    liveRateCurrCodes?: string[];
+    newsCategories?: string[];
+};
+
 export type ConversionData = {
     amount: number;
     baseCurr: string;
@@ -5,12 +18,7 @@ export type ConversionData = {
     total: number;
 };
 
-export type ConvertorProps = DisplayFlags & User & {
-    currCountiesCodeMapDetail: CurrCountiesCodeMapDetail;
-    sortedCurrsCodeList: string[];
-    validCurFlagList: string[];
-    isChartFeatureEnable: boolean;
-};
+export type CurrExchangeRates = Record<string, number>;
 
 export type CurrCountiesCodeMapDetail = Record<string, CurrCountriesDetail>;
 
@@ -22,31 +30,12 @@ export type CurrCountriesDetail = {
     flagCode: string;
 };
 
-export type CurrExchangeRates = Record<string, number>;
-
 export type CurrList = {
     change?: string;
     histRate?: number;
     latestRate: number;
     targetCurr: string;
     timeSeries?: TimeSerie;
-};
-
-export type DisplayFlags = {
-    isDisplaySM: boolean;
-    isDisplayMD: boolean;
-};
-
-export type NavBarProps = DisplayFlags & User & {
-    currentUrl: string;
-    isOutLineTheme: boolean;
-};
-
-export type Preference = {
-    theme?: string;
-    convertedCurrPair?: string[];
-    liveRateCurrCodes?: string[];
-    newsCategories?: string[];
 };
 
 export type TimeSerie = {
@@ -57,10 +46,25 @@ export type TimeSerie = {
     monthRangeIndicator: string[];
 };
 
-export type User = {
-    userId: string;
-    userPreference: Preference;
-    onThemeUpdate: () => Promise<void>;
+export type NewsHeadlines = {
+    title: string;
+    link: string;
+    publisher: string;
+    publishTime: string;
+    diffTimeInHour: number;
+    thumbnail: string;
+}
+
+export type NavBarProps = DisplayFlags & User & {
+    currentUrl: string;
+    isOutLineTheme: boolean;
+};
+
+export type ConvertorProps = DisplayFlags & User & {
+    currCountiesCodeMapDetail: CurrCountiesCodeMapDetail;
+    sortedCurrsCodeList: string[];
+    validCurFlagList: string[];
+    isChartFeatureEnable: boolean;
 };
 
 export type ChartProps = ConvertorProps & {
@@ -73,3 +77,8 @@ export type NewsProps = DisplayFlags & User & {
     currentUrl: string;
     newsListsRes: string[];
 }
+
+export type DisplayFlags = {
+    isDisplaySM: boolean;
+    isDisplayMD: boolean;
+};
