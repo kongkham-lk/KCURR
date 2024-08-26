@@ -7,8 +7,9 @@ import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
 import { type ConversionData, type ConvertorProps } from '../../lib/types';
 
- const Convertor: FC<ConvertorProps> = (props) => {
-    const { isDisplaySM, userId, userPreference } = props;
+
+export default function Convertor (props : ConvertorProps) {
+    const { isDisplaySM, userId, userPreference } = props
 
     const [formData, setFormData] = useState<ConversionData | null>(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState<boolean>(true);
@@ -21,7 +22,7 @@ import { type ConversionData, type ConvertorProps } from '../../lib/types';
 
     useEffect(() => {
         // console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
-        setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair))
+        setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair)) // this equivalent to spread operator [...userPreference.convertedCurrPair]
     }, [userPreference])
 
     // Display conversion result
@@ -99,5 +100,3 @@ import { type ConversionData, type ConvertorProps } from '../../lib/types';
         </>
     )
 }
-
-export default Convertor;

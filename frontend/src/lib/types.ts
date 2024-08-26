@@ -53,7 +53,19 @@ export type NewsHeadlines = {
     publishTime: string;
     diffTimeInHour: number;
     thumbnail: string;
-}
+};
+
+type CurrCode = string;
+
+export type CurrCodeByDetail = Record<CurrCode, CurrCountryDetail>;
+
+export type CurrCountryDetail = {
+    currCode: string;
+    countryName: string;
+    display: string;
+    currSymbol: string;
+    flagCode: string;
+};
 
 export type NavBarProps = DisplayFlags & User & {
     currentUrl: string;
@@ -67,7 +79,7 @@ export type ConvertorProps = DisplayFlags & User & {
     isChartFeatureEnable: boolean;
 };
 
-export type ChartProps = ConvertorProps & {
+export type LiveRateProps = ConvertorProps & {
     initialCurrLists: CurrList[];
     initialCurrExchangeRates: string[];
     isReady: boolean;
@@ -76,7 +88,7 @@ export type ChartProps = ConvertorProps & {
 export type NewsProps = DisplayFlags & User & {
     currentUrl: string;
     newsListsRes: string[];
-}
+};
 
 export type DisplayFlags = {
     isDisplaySM: boolean;

@@ -95,7 +95,7 @@ export async function saveCurrListsToCookie(userId: string, currLists: CurrList)
 }
 
 // Invoke to update the initialCurrList whenever user set new theme
-export function getCurrListsFromCookie(userId: string) : CurrList | null {
+export function getCurrListsFromCookie(userId: string) : CurrList[] | null {
     const savedCurrLists : string | null = localStorage.getItem(`currLists_${userId}`);
     // console.log("check savedCurrLists: ", savedCurrLists)
     // Check if savedData has any

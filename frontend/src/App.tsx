@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import useCurrCountriesApiGetter from './hook/useCurrCountriesApiGetter';
-import useInitialCurrListsGetter from './hook/useInitialCurrListsGetter';
+import useInitialCurrListsApiGetter from './hook/useInitialCurrListsApiGetter';
 import { getUserPreferences, getUserIdentifier } from './hook/userController';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
@@ -17,10 +17,10 @@ import { Box } from '@mui/material';
 import { type NewsHeadlines, type Preference } from './lib/types';
 
 export default function App() {
-    const userId = getUserIdentifier();
+    const userId: string = getUserIdentifier();
     const [userPreference, setUserPreference] = useState<Preference | null>(null);
-    const isDisplaySM = useMediaQuery('(max-width:414px)');
-    const isDisplayMD = useMediaQuery('(max-width:920px)');
+    const isDisplaySM: boolean = useMediaQuery('(max-width:414px)');
+    const isDisplayMD: boolean = useMediaQuery('(max-width:920px)');
     const currentUrl = useLocation();
     const currentPath: string = currentUrl.pathname.toLowerCase();
     const isChartFeatureEnable: boolean = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
@@ -61,7 +61,7 @@ export default function App() {
         ...(userPreference !== null ? userPreference.theme === "color" ? elevationProps : outlinedProps : ""),
     }
 
-    const handleThemeUpdate = async (newTheme: string) => {
+    const handleThemeUpdate = async (newTheme: string): Promise<void> => {
         console.log("        # handle New Theme!!!");
         const newPref: Preference | null = await getUserPreferences(userId);
         if (newPref !== null) {
