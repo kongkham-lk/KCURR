@@ -18,9 +18,13 @@ export type ConversionData = {
     total: number;
 };
 
-export type CurrExchangeRates = Record<string, number>;
+type CurrCode = string;
+type ExchangeRates = number;
 
-export type CurrCountiesCodeMapDetail = Record<string, CurrCountriesDetail>;
+export type CurrCodeMapExchangeRates = Record<CurrCode, ExchangeRates>;
+
+export type CurrCodeMapDetail = Record<CurrCode, CurrCountriesDetail>;
+export type CurrCodeMapTimeSerie = Record<CurrCode, TimeSerie>;
 
 export type CurrCountriesDetail = {
     countryName: string;
@@ -55,8 +59,6 @@ export type NewsHeadlines = {
     thumbnail: string;
 };
 
-type CurrCode = string;
-
 export type CurrCodeByDetail = Record<CurrCode, CurrCountryDetail>;
 
 export type CurrCountryDetail = {
@@ -72,18 +74,24 @@ export type NavBarProps = DisplayFlags & User & {
     isOutLineTheme: boolean;
 };
 
-export type ConvertorProps = DisplayFlags & User & {
-    currCountiesCodeMapDetail: CurrCountiesCodeMapDetail;
+export type CurrCountriesApi = {
+    currCountiesCodeMapDetail: CurrCodeMapDetail;
     sortedCurrsCodeList: string[];
     validCurFlagList: string[];
+    isReady?: boolean
+}
+
+export type InitialCurrListsApi = {
+    initialCurrLists: CurrList[];
+    initialCurrExchangeRates: CurrCodeMapExchangeRates[] | null;
+    isReady: boolean;
+}
+
+export type ConvertorProps = DisplayFlags & User & CurrCountriesApi & {
     isChartFeatureEnable: boolean;
 };
 
-export type LiveRateProps = ConvertorProps & {
-    initialCurrLists: CurrList[];
-    initialCurrExchangeRates: string[];
-    isReady: boolean;
-};
+export type LiveRateProps = ConvertorProps & InitialCurrListsApi;
 
 export type NewsProps = DisplayFlags & User & {
     currentUrl: string;

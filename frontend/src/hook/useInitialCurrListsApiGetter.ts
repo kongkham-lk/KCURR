@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { createCurrLists } from '../util/createCurrLists';
 import { retrieveExchangeRates } from '../util/apiClient';
 import { getCurrListsFromCookie } from './userController';
-import { type LiveRateProps, type Preference, type CurrExchangeRates, type CurrList } from '../lib/types';
+import { type Preference, type CurrCodeMapExchangeRates, type CurrList, type InitialCurrListsApi } from '../lib/types';
 
-export default function useInitialCurrListsApiGetter(defaultCurr: string | null, currCodeArray: string[] | null, dayRange: string | null,
-    isFeatureDisplay: boolean, userPreference: Preference | null = null, userId: string): LiveRateProps {
+export default function useInitialCurrListsApiGetter(defaultCurr: string, currCodeArray: string[], dayRange: string, 
+    isFeatureDisplay: boolean, userPreference: Preference | null = null, userId: string): InitialCurrListsApi {
     const [initialCurrLists, setInitialCurrLists] = useState<CurrList[]>([]);
-    const [initialCurrExchangeRates, setInitialCurrExchangeRates] = useState<CurrExchangeRates[] | null>([]);
+    const [initialCurrExchangeRates, setInitialCurrExchangeRates] = useState<CurrCodeMapExchangeRates[] | null>([]);
     const [isReady, setIsReady] = useState<boolean>(false);
 
     // reassign all neccessary props when this function is invoked on App.js
@@ -19,7 +19,7 @@ export default function useInitialCurrListsApiGetter(defaultCurr: string | null,
 
     // Only fetch exchange rate list from APIs when users are on home page
     // this will be used when it is not neccessary to fetch timeSeries data for each visible currency row on live rate table
-    const fetchExchangeRatesDayRange = async (defaultCurr: string | null): Promise<CurrExchangeRates[] | null> => {
+    const fetchExchangeRatesDayRange = async (defaultCurr: string): Promise<CurrCodeMapExchangeRates[] | null> => {
         if (defaultCurr === null)
             return null;
 
@@ -36,7 +36,7 @@ export default function useInitialCurrListsApiGetter(defaultCurr: string | null,
                         try {
                             const currLists: CurrList[] = [];
                             // console.log("defaultCurr: ", defaultCurr)
-                            const currExchangeRates: CurrExchangeRates[] | null = isFeatureDisplay ? null : await fetchExchangeRatesDayRange(defaultCurr);
+                            const currExchangeRates: CurrCodeMapExchangeRates[] | null = isFeatureDisplay ? null : await fetchExchangeRatesDayRange(defaultCurr);
                             // console.log("currExchangeRates: ", currExchangeRates)
                             // console.log("    >>> createCurrLists!!! ", currCodeArray)
                             for (let i in currCodeArray) {

@@ -56,13 +56,13 @@ export default function Convertor (props : ConvertorProps) {
     const handleConversionFormDataUpdate = async (targetConvertAmount: number) => {
         if (targetConvertAmount !== 0 || isNaN(targetConvertAmount)) {
             setIsNewUpdateRequest(true);
-            const response = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
+            const totalConvertAmount = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
             setFormData(() => {
                 return {
                     amount: targetConvertAmount,
                     baseCurr: targetConvertCurrPair[0],
                     targetCurr: targetConvertCurrPair[1],
-                    total: response.data
+                    total: totalConvertAmount
                 }
             });
         }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { fetchAllCountryFlags } from '../util/getFlag';
-import { type ConvertorProps, type CurrCodeByDetail, type CurrCountiesCodeMapDetail } from '../lib/types';
+import { type CurrCountriesApi, type CurrCodeByDetail, type CurrCodeMapDetail } from '../lib/types';
 
-export default function useCurrCountriesApiGetter(): ConvertorProps {
-    const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState<CurrCountiesCodeMapDetail>({});
+export default function useCurrCountriesApiGetter(): CurrCountriesApi {
+    const [currCountiesCodeMapDetail, setCurrCountiesCodeMapDetail] = useState<CurrCodeMapDetail>({});
     const [sortedCurrsCodeList, setSortedCurrsCodeList] = useState<string[]>([]);
     const [validCurFlagList, setValidCurFlagList] = useState<string[]>([]); // the curr code flag that api return 404 status
     const [isReady, setIsReady] = useState<boolean>(false);
@@ -54,8 +54,8 @@ export default function useCurrCountriesApiGetter(): ConvertorProps {
         async function fetchCountriesFlags() {
             if (Object.keys(currCountiesCodeMapDetail).length !== 0) {
                 // console.log("check all cur code for flag api!!!");
-                const newSortedCurrsCodeList = Object.keys(currCountiesCodeMapDetail).sort();
-                const newValidCurrFlagList = await fetchAllCountryFlags(newSortedCurrsCodeList);
+                const newSortedCurrsCodeList: string[] = Object.keys(currCountiesCodeMapDetail).sort();
+                const newValidCurrFlagList: string[] = await fetchAllCountryFlags();
 
                 setSortedCurrsCodeList(newSortedCurrsCodeList);
                 setValidCurFlagList(newValidCurrFlagList);
