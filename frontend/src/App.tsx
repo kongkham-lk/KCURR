@@ -31,7 +31,7 @@ export default function App() {
     // retrieved initial data for live rate feature
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
     // Observation: When react state in App.js is updated, all the sub component's state also reset
-    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsApiGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
+    const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsApiGetter("", [], "", isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
     const [newsListsRes, setNewsListsRes] = useState<NewsHeadlines[]>([]);
 
     // Initialized userPreference

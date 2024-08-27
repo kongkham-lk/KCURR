@@ -1,5 +1,5 @@
 import '../../App.css';
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ConvertorForm from './ConvertorForm';
 import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
@@ -41,7 +41,7 @@ export default function Convertor (props : ConvertorProps) {
     }
 
     // Invoke when swap currency code
-    const handleConvertCurrSwap = (e) => {
+    const handleConvertCurrSwap = () => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
         handleCurrPairCookieUpdate(newCurrPair);
     }

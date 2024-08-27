@@ -31,11 +31,11 @@ export type CurrCountriesDetail = {
 };
 
 export type CurrList = {
-    change?: string;
-    histRate?: number;
-    latestRate: number;
     targetCurr: string;
-    timeSeries?: TimeSerie;
+    latestRate: number;
+    histRate?: number | null;
+    change?: string | null;
+    timeSeries?: TimeSerie | null;
 };
 
 export type TimeSerie = {
