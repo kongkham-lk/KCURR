@@ -1,14 +1,20 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import InputTextField from '../subComponents/InputTextField';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import { type DisplayFlags } from '../../lib/types';
 
-export default function ConvertorForm(props) {
-    const { onConversionFormDataSubmit, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
-        targetConvertCurrPair, isDisplaySM, onNewCurrCodeAssigned, onConvertCurrSwap } = props;
+type ConvertorFormProps = DisplayFlags & {
+    onConversionFormDataSubmit: (ConvertAmount: number) => Promise<void>;
+    targetConvertCurrPair: string[];
+    onConvertCurrSwap: () => void;
+}
+
+export default function ConvertorForm(props: ConvertorFormProps) {
+    const { onConversionFormDataSubmit, targetConvertCurrPair, isDisplaySM, onConvertCurrSwap } = props;
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
@@ -38,10 +44,6 @@ export default function ConvertorForm(props) {
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
-        onNewCurrCodeAssigned,
-        currCountiesCodeMapDetail,
-        sortedCurrsCodeList,
-        validCurFlagList
     }
 
     const attr = {
@@ -49,27 +51,31 @@ export default function ConvertorForm(props) {
             onConvertAmountUpdate: handleConvertAmountUpdate,
             isError,
             baseCurr: targetConvertCurrPair[0],
-            currCountiesCodeMapDetail,
             inputFieldLabel: "amount",
-            placeHolder: "Enter Number"
+            placeHolder: "Enter Number",
+            ...props,
         },
         baseCurr: {
             label: "From",
             isBaseCurrency: 0,
             baseCurrVal: targetConvertCurrPair[0],
-            ...commonAttr
+            ...commonAttr,
+            ...props,
         },
         targetCurr: {
             label: "To",
             isBaseCurrency: 1,
             baseCurrVal: targetConvertCurrPair[1],
-            ...commonAttr
+            ...commonAttr,
+            ...props,
         },
     };
 
+    const targetFormStyling = isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand
+
     return (
         <form onSubmit={onSubmit} >
-            <div spacing={3} style={isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand} flexdirection={isDisplaySM ? "column" : "row"}>
+            <div style={targetFormStyling}>
                 <InputTextField {...attr.InputTextField} />
                 <CurrCountriesDropDown {...attr.baseCurr} />
                 <Button variant="outlined" type="submit" onClick={onConvertCurrSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
@@ -92,11 +98,11 @@ const style = {
 const sxStyle = {
     CurrCountriesDropDown: { minWidth: 1 / 4, width: 'auto' },
     FormExpand: {
-        display: "flex", alignItems: "center", flexWrap: "nowrap", flexDirection: "row", justifyContent: "space-between",
+        display: "flex", alignItems: "center", flexWrap: "nowrap" as const, flexDirection: "row" as const, justifyContent: "space-between",
         gap: "10px", padding: "0",
     },
     FormShrink: {
-        display: "flex", flexWrap: "nowrap", flexDirection: "column", justifyContent: "space-between",
+        display: "flex", flexWrap: "nowrap" as const, flexDirection: "column" as const, justifyContent: "space-between",
         gap: "20px", padding: "0",
     },
     swapButton: { borderRadius: "32px", width: "50px", height: "50px", borderColor: "#afaeae", minWidth: "50px" },

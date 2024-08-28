@@ -1,21 +1,28 @@
 import '../../App.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import { LineGraph } from './LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
+import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type IsChartFeatureEnable, type TimeSerie, type User } from '../../lib/types';
 
-export default function RateChangeGraphFeature(props) {
-    const { currencyRateData, passInRequestState, isDisplaySM, removeMarginTop = false, isChartFeatureEnable } = props;
-    const [timeSeries, setTimeSeries] = useState(null);
-    const [timeSeriesRange, setTimeSeriesRange] = useState("1d");
-    const [isNewUpdateRequest, setIsNewUpdateRequest] = useState(passInRequestState);
+type RateChangeGraphFeatureProps = DisplayFlags & User & IsChartFeatureEnable & {
+    currencyRateData: ConversionData | null;
+    passInRequestState: boolean;
+    removeMarginTop: boolean
+}
 
-    let baseCurr;
-    let targetCurr;
-    let changeRateInPercent;
-    let latestRate;
+export default function RateChangeGraphFeature(props: RateChangeGraphFeatureProps) {
+    const { currencyRateData, passInRequestState: passDownUpdateRequestFlag, isDisplaySM, removeMarginTop = false, isChartFeatureEnable } = props;
+    const [timeSeries, setTimeSeries] = useState<TimeSerie | null>(null);
+    const [timeSeriesRange, setTimeSeriesRange] = useState<string>("1d");
+    const [isNewUpdateRequest, setIsNewUpdateRequest] = useState<boolean>(passDownUpdateRequestFlag);
+
+    let baseCurr = "";
+    let targetCurr = "";
+    let changeRateInPercent = 0;
+    let latestRate = "";
 
     if (currencyRateData !== null) {
         baseCurr = currencyRateData.baseCurr;
@@ -24,7 +31,7 @@ export default function RateChangeGraphFeature(props) {
     }
 
     if (timeSeries !== null) {
-        const changingRates = timeSeries.changingRates;
+        const changingRates: number[] = timeSeries.changingRates;
         changeRateInPercent = (changingRates[changingRates.length - 1] - changingRates[0]) / changingRates[0] * 100;
     }
 
@@ -32,14 +39,14 @@ export default function RateChangeGraphFeature(props) {
         async function timeSeriesGetter() {
             if (currencyRateData != null && isChartFeatureEnable) {
                 console.log("retrieveExchangeRatesTimeSeries!!!")
-                const timeSeriesRes = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
-                setTimeSeries(timeSeriesRes.data[targetCurr]);
+                const timeSeriesRes: CurrCodeMapTimeSerie = await retrieveExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest);
+                setTimeSeries(timeSeriesRes[targetCurr]);
             }
         }
         timeSeriesGetter()
     }, [baseCurr, currencyRateData, isChartFeatureEnable, isNewUpdateRequest, targetCurr, timeSeriesRange])
 
-    const handleClick = (range) => {
+    const handleClick = (range: string) => {
         setIsNewUpdateRequest(false)
         setTimeSeriesRange(range)
     }
@@ -53,7 +60,7 @@ export default function RateChangeGraphFeature(props) {
                     </Typography>
                 }
                 {latestRate !== "NaN" ?
-                    <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null && 1} >
+                    <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null ? 1 : 0} >
                         1 {baseCurr} = {latestRate} {targetCurr}
                     </Typography> : <br />
                 }
@@ -72,18 +79,18 @@ export default function RateChangeGraphFeature(props) {
     );
 }
 
-const styleSpan = (changeRateInPercent) => {
+const styleSpan = (changeRateInPercent: number) => {
     return { color: changeRateInPercent >= 0 ? "green" : "#cd0000" }
 }
 
 const commonStyle = {
-    width: { width: "-webkit-fill-available" },
-    textAlign: { textAlign: "center" }
+    Width: { width: "-webkit-fill-available" },
+    TextAlign: { textAlign: "center" as const }
 }
 
 const style = {
-    divRangeSelectorWrapperSm: { ...commonStyle.textAlign, margin: "4% 0px" },
-    divRangeSelectorWrapperLg: { ...commonStyle.textAlign, margin: "20px 0px 2% 0px" },
+    divRangeSelectorWrapperSm: { ...commonStyle.TextAlign, margin: "4% 0px" },
+    divRangeSelectorWrapperLg: { ...commonStyle.TextAlign, margin: "20px 0px 2% 0px" },
     divRangeSelectorNone: { display: "none" },
     divChart: { height: "auto", width: "100%" },
     TopBorderAdded: { borderTop: "1px solid #adadad60" },
@@ -91,6 +98,6 @@ const style = {
 }
 
 const sxStyle = {
-    lineGraphSm: { ...commonStyle.width },
-    lineGraphLg: { ...commonStyle.width, height: "300px" },
+    lineGraphSm: { ...commonStyle.Width },
+    lineGraphLg: { ...commonStyle.Width, height: "300px" },
 }

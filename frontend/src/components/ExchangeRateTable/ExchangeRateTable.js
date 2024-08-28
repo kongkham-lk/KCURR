@@ -250,7 +250,7 @@ export default function ExchangeRateTable(props) {
             inputCurrType: "targetCurr",
             currCountiesCodeMapDetail,
             passInStyle: { ...style.CurrCountriesDropDown },
-            size: "small",
+            // size: "small", // no need to pass in as this somehow won't effect the conversion secton
             sortedCurrsCodeList,
             validCurFlagList,
         },

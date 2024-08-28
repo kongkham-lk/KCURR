@@ -1,20 +1,31 @@
+import React from 'react';
 import { FormControl } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
+import { type CurrCountriesApi, type NewCurrCodeAssigned } from '../../lib/types';
 
-export default function CurrCountriesDropDown(props) {
+type CurrCountriesDropDownProps = CurrCountriesApi & NewCurrCodeAssigned & {
+    label: "string";
+    onNewCurrCodeAssigned: (e: NewCurrCodeAssigned) => void;
+    baseCurrVal: string;
+    sxStyle: React.CSSProperties;
+    size: string;
+    passInStyle: React.CSSProperties;
+}
+
+export default function CurrCountriesDropDown(props: CurrCountriesDropDownProps) {
     const { label, onNewCurrCodeAssigned, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
-        sxStyle, size, passInStyle = { height: "56.5px" } } = props;
+        sxStyle, passInStyle = { height: "56.5px" } } = props;
     
     // Differentiate the currCode setter base on indexNumber or as boolean in binary
     // The isBaseCurrency will be only use in conversion page (differentiate which dropdown setter refers to)
-    const handleChange = (e) => onNewCurrCodeAssigned({ isBaseCurrency, value: e.target.value });
+    const handleChange = (e: SelectChangeEvent): void => onNewCurrCodeAssigned({ isBaseCurrency, value: e.target.value });
     const id = isBaseCurrency === 0 ? "baseCurr" : "targetCurr"
 
     return (
-        <FormControl sx={sxStyle} size={size}>
+        <FormControl sx={sxStyle} size="small">
             <InputLabel id={id } >{label}</InputLabel>
             <Select
                 labelId={id}
