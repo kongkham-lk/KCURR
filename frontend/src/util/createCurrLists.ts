@@ -1,7 +1,8 @@
-import { CurrCodeMapTimeSerie, CurrCodeMapExchangeRates, CurrList, TimeSerie } from '../lib/types';
 import { retrieveExchangeRatesTimeSeries } from './apiClient';
+import { type CurrCodeMapTimeSerie, type CurrCodeMapExchangeRates, type CurrList, type TimeSerie } from '../lib/types';
 
-export async function createCurrLists(baseCurr: string, targetCurr: string, defaultCurrExchangeRates: CurrCodeMapExchangeRates[] | null, timeSeriesRange: string, isFeatureDisplay: boolean): Promise<CurrList> {
+export async function createCurrLists(baseCurr: string, targetCurr: string, defaultCurrExchangeRates: CurrCodeMapExchangeRates[] | null, 
+    timeSeriesRange: string, isFeatureDisplay: boolean): Promise<CurrList> {
     if (baseCurr === targetCurr) {
         return { targetCurr, latestRate: 1, histRate: null, change: null, timeSeries: null }; // skip request data from API for default row
     } else {

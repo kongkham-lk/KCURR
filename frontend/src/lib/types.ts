@@ -21,9 +21,12 @@ export type ConversionData = {
 type CurrCode = string;
 type ExchangeRates = number;
 
+export type IsChartFeatureEnable = { isChartFeatureEnable: boolean };
+
 export type CurrCodeMapExchangeRates = Record<CurrCode, ExchangeRates>;
 
 export type CurrCodeMapDetail = Record<CurrCode, CurrCountriesDetail>;
+
 export type CurrCodeMapTimeSerie = Record<CurrCode, TimeSerie>;
 
 export type CurrCountriesDetail = {
@@ -87,11 +90,10 @@ export type InitialCurrListsApi = {
     isReady: boolean;
 }
 
-export type ConvertorProps = DisplayFlags & User & CurrCountriesApi & {
-    isChartFeatureEnable: boolean;
-};
-
-export type LiveRateProps = ConvertorProps & InitialCurrListsApi;
+export type NewCurrCodeAssigned = {
+    isBaseCurrency: number;
+    value: string;
+}
 
 export type NewsProps = DisplayFlags & User & {
     currentUrl: string;

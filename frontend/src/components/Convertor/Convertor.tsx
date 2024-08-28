@@ -5,10 +5,11 @@ import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
-import { type ConversionData, type ConvertorProps } from '../../lib/types';
+import { type DisplayFlags, type NewCurrCodeAssigned, type User, type ConversionData } from '../../lib/types';
 
+type ConvertorProps = DisplayFlags & User;
 
-export default function Convertor (props : ConvertorProps) {
+export default function Convertor(props: ConvertorProps) {
     const { isDisplaySM, userId, userPreference } = props
 
     const [formData, setFormData] = useState<ConversionData | null>(null);
@@ -34,14 +35,14 @@ export default function Convertor (props : ConvertorProps) {
     };
 
     // Invoke when new currency code is set through the dropdown menu
-    const handleTargetConvertCurrUpdate = (e) => {
+    const handleTargetConvertCurrUpdate = (e: NewCurrCodeAssigned): void => {
         const newConvertCurrPair = [...targetConvertCurrPair];
         newConvertCurrPair[e.isBaseCurrency] = e.value;
         handleCurrPairCookieUpdate(newConvertCurrPair);
     }
 
     // Invoke when swap currency code
-    const handleConvertCurrSwap = () => {
+    const handleConvertCurrSwap = (): void => {
         const newCurrPair = [targetConvertCurrPair[1], targetConvertCurrPair[0]];
         handleCurrPairCookieUpdate(newCurrPair);
     }
@@ -53,7 +54,7 @@ export default function Convertor (props : ConvertorProps) {
     }
 
     // Invode when click convert button on the screen
-    const handleConversionFormDataUpdate = async (targetConvertAmount: number) => {
+    const handleConversionFormDataUpdate = async (targetConvertAmount: number): Promise<void> => {
         if (targetConvertAmount !== 0 || isNaN(targetConvertAmount)) {
             setIsNewUpdateRequest(true);
             const totalConvertAmount = await retrieveConvertValue(targetConvertAmount, targetConvertCurrPair);
@@ -78,7 +79,7 @@ export default function Convertor (props : ConvertorProps) {
         },
         RateHistoryGraph: {
             currencyRateData: formData,
-            passInRequestState: isNewUpdateRequest,
+            passDownUpdateRequestFlag: isNewUpdateRequest,
             ...props
         }
     };
