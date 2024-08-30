@@ -43,7 +43,9 @@ export default function App() {
                 if (pref !== null) {
                     const newsRes = await retrieveFinancialNews(pref.newsCategories);
                     setUserPreference(pref);
-                    setNewsListsRes(newsRes.data);
+                    
+                    if (newsRes !== null)
+                        setNewsListsRes(newsRes.data);
                 }
             }
         }

@@ -36,7 +36,9 @@ export async function retrieveExchangeRatesTimeSeries(baseCurr: string, targetCu
     return resExchangeRatesTimeSeries.data;
 }
 
-export async function retrieveFinancialNews(newsTopics: string[]) {
+export async function retrieveFinancialNews(newsTopics: string[] | undefined) {
+    if (newsTopics === undefined)
+        return null
     let newsTopic = "";
     for (let i = 0; i < newsTopics.length; i++) {
         newsTopic += newsTopics[i]
