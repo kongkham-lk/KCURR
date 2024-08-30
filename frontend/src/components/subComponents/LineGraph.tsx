@@ -1,13 +1,22 @@
+import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs } from 'chart.js/auto';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { type TimeSerie } from '../../lib/types';
 
-export function LineGraph(props) {
+type LineGraphProps = {
+    displayLabel: boolean;
+    timeSeries: TimeSerie | null;
+}
+
+export function LineGraph(props: LineGraphProps) {
     const { displayLabel = false, timeSeries = null } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
-    const changingRates = timeSeries !== null ? timeSeries.changingRates : null;
-    const timeSeriesRangeLabel = timeSeries !== null ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator) : "1d";
-    
+    const changingRates: number[] | null = timeSeries !== null ? timeSeries.changingRates : null;
+    const timeSeriesRangeLabel = timeSeries !== null && changingRates !== null
+        ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator)
+        : ["1d"];
+
     // color of the color label within popup box
     const borderColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
@@ -16,7 +25,7 @@ export function LineGraph(props) {
             return '#0ba50b'
         }
     };
-    
+
     // color of the color label within popup box
     const backgroundColor = () => {
         if (changingRates !== null && changingRates[0] > changingRates[changingRates.length - 1]) {
@@ -27,7 +36,7 @@ export function LineGraph(props) {
     };
 
     const borderWidth = displayLabel ? 2 : 2.3; // the graph line's thickness
-    const labels = timeSeriesRangeLabel; // the header of popup tag when hover on lin graph
+    const labels: string[] = timeSeriesRangeLabel; // the header of popup tag when hover on lin graph
     const data = {
         labels: labels,
         datasets: [{
@@ -40,31 +49,18 @@ export function LineGraph(props) {
         }]
     };
 
-    const plugins = displayLabel ? {
+    const targetMode = getTargetMode(displayLabel);
+    const maxXAxisLabel = getMaxXAxisLabel(timeSeriesRangeLabel);
+
+    const plugins = {
         legend: {
             display: false,
         },
         tooltip: {
-            mode: 'index',
+            mode: targetMode,
             intersect: false
         }
-    } : {
-        legend: {
-            display: false,
-        },
     };
-
-    const maxXAxisLabel = () => {
-        if (timeSeriesRangeLabel.length <= 7) {
-            return 7;
-        } else if (timeSeriesRangeLabel.length <= 31) {
-            return 7;
-        } else if (timeSeriesRangeLabel.length < 31 * 3) {
-            return 4;
-        } else {
-            return 7;
-        }
-    }
 
     const options = {
         plugins,
@@ -98,11 +94,27 @@ export function LineGraph(props) {
         pointRadius: 0,
         maintainAspectRatio: false,
     }
-    
+
     return (
         <Line
             data={data}
             options={options}
         />
     )
+}
+
+const getTargetMode = (displayLabel: boolean): "index" | undefined => {
+    return displayLabel ? 'index' : undefined;
+}
+
+const getMaxXAxisLabel = (timeSeriesRangeLabel: string[]): number => {
+    if (timeSeriesRangeLabel.length <= 7) {
+        return 7;
+    } else if (timeSeriesRangeLabel.length <= 31) {
+        return 7;
+    } else if (timeSeriesRangeLabel.length < 31 * 3) {
+        return 4;
+    } else {
+        return 7;
+    }
 }
