@@ -5,16 +5,17 @@ import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
-import { type DisplayFlags } from '../../lib/types';
+import { type NewCurrCodeAssigned, type DisplayFlags, CurrCountriesApi } from '../../lib/types';
 
-type ConvertorFormProps = DisplayFlags & {
+type ConvertorFormProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
     onConversionFormDataSubmit: (ConvertAmount: number) => Promise<void>;
     targetConvertCurrPair: string[];
     onConvertCurrSwap: () => void;
+    onNewCurrCodeAssigned: (e: NewCurrCodeAssigned) => void;
 }
 
 export default function ConvertorForm(props: ConvertorFormProps) {
-    const { onConversionFormDataSubmit, targetConvertCurrPair, isDisplaySM, onConvertCurrSwap } = props;
+    const { onConversionFormDataSubmit, targetConvertCurrPair, isDisplaySM, onConvertCurrSwap, onNewCurrCodeAssigned } = props;
     const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
     const [isError, setIsError] = useState(false);
 
@@ -44,30 +45,29 @@ export default function ConvertorForm(props: ConvertorFormProps) {
 
     const commonAttr = {
         sxStyle: sxStyle.CurrCountriesDropDown,
+        onNewCurrCodeAssigned
     }
 
     const attr = {
         InputTextField: {
             onConvertAmountUpdate: handleConvertAmountUpdate,
             isError,
-            baseCurr: targetConvertCurrPair[0],
             inputFieldLabel: "amount",
             placeHolder: "Enter Number",
-            ...props,
         },
         baseCurr: {
             label: "From",
             isBaseCurrency: 0,
             baseCurrVal: targetConvertCurrPair[0],
             ...commonAttr,
-            ...props,
+            ...props
         },
         targetCurr: {
             label: "To",
             isBaseCurrency: 1,
             baseCurrVal: targetConvertCurrPair[1],
             ...commonAttr,
-            ...props,
+            ...props
         },
     };
 

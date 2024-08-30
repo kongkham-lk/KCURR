@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
-import { type DisplayFlags, type NewCurrCodeAssigned, type User, type ConversionData } from '../../lib/types';
+import { type DisplayFlags, type NewCurrCodeAssigned, type User, type ConversionData, type CurrCountriesApi } from '../../lib/types';
 
-type ConvertorProps = DisplayFlags & User;
+type ConvertorProps = DisplayFlags & User & Omit<CurrCountriesApi, "isReady">;
 
 export default function Convertor(props: ConvertorProps) {
     const { isDisplaySM, userId, userPreference } = props

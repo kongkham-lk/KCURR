@@ -6,13 +6,12 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
 import { type CurrCountriesApi, type NewCurrCodeAssigned } from '../../lib/types';
 
-type CurrCountriesDropDownProps = CurrCountriesApi & NewCurrCodeAssigned & {
-    label: "string";
+type CurrCountriesDropDownProps = Omit<CurrCountriesApi, "isReady"> & Omit<NewCurrCodeAssigned, "value"> & {
+    label: string; // "From" | "To"
     onNewCurrCodeAssigned: (e: NewCurrCodeAssigned) => void;
     baseCurrVal: string;
     sxStyle: React.CSSProperties;
-    size: string;
-    passInStyle: React.CSSProperties;
+    passInStyle?: React.CSSProperties;
 }
 
 export default function CurrCountriesDropDown(props: CurrCountriesDropDownProps) {
