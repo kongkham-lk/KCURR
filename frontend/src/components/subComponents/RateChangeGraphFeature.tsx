@@ -46,7 +46,7 @@ export default function RateChangeGraphFeature(props: RateChangeGraphFeatureProp
         timeSeriesGetter()
     }, [baseCurr, currencyRateData, isChartFeatureEnable, isNewUpdateRequest, targetCurr, timeSeriesRange])
 
-    const handleClick = (range: string) => {
+    const handleClick = (range: string): void => {
         setIsNewUpdateRequest(false)
         setTimeSeriesRange(range)
     }

@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup, {
-    toggleButtonGroupClasses,
-} from '@mui/material/ToggleButtonGroup';
+import ToggleButtonGroup, { toggleButtonGroupClasses, } from '@mui/material/ToggleButtonGroup';
+import { DisplayFlags } from '../../lib/types';
 
-export default function RangeTimeSeriesSelector(props) {
+type RangeTimeSeriesSelectorProps = Omit<DisplayFlags, 'isDisplayMD'> & {
+    updateVal: (range: string) => void;
+}
+
+export default function RangeTimeSeriesSelector(props: RangeTimeSeriesSelectorProps) {
     const { updateVal, isDisplaySM } = props;
     const [displayValue, setDisplayValue] = useState("1d")
     const timeSeriesRanges = ["1d", "1w", "1m", "3m", "6m", "9m", "1y"];
 
-    const handleChange = (event, newDisplayValue) => {
+    const handleChange = (event: React.MouseEvent<HTMLElement>, newDisplayValue: string) => {
         updateVal(newDisplayValue);
         setDisplayValue(newDisplayValue);
     };
@@ -29,7 +32,7 @@ export default function RangeTimeSeriesSelector(props) {
         // </ToggleButtonGroup>
         <div>
             <StyledToggleButtonGroup
-                size={isDisplaySM ? "small" : "big"}
+                size={isDisplaySM ? "small" : "large"}
                 value={displayValue}
                 exclusive
                 onChange={handleChange}
