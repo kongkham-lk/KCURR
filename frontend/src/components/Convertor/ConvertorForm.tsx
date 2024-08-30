@@ -19,7 +19,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
     const [isError, setIsError] = useState(false);
 
     // Store new user input for conversion amount
-    const handleConvertAmountUpdate = (e) => {
+    const handleConvertAmountUpdate = (e: HTMLTextAreaElement): void => {
         if (checkIfContainsOnlyNumbers(e.value) || e.value === "") {
             setIsError(false);
         } else {

@@ -1,9 +1,19 @@
+import React, { ChangeEvent } from 'react';
 import TextField from '@mui/material/TextField';
 
-export default function InputTextField(props) {
-    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "large", displayInput } = props;
+type InputTextFieldProps = {
+    onConvertAmountUpdate:(e: HTMLTextAreaElement) => void;
+    isError: boolean;
+    inputFieldLabel: string;
+    placeHolder: string;
+    size: "medium" | "small";
+    displayInput: string;
+}
 
-    const handleChange = (e) => { onConvertAmountUpdate(e.target) };
+export default function InputTextField(props: InputTextFieldProps) {
+    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "medium", displayInput } = props;
+
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>): void => { onConvertAmountUpdate(e.target) };
 
     return (
         <TextField
