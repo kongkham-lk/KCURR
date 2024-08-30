@@ -43,7 +43,7 @@ export default function App() {
                 if (pref !== null) {
                     const newsRes = await retrieveFinancialNews(pref.newsCategories);
                     setUserPreference(pref);
-                    
+
                     if (newsRes !== null)
                         setNewsListsRes(newsRes.data);
                 }

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import InputTextField from '../subComponents/InputTextField';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
-import { type NewCurrCodeAssigned, type DisplayFlags, CurrCountriesApi } from '../../lib/types';
+import { type NewCurrCodeAssigned, type DisplayFlags, type CurrCountriesApi } from '../../lib/types';
 
 type ConvertorFormProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
     onConversionFormDataSubmit: (ConvertAmount: number) => Promise<void>;
@@ -38,7 +38,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
     }
 
     // Submit form to start runniing the conversion logic
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         onConversionFormDataSubmit(targetConvertAmount);
     };

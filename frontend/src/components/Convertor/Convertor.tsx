@@ -5,9 +5,12 @@ import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { savePrefCovertedPair } from '../../hook/userController';
-import { type DisplayFlags, type NewCurrCodeAssigned, type User, type ConversionData, type CurrCountriesApi } from '../../lib/types';
+import { type DisplayFlags, type NewCurrCodeAssigned, type ConversionData, type CurrCountriesApi, type Preference } from '../../lib/types';
 
-type ConvertorProps = DisplayFlags & User & Omit<CurrCountriesApi, "isReady">;
+type ConvertorProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
+    userPreference: Preference | null;
+    userId: string;
+};
 
 export default function Convertor(props: ConvertorProps) {
     const { isDisplaySM, userId, userPreference } = props
@@ -23,7 +26,8 @@ export default function Convertor(props: ConvertorProps) {
 
     useEffect(() => {
         // console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
-        setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair)) // this equivalent to spread operator [...userPreference.convertedCurrPair]
+        if (userPreference !== null)
+            setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair)) // this equivalent to spread operator [...userPreference.convertedCurrPair]
     }, [userPreference])
 
     // Display conversion result
@@ -80,7 +84,7 @@ export default function Convertor(props: ConvertorProps) {
         RateHistoryGraph: {
             currencyRateData: formData,
             passDownUpdateRequestFlag: isNewUpdateRequest,
-            ...props
+            isDisplaySM,
         }
     };
 

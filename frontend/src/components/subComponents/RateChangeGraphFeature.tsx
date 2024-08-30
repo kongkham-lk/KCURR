@@ -5,16 +5,17 @@ import { LineGraph } from './LineGraph';
 import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
-import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type IsChartFeatureEnable, type TimeSerie, type User } from '../../lib/types';
+import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type TimeSerie } from '../../lib/types';
 
-type RateChangeGraphFeatureProps = DisplayFlags & User & IsChartFeatureEnable & {
+type RateChangeGraphFeatureProps = Omit<DisplayFlags, "isDisplayMD"> & {
     currencyRateData: ConversionData | null;
-    passInRequestState: boolean;
-    removeMarginTop: boolean
+    passDownUpdateRequestFlag: boolean;
+    removeMarginTop?: boolean
+    isChartFeatureEnable? : boolean
 }
 
 export default function RateChangeGraphFeature(props: RateChangeGraphFeatureProps) {
-    const { currencyRateData, passInRequestState: passDownUpdateRequestFlag, isDisplaySM, removeMarginTop = false, isChartFeatureEnable } = props;
+    const { currencyRateData, passDownUpdateRequestFlag, isDisplaySM, removeMarginTop = false, isChartFeatureEnable = false } = props;
     const [timeSeries, setTimeSeries] = useState<TimeSerie | null>(null);
     const [timeSeriesRange, setTimeSeriesRange] = useState<string>("1d");
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState<boolean>(passDownUpdateRequestFlag);
