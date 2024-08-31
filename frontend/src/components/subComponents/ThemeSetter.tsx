@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
-// import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
@@ -30,13 +29,13 @@ export default function ThemeSetter(props) {
         setAnchorEl(null);
     };
 
-    const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
+    const getThemeIcon = (targetTheme: string, styling = {}, isPrimary = false) => {
         if (targetTheme === "light")
-            return <LightModeOutlinedIcon fontSize="smaller" sx={styling} color={isPrimary ? "primary" : ""} />
+            return <LightModeOutlinedIcon fontSize="small" sx={styling} color={isPrimary ? "primary" : undefined} />
         else if (targetTheme === "dark")
-            return <DarkModeOutlinedIcon fontSize="smaller" sx={styling} />
+            return <DarkModeOutlinedIcon fontSize="small" sx={styling} />
         else
-            return <ContrastIcon fontSize="smaller" sx={styling} />
+            return <ContrastIcon fontSize="small" sx={styling} />
     }
 
     const handleThemeUpdate = (newTheme) => {

@@ -9,7 +9,7 @@ export function getBaseColor() {
     }
 };
 
-export function getTargetBaseColor(isOutLineTheme, isLightTheme) {
+export function getTargetBaseColor(isOutLineTheme: boolean, isLightTheme: boolean): string {
     const baseColor = getBaseColor();
     return isOutLineTheme ? isLightTheme ? baseColor.lightPrimary : baseColor.darkPrimary : baseColor.white;
 }

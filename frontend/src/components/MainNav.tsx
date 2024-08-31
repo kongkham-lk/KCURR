@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -22,8 +22,8 @@ import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globa
 
 export default function MainNav(props) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
-    const [mobileScreen, setMobileScreen] = useState(false);
-    const [state, setState] = useState(userPreference.theme);
+    const [mobileScreen, setMobileScreen] = useState<boolean>(false);
+    const [state, setState] = useState<string>(userPreference.theme);
     const isLightTheme = state === "light";
 
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
