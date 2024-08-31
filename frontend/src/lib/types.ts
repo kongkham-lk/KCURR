@@ -1,11 +1,11 @@
 export type User = {
     userId: string;
     userPreference: Preference;
-    onThemeUpdate: () => Promise<void>;
+    onThemeUpdate: (newTheme: string) => Promise<void>;
 };
 
 export type Preference = {
-    theme?: string;
+    theme: string;
     convertedCurrPair?: string[];
     liveRateCurrCodes?: string[];
     newsCategories?: string[];
@@ -82,22 +82,27 @@ export type CurrCountriesApi = {
     sortedCurrsCodeList: string[];
     validCurFlagList: string[];
     isReady?: boolean
-}
+};
 
 export type InitialCurrListsApi = {
     initialCurrLists: CurrList[];
     initialCurrExchangeRates: CurrCodeMapExchangeRates[] | null;
     isReady: boolean;
-}
+};
 
 export type NewCurrCodeAssigned = {
     isBaseCurrency: number;
     value: string;
-}
+};
 
 export type NewsProps = DisplayFlags & User & {
     currentUrl: string;
     newsListsRes: string[];
+};
+
+export type ThemeOption = {
+    iconType: string; 
+    label: string;
 };
 
 export type DisplayFlags = {

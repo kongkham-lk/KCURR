@@ -1,3 +1,5 @@
+import { ThemeOption } from "../lib/types";
+
 export function getBaseColor() {
     return {
         lightPrimary: "#1876d2",
@@ -14,7 +16,7 @@ export function getTargetBaseColor(isOutLineTheme: boolean, isLightTheme: boolea
     return isOutLineTheme ? isLightTheme ? baseColor.lightPrimary : baseColor.darkPrimary : baseColor.white;
 }
 
-export function getThemeOptions() {
+export function getThemeOptions(): ThemeOption[] {
     return [
         { iconType: 'light', label: 'Light' },
         { iconType: 'color', label: 'Color' },
