@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -19,15 +19,32 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
+import { DisplayFlags, ThemeOption, User } from '../lib/types';
 
-export default function MainNav(props) {
-    const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
+type MainNavProps = Omit<DisplayFlags, 'isDisplaySM'> & User & {
+    currentPath: string;
+    isOutLineTheme: boolean;
+}
+
+type navItem = {
+    label: string;
+    link: string;
+}
+
+type PopupSideBarProps = Omit<User, 'userId'> & {
+    navItems: navItem[];
+    handleDrawerToggle: () => void;
+    isOutLineTheme: boolean;
+}
+
+export default function MainNav(props: MainNavProps) {
+    const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentPath } = props;
     const [mobileScreen, setMobileScreen] = useState<boolean>(false);
     const [state, setState] = useState<string>(userPreference.theme);
     const isLightTheme = state === "light";
 
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
-    const handleThemeUpdate = async (newState) => {
+    const handleThemeUpdate = async (newState: string) => {
         setState(newState);
         console.log("Save new Theme!!!", newState);
         onThemeUpdate(newState);
@@ -40,12 +57,13 @@ export default function MainNav(props) {
     };
 
     // refresh webpage manually when the same link is clicked
-    const handleRefreshPage = (link) => {
-        if (link === currentUrl.pathname)
+    const handleRefreshPage = (link: string) => {
+        if (link === currentPath)
             window.location.reload();
     }
 
-    const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
+    const targetBaseColor: string = getTargetBaseColor(isOutLineTheme, isLightTheme);
+    const targetBackgroundColor: string = isOutLineTheme && state === "light" ? "white" : "";
 
     return (
         <Box
@@ -58,7 +76,7 @@ export default function MainNav(props) {
             }>
             <AppBar
                 component="nav"
-                sx={{ ...sxStyle.bringToTop, backgroundColor: isOutLineTheme && state === "light" && "white" }}
+                sx={{ ...sxStyle.bringToTop, backgroundColor: targetBackgroundColor }}
             >
                 <Toolbar id="subNav" sx={commonStyles.alignItemsStretch}>
                     <Typography id="navMain" variant="h6" sx={sxStyle.Typography} >
@@ -71,8 +89,8 @@ export default function MainNav(props) {
                     </Typography>
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
-                            const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
-                                || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
+                            const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentPath) // when current url is at homePage, '/' 
+                                || (currentPath !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentPath.substring(1)));
                             return (
                                 <Link
                                     id="navPage"
@@ -81,8 +99,9 @@ export default function MainNav(props) {
                                     style={{
                                         ...sxStyle.Link,
                                         ...sxStyle.NonMargin,
-                                        borderBottom: isCurrentPage && `4px solid ${targetBaseColor}`,
-                                        '& :hover': { borderBottom: `4px solid ${targetBaseColor}99` }
+                                        borderBottom: isCurrentPage ? `4px solid ${targetBaseColor}` : "",
+                                        // '& :hover': { borderBottom: `4px solid ${targetBaseColor}99` },
+                                        ...(getHoverLink(targetBaseColor))
                                     }}
                                     onClick={() => handleRefreshPage(item.link)}
                                 >
@@ -129,21 +148,21 @@ export default function MainNav(props) {
     );
 };
 
-const mainLogo = { label: 'KCURR', link: "/" }
-const navItems = [
+const mainLogo: navItem = { label: 'KCURR', link: "/" }
+const navItems: navItem[] = [
     { label: 'Dashboard', link: "/" },
     { label: 'Convertor', link: "/Convertor" },
     { label: 'Chart', link: "/Chart" },
     { label: 'Financial News', link: "/News" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }: PopupSideBarProps) => {
 
-    const themeOptions = getThemeOptions();
+    const themeOptions: ThemeOption[] = getThemeOptions();
 
-    const getThemeIcon = (targetTheme, styling = {}, isPrimary = false) => {
+    const getThemeIcon = (targetTheme: string, styling = {}, isPrimary = false) => {
         if (targetTheme === "light")
-            return <LightModeOutlinedIcon sx={styling} color={isPrimary ? "primary" : ""} />
+            return <LightModeOutlinedIcon sx={styling} color={isPrimary ? "primary" : undefined} />
         else if (targetTheme === "dark")
             return <DarkModeOutlinedIcon sx={styling} />
         else
@@ -152,7 +171,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
 
     const [theme, setTheme] = useState(userPreference.theme);
 
-    const handleChange = (event, newTheme) => {
+    const handleChange = (event: MouseEvent, newTheme: string | null) => {
         if (newTheme === null || newTheme === theme)
             return;
         console.log("Save theme!!! ", newTheme)
@@ -160,16 +179,16 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
         onThemeUpdate(newTheme);
     };
 
-    const checkToggleDrawer = (newTheme) => {
+    const checkToggleDrawer = () => {
         // console.log(newTheme)
         // const checkEachTargetTheme = obj => obj.iconType == newTheme;
         // if (!themeOptions.some(checkEachTargetTheme))
-            handleDrawerToggle();
+        handleDrawerToggle();
     }
 
     return (
         <Box onClick={checkToggleDrawer} height={commonStyles.prop.fillAvailSpace}>
-            <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
+            <List sx={{ ...sxStyle.ListPopupSideBar, height: commonStyles.prop.fillAvailSpace }}>
                 <Box pt={1} px={3} pb={2.5} sx={{ ...sxStyle.FillAllWidth }}>
                     <Typography variant="overline" display="block" color='gray'>Theme</Typography>
                     <ToggleButtonGroup
@@ -259,7 +278,7 @@ const sxStyle = {
         },
     },
     themeSetter: { justifyContent: 'center', marginTop: '2px', marginRight: '-10px' },
-    bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
+    bringToTop: { zIndex: (theme: any) => theme.zIndex.drawer + 1 },
     FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
     NonMargin: { margin: '0px' }
 }
@@ -268,4 +287,9 @@ const style = {
     logo: { width: "30px", height: "30px", margin: "0 8px 0 0" },
     Link: { color: "black", ...commonStyles.noneTextDeco },
     logoImg: { ...commonStyles.alignItemsCenter, marginLeft: "15px" },
+}
+
+
+const getHoverLink = (targetBaseColor: string) => {
+    return { '& :hover': { borderBottom: `4px solid ${targetBaseColor}99` } }
 }
