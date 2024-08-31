@@ -79,10 +79,10 @@ export default function App() {
     }
 
     const attr = {
-        navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, ...commonAttr.themeFlag },
+        navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentPath, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, currentUrl, newsListsRes }
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref, newsListsRes }
     }
 
     const isDarkTheme = userPreference !== null ? userPreference.theme === "dark" : false; // set default theme as white theme
