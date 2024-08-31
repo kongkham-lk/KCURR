@@ -21,7 +21,7 @@ import ContrastIcon from '@mui/icons-material/Contrast';
 import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
 import { DisplayFlags, ThemeOption, User } from '../lib/types';
 
-type MainNavProps = Omit<DisplayFlags, 'isDisplaySM'> & User & {
+type MainNavProps = DisplayFlags & User & {
     currentPath: string;
     isOutLineTheme: boolean;
 }
@@ -31,16 +31,17 @@ type navItem = {
     link: string;
 }
 
-type PopupSideBarProps = Omit<User, 'userId'> & {
+type PopupSideBarProps = {
     navItems: navItem[];
     handleDrawerToggle: () => void;
-    isOutLineTheme: boolean;
+    onThemeUpdate: (newState: string) => Promise<void>
+    state: string
 }
 
 export default function MainNav(props: MainNavProps) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentPath } = props;
     const [mobileScreen, setMobileScreen] = useState<boolean>(false);
-    const [state, setState] = useState<string>(userPreference.theme);
+    const [state, setState] = useState<string>(userPreference !== null ? userPreference.theme : "");
     const isLightTheme = state === "light";
 
     // update userPref's theme base on user's interaction, then invoke outer layer's method to save new userPref to API
@@ -138,9 +139,8 @@ export default function MainNav(props: MainNavProps) {
                     <PopupSideBar
                         navItems={navItems}
                         handleDrawerToggle={handleDrawerToggle}
-                        isOutLineTheme={isOutLineTheme}
                         onThemeUpdate={handleThemeUpdate}
-                        userPreference={userPreference}
+                        state={state}
                     />
                 </Drawer>
             </Box>
@@ -156,7 +156,7 @@ const navItems: navItem[] = [
     { label: 'Financial News', link: "/News" },
 ];
 
-const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }: PopupSideBarProps) => {
+const PopupSideBar = ({ navItems, handleDrawerToggle, onThemeUpdate, state }: PopupSideBarProps) => {
 
     const themeOptions: ThemeOption[] = getThemeOptions();
 
@@ -169,7 +169,7 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
             return <ContrastIcon sx={styling} />
     }
 
-    const [theme, setTheme] = useState(userPreference.theme);
+    const [theme, setTheme] = useState<string>(state);
 
     const handleChange = (event: MouseEvent, newTheme: string | null) => {
         if (newTheme === null || newTheme === theme)

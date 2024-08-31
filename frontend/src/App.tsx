@@ -74,7 +74,7 @@ export default function App() {
 
     const commonAttr = {
         displayFlags: { isDisplaySM, isDisplayMD },
-        themeFlag: { isOutLineTheme: userPreference !== null ? userPreference.theme !== "color" : "" },
+        themeFlag: { isOutLineTheme: userPreference !== null && userPreference.theme !== "color" },
         pref: { userId, userPreference, onThemeUpdate: handleThemeUpdate },
     }
 

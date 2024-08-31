@@ -1,6 +1,6 @@
 export type User = {
     userId: string;
-    userPreference: Preference;
+    userPreference: Preference | null;
     onThemeUpdate: (newTheme: string) => Promise<void>;
 };
 
