@@ -72,11 +72,6 @@ export type CurrCountryDetail = {
     flagCode: string;
 };
 
-export type NavBarProps = DisplayFlags & User & {
-    currentUrl: string;
-    isOutLineTheme: boolean;
-};
-
 export type CurrCountriesApi = {
     currCountiesCodeMapDetail: CurrCodeMapDetail;
     sortedCurrsCodeList: string[];
