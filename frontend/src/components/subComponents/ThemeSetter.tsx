@@ -13,10 +13,10 @@ type ThemeSetterProps = Omit<User, "userId">;
 
 export default function ThemeSetter(props: ThemeSetterProps) {
     const { userPreference, onThemeUpdate } = props;
-    const [theme, setTheme] = useState<string>(userPreference.theme)
+    const [theme, setTheme] = useState<string>(userPreference !== null ? userPreference.theme : "color")
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const isDarkTheme = userPreference.theme === "dark";
+    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
     const targetGrey = !isDarkTheme ? baseColor.greyDark : baseColor.greyLight;
 
     // reload again when getting the correct theme set on initial load
