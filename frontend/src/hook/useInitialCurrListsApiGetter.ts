@@ -4,7 +4,7 @@ import { retrieveExchangeRates } from '../util/apiClient';
 import { getCurrListsFromCookie } from './userController';
 import { type Preference, type CurrCodeMapExchangeRates, type CurrList, type InitialCurrListsApi } from '../lib/types';
 
-export default function useInitialCurrListsApiGetter(defaultCurr: string, currCodeArray: string[], dayRange: string, 
+export default function useInitialCurrListsApiGetter(defaultCurr: string, currCodeArray: string[], dayRange: string,
     isFeatureDisplay: boolean, userPreference: Preference | null = null, userId: string): InitialCurrListsApi {
     const [initialCurrLists, setInitialCurrLists] = useState<CurrList[]>([]);
     const [initialCurrExchangeRates, setInitialCurrExchangeRates] = useState<CurrCodeMapExchangeRates[] | null>([]);
@@ -30,7 +30,7 @@ export default function useInitialCurrListsApiGetter(defaultCurr: string, currCo
     useEffect(
         function fetchData() {
             async function fetchCurrApiData() {
-                if (currCodeArray !== null) {
+                if (currCodeArray !== null && currCodeArray.length > 0) {
                     if (initialCurrLists.length === 0) {
                         // This will be triggered whenever the page is refreshed
                         try {
