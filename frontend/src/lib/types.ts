@@ -40,7 +40,7 @@ export type CurrCountriesDetail = {
 export type CurrList = {
     targetCurr: string;
     latestRate: number;
-    histRate?: number | null;
+    histRate: number | null;
     change?: string | null;
     timeSeries?: TimeSerie | null;
 };

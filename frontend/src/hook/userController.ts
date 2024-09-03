@@ -89,7 +89,7 @@ export async function getUserPreferences(userId: string): Promise<Preference | n
 }
 
 // Save currList to Cookie is needed as whenever user set new theme, the initialCurrList will not be updated
-export async function saveCurrListsToCookie(userId: string, currLists: CurrList) : Promise<void> {
+export async function saveCurrListsToCookie(userId: string, currLists: CurrList[]) : Promise<void> {
     console.log("saveCurrListsToCookie: ", currLists)
     localStorage.setItem(`currLists_${userId}`, JSON.stringify(currLists));
 }

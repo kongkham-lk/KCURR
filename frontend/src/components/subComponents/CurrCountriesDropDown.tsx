@@ -6,16 +6,17 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getFlag } from '../../util/getFlag';
 import { type CurrCountriesApi, type NewCurrCodeAssigned } from '../../lib/types';
 
-type CurrCountriesDropDownProps = Omit<CurrCountriesApi, "isReady"> & Omit<NewCurrCodeAssigned, "value"> & {
+type CurrCountriesDropDownProps = CurrCountriesApi & {
     label: string; // "From" | "To"
     onNewCurrCodeAssigned: (e: NewCurrCodeAssigned) => void;
-    baseCurrVal: string;
+    isBaseCurrency?: number;
+    baseCurrVal?: string;
     sxStyle: React.CSSProperties;
     passInStyle?: React.CSSProperties;
 }
 
 export default function CurrCountriesDropDown(props: CurrCountriesDropDownProps) {
-    const { label, onNewCurrCodeAssigned, isBaseCurrency, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
+    const { label, onNewCurrCodeAssigned, isBaseCurrency = 0, baseCurrVal = "", currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, 
         sxStyle, passInStyle = { height: "56.5px" } } = props;
     
     // Differentiate the currCode setter base on indexNumber or as boolean in binary

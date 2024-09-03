@@ -1,5 +1,5 @@
 import '../../App.css';
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -26,14 +26,22 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
-import React from 'react';
+import { Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi, type CurrList, type DisplayFlags, type User } from '../../lib/types';
 
-export default function ExchangeRateTable(props) {
+type ExchangeRateTableProps = CurrCountriesApi & DisplayFlags & Omit<User, "onThemeUpdate"> & {
+    initialCurrLists: CurrList[];
+    initialCurrExchangeRates: CurrCodeMapExchangeRates[] | null;
+    isChartFeatureEnable: boolean;
+}
+
+export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
         initialCurrLists, initialCurrExchangeRates, isReady, isChartFeatureEnable } = props;
-
     // Setting property base on save preference
-    const [currCodeArray, setCurrCodeArray] = useState([...userPreference.liveRateCurrCodes]); // initial currency list that will be displayed on screen
+    const [currCodeArray, setCurrCodeArray] = useState(
+        userPreference !== null && userPreference.liveRateCurrCodes !== undefined
+            ? [...userPreference.liveRateCurrCodes] : []
+    ); // initial currency list that will be displayed on screen
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
 
     // Initialized currency's visible row proeprty
@@ -57,21 +65,24 @@ export default function ExchangeRateTable(props) {
 
     // Initialized flags
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
-    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState([...Array(userPreference.liveRateCurrCodes.length)].map(i => false)); // each live rate row's display chart flags
+    const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState(
+        userPreference !== null && userPreference.liveRateCurrCodes !== undefined
+            ? [...Array(userPreference.liveRateCurrCodes.length)].map(i => false) : []
+    ); // each live rate row's display chart flags
     const [prevDisplayChartIndex, setPrevDisplayChartIndex] = useState(-1); // each live rate row's display chart flags
     const [isInitialLoad, setIsInitialLoad] = useState(true)
-    const isDarkTheme = userPreference.theme === "dark";
+    const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
     const emptyRows = page > 0 && currLists !== null ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
     // console.log("--  >>> Load Live Rate Table!!! ", initialCurrLists, currLists)
 
     const visibleRows = useMemo(
         () =>
-            currLists !== null 
-            ? stableSort(currLists, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            )
-            : [],
+            currLists !== null
+                ? stableSort(currLists, getComparator(order, orderBy)).slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage,
+                )
+                : [],
         [currLists, order, orderBy, page, rowsPerPage],
     );
 
@@ -86,21 +97,25 @@ export default function ExchangeRateTable(props) {
     // when user switch to different tab.
     useEffect(() => {
         async function fetchUpdateOnInitialLoad() {
-            if (isInitialLoad) { // THIS NEED TO BREAK INTO ITS USEEFFECT
-                const newPref = await getUserPreferences(userId);
-                const newCurrCodeArray = newPref.liveRateCurrCodes;
+            if (isInitialLoad) {
+                const newPref: Preference | null = await getUserPreferences(userId);
                 const newCurrLists = await getCurrListsFromCookie(userId);
 
-                // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
-                if (newCurrLists !== null) {
-                    setCurrLists(newCurrLists);
-                    setCurrCodeArray(newCurrCodeArray);
+                // return null only when fail to get user preferece from backend
+                if (newPref !== null) {
+                    const newCurrCodeArray = newPref.liveRateCurrCodes;
+                    setCurrCodeArray(newCurrCodeArray !== undefined ? newCurrCodeArray : currCodeArray);
                 }
+
+                // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
+                if (newCurrLists !== null)
+                    setCurrLists(newCurrLists);
+
                 setIsInitialLoad(false);
             }
         }
         fetchUpdateOnInitialLoad();
-    }, [isInitialLoad, userId])
+    }, [currCodeArray, isInitialLoad, userId])
 
     // Update new added currency code to visible row
     useEffect(() => {
@@ -126,13 +141,13 @@ export default function ExchangeRateTable(props) {
         }
     }, [triggerNewTimeDisplay]);
 
-    const updateCurrCodeArray = () => {
+    const updateCurrCodeArray = (): void => {
         const newCurrCodeArray = [...currCodeArray, newCurrCode];
         setCurrCodeArray(newCurrCodeArray);
         handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
 
-    const updateCurrLists = async () => {
+    const updateCurrLists = async (): Promise<void> => {
         console.log("    >>> createCurrLists!!!")
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         const newLists = [...currLists, currList];
@@ -140,7 +155,7 @@ export default function ExchangeRateTable(props) {
         saveCurrListsToCookie(userId, newLists);
     }
 
-    const handleRequestSort = (event, property) => {
+    const handleRequestSort = (event: any, property: string): void => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -154,7 +169,7 @@ export default function ExchangeRateTable(props) {
     }
 
     // Re-arrange curr list order
-    const handleSetDefaultCurr = async (targetCurr) => {
+    const handleSetDefaultCurr = async (targetCurr: string) => {
         // get the index of new default curr
         const targetCurrIndex = currLists.findIndex(curr => curr.targetCurr === targetCurr);
 
@@ -171,7 +186,9 @@ export default function ExchangeRateTable(props) {
             // console.log("Check Array after re-arrange:  ", oldTargetCurrArray);
             await handleUpdateDefaultCurrLiveRate(newCurrCodeArray); // Refetch new update rate from beacon api
 
-            userPreference.liveRateCurrCodes = newCurrCodeArray;
+            if (userPreference !== null)
+                userPreference.liveRateCurrCodes = newCurrCodeArray;
+
             setDefaultCurrCode(targetCurr);
             setCurrCodeArray(newCurrCodeArray);
             handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
@@ -179,9 +196,9 @@ export default function ExchangeRateTable(props) {
     };
 
     // Refetch new default currency rate from api
-    const handleUpdateDefaultCurrLiveRate = async (currCodeArray) => {
+    const handleUpdateDefaultCurrLiveRate = async (currCodeArray: string[]) => {
         // console.log("Fetching latest exchange rate from API!!!")
-        const newLists = [];
+        const newLists: CurrList[] = [];
         const initialValue = { baseCurr: currCodeArray[0] };
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
 
@@ -196,16 +213,16 @@ export default function ExchangeRateTable(props) {
         handleDisplayLatestFetchTimeUpdate();
     };
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
+    const handleChangeRowsPerPage = (e) => {
+        setRowsPerPage(parseInt(e.target.value, 10));
         setPage(0);
     };
 
-    const updateNewLiveRate = (event) => {
+    const updateNewLiveRate = () => {
         // console.log("Timer trigger!!!")
         handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
@@ -215,7 +232,7 @@ export default function ExchangeRateTable(props) {
         setNewCurrCode(e.value);
     };
 
-    const handleDelete = (targetCurr) => {
+    const handleDelete = (targetCurr: string) => {
         if (targetCurr === currCodeArray[0]) {
             // console.log("Attempting to delete default currency row, Exit!!!");
             return;
@@ -225,7 +242,7 @@ export default function ExchangeRateTable(props) {
         const newCurrLists = [...currLists];
         const newCurrCodeArray = [...currCodeArray];
 
-        for (let i in newCurrLists) {
+        for (let i = 0; i < newCurrLists.length; i++) {
             // only delete the currency in the list that match targetCurr, but not defaultCurr 
             if (newCurrLists[i].targetCurr === targetCurr && targetCurr !== defaultCurrCode) {
                 newCurrLists.splice(i, 1);
@@ -238,7 +255,7 @@ export default function ExchangeRateTable(props) {
         handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
 
-    const handleCurrCodeArrayCookieUpdate = (newCurrCodeArray) => {
+    const handleCurrCodeArrayCookieUpdate = (newCurrCodeArray: string[]) => {
         console.log("Save new currCodeArray to API!!! ", newCurrCodeArray);
         savePrefCurrCodes(userId, newCurrCodeArray);
     }
@@ -267,7 +284,7 @@ export default function ExchangeRateTable(props) {
         },
     };
 
-    const handleToggleFlags = (index, isDefaultCurr) => {
+    const handleToggleFlags = (index: number, isDefaultCurr: boolean) => {
         if (isDefaultCurr)
             return;
 
@@ -327,7 +344,7 @@ export default function ExchangeRateTable(props) {
                                 isDisplaySM={isDisplaySM}
                             />
                             <TableBody sx={sxStyle.TableBody}>
-                                {visibleRows.map((currList, index) => {
+                                {visibleRows.map((currList: CurrList, index: number) => {
                                     const targetCurrCode = currList.targetCurr;
                                     const currencyRateData = {
                                         baseCurr: currCodeArray[0],
@@ -340,10 +357,11 @@ export default function ExchangeRateTable(props) {
                                     // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
                                     // Which means the currList that is initialized base on exchangrRateList does not contain timeSeries object
                                     if (!isChartFeatureEnable && isDefaultCurr) {
+                                        const histRate = currList.histRate !== null ? currList.histRate : 0
                                         currList.timeSeries = {
-                                            lowest: Math.min(currList.latestRate, currList.histRate),
-                                            highest: Math.max(currList.latestRate, currList.histRate),
-                                            changingRates: [parseFloat(currList.histRate), parseFloat(currList.latestRate)],
+                                            lowest: Math.min(currList.latestRate, histRate),
+                                            highest: Math.max(currList.latestRate, histRate),
+                                            changingRates: [histRate, currList.latestRate],
                                             dayRangeIndicator,
                                             monthRangeIndicator
                                         }
@@ -354,10 +372,10 @@ export default function ExchangeRateTable(props) {
                                     return (
                                         <>
                                             <TableRow
-                                                className={userPreference.theme === "color" && "clipPath"}
+                                                className={userPreference !== null && userPreference.theme === "color" ? "clipPath" : ""}
                                                 key={targetCurrCode}
-                                                height={'72.5px'}
-                                                style={{
+                                                sx={{
+                                                    height: '72.5px',
                                                     ...styleTableRow(targetCurrCode, defaultCurrCode),
                                                     ...sxStyle.TableRow,
                                                     ...(isDefaultCurr
@@ -417,7 +435,7 @@ export default function ExchangeRateTable(props) {
                                                                         ...(isDefaultCurr && commonStyle.colorInherit)
                                                                     }}
                                                                 >
-                                                                    {index !== 0 ? parseFloat(currList.latestRate).toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
+                                                                    {index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
@@ -553,7 +571,7 @@ export default function ExchangeRateTable(props) {
 
 const baseColor = getBaseColor();
 
-const getTargetPros = (isChecked) => {
+const getTargetPros = (isChecked: boolean) => {
     return {
         displayText: isChecked ? "Live Rates" : "Live Exchange Rates",
         labelRowsPerPage: isChecked ? "Rows:" : "Rows per page:",
