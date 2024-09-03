@@ -83,7 +83,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
             <div style={targetFormStyling}>
                 <InputTextField {...attr.InputTextField} />
                 <CurrCountriesDropDown {...attr.baseCurr} />
-                <Button variant="outlined" type="submit" onClick={onConvertCurrSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
+                <Button variant="outlined" onClick={onConvertCurrSwap} sx={sxStyle.swapButton} disabled={isError ? true : false} >
                     {isDisplaySM ? <SwapVertIcon /> : <SwapHorizIcon />}
                 </Button>
                 <CurrCountriesDropDown {...attr.targetCurr} />
