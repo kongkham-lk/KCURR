@@ -26,6 +26,7 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
+import React from 'react';
 
 export default function ExchangeRateTable(props) {
     const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
