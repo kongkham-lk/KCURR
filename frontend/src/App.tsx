@@ -7,7 +7,7 @@ import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 // import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
 // import FinancialNews from './components/FinancialNews/FinancialNews';
-// import Footer from './components/Footer';
+import Footer from './components/Footer';
 import { Loading } from './components/subComponents/Loading';
 import { retrieveFinancialNews } from "./util/apiClient";
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -82,7 +82,8 @@ export default function App() {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentPath, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, newsListsRes }
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref, newsListsRes },
+        footer: {...commonAttr.displayFlags, ...commonAttr.themeFlag, userPreference}
     }
 
     const isDarkTheme = userPreference !== null ? userPreference.theme === "dark" : false; // set default theme as white theme
@@ -132,7 +133,7 @@ export default function App() {
                                 } ></Route>
                             </Routes>
                         </Box>
-                        {/* <Footer {...attr.navBar} /> */}
+                        <Footer {...attr.navBar} />
                     </div >
                 </ThemeProvider>
             }

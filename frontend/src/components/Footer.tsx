@@ -10,12 +10,19 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AppBar from '@mui/material/AppBar';
 import { getBaseColor, getTargetBaseColor } from '../util/globalVariable';
+import React from 'react';
+import { DisplayFlags, Preference } from '../lib/types';
 
-export default function Footer(props) {
+type FooterProps = DisplayFlags & {
+    isOutLineTheme: boolean;
+    userPreference: Preference | null;
+}
+
+export default function Footer(props: FooterProps) {
     const { isDisplaySM, isOutLineTheme, userPreference } = props;
-    const isLightTheme = userPreference.theme === "light";
+    const isLightTheme = userPreference === null || userPreference.theme === "light";
     const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
-    
+
     return (
         <Box
             display='flex'
@@ -31,7 +38,7 @@ export default function Footer(props) {
                     : sxStyle.Theme.Elevate)
             }}>
                 <Box sx={sxStyle.BoxSub}>
-                    <List sx={sxStyle.ListPopupSideBar} height={commonStyles.prop.fillAvailSpace}>
+                    <List sx={{...sxStyle.ListPopupSideBar, height:commonStyles.prop.fillAvailSpace}}>
                         <ListItem key="product" disablePadding>
                             <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
                                 Product
@@ -80,7 +87,7 @@ export default function Footer(props) {
     );
 };
 
-const baseColor =  getBaseColor();
+const baseColor = getBaseColor();
 
 const navItems = [
     { label: 'Dashboard', link: "/" },
@@ -135,7 +142,7 @@ const sxStyle = {
             },
             dark: {
                 color: baseColor.white,
-                background: baseColor.dark,
+                background: baseColor.black,
                 borderTop: `1.5px solid ${baseColor.darkPrimary}55`
             }
         },
