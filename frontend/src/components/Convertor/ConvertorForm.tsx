@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import InputTextField from '../subComponents/InputTextField';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
-import { checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
+import { checkIfContainsMoreThanOneDot, checkIfContainsOnlyNumbers } from '../../util/checkingMethods';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { type NewCurrCodeAssigned, type DisplayFlags, type CurrCountriesApi } from '../../lib/types';
@@ -16,31 +16,33 @@ type ConvertorFormProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
 
 export default function ConvertorForm(props: ConvertorFormProps) {
     const { onConversionFormDataSubmit, targetConvertCurrPair, isDisplaySM, onConvertCurrSwap, onNewCurrCodeAssigned } = props;
-    const [targetConvertAmount, setTargetConvertAmount] = useState(0.0);
+    const [targetConvertAmount, setTargetConvertAmount] = useState("");
     const [isError, setIsError] = useState(false);
 
     // Store new user input for conversion amount
     const handleConvertAmountUpdate = (e: HTMLTextAreaElement): void => {
-        if (checkIfContainsOnlyNumbers(e.value) || e.value === "") {
+        if ((checkIfContainsOnlyNumbers(e.value) && !checkIfContainsMoreThanOneDot(e.value)) // Check if is number and user not enter "." twice
+            || e.value === "") { // Do not warn when input is empty, when user delete all the input
             setIsError(false);
         } else {
             setIsError(true);
         }
-
-        // The total amount to convert
-        const convertAmountInput: number = parseFloat(e.value);
-
-        // Determined if the input value is valid or user just delete all and no new value input
-        if (!isNaN(convertAmountInput))
-            setTargetConvertAmount(convertAmountInput);
-        else
-            setTargetConvertAmount(0);
+        setTargetConvertAmount(e.value); // Display anyway when user is correct or not
     }
 
     // Submit form to start runniing the conversion logic
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onConversionFormDataSubmit(targetConvertAmount);
+
+        if (!isError) { // Prevent the logic to work as well when isError
+            if (targetConvertAmount !== "") {
+                const convertAmountInput: number = parseFloat(targetConvertAmount); // change to number before convert the input amount 
+                onConversionFormDataSubmit(convertAmountInput);
+            } else {
+                setTargetConvertAmount("1.00");
+                onConversionFormDataSubmit(1);
+            }
+        }
     };
 
     const commonAttr = {
@@ -73,6 +75,8 @@ export default function ConvertorForm(props: ConvertorFormProps) {
     };
 
     const targetFormStyling = isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand
+
+    console.log(targetConvertAmount)
 
     return (
         <form onSubmit={onSubmit} >
