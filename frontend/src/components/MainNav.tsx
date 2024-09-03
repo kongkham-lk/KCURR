@@ -19,7 +19,7 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
-import { DisplayFlags, ThemeOption, User } from '../lib/types';
+import { type DisplayFlags, type ThemeOption, type User } from '../lib/types';
 
 type MainNavProps = DisplayFlags & User & {
     currentPath: string;

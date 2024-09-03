@@ -7,7 +7,7 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import { getBaseColor, getThemeOptions } from '../../util/globalVariable';
-import { ThemeOption, type User } from '../../lib/types';
+import { type ThemeOption, type User } from '../../lib/types';
 
 type ThemeSetterProps = Omit<User, "userId">;
 

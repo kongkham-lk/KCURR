@@ -76,7 +76,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
 
     const targetFormStyling = isDisplaySM ? sxStyle.FormShrink : sxStyle.FormExpand
 
-    console.log(targetConvertAmount)
+    // console.log(targetConvertAmount)
 
     return (
         <form onSubmit={onSubmit} >

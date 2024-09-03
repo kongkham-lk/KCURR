@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup, { toggleButtonGroupClasses, } from '@mui/material/ToggleButtonGroup';
-import { DisplayFlags } from '../../lib/types';
+import { type DisplayFlags } from '../../lib/types';
 
 type RangeTimeSeriesSelectorProps = Omit<DisplayFlags, 'isDisplayMD'> & {
     updateVal: (range: string) => void;

@@ -1,4 +1,4 @@
-import { ThemeOption } from "../lib/types";
+import { type ThemeOption } from "../lib/types";
 
 export function getBaseColor() {
     return {
