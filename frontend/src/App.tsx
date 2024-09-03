@@ -5,9 +5,9 @@ import useInitialCurrListsApiGetter from './hook/useInitialCurrListsApiGetter';
 import { getUserPreferences, getUserIdentifier } from './hook/userController';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
-import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
-import FinancialNews from './components/FinancialNews/FinancialNews';
-import Footer from './components/Footer';
+// import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
+// import FinancialNews from './components/FinancialNews/FinancialNews';
+// import Footer from './components/Footer';
 import { Loading } from './components/subComponents/Loading';
 import { retrieveFinancialNews } from "./util/apiClient";
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -108,10 +108,10 @@ export default function App() {
                                             {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                         </Item>
                                         <Item key="ExchangeRateTable" {...MuiProps} >
-                                            {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
+                                            {/* {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />} */}
                                         </Item>
                                         <Item key="FinancialNews" {...MuiProps} >
-                                            {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
+                                            {/* {isReady ? <FinancialNews {...attr.news} /> : <Loading />} */}
                                         </Item>
                                     </>
                                 } ></Route>
@@ -122,17 +122,17 @@ export default function App() {
                                 } ></Route>
                                 <Route path="/Chart" element={
                                     <Item key="ExchangeRateTable" {...MuiProps} >
-                                        {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
+                                        {/* {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />} */}
                                     </Item>
                                 } ></Route>
                                 <Route path="/News" element={
                                     <Item key="FinancialNews" {...MuiProps} >
-                                        <FinancialNews filter="true" {...attr.news} />
+                                        {/* <FinancialNews filter="true" {...attr.news} /> */}
                                     </Item>
                                 } ></Route>
                             </Routes>
                         </Box>
-                        <Footer {...attr.navBar} />
+                        {/* <Footer {...attr.navBar} /> */}
                     </div >
                 </ThemeProvider>
             }
