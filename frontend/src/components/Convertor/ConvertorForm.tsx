@@ -28,7 +28,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
         }
 
         // The total amount to convert
-        const convertAmountInput = parseFloat(e.value);
+        const convertAmountInput: number = parseFloat(e.value);
 
         // Determined if the input value is valid or user just delete all and no new value input
         if (!isNaN(convertAmountInput))
@@ -54,6 +54,7 @@ export default function ConvertorForm(props: ConvertorFormProps) {
             isError,
             inputFieldLabel: "amount",
             placeHolder: "Enter Number",
+            displayInput: targetConvertAmount,
         },
         baseCurr: {
             label: "From",

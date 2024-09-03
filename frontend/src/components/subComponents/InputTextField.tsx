@@ -7,13 +7,14 @@ type InputTextFieldProps = {
     inputFieldLabel: string;
     placeHolder: string;
     size?: "medium" | "small";
-    displayInput?: string;
+    displayInput: number;
 }
 
 export default function InputTextField(props: InputTextFieldProps) {
-    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "medium", displayInput = "" } = props;
+    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "medium", displayInput } = props;
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>): void => { onConvertAmountUpdate(e.target) };
+    const targetDisplayInput: string = displayInput > 0 ? displayInput.toString() : "";
 
     return (
         <TextField
@@ -25,7 +26,7 @@ export default function InputTextField(props: InputTextFieldProps) {
             sx={sxStyle.TextField}
             size={size}
             onChange={handleChange}
-            value={displayInput}
+            value={targetDisplayInput}
         />
     )
 };
