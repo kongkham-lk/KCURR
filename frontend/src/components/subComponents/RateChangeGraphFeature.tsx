@@ -8,8 +8,8 @@ import { Box } from '@mui/material';
 import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type TimeSerie } from '../../lib/types';
 
 type RateChangeGraphFeatureProps = Omit<DisplayFlags, "isDisplayMD"> & {
-    currencyRateData: ConversionData | null;
-    passDownUpdateRequestFlag: boolean;
+    passDownUpdateRequestFlag: boolean; // check if need to update chart. Only conversion need this property
+    currencyRateData: ConversionData | null; // instead of checking for passDownUpdateRequestFlag to update chart, LiveRate look at the baseCurr instead
     removeMarginTop?: boolean
     isChartFeatureEnable? : boolean
 }
