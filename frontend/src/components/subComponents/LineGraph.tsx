@@ -10,7 +10,7 @@ type LineGraphProps = {
 }
 
 export function LineGraph(props: LineGraphProps) {
-    const { displayLabel = false, timeSeries = null } = props;
+    const { displayLabel, timeSeries } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates: number[] | null = timeSeries !== null ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null && changingRates !== null

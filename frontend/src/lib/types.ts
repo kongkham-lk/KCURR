@@ -42,7 +42,7 @@ export type CurrList = {
     latestRate: number;
     histRate: number | null;
     change?: string | null;
-    timeSeries?: TimeSerie | null;
+    timeSeries: TimeSerie | null;
 };
 
 export type TimeSerie = {
