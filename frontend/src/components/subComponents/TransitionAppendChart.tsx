@@ -5,18 +5,27 @@ import RateChangeGraphFeature from './RateChangeGraphFeature';
 import { Box } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import React from 'react';
+import { type ConversionData } from '../../lib/types';
 
+type TransitionAppendChartProps = {
+    appendChart: boolean;
+    isDisplaySM: boolean;
+    currencyRateData: ConversionData | null;
+    removeMarginTop?: boolean
+    isChartFeatureEnable? : boolean
+}
 
-export default function TransitionAppendChart(props) {
+export default function TransitionAppendChart(props: TransitionAppendChartProps) {
     const { appendChart, currencyRateData, isDisplaySM } = props;
-    const [displayChart, setDisplayChart] = useState(null);
+    const [displayChart, setDisplayChart] = useState<React.JSX.Element | null>(null);
 
     useEffect(() => {
-        const currCode = () => <RateChangeGraphFeature {...props} removeMarginTop={true} />;
+        const currListDisplay = () => <RateChangeGraphFeature {...props} removeMarginTop={true} passDownUpdateRequestFlag={false} />;
         const handleDisplayChart = () => {
             if (appendChart) {
                 // console.log(">>> append row!!!")
-                setDisplayChart(currCode);
+                setDisplayChart(currListDisplay);
             } else {
                 // console.log("<<< clear row!!!")
                 setDisplayChart(null);
@@ -25,21 +34,24 @@ export default function TransitionAppendChart(props) {
         handleDisplayChart();
     }, [appendChart, props])
 
-    const renderGraph = (item) => {
+    const renderGraph = (item: React.JSX.Element | null) => {
         return (
             <Box sx={appendChart ? isDisplaySM ? sxStyle.renderGraphSm : sxStyle.renderGraphLg : sxStyle.renderNon} >
                 {item}
             </Box>
         );
     };
+
+    const targetKey = currencyRateData !== null ? currencyRateData.targetCurr : "";
+
     // console.log("key: ", (currencyRateData.targetCurr + "_Chart"))
     return (
-        <>
+        <>====
             {/* {console.log("Include hidden rows!!!")} */}
-            <TableRow key={currencyRateData.targetCurr + "_ChartRow"}>
-                <TableCell key={currencyRateData.targetCurr + "_ChartCell"} colSpan={5} sx={sxStyle.tableCell} >
+            <TableRow key={targetKey + "_ChartRow"}>
+                <TableCell key={targetKey + "_ChartCell"} colSpan={5} sx={sxStyle.tableCell} >
                     <TransitionGroup style={isDisplaySM ? style.TransitionGroupSm : style.TransitionGroupLg}>
-                        <Collapse key={currencyRateData.targetCurr + "Chart"} sx={isDisplaySM ? style.CollapseSm : style.CollapseLg} >{renderGraph(displayChart)}</Collapse>
+                        <Collapse key={targetKey + "Chart"} sx={isDisplaySM ? style.CollapseSm : style.CollapseLg} >{renderGraph(displayChart)}</Collapse>
                     </TransitionGroup>
                 </TableCell>
             </TableRow>

@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
@@ -5,11 +6,19 @@ import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { visuallyHidden } from '@mui/utils';
+import { type Order } from '../../lib/types';
 
-export default function EnhancedTableHead(props) {
+type EnhancedTableHeadProps = {
+    order: Order;
+    orderBy: string;
+    onRequestSort:(event: any, property: string) => void;
+    isDisplaySM: boolean;
+}
+
+export default function EnhancedTableHead(props: EnhancedTableHeadProps) {
     const { order, orderBy, onRequestSort, isDisplaySM } = props;
 
-    const createSortHandler = (property) => (event) => {
+    const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -35,7 +44,7 @@ export default function EnhancedTableHead(props) {
                                     style={{
                                         marginLeft: headCell.id === 'targetCurr' ? (isDisplaySM ? 0 : 16) : -32,
                                         marginRight: headCell.id === 'targetCurr' ? -20 : -8,
-                                        padding: isDisplaySM && 0,
+                                        padding: isDisplaySM ? 0 : 'auto',
                                     }}
                                 >
                                     {headCell.label}
@@ -52,7 +61,7 @@ export default function EnhancedTableHead(props) {
                     <TableCell style={isDisplaySM ? style.TableCell.sm.main : style.TableCell.lg} align="right" >
                         Chart (24h)
                     </TableCell>
-                    <TableCell style={{ padding: isDisplaySM && "0px 8px 8px 0px", ...borderNone }} align="right" >
+                    <TableCell style={{ padding: isDisplaySM ? "0px 8px 8px 0px" : "auto", ...borderNone }} align="right" >
                         {isDisplaySM ? "Del" : "Delete"}
                     </TableCell>
                 </TableRow>
