@@ -26,7 +26,7 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
-import { Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi, type CurrList, type DisplayFlags, type User } from '../../lib/types';
+import { type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi, type CurrList, type DisplayFlags, type User, type Order } from '../../lib/types';
 
 type ExchangeRateTableProps = CurrCountriesApi & DisplayFlags & Omit<User, "onThemeUpdate"> & {
     initialCurrLists: CurrList[];
@@ -49,7 +49,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const [currLists, setCurrLists] = useState([...initialCurrLists]);
 
     // Mui table's setting property
-    const [order, setOrder] = useState('desc');
+    const [order, setOrder] = useState<Order>('desc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -204,7 +204,8 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
 
         for (let i in currCodeArray) {
             // console.log("    >>> createCurrLists!!!")
-            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
+            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, 
+                timeSeriesRangeLength, isChartFeatureEnable);
         }
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
@@ -217,7 +218,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (e) => {
+    const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setRowsPerPage(parseInt(e.target.value, 10));
         setPage(0);
     };
@@ -227,7 +228,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         handleUpdateDefaultCurrLiveRate(currCodeArray);
     };
 
-    const handleAddCurrCountry = (e) => {
+    const handleAddCurrCountry = (e: NewCurrCodeAssigned) => {
         console.log("Add new item to list: ", e);
         setNewCurrCode(e.value);
     };
@@ -348,7 +349,9 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                     const targetCurrCode = currList.targetCurr;
                                     const currencyRateData = {
                                         baseCurr: currCodeArray[0],
-                                        targetCurr: currList.targetCurr
+                                        targetCurr: currList.targetCurr,
+                                        amount: 0,
+                                        total: 0,
                                     };
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const isDefaultCurr = currList.targetCurr === currCodeArray[0];
@@ -453,7 +456,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                 >
                                                                     {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
-                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} isFeatureDisplay={isChartFeatureEnable} />}
+                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} displayLabel={false}/>}
                                                                         </div> :
                                                                         <Button
                                                                             variant="text"
@@ -606,7 +609,7 @@ const style = {
     CurrCountriesDropDown: { height: "auto" },
     DeleteIcon: { marginRight: "8px" },
     chartDiv: {
-        main: { height: "40px", float: "right" },
+        main: { height: "40px", float: "right" as const },
         lg: { width: "70px" },
         sm: { width: "60px", paddingRight: "5px" },
     },

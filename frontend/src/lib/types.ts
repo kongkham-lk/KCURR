@@ -104,3 +104,5 @@ export type DisplayFlags = {
     isDisplaySM: boolean;
     isDisplayMD: boolean;
 };
+
+export type Order = 'asc' | 'desc';
