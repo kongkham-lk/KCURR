@@ -14,7 +14,7 @@ export function getUserIdentifier(): string {
         // If not, generate a new identifier
         userId = uuidv4();
         // Store the identifier in local storage
-        localStorage.setItem('userId', userId);
+        localStorage.setItem('userId', userId !== null ? userId : "");
     }
     return userId;
 }
