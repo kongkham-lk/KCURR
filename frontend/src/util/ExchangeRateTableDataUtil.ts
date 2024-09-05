@@ -14,12 +14,13 @@ export function getComparator(order: Order, orderBy: string): (a: CurrList, b: C
     }
 }
 
-export function stableSort(array: CurrList[], comparator: (a: CurrList, b: CurrList) => number): CurrList[] {
-    if (array === null || array === undefined)
-        return array;
+export function stableSort(currLists: CurrList[], comparator: (a: CurrList, b: CurrList) => number): CurrList[] {
+    console.log(currLists)
+    if (currLists === null || currLists === undefined )
+        return currLists;
 
     // Create an array of tuples, where each tuple contains an element from the original array and its index.
-    const stabilizedArray: [CurrList, number][] = Array.from({ length: array.length }, (v, i) => [array[i], i]);
+    const stabilizedArray: [CurrList, number][] = Array.from({ length: currLists.length }, (v, i) => [currLists[i], i]);
 
     // Sort the array of tuples using the provided comparator.
     stabilizedArray.sort((a: [CurrList, number], b: [CurrList, number]) => {
