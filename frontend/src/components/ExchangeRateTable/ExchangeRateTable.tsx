@@ -33,7 +33,6 @@ import {
     type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates,
     type CurrCountriesApi, type CurrList, type DisplayFlags, type User, type Order,
 } from '../../lib/types';
-import { SxProps, Theme } from '@mui/system';
 
 type ExchangeRateTableProps = CurrCountriesApi & DisplayFlags & Omit<User, "onThemeUpdate"> & {
     initialCurrLists: CurrList[];
@@ -403,7 +402,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                     onClick={() => handleSetDefaultCurr(targetCurrCode)}
                                                     sx={{
                                                         ...commonStyle.paddingNone,
-                                                        ...(isDisplaySM ? sxStyle.TableCell.sm : sxStyle.TableCell.lg),
+                                                        ...(isDisplaySM ? sxStyle.TableCell.defaultCurrBtn.sm : sxStyle.TableCell.defaultCurrBtn.lg),
                                                         ...(isDefaultCurr ? commonStyle.colorInherit : sxStyle.hoverOverride),
                                                     }}
                                                 >
@@ -486,10 +485,10 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                 </TableCell>
                                                 {/* Delete button */}
                                                 <TableCell
+                                                    align="right"
                                                     sx={{
                                                         ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM),
-                                                        ...(isDisplaySM ? sxStyle.TableCell.sm : sxStyle.TableCell.lg),
-                                                        ...commonStyle.textAlign,
+                                                        ...(isDisplaySM ? sxStyle.TableCell.deleteBtn.sm : sxStyle.TableCell.deleteBtn.lg),
                                                         ...(index !== 0 && sxStyle.hoverOverride),
                                                     }}
                                                     onClick={() => handleDelete(targetCurrCode)}
@@ -602,7 +601,7 @@ const commonStyle = {
     colorNone: { color: 'transparent' },
     marginTopNeg15: { marginTop: "-15px" },
     hoverNone: { '&:hover': { background: "transparent" } },
-    textAlign: { textAlign: "center" },
+    textAlignCenter: { textAlign: "center" },
     displayNone: { display: "none" },
     floatRight: { float: 'right' }
 }
@@ -636,8 +635,14 @@ const sxStyle = {
     },
     TableRow: { width: "100%", whiteSpace: "nowrap", transform: 'translate(0)' },
     TableCell: {
-        lg: { width: "20%", ...commonStyle.borderNone },
-        sm: { width: "10%", ...commonStyle.paddingNone, ...commonStyle.borderNone }
+        defaultCurrBtn: {
+            lg: { width: "20%", ...commonStyle.borderNone },
+            sm: { width: "10%", ...commonStyle.paddingNone, ...commonStyle.borderNone }
+        },
+        deleteBtn: {
+            lg: { width: "2%", ...commonStyle.borderNone },
+            sm: { width: "2%", ...commonStyle.paddingNone, ...commonStyle.borderNone }
+        }
     },
     Typography: {
         flex: '1 1 100%', pl: { sm: 0 }, pr: { xs: 1, sm: 1 }, minHeight: "64px", display: "flex", alignItems: "center",

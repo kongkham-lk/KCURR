@@ -46,7 +46,7 @@ export default function TransitionAppendChart(props: TransitionAppendChartProps)
 
     // console.log("key: ", (currencyRateData.targetCurr + "_Chart"))
     return (
-        <>====
+        <>
             {/* {console.log("Include hidden rows!!!")} */}
             <TableRow key={targetKey + "_ChartRow"}>
                 <TableCell key={targetKey + "_ChartCell"} colSpan={5} sx={sxStyle.tableCell} >
