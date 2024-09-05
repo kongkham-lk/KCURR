@@ -54,7 +54,7 @@ export function LineGraph(props: LineGraphProps) {
     const targetMode = getTargetMode(displayLabel);
     const maxXAxisLabel = getMaxXAxisLabel(timeSeriesRangeLabel);
 
-    const plugins = {
+    const plugins = displayLabel ? {
         legend: {
             display: false,
         },
@@ -62,6 +62,10 @@ export function LineGraph(props: LineGraphProps) {
             mode: targetMode,
             intersect: false
         }
+    } : {
+        legend: {
+            display: false,
+        },
     };
 
     const options = {
