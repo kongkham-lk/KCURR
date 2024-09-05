@@ -6,8 +6,8 @@ export function getComparator(order: Order, orderBy: string): (a: CurrList, b: C
         // Now, we are certain that orderBy is a keyof CurrList
         const orderByField: keyof CurrList = orderBy as keyof CurrList;
         return order === 'desc'
-            ? (a: CurrList, b: CurrList) => descendingComparator(a, b, orderByField)
-            : (a: CurrList, b: CurrList) => -descendingComparator(a, b, orderByField);
+            ? (a: CurrList, b: CurrList) => descendingComparator(a[orderByField], b[orderByField])
+            : (a: CurrList, b: CurrList) => -descendingComparator(a[orderByField], b[orderByField]);
     } else {
         console.error(`${orderBy} is not a valid key of CurrList`);
         return (a: CurrList, b: CurrList) => 0;
@@ -68,15 +68,14 @@ export function getDisplayList(currList: CurrList) {
         return currList.change;
 }
 
-const descendingComparator = (a: CurrList, b: CurrList, orderBy: keyof CurrList) => {
-    if (a[orderBy] !== null && a[orderBy] !== undefined
-        && b[orderBy] !== null && b[orderBy] !== undefined) {
-        if (b[orderBy] < a[orderBy])
-            return -1;
-        else if (b[orderBy] > a[orderBy])
-            return 1;
-    }
-    return 0;
+// the passing in param, 'a' and 'b', need to set as "any" type since they can be any field's value within CurrList (string or number)
+const descendingComparator = (a: any, b: any) => {
+    if (b < a)
+        return -1;
+    else if (b > a)
+        return 1;
+    else
+        return 0;
 }
 
 export function styleTableRowInFile(dense: boolean, emptyRows: number) {
