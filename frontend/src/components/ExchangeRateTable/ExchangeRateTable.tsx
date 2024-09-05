@@ -16,7 +16,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
-import { getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile, styleTableCellDelete, getDayRangeDate, getMonthRangeDate } from '../../util/ExchangeRateTableDataUtil';
+import {
+    getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile,
+    styleTableCellDelete, getDayRangeDate, getMonthRangeDate
+} from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
 import { getFlag } from '../../util/getFlag';
@@ -26,7 +29,11 @@ import CircularProgressWithLabel from '../subComponents/CircularProgressWithLabe
 import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
-import { type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi, type CurrList, type DisplayFlags, type User, type Order } from '../../lib/types';
+import {
+    type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi,
+    type CurrList, type DisplayFlags, type User, type Order
+} from '../../lib/types';
+import { SxProps, Theme } from '@mui/system';
 
 type ExchangeRateTableProps = CurrCountriesApi & DisplayFlags & Omit<User, "onThemeUpdate"> & {
     initialCurrLists: CurrList[];
@@ -35,8 +42,8 @@ type ExchangeRateTableProps = CurrCountriesApi & DisplayFlags & Omit<User, "onTh
 }
 
 export default function ExchangeRateTable(props: ExchangeRateTableProps) {
-    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId, userPreference,
-        initialCurrLists, initialCurrExchangeRates, isReady, isChartFeatureEnable } = props;
+    const { currCountiesCodeMapDetail, validCurFlagList, sortedCurrsCodeList, isDisplaySM, isDisplayMD, userId,
+        userPreference, initialCurrLists, initialCurrExchangeRates, isReady, isChartFeatureEnable } = props;
     // Setting property base on save preference
     const [currCodeArray, setCurrCodeArray] = useState(
         userPreference !== null && userPreference.liveRateCurrCodes !== undefined
@@ -45,7 +52,9 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const [defaultCurrCode, setDefaultCurrCode] = useState(currCodeArray[0]); // set default/main currency that will be used to against the other target currency
 
     // Initialized currency's visible row proeprty
-    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(initialCurrExchangeRates !== null ? [...initialCurrExchangeRates] : null); // consist of all the currCode exchange rate, 1 day range. Do not set anything if currently load feature page
+    const [defaultCurrExchangeRates, setDefaultCurrExchangeRates] = useState(
+        initialCurrExchangeRates !== null ? [...initialCurrExchangeRates] : null
+    ); // consist of all the currCode exchange rate, 1 day range. Do not set anything if currently load feature page
     const [currLists, setCurrLists] = useState([...initialCurrLists]);
 
     // Mui table's setting property
@@ -204,7 +213,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
 
         for (let i in currCodeArray) {
             // console.log("    >>> createCurrLists!!!")
-            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates, 
+            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates,
                 timeSeriesRangeLength, isChartFeatureEnable);
         }
 
