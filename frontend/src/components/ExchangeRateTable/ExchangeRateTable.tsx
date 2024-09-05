@@ -68,9 +68,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
 
     // Initialized time property
     const timeSeriesRangeLength = "1d"; // time range for displaying chart on the live rate table
-    const [dayRangeIndicator] = useState([getDayRangeDate(1), getDayRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
-    const [monthRangeIndicator] = useState([getMonthRangeDate(1), getMonthRangeDate(0)]); // needed when the live rate table use exchange rate data instead of timeSeries
-
+    
     // Initialized flags
     const [newCurrCode, setNewCurrCode] = useState(""); // new added currency flag
     const [displayRateHistChartFlags, setDisplayRateHistChartFlags] = useState(
@@ -364,22 +362,6 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const isDefaultCurr = currList.targetCurr === currCodeArray[0];
 
-                                    // Manually assign each curr row's timeSerie.
-                                    // This is needed when the live rate table use exchangeRateList's data instead of timeSeries.
-                                    // Which means the currList that is initialized base on exchangrRateList does not contain timeSeries object
-                                    if (!isChartFeatureEnable && isDefaultCurr) {
-                                        const histRate = currList.histRate !== null ? currList.histRate : 0
-                                        currList.timeSeries = {
-                                            lowest: Math.min(currList.latestRate, histRate),
-                                            highest: Math.max(currList.latestRate, histRate),
-                                            changingRates: [histRate, currList.latestRate],
-                                            dayRangeIndicator,
-                                            monthRangeIndicator
-                                        }
-                                    }
-
-                                    const timeSeries = currList.timeSeries;
-
                                     return (
                                         <>
                                             <TableRow
@@ -464,7 +446,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                 >
                                                                     {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
-                                                                            {index !== 0 && <LineGraph timeSeries={timeSeries} displayLabel={false} />}
+                                                                            {index !== 0 && <LineGraph timeSeries={currList.timeSeries} displayLabel={false} />}
                                                                         </div> :
                                                                         <Button
                                                                             variant="text"

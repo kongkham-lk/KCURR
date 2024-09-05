@@ -1,4 +1,5 @@
 import { retrieveExchangeRatesTimeSeries } from './apiClient';
+import { getDayRangeDate, getMonthRangeDate } from './ExchangeRateTableDataUtil';
 import { type CurrCodeMapTimeSerie, type CurrCodeMapExchangeRates, type CurrList, type TimeSerie } from '../lib/types';
 
 export async function createCurrLists(baseCurr: string, targetCurr: string, defaultCurrExchangeRates: CurrCodeMapExchangeRates[] | null, 
@@ -14,8 +15,17 @@ export async function createCurrLists(baseCurr: string, targetCurr: string, defa
         if (defaultCurrExchangeRates !== null && !isFeatureDisplay) {
             const latestRates: CurrCodeMapExchangeRates = defaultCurrExchangeRates[0];
             const histRates: CurrCodeMapExchangeRates = defaultCurrExchangeRates[1];
+            const dayRangeIndicator = [getDayRangeDate(1), getDayRangeDate(0)]; // needed when the live rate table use exchange rate data instead of timeSeries
+            const monthRangeIndicator = [getMonthRangeDate(1), getMonthRangeDate(0)]; // needed when the live rate table use exchange rate data instead of timeSeries
             latestRate = latestRates[targetCurr]; // accessing by key as ExchangeRate is key-value pair
             histRate = histRates[targetCurr];
+            timeSeries = {
+                lowest: Math.min(latestRate, histRate),
+                highest: Math.max(latestRate, histRate),
+                changingRates: [histRate, latestRate],
+                dayRangeIndicator,
+                monthRangeIndicator
+            };
         } else { // Only request for timeSeries for each visible currency row when display chart feature is on
             try {
                 timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
