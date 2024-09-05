@@ -17,8 +17,8 @@ import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import CurrCountriesDropDown from '../subComponents/CurrCountriesDropDown';
 import EnhancedTableHead from './EnhancedTableHead';
 import {
-    getComparator, stableSort, styleTableCell, styleTableRow, getDisplayList, styleTableRowInFile,
-    styleTableCellDelete, getDayRangeDate, getMonthRangeDate
+    getComparator, stableSort, styleTableCell, styleTableRow,
+    getDisplayList, styleTableRowInFile, styleTableCellDelete
 } from '../../util/ExchangeRateTableDataUtil';
 import { checkIfExist } from '../../util/checkingMethods';
 import { createCurrLists } from '../../util/createCurrLists';
@@ -30,8 +30,8 @@ import TransitionAppendChart from '../subComponents/TransitionAppendChart';
 import { getCurrListsFromCookie, getUserPreferences, saveCurrListsToCookie, savePrefCurrCodes } from '../../hook/userController';
 import { getBaseColor } from '../../util/globalVariable';
 import {
-    type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates, type CurrCountriesApi,
-    type CurrList, type DisplayFlags, type User, type Order
+    type NewCurrCodeAssigned, type Preference, type CurrCodeMapExchangeRates,
+    type CurrCountriesApi, type CurrList, type DisplayFlags, type User, type Order,
 } from '../../lib/types';
 import { SxProps, Theme } from '@mui/system';
 
