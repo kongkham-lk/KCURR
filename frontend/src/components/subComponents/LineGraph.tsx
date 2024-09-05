@@ -1,8 +1,10 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as Chartjs } from 'chart.js/auto';
+import { Chart as Chartjs, registerables } from 'chart.js';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { type TimeSerie } from '../../lib/types';
+
+Chartjs.register(...registerables); // register line Chart.js's Line comp
 
 type LineGraphProps = {
     displayLabel: boolean;
