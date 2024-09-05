@@ -11,7 +11,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AppBar from '@mui/material/AppBar';
 import { getBaseColor, getTargetBaseColor } from '../util/globalVariable';
 import React from 'react';
-import { DisplayFlags, Preference } from '../lib/types';
+import { type DisplayFlags, type Preference } from '../lib/types';
 
 type FooterProps = DisplayFlags & {
     isOutLineTheme: boolean;

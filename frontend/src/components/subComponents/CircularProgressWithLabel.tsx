@@ -4,7 +4,7 @@ import CircularProgress, { CircularProgressProps } from '@mui/material/CircularP
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import React from 'react';
-import { DisplayFlags } from '../../lib/types';
+import { type DisplayFlags } from '../../lib/types';
 
 function CircularProgressWithLabel(props: CircularProgressProps & { value: number },) {
     return (
