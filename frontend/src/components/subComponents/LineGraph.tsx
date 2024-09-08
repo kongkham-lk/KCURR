@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs, registerables } from 'chart.js';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { type TimeSerie } from '../../lib/types';
+import { colors } from '@mui/material';
 
 Chartjs.register(...registerables); // register line Chart.js's Line comp
 
@@ -48,7 +49,7 @@ export function LineGraph(props: LineGraphProps) {
             borderColor,
             backgroundColor,
             tension: 0,
-        }]
+        }],
     };
 
     const targetMode = getTargetMode(displayLabel);
@@ -56,11 +57,11 @@ export function LineGraph(props: LineGraphProps) {
 
     const plugins = displayLabel ? {
         legend: {
-            display: false,
+            display: false
         },
         tooltip: {
             mode: targetMode,
-            intersect: false
+            intersect: false,
         }
     } : {
         legend: {
@@ -74,11 +75,13 @@ export function LineGraph(props: LineGraphProps) {
             y: {
                 display: displayLabel, // Hide Y axis labels
                 grid: {
+                    color: '#adadad80',
                     tickColor: '#adadad',
                 },
                 ticks: {
                     // forces step size to be 50 units
-                    maxTicksLimit: 4
+                    maxTicksLimit: 4,
+                    color: '#a1a1a1',
                 },
                 border: {
                     dash: [6, 6]
@@ -87,15 +90,17 @@ export function LineGraph(props: LineGraphProps) {
             x: {
                 display: displayLabel, // Hide X axis labels
                 grid: {
-                    color: 'white',
+                    color: '#adadad80',
                     tickColor: '#adadad',
                 },
                 ticks: {
                     maxTicksLimit: maxXAxisLabel,
                     alwaysShowLastTick: true,
+                    color: '#a1a1a1',
                 },
             },
         },
+                fontColor: "blue",
         borderWidth,
         pointRadius: 0,
         maintainAspectRatio: false,

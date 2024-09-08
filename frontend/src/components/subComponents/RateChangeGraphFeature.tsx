@@ -6,6 +6,7 @@ import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type TimeSerie } from '../../lib/types';
+import { getBaseColor, getTargetBaseColor } from '../../util/globalVariable';
 
 type RateChangeGraphFeatureProps = Omit<DisplayFlags, "isDisplayMD"> & {
     passDownUpdateRequestFlag: boolean; // check if need to update chart. Only conversion need this property
@@ -61,7 +62,7 @@ export default function RateChangeGraphFeature(props: RateChangeGraphFeatureProp
                     </Typography>
                 }
                 {latestRate !== "NaN" ?
-                    <Typography variant="subtitle1" color="#727272f2" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null ? 1 : 0} >
+                    <Typography variant="subtitle1" color="inherit" fontStyle="italic" fontWeight={500} mb={1} mt={timeSeries === null ? 1 : 0} >
                         1 {baseCurr} = {latestRate} {targetCurr}
                     </Typography> : <br />
                 }

@@ -64,7 +64,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     },
 }));
 
-const borderStyle = "1px solid #00000030";
+const borderStyle = "1px solid #adadad80";
 
 const commonStyle = {
     borderTop: borderStyle,

@@ -425,7 +425,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                     sx={{
                                                                         ...styleTableCell(currList, isDisplaySM, false),
                                                                         ...getTargetProps(isDisplaySM).width,
-                                                                        ...(isDefaultCurr && commonStyle.colorInherit)
+                                                                        ...commonStyle.colorInherit
                                                                     }}
                                                                 >
                                                                     {index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
