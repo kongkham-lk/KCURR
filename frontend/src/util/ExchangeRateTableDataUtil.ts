@@ -8,7 +8,9 @@ export function getComparator(order: Order, orderBy: string): (a: CurrList, b: C
         return order === 'desc'
             ? (a: CurrList, b: CurrList) => descendingComparator(a[orderByField], b[orderByField])
             : (a: CurrList, b: CurrList) => -descendingComparator(a[orderByField], b[orderByField]);
-    } else {
+    } else if (orderBy === "") { // clear filter
+        return (a: CurrList, b: CurrList) => 0;
+    } else { // pass in keyword other than col name
         console.error(`${orderBy} is not a valid key of CurrList`);
         return (a: CurrList, b: CurrList) => 0;
     }
