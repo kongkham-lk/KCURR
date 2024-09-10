@@ -112,7 +112,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                     const newCurrCodeArray = newPref.liveRateCurrCodes;
                     setCurrCodeArray(newCurrCodeArray !== undefined ? newCurrCodeArray : currCodeArray);
                 }
-
+                console.log("    >>> update new currlist!!! ", newCurrLists)
                 // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
                 if (newCurrLists !== null)
                     setCurrLists(newCurrLists);
@@ -121,7 +121,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
             }
         }
         fetchUpdateOnInitialLoad();
-    }, [currCodeArray, isInitialLoad, userId])
+    }, [currCodeArray, currLists, isInitialLoad, userId])
 
     // Update new added currency code to visible row
     useEffect(() => {
@@ -156,9 +156,10 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const updateCurrLists = async (): Promise<void> => {
         console.log("    >>> createCurrLists!!!")
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
-        const newLists = [...currLists, currList];
-        setCurrLists(newLists);
-        saveCurrListsToCookie(userId, newLists);
+        const newCurrLists = [...currLists, currList];
+        console.log("    >>> update new currlist!!! ", newCurrLists)
+        setCurrLists(newCurrLists);
+        saveCurrListsToCookie(userId, newCurrLists);
     }
 
     const handleRequestSort = (event: any, property: string): void => {
@@ -204,19 +205,20 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray: string[]) => {
         // console.log("Fetching latest exchange rate from API!!!")
-        const newLists: CurrList[] = [];
+        const newCurrLists: CurrList[] = [];
         const initialValue = { baseCurr: currCodeArray[0] };
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
 
         for (let i in currCodeArray) {
             // console.log("    >>> createCurrLists!!!")
-            newLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates,
+            newCurrLists[i] = await createCurrLists(currCodeArray[0], currCodeArray[i], newDefaultCurrExchangeRates,
                 timeSeriesRangeLength, isChartFeatureEnable);
         }
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
-        setCurrLists(newLists);
-        saveCurrListsToCookie(userId, newLists);
+        console.log("    >>> update new currlist!!! ", newCurrLists)
+        setCurrLists(newCurrLists);
+        saveCurrListsToCookie(userId, newCurrLists);
         handleDisplayLatestFetchTimeUpdate();
     };
 
@@ -256,6 +258,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                 newCurrCodeArray.splice(i, 1);
             }
         }
+        console.log("    >>> update new currlist!!! ", newCurrLists)
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
         setCurrCodeArray(newCurrCodeArray);
