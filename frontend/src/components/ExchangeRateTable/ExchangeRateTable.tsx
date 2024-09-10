@@ -79,7 +79,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const [isInitialLoad, setIsInitialLoad] = useState(true)
     const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
     const emptyRows = page > 0 && currLists !== null ? Math.max(0, (1 + page) * rowsPerPage - currLists.length) : 0;
-    console.log("--  >>> Load Live Rate Table!!! ", initialCurrLists, currLists)
+    // console.log("--  >>> Load Live Rate Table!!! ", initialCurrLists, currLists)
 
     const visibleRows = useMemo(
         () =>
@@ -112,7 +112,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                     const newCurrCodeArray = newPref.liveRateCurrCodes;
                     setCurrCodeArray(newCurrCodeArray !== undefined ? newCurrCodeArray : currCodeArray);
                 }
-                console.log("    >>> update new currlist!!! ", newCurrLists)
+                
                 // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
                 if (newCurrLists !== null)
                     setCurrLists(newCurrLists);
@@ -157,7 +157,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         console.log("    >>> createCurrLists!!!")
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         const newCurrLists = [...currLists, currList];
-        console.log("    >>> update new currlist!!! ", newCurrLists)
+        
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
     }
@@ -216,7 +216,6 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         }
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
-        console.log("    >>> update new currlist!!! ", newCurrLists)
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
         handleDisplayLatestFetchTimeUpdate();
@@ -258,7 +257,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                 newCurrCodeArray.splice(i, 1);
             }
         }
-        console.log("    >>> update new currlist!!! ", newCurrLists)
+        
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
         setCurrCodeArray(newCurrCodeArray);

@@ -15,7 +15,7 @@ export function getComparator(order: Order, orderBy: string): (a: CurrList, b: C
 }
 
 export function stableSort(currLists: CurrList[], comparator: (a: CurrList, b: CurrList) => number): CurrList[] {
-    console.log(currLists)
+    // console.log(currLists)
     if (currLists === null || currLists === undefined )
         return currLists;
 
