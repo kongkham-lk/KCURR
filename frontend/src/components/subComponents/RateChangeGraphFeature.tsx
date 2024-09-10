@@ -6,7 +6,6 @@ import { retrieveExchangeRatesTimeSeries } from '../../util/apiClient';
 import RangeTimeSeriesSelector from './RangeTimeSeriesSelector';
 import { Box } from '@mui/material';
 import { type ConversionData, type CurrCodeMapTimeSerie, type DisplayFlags, type TimeSerie } from '../../lib/types';
-import { getBaseColor, getTargetBaseColor } from '../../util/globalVariable';
 
 type RateChangeGraphFeatureProps = Omit<DisplayFlags, "isDisplayMD"> & {
     passDownUpdateRequestFlag: boolean; // check if need to update chart. Only conversion need this property

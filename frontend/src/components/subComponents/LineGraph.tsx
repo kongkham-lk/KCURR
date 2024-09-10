@@ -1,9 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs, registerables } from 'chart.js';
-import { LineChart } from '@mui/x-charts/LineChart';
 import { type TimeSerie } from '../../lib/types';
-import { colors } from '@mui/material';
 
 Chartjs.register(...registerables); // register line Chart.js's Line comp
 
