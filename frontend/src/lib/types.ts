@@ -40,9 +40,9 @@ export type CurrCountriesDetail = {
 export type CurrList = {
     targetCurr: string;
     latestRate: number;
-    histRate?: number | null;
+    histRate: number | null;
     change?: string | null;
-    timeSeries?: TimeSerie | null;
+    timeSeries: TimeSerie | null;
 };
 
 export type TimeSerie = {
@@ -104,3 +104,5 @@ export type DisplayFlags = {
     isDisplaySM: boolean;
     isDisplayMD: boolean;
 };
+
+export type Order = 'asc' | 'desc';

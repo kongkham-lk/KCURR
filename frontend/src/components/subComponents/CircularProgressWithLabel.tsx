@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import React from 'react';
+import { type DisplayFlags } from '../../lib/types';
 
-function CircularProgressWithLabel(props) {
+function CircularProgressWithLabel(props: CircularProgressProps & { value: number },) {
     return (
-        <Box sx={{ ...sxStyle.Container, justifyContent: displaySM && 'flex-end' }}>
+        <Box sx={{ ...sxStyle.Container, justifyContent: displaySM ? 'flex-end' : undefined }}>
             <Box sx={sxStyle.Box}>
                 <CircularProgress
                     variant="determinate"
@@ -20,22 +22,21 @@ function CircularProgressWithLabel(props) {
                 <Box
                     sx={sxStyle.CenterPos}
                 >
-                    <Typography variant="BUTTON" component="div" color="text.secondary">
+                    <Typography variant="button" component="div" color="text.secondary">
                         {`${Math.round(props.value / 1.6667)}`}
                     </Typography>
                 </Box>
             </Box>
             <Box
-                flex
-                flexDirection={'column'}
-                ml={2}
-                mr={displayMD && !displaySM && '30px'}
-                width={displaySM ? '50%' : '100%'}
+                sx={{
+                    display: 'flex', flexDirection: 'column', ml: 2, mr: displayMD && !displaySM ? '30px' : 'auto',
+                    width: displaySM ? '50%' : '100%'
+                }}
             >
-                <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
+                <Typography variant="body2" fontSize={displaySM ? '0.78rem' : 'auto'}>
                     {"Last Update "}
                 </Typography>
-                <Typography variant="body2" fontSize={displaySM && '0.78rem'}>
+                <Typography variant="body2" fontSize={displaySM ? '0.78rem' : 'auto'}>
                     {updateTime}
                 </Typography>
             </Box>
@@ -52,12 +53,18 @@ CircularProgressWithLabel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-export default function CircularWithValueLabel(props) {
+type CircularWithValueLabelProps = DisplayFlags & {
+    onUpdateNewLiveRate: () => void;
+    onUpdateDisplayTime: () => void;
+    lastUpdateRateTime: string;
+}
+
+export default function CircularWithValueLabel(props: CircularWithValueLabelProps) {
     const { onUpdateNewLiveRate, onUpdateDisplayTime, lastUpdateRateTime, isDisplaySM, isDisplayMD } = props;
     const [progress, setProgress] = useState(59);
     const [timerForUpdateNewLiveRate, setTimerForUpdateNewLiveRate] = useState(15); // reduce the frequency of retrieving new rate from run out of quota
 
-    const checkTimer = (prevProgress) => {
+    const checkTimer = (prevProgress: number) => {
         if (prevProgress <= 1) {  // 1.66 * 60 = 99.6
             // console.log('Reset timer and Refresh lives rate!!!');
             prevProgress = 99;
@@ -102,25 +109,25 @@ export default function CircularWithValueLabel(props) {
 const sxStyle = {
     Container: { display: 'flex', alignItems: 'center' },
     Box: { position: 'relative', display: 'inline-flex' },
-    CircularGrey: { color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 300 : 800], '& svg': { position: 'inherit' } },
+    CircularGrey: { color: (theme: any) => theme.palette.grey[theme.palette.mode === 'light' ? 300 : 800], '& svg': { position: 'inherit' } },
     CenterPos: {
         top: 0, left: 0, bottom: 0, right: 0, position: 'absolute', display: 'flex', alignItems: 'center',
         justifyContent: 'center'
     }
 }
 
-var updateTime = 0;
+var updateTime: string = "0";
 var displaySM = false;
 var displayMD = false;
 
-const setUpdateTime = (time) => {
+const setUpdateTime = (time: string) => {
     updateTime = time;
 }
 
-const CheckDisplaySM = (val) => {
+const CheckDisplaySM = (val: boolean) => {
     displaySM = val;
 }
 
-const CheckDisplayMD = (val) => {
+const CheckDisplayMD = (val: boolean) => {
     displayMD = val;
 }

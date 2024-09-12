@@ -5,13 +5,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import InstagramIcon from '@mui/icons-material/Instagram';
+import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AppBar from '@mui/material/AppBar';
 import { getBaseColor, getTargetBaseColor } from '../util/globalVariable';
 import React from 'react';
-import { DisplayFlags, Preference } from '../lib/types';
+import { type DisplayFlags, type Preference } from '../lib/types';
 
 type FooterProps = DisplayFlags & {
     isOutLineTheme: boolean;
@@ -38,7 +38,7 @@ export default function Footer(props: FooterProps) {
                     : sxStyle.Theme.Elevate)
             }}>
                 <Box sx={sxStyle.BoxSub}>
-                    <List sx={{...sxStyle.ListPopupSideBar, height:commonStyles.prop.fillAvailSpace}}>
+                    <List sx={{ ...sxStyle.ListPopupSideBar, height: commonStyles.prop.fillAvailSpace }}>
                         <ListItem key="product" disablePadding>
                             <Typography variant="subtitle1" sx={{ fontWeight: 600, }} gutterBottom>
                                 Product
@@ -64,14 +64,14 @@ export default function Footer(props: FooterProps) {
                         })}
                         <ListItem key="toolAndResource" disablePadding>
                             <Stack direction="row" alignItems="center">
-                                <IconButton aria-label="github" size="large" sx={{ ml: -1.5 }} >
+                                <IconButton aria-label="github" size="large" sx={{ ml: -1.5 }} href="https://github.com/kongkham-lk" >
                                     <GitHubIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
-                                <IconButton aria-label="linkedin" size="large" >
+                                <IconButton aria-label="linkedin" size="large" href="https://www.linkedin.com/in/kongkham-luangkhot/" >
                                     <LinkedInIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
-                                <IconButton aria-label="instagram" size="large">
-                                    <InstagramIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
+                                <IconButton aria-label="mail" size="large" href="mailto:kongkham.luangkhot@gmail.com" >
+                                    <EmailIcon sx={{ color: !isLightTheme ? 'white' : baseColor.lightPrimary }} />
                                 </IconButton>
                             </Stack>
                         </ListItem>

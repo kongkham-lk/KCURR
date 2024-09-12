@@ -1,8 +1,9 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as Chartjs } from 'chart.js/auto';
-import { LineChart } from '@mui/x-charts/LineChart';
+import { Chart as Chartjs, registerables } from 'chart.js';
 import { type TimeSerie } from '../../lib/types';
+
+Chartjs.register(...registerables); // register line Chart.js's Line comp
 
 type LineGraphProps = {
     displayLabel: boolean;
@@ -10,9 +11,9 @@ type LineGraphProps = {
 }
 
 export function LineGraph(props: LineGraphProps) {
-    const { displayLabel = false, timeSeries = null } = props;
+    const { displayLabel, timeSeries } = props;
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
-    const changingRates: number[] | null = timeSeries !== null ? timeSeries.changingRates : null;
+    const changingRates: number[] | null = timeSeries !== null && timeSeries !== undefined ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null && changingRates !== null
         ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator)
         : ["1d"];
@@ -46,20 +47,24 @@ export function LineGraph(props: LineGraphProps) {
             borderColor,
             backgroundColor,
             tension: 0,
-        }]
+        }],
     };
 
     const targetMode = getTargetMode(displayLabel);
     const maxXAxisLabel = getMaxXAxisLabel(timeSeriesRangeLabel);
 
-    const plugins = {
+    const plugins = displayLabel ? {
         legend: {
-            display: false,
+            display: false
         },
         tooltip: {
             mode: targetMode,
-            intersect: false
+            intersect: false,
         }
+    } : {
+        legend: {
+            display: false,
+        },
     };
 
     const options = {
@@ -68,11 +73,13 @@ export function LineGraph(props: LineGraphProps) {
             y: {
                 display: displayLabel, // Hide Y axis labels
                 grid: {
+                    color: '#adadad80',
                     tickColor: '#adadad',
                 },
                 ticks: {
                     // forces step size to be 50 units
-                    maxTicksLimit: 4
+                    maxTicksLimit: 4,
+                    color: '#a1a1a1',
                 },
                 border: {
                     dash: [6, 6]
@@ -81,15 +88,17 @@ export function LineGraph(props: LineGraphProps) {
             x: {
                 display: displayLabel, // Hide X axis labels
                 grid: {
-                    color: 'white',
+                    color: '#adadad80',
                     tickColor: '#adadad',
                 },
                 ticks: {
                     maxTicksLimit: maxXAxisLabel,
                     alwaysShowLastTick: true,
+                    color: '#a1a1a1',
                 },
             },
         },
+                fontColor: "blue",
         borderWidth,
         pointRadius: 0,
         maintainAspectRatio: false,

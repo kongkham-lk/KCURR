@@ -10,6 +10,7 @@ import { type DisplayFlags, type NewCurrCodeAssigned, type ConversionData, type 
 type ConvertorProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
     userPreference: Preference | null;
     userId: string;
+    isChartFeatureEnable: boolean
 };
 
 export default function Convertor(props: ConvertorProps) {
@@ -84,7 +85,7 @@ export default function Convertor(props: ConvertorProps) {
         RateHistoryGraph: {
             currencyRateData: formData,
             passDownUpdateRequestFlag: isNewUpdateRequest,
-            isDisplaySM,
+            ...props
         }
     };
 
