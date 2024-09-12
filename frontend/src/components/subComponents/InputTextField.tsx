@@ -3,15 +3,15 @@ import TextField from '@mui/material/TextField';
 
 type InputTextFieldProps = {
     onConvertAmountUpdate:(e: HTMLTextAreaElement) => void;
-    isError: boolean;
+    isError?: boolean;
     inputFieldLabel: string;
-    placeHolder: string;
+    placeHolder?: string;
     size?: "medium" | "small";
     displayInput: string;
 }
 
 export default function InputTextField(props: InputTextFieldProps) {
-    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder, size = "medium", displayInput } = props;
+    const { onConvertAmountUpdate, isError = false, inputFieldLabel, placeHolder = "", size = "medium", displayInput } = props;
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>): void => { onConvertAmountUpdate(e.target) };
 
