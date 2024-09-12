@@ -127,7 +127,8 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     useEffect(() => {
         async function checkNewRow() {
             // console.log("refresh page!!!");
-            if (newCurrCode !== "" && !checkIfExist(currLists, newCurrCode)) {
+            if (newCurrCode !== "" && !checkIfExist(currCodeArray, newCurrCode)) {
+                console.log("update currCodeArray!!!")
                 updateCurrCodeArray()
                 await updateCurrLists()
             }

@@ -8,9 +8,9 @@ export function checkIfContainsMoreThanOneDot(str: string): boolean {
     return /\.\.[^.]*$/.test(str);
 }
 
-export function checkIfExist(currLists: CurrList[], targetCurr: string): boolean {
-    for (let el of currLists) {
-        if (el.targetCurr === targetCurr) return true;
+export function checkIfExist(currCodes: string[], targetCurr: string): boolean {
+    for (let el of currCodes) {
+        if (el === targetCurr) return true;
     }
     return false;
 }
