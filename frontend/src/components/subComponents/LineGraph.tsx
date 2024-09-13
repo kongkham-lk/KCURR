@@ -15,7 +15,7 @@ export function LineGraph(props: LineGraphProps) {
     // console.log("Check passing in TimeSeries: ", timeSeries); // for debugging the response data
     const changingRates: number[] | null = timeSeries !== null && timeSeries !== undefined ? timeSeries.changingRates : null;
     const timeSeriesRangeLabel = timeSeries !== null && changingRates !== null
-        ? (changingRates.length <= 31 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator)
+        ? (changingRates.length <= timeRange.m1 ? timeSeries.dayRangeIndicator : timeSeries.monthRangeIndicator)
         : ["1d"];
 
     // color of the color label within popup box
@@ -51,7 +51,7 @@ export function LineGraph(props: LineGraphProps) {
     };
 
     const targetMode = getTargetMode(displayLabel);
-    const maxXAxisLabel = getMaxXAxisLabel(timeSeriesRangeLabel);
+    const maxXAxisLabel = getMaxXAxisLabel(timeSeriesRangeLabel.length);
 
     const plugins = displayLabel ? {
         legend: {
@@ -116,14 +116,28 @@ const getTargetMode = (displayLabel: boolean): "index" | undefined => {
     return displayLabel ? 'index' : undefined;
 }
 
-const getMaxXAxisLabel = (timeSeriesRangeLabel: string[]): number => {
-    if (timeSeriesRangeLabel.length <= 7) {
+const getMaxXAxisLabel = (length: number): number => {
+    console.log(length)
+    if (length <= timeRange.w1) { // week
         return 7;
-    } else if (timeSeriesRangeLabel.length <= 31) {
-        return 7;
-    } else if (timeSeriesRangeLabel.length < 31 * 3) {
+    } else if (length <= timeRange.m1) { // month
         return 4;
-    } else {
-        return 7;
+    } else if (length <= timeRange.m3) { // 3 months
+        return 3;
+    } else if (length <= timeRange.m6) { // 6 months
+        return 6;
+    } else if (length <= timeRange.m9) { // 9 months
+        return 9;
+    } else { // 1 year
+        return 12;
     }
+}
+
+const timeRange = {
+    d1: 2,
+    w1: 7,
+    m1: 32,
+    m3: 31 * 3,
+    m6: 31 * 6,
+    m9: 31 * 9
 }
