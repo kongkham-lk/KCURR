@@ -1,7 +1,7 @@
 import React from "react";
 import "../../App.css";
 import Typography from '@mui/material/Typography';
-import { NewsHeadlines } from "../../lib/types";
+import { type NewsHeadlines } from "../../lib/types";
 
 type FinancialNewsProps = {
     news: NewsHeadlines;

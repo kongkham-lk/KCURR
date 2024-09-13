@@ -13,8 +13,8 @@ import InputTextField from "../subComponents/InputTextField";
 import { Loading } from '../subComponents/Loading';
 import FinancialNewsLists from "./FinancialNewsLists";
 import { getUserPreferences, savePrefNewsCategories } from "../../hook/userController";
+import { getTargetBaseColor } from "../../util/globalVariable";
 import { type NewsHeadlines, type User } from "../../lib/types";
-import { getBaseColor, getTargetBaseColor } from "../../util/globalVariable";
 
 type FinancialNewsProps = Omit<User, 'onThemeUpdate'> & {
     filter?: boolean;
