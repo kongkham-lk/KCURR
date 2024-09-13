@@ -137,6 +137,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId]);
 
     // refresh time display on screen when any time-related property is updated
