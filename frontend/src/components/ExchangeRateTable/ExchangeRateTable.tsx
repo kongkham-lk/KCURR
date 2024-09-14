@@ -128,9 +128,9 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         async function checkNewRow() {
             // console.log("refresh page!!!");
             if (newCurrCode !== "" && !checkIfExist(currCodeArray, newCurrCode)) {
-                console.log("update currCodeArray!!!")
+                console.log("update currCodeArray!!!", currCodeArray, newCurrCode)
                 updateCurrCodeArray()
-                await updateCurrLists()
+                await updateCurrLists(newCurrCode)
             }
             setNewCurrCode("");
             // console.log("Check Curr Lists after refresh page: ", currLists);
@@ -155,7 +155,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
 
-    const updateCurrLists = async (): Promise<void> => {
+    const updateCurrLists = async (newCurrCode: string): Promise<void> => {
         console.log("    >>> createCurrLists!!!")
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         const newCurrLists = [...currLists, currList];
