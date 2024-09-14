@@ -160,6 +160,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         const newCurrLists = [...currLists, currList];
         
+        console.log(currLists, newCurrLists);
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
     }

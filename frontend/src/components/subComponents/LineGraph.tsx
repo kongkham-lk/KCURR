@@ -117,7 +117,6 @@ const getTargetMode = (displayLabel: boolean): "index" | undefined => {
 }
 
 const getMaxXAxisLabel = (length: number): number => {
-    console.log(length)
     if (length <= timeRange.w1) { // week
         return 7;
     } else if (length <= timeRange.m1) { // month
