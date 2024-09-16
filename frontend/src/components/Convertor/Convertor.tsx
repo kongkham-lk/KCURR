@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
 import { getUserPreferences, savePrefCovertedPair } from '../../hook/userController';
-import { type DisplayFlags, type NewCurrCodeAssigned, type ConversionData, type CurrCountriesApi, type Preference } from '../../lib/types';
+import { type DisplayFlags, type NewCurrCodeAssigned, type ConversionData, type CurrCountriesApi } from '../../lib/types';
 
 type ConvertorProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
     userId: string;

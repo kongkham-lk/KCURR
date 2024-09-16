@@ -13,7 +13,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { type NewsHeadlines, type Preference } from './lib/types';
+import { type Preference } from './lib/types';
 
 export default function App() {
     const userId: string = getUserIdentifier();
@@ -31,7 +31,6 @@ export default function App() {
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
     // Observation: When react state in App.js is updated, all the sub component's state also reset
     const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsApiGetter("", [], "", isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
-    const [newsListsRes, setNewsListsRes] = useState<NewsHeadlines[]>([]);
 
     // Initialized userPreference
     useEffect(() => {
