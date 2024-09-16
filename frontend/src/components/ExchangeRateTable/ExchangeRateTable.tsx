@@ -104,6 +104,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     useEffect(() => {
         async function fetchUpdateOnInitialLoad() {
             if (isInitialLoad) {
+                console.log("Fetch latest liveRates!!!")
                 const newPref: Preference | null = await getUserPreferences(userId);
                 const newCurrLists = await getCurrListsFromCookie(userId);
 

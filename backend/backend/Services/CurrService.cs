@@ -73,12 +73,14 @@ public class CurrService
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange, bool isNewUpdateRequest)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
-
+        
+        // return the prev retrieved timeSeries object when not require to update the current stored timeSeries object
         if (!isNewUpdateRequest && RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
             targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
-
+            
+            // fetch new timeSerie object when it is not existed
             if (targetCurrTimeSeries != null)
                 return targetCurrTimeSeries;
         }
@@ -101,9 +103,10 @@ public class CurrService
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
         targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
 
-        // Added new currTimeSeries to memo list
+        // Added new currTimeSeries to memo list if not existed yet, else if contain then
         if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
+            // get all the curr code's timeSerie object bases on the same time range
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
             if (allCurrTimeSeriesList.Any())
             {
@@ -123,6 +126,7 @@ public class CurrService
                     allCurrTimeSeriesList.Add(targetCurrTimeSeries);
             }
             else
+                // the new value that assign to allCurrTimeSeriesList is equivalent as store to memo object (RangeByCurrTimeSeriesLists[timeSeriesRange])
                 allCurrTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
         }
         else
