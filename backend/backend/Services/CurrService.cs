@@ -105,21 +105,21 @@ public class CurrService
         if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
-            if (allCurrTimeSeriesList != null && allCurrTimeSeriesList.Any())
+            if (allCurrTimeSeriesList.Any())
             {
-                if (isNewUpdateRequest)
+                int i;
+                for (i = 0; i < allCurrTimeSeriesList.Count(); i++)
                 {
-                    for (int i = 0; i < allCurrTimeSeriesList.Count(); i++)
+                    // if the currTimeSeries's key existed in the list, update its value and stop iteration
+                    if (allCurrTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
                     {
-                        // if the currTimeSeries's key existed in the list, update its value and stop iteration
-                        if (allCurrTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
-                        {
-                            allCurrTimeSeriesList[i] = targetCurrTimeSeries;
-                            break;
-                        }
+                        allCurrTimeSeriesList[i] = targetCurrTimeSeries;
+                        break;
                     }
                 }
-                else
+                
+                // add the new currCode's timeSeries to memo if the currCode of that timeRange is not existed yet
+                if (i == allCurrTimeSeriesList.Count())
                     allCurrTimeSeriesList.Add(targetCurrTimeSeries);
             }
             else
