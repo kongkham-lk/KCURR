@@ -20,14 +20,13 @@ type FinancialNewsProps = Omit<User, 'onThemeUpdate'> & {
     filter?: boolean;
     isDisplaySM: boolean;
     isOutLineTheme?: boolean;
-    newsListsRes: NewsHeadlines[];
 }
 
 export default function FinancialNews(props: FinancialNewsProps) {
-    const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference, newsListsRes } = props;
+    const { filter = false, isDisplaySM, isOutLineTheme = true, userId, userPreference } = props;
     // console.log("Load News!!! ", userPreference);
     const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true); // everytime theme is set, all the state seems to be reset.
-    const [newsHeadlinesList, setNewsHeadlinesList] = useState<NewsHeadlines[]>([...newsListsRes]);
+    const [newsHeadlinesList, setNewsHeadlinesList] = useState<NewsHeadlines[]>([]);
     const [inputTrackerTopic, setInputTrackerTopic] = useState<string>("");
     const [newCategories, setNewCategories] = useState<string[]>([]);
     const [isNewCategoriesUpdate, setIsNewCategoriesUpdate] = useState<boolean>(false);
@@ -49,9 +48,9 @@ export default function FinancialNews(props: FinancialNewsProps) {
         fetchLatestNewsCategories();
     }, [isInitialLoad, userId])
 
-    // Fetch new newsList when click "Add" new theme
+    // Fetch new news headlines when click "Add" or load news component
     useEffect(() => {
-        async function fetchNewsLists() {
+        async function fetchNewsHeadlines() {
             if (isNewCategoriesUpdate && newCategories.length > 0) {
                 const newsRes = await retrieveFinancialNews(newCategories);
                 if (newsRes !== null)
@@ -60,7 +59,7 @@ export default function FinancialNews(props: FinancialNewsProps) {
                 setIsNewCategoriesUpdate(false);
             }
         }
-        fetchNewsLists();
+        fetchNewsHeadlines();
     }, [newCategories, isNewCategoriesUpdate])
 
     const handleInput = (e: HTMLTextAreaElement) => {
@@ -86,9 +85,9 @@ export default function FinancialNews(props: FinancialNewsProps) {
     }
 
     // update the add/delete of news Categories filter to states
-    const handleNewsTopicsUpdate = (newNewsTopicList: string[]) => {
-        setNewCategories(newNewsTopicList);
-        handleNewsCategoriesCookieUpdate(newNewsTopicList);
+    const handleNewsTopicsUpdate = (newNewsTopics: string[]) => {
+        setNewCategories(newNewsTopics);
+        handleNewsCategoriesCookieUpdate(newNewsTopics);
         setIsNewCategoriesUpdate(true);
     }
 

@@ -9,7 +9,6 @@ import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable'
 import FinancialNews from './components/FinancialNews/FinancialNews';
 import Footer from './components/Footer';
 import { Loading } from './components/subComponents/Loading';
-import { retrieveFinancialNews } from "./util/apiClient";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -40,13 +39,8 @@ export default function App() {
             if (userPreference === null) {
                 // console.log("Get initial Pref!!!")
                 const pref: Preference | null = await getUserPreferences(userId);
-                if (pref !== null) {
-                    const newsRes = await retrieveFinancialNews(pref.newsCategories);
+                if (pref !== null)
                     setUserPreference(pref);
-
-                    if (newsRes !== null)
-                        setNewsListsRes(newsRes.data);
-                }
             }
         }
         fetchPreference();
@@ -82,7 +76,7 @@ export default function App() {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentPath, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, newsListsRes },
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref },
         footer: {...commonAttr.displayFlags, ...commonAttr.themeFlag, userPreference}
     }
 
