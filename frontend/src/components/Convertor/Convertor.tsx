@@ -4,32 +4,42 @@ import ConvertorForm from './ConvertorForm';
 import Typography from '@mui/material/Typography';
 import RateChangeGraphFeature from '../subComponents/RateChangeGraphFeature';
 import { retrieveConvertValue } from '../../util/apiClient';
-import { savePrefCovertedPair } from '../../hook/userController';
+import { getUserPreferences, savePrefCovertedPair } from '../../hook/userController';
 import { type DisplayFlags, type NewCurrCodeAssigned, type ConversionData, type CurrCountriesApi, type Preference } from '../../lib/types';
 
 type ConvertorProps = DisplayFlags & Omit<CurrCountriesApi, "isReady"> & {
-    userPreference: Preference | null;
     userId: string;
     isChartFeatureEnable: boolean
 };
 
 export default function Convertor(props: ConvertorProps) {
-    const { isDisplaySM, userId, userPreference } = props
+    const { isDisplaySM, userId } = props
 
     const [formData, setFormData] = useState<ConversionData | null>(null);
     const [isNewUpdateRequest, setIsNewUpdateRequest] = useState<boolean>(true);
     const [targetConvertCurrPair, setTargetConvertCurrPair] = useState<string[]>([]);
+    const [isInitialLoad, setIsInitialLoad] = useState(true)
+
 
     let baseCurr: string = "";
     let targetCurr: string = "";
     let amount: number = 0.0;
     let total: number = 0.0; // declare default variable to insert into the markup content
 
+
     useEffect(() => {
-        // console.log("Reassign initial convertPair to dropdown (when userPref not null)!!!")
-        if (userPreference !== null)
-            setTargetConvertCurrPair(Object.assign([], userPreference.convertedCurrPair)) // this equivalent to spread operator [...userPreference.convertedCurrPair]
-    }, [userPreference])
+        async function loadConvertCurrPair() {
+            // fetch the latest currency pair from cookie 
+            if (isInitialLoad) {
+                console.log("Fetch latest currency pair!!!")
+                const newPref = await getUserPreferences(userId);
+                if (newPref !== null)
+                    setTargetConvertCurrPair(Object.assign([], newPref.convertedCurrPair)) // this equivalent to spread operator [...userPreference.convertedCurrPair]
+                setIsInitialLoad(false);
+            }
+        }
+        loadConvertCurrPair();
+    }, [isInitialLoad, userId])
 
     // Display conversion result
     if (formData !== null) {
