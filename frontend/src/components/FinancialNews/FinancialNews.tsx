@@ -29,53 +29,67 @@ export default function FinancialNews(props: FinancialNewsProps) {
     const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true); // everytime theme is set, all the state seems to be reset.
     const [newsHeadlinesList, setNewsHeadlinesList] = useState<NewsHeadlines[]>([...newsListsRes]);
     const [inputTrackerTopic, setInputTrackerTopic] = useState<string>("");
-    const [newCategories, setNewCategories] = useState<string[]>(
-        userPreference !== null && userPreference.newsCategories !== undefined ? [...userPreference.newsCategories] : []
-    );
+    const [newCategories, setNewCategories] = useState<string[]>([]);
+    const [isNewCategoriesUpdate, setIsNewCategoriesUpdate] = useState<boolean>(false);
     const isDarkTheme = userPreference !== null && userPreference.theme === "dark";
     // console.log("Load News!!! ", newCategories)
 
+    // Fetch latest news categories from cookie
     useEffect(() => {
-        async function fetchNewsLists() {
-            // console.log("--  >>> fetchNewsLists!!! ", newCategories)
-            if (!isInitialLoad) { // Do not fetch new newsList if set new theme
-                const newsRes = await retrieveFinancialNews(newCategories);
-                if (newsRes !== null)
-                    setNewsHeadlinesList(newsRes.data);
-            } else {
+        async function fetchLatestNewsCategories() {
+            if (isInitialLoad) {
+                console.log("Fetch latest news categories!!!")
                 const newPref = await getUserPreferences(userId);
                 if (newPref !== null && newPref.newsCategories !== undefined)
                     setNewCategories(newPref.newsCategories);
                 setIsInitialLoad(false);
+                setIsNewCategoriesUpdate(true);
+            }
+        }
+        fetchLatestNewsCategories();
+    }, [isInitialLoad, userId])
+
+    // Fetch new newsList when click "Add" new theme
+    useEffect(() => {
+        async function fetchNewsLists() {
+            if (isNewCategoriesUpdate && newCategories.length > 0) {
+                const newsRes = await retrieveFinancialNews(newCategories);
+                if (newsRes !== null)
+                    setNewsHeadlinesList(newsRes.data);
+
+                setIsNewCategoriesUpdate(false);
             }
         }
         fetchNewsLists();
-    }, [isInitialLoad, newCategories, userId])
-
-
-    const handleAddNewsTopic = () => {
-        // console.log("Set News!!!")
-        const newNewsTopicList = [...newCategories];
-        newNewsTopicList.push(inputTrackerTopic);
-        handleNewTopicsUpdate(newNewsTopicList);
-        setInputTrackerTopic("") // reset the input tracker, the textbox, after added the news category
-    }
+    }, [newCategories, isNewCategoriesUpdate])
 
     const handleInput = (e: HTMLTextAreaElement) => {
         const newTempInput = e.value;
         setInputTrackerTopic(newTempInput);
     }
 
-    const handleDelete = (index: number) => {
+    // delete news Categories filter
+    const handleAddNewsTopic = () => {
+        // console.log("Set News!!!")
+        const newNewsTopicList = [...newCategories];
+        newNewsTopicList.push(inputTrackerTopic);
+        handleNewsTopicsUpdate(newNewsTopicList);
+        setInputTrackerTopic("") // reset the input tracker, the textbox, after added the news category
+    }
+
+    // delete news Categories filter
+    const handleDeleteNewsTopic = (index: number) => {
         // console.log("Set News!!!")
         const newNewsTopicList = [...newCategories];
         newNewsTopicList.splice(index, 1);
-        handleNewTopicsUpdate(newNewsTopicList);
+        handleNewsTopicsUpdate(newNewsTopicList);
     }
 
-    const handleNewTopicsUpdate = (newNewsTopicList: string[]) => {
+    // update the add/delete of news Categories filter to states
+    const handleNewsTopicsUpdate = (newNewsTopicList: string[]) => {
         setNewCategories(newNewsTopicList);
         handleNewsCategoriesCookieUpdate(newNewsTopicList);
+        setIsNewCategoriesUpdate(true);
     }
 
     const handleNewsCategoriesCookieUpdate = (newNewsTopics: string[]) => {
@@ -112,7 +126,7 @@ export default function FinancialNews(props: FinancialNewsProps) {
                     </div>
                     {filter && <Stack direction="row" style={style.Stack as React.CSSProperties}>
                         {(newCategories)?.map((topic, index) => (
-                            <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDelete(index)} style={style.Chip} />
+                            <Chip key={topic} label={topic} variant="outlined" onDelete={() => handleDeleteNewsTopic(index)} style={style.Chip} />
                         ))}
                     </Stack>}
                     {newsHeadlinesList.map(news => {
