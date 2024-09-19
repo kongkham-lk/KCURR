@@ -17,8 +17,8 @@ export async function createCurrLists(baseCurr: string, targetCurr: string, defa
             const histRates: CurrCodeMapExchangeRates = defaultCurrExchangeRates[1];
             const dayRangeIndicator = [getDayRangeDate(1), getDayRangeDate(0)]; // needed when the live rate table use exchange rate data instead of timeSeries
             const monthRangeIndicator = [getMonthRangeDate(1), getMonthRangeDate(0)]; // needed when the live rate table use exchange rate data instead of timeSeries
-            latestRate = latestRates[targetCurr]; // accessing by key as ExchangeRate is key-value pair
-            histRate = histRates[targetCurr];
+            latestRate = isNaN(latestRates[targetCurr]) ? 0 : latestRates[targetCurr]; // accessing by key as ExchangeRate is key-value pair
+            histRate = isNaN(histRates[targetCurr]) ? 0 : histRates[targetCurr];
             timeSeries = {
                 lowest: Math.min(latestRate, histRate),
                 highest: Math.max(latestRate, histRate),
