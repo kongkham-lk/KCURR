@@ -368,7 +368,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const isDefaultCurr = currList.targetCurr === currCodeArray[0];
 
-                                    console.log(currList.latestRate, typeof currList.latestRate);
+                                    console.log(currList, typeof currList.latestRate);
 
                                     return (
                                         <>
