@@ -1,12 +1,19 @@
+import React from "react";
 import "../../App.css";
 import Typography from '@mui/material/Typography';
+import { type NewsHeadlines } from "../../lib/types";
 
-export default function FinancialNews(props) {
+type FinancialNewsProps = {
+    news: NewsHeadlines;
+    isDisplaySM: boolean;
+}
+
+export default function FinancialNews(props: FinancialNewsProps) {
     const { news, isDisplaySM } = props;
 
     return (
         <>
-            <div style={{ ...sxStyle.NewsList.main, ...(isDisplaySM && sxStyle.NewsList.sm) }}>
+            <div style={{ ...sxStyle.NewsList.main, ...(isDisplaySM ? sxStyle.NewsList.sm : "") } as React.CSSProperties}>
                 <Typography
                     component="div"
                     variant="subtitle1"
@@ -20,10 +27,7 @@ export default function FinancialNews(props) {
                     <Typography
                         className="hoverLink"
                         variant="h3"
-                        fontSize={20}
-                        fontWeight={700}
-                        underline="none"
-                        color="inherit"
+                        sx={{fontSize: 20, fontWeight: 700, textDecoration: 'none', color: 'inherit'}}
                         mb={3}
                     >
                         {news.title}

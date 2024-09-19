@@ -104,6 +104,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     useEffect(() => {
         async function fetchUpdateOnInitialLoad() {
             if (isInitialLoad) {
+                console.log("Fetch latest liveRates!!!")
                 const newPref: Preference | null = await getUserPreferences(userId);
                 const newCurrLists = await getCurrListsFromCookie(userId);
 
@@ -128,16 +129,17 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         async function checkNewRow() {
             // console.log("refresh page!!!");
             if (newCurrCode !== "" && !checkIfExist(currCodeArray, newCurrCode)) {
-                console.log("update currCodeArray!!!")
+                console.log("update currCodeArray!!!", currCodeArray, newCurrCode)
                 updateCurrCodeArray()
-                await updateCurrLists()
+                await updateCurrLists(newCurrCode)
             }
             setNewCurrCode("");
             // console.log("Check Curr Lists after refresh page: ", currLists);
             // console.log("Check Curr Array after refresh page: ", currCodeArray);
         }
         checkNewRow();
-    }, [newCurrCode, currLists, defaultCurrExchangeRates, defaultCurrCode, currCodeArray, isChartFeatureEnable, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currCodeArray, newCurrCode]);
 
     // refresh time display on screen when any time-related property is updated
     useEffect(() => {
@@ -154,11 +156,12 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
 
-    const updateCurrLists = async (): Promise<void> => {
+    const updateCurrLists = async (newCurrCode: string): Promise<void> => {
         console.log("    >>> createCurrLists!!!")
         const currList = await createCurrLists(defaultCurrCode, newCurrCode, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
         const newCurrLists = [...currLists, currList];
         
+        console.log(currLists, newCurrLists);
         setCurrLists(newCurrLists);
         saveCurrListsToCookie(userId, newCurrLists);
     }

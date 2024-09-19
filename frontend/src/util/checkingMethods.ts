@@ -1,5 +1,3 @@
-import { type CurrList } from "../lib/types";
-
 export function checkIfContainsOnlyNumbers(str: string): boolean {
     return /^[0-9.]+$/.test(str);
 }

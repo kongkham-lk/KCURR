@@ -6,15 +6,14 @@ import { getUserPreferences, getUserIdentifier } from './hook/userController';
 import MainNav from './components/MainNav';
 import Convertor from './components/Convertor/Convertor';
 import ExchangeRateTable from './components/ExchangeRateTable/ExchangeRateTable';
-// import FinancialNews from './components/FinancialNews/FinancialNews';
+import FinancialNews from './components/FinancialNews/FinancialNews';
 import Footer from './components/Footer';
 import { Loading } from './components/subComponents/Loading';
-import { retrieveFinancialNews } from "./util/apiClient";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { type NewsHeadlines, type Preference } from './lib/types';
+import { type Preference } from './lib/types';
 
 export default function App() {
     const userId: string = getUserIdentifier();
@@ -32,7 +31,6 @@ export default function App() {
     // need to retrieve outside here in order to prevent app re-fetch new initial data from backend whenever new theme is set
     // Observation: When react state in App.js is updated, all the sub component's state also reset
     const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsApiGetter("", [], "", isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
-    const [newsListsRes, setNewsListsRes] = useState<NewsHeadlines[]>([]);
 
     // Initialized userPreference
     useEffect(() => {
@@ -40,13 +38,8 @@ export default function App() {
             if (userPreference === null) {
                 // console.log("Get initial Pref!!!")
                 const pref: Preference | null = await getUserPreferences(userId);
-                if (pref !== null) {
-                    const newsRes = await retrieveFinancialNews(pref.newsCategories);
+                if (pref !== null)
                     setUserPreference(pref);
-
-                    if (newsRes !== null)
-                        setNewsListsRes(newsRes.data);
-                }
             }
         }
         fetchPreference();
@@ -82,7 +75,7 @@ export default function App() {
         navBar: { ...commonAttr.displayFlags, ...commonAttr.pref, currentPath, ...commonAttr.themeFlag },
         curr: { ...commonAttr.displayFlags, ...commonAttr.pref, currCountiesCodeMapDetail, sortedCurrsCodeList, validCurFlagList, isChartFeatureEnable },
         chart: { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady },
-        news: { ...commonAttr.displayFlags, ...commonAttr.pref, newsListsRes },
+        news: { ...commonAttr.displayFlags, ...commonAttr.pref },
         footer: {...commonAttr.displayFlags, ...commonAttr.themeFlag, userPreference}
     }
 
@@ -112,7 +105,7 @@ export default function App() {
                                             {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                         </Item>
                                         <Item key="FinancialNews" {...MuiProps} >
-                                            {/* {isReady ? <FinancialNews {...attr.news} /> : <Loading />} */}
+                                            {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                         </Item>
                                     </>
                                 } ></Route>
@@ -128,7 +121,7 @@ export default function App() {
                                 } ></Route>
                                 <Route path="/News" element={
                                     <Item key="FinancialNews" {...MuiProps} >
-                                        {/* <FinancialNews filter="true" {...attr.news} /> */}
+                                        <FinancialNews filter={true} {...attr.news} />
                                     </Item>
                                 } ></Route>
                             </Routes>

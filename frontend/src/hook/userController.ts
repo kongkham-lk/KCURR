@@ -64,7 +64,7 @@ export async function saveUserPreferences(userId: string, preferences: Preferenc
 export async function getUserPreferences(userId: string): Promise<Preference | null> {
     const savedPreferences: string | null = localStorage.getItem(`preferences_${userId}`);
     // console.log("check savedPreference: ", savedPreferences)
-    // Check if savedPreferences has any
+    // Check if cookie has any savedPreferences
     if (savedPreferences) {
         const transformPref: Preference = JSON.parse(savedPreferences);
 
