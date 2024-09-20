@@ -436,7 +436,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                         ...commonStyle.colorInherit
                                                                     }}
                                                                 >
-                                                                    {index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate}
+                                                                    {currList.latestRate === undefined ? 0 : (index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate)}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
