@@ -73,13 +73,13 @@ public class CurrService
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange, bool isNewUpdateRequest)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
-        
+
         // return the prev retrieved timeSeries object when not require to update the current stored timeSeries object
         if (!isNewUpdateRequest && MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
             targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
-            
+
             // fetch new timeSerie object when it is not existed
             if (targetCurrTimeSeries != null)
                 return targetCurrTimeSeries;
@@ -110,19 +110,24 @@ public class CurrService
             List<Dictionary<string, RateTimeSeriesResponse>> targetMemoTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
             if (targetMemoTimeSeriesList != null && targetMemoTimeSeriesList.Any())
             {
-                int i;
-                for (i = 0; i < targetMemoTimeSeriesList.Count(); i++)
+                if (isNewUpdateRequest)
                 {
-                    // if the currTimeSeries's key, currCode, existed in the list, update its value and stop iteration
-                    if (targetMemoTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
+                    int i;
+                    for (i = 0; i < targetMemoTimeSeriesList.Count(); i++)
                     {
-                        targetMemoTimeSeriesList[i] = targetCurrTimeSeries;
-                        break;
+                        // if the currTimeSeries's key, currCode, existed in the list, update its value and stop iteration
+                        if (targetMemoTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
+                        {
+                            targetMemoTimeSeriesList[i] = targetCurrTimeSeries;
+                            break;
+                        }
                     }
+
+                    // add the new currCode's timeSeries to memo if the currCode of that timeRange is not existed yet
+                    if (i == targetMemoTimeSeriesList.Count())
+                        targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
                 }
-                
-                // add the new currCode's timeSeries to memo if the currCode of that timeRange is not existed yet
-                if (i == targetMemoTimeSeriesList.Count())
+                else
                     targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
             }
             else
