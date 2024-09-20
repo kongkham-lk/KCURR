@@ -18,7 +18,10 @@ const reloadWebsite = () => {
       console.error(`Error reloading at ${new Date().toISOString()}:`, error.message);
     });
 }
-setInterval(reloadWebsite, interval);
+
+// keep pinging backend only on deployment mode
+if (process.env.NODE_ENV !== "development")
+    setInterval(reloadWebsite, interval);
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
