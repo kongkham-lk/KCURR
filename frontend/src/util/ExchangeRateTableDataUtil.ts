@@ -1,6 +1,10 @@
 import { type CurrList, type Order } from "../lib/types";
 
 export function getComparator(order: Order, orderBy: string, currList: CurrList): (a: CurrList, b: CurrList) => number {
+    // Do not sort if currList is not ready
+    if (currList === undefined || currList === null)
+        return (a: CurrList, b: CurrList) => 0;
+
     // Type guard to check if orderBy is a valid key of CurrList
     if (Object.keys(currList).includes(orderBy)) {
         // Now, we are certain that orderBy is a keyof CurrList
