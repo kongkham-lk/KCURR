@@ -418,7 +418,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                         ...commonStyle.paddingNone,
                                                         ...commonStyle.borderNone,
                                                         ...commonStyle.colorInherit,
-                                                        ...(index !== 0 && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverOverride),
+                                                        ...(!isDefaultCurr && !isDisplaySM && isChartFeatureEnable && sxStyle.hoverOverride),
                                                     }}
                                                     onClick={() => handleToggleFlags(index, isDefaultCurr)}
                                                 >
@@ -434,7 +434,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                         ...commonStyle.colorInherit
                                                                     }}
                                                                 >
-                                                                    {currList.latestRate === undefined ? "" : (index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate)}
+                                                                    {currList.latestRate === undefined ? "" : (!isDefaultCurr ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate)}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
@@ -452,7 +452,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                 >
                                                                     {!isDisplaySM || !isChartFeatureEnable ?
                                                                         <div style={{ ...style.chartDiv.main, ...(isDisplaySM ? style.chartDiv.sm : style.chartDiv.lg) }} >
-                                                                            {index !== 0 && <LineGraph timeSeries={currList.timeSeries} displayLabel={false} />}
+                                                                            {!isDefaultCurr && <LineGraph timeSeries={currList.timeSeries} displayLabel={false} />}
                                                                         </div> :
                                                                         <Button
                                                                             variant="text"
@@ -477,7 +477,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                     sx={{
                                                         ...styleTableCellDelete(targetCurrCode, defaultCurrCode, isDisplaySM),
                                                         ...(isDisplaySM ? sxStyle.TableCell.deleteBtn.sm : sxStyle.TableCell.deleteBtn.lg),
-                                                        ...(index !== 0 && sxStyle.hoverOverride),
+                                                        ...(!isDefaultCurr && sxStyle.hoverOverride),
                                                     }}
                                                     onClick={() => handleDelete(targetCurrCode)}
                                                 >
