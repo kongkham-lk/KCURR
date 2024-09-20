@@ -11,7 +11,7 @@ public class CurrService
     private int TotalRetryApiKey { get; set; } = 3;
     private Dictionary<string, double> LatestRates { get; set; } = new();
     private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
-    private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> RangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
+    private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> MemoRangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
 
     public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
@@ -75,9 +75,9 @@ public class CurrService
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
         
         // return the prev retrieved timeSeries object when not require to update the current stored timeSeries object
-        if (!isNewUpdateRequest && RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        if (!isNewUpdateRequest && MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
-            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
+            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
             targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
             
             // fetch new timeSerie object when it is not existed
@@ -104,35 +104,35 @@ public class CurrService
         targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
 
         // Added new currTimeSeries to memo list if not existed yet, else if contain then
-        if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        if (MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             // get all the curr code's timeSerie object bases on the same time range
-            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
-            if (allCurrTimeSeriesList.Any())
+            List<Dictionary<string, RateTimeSeriesResponse>> targetMemoTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
+            if (targetMemoTimeSeriesList != null && targetMemoTimeSeriesList.Any())
             {
                 int i;
-                for (i = 0; i < allCurrTimeSeriesList.Count(); i++)
+                for (i = 0; i < targetMemoTimeSeriesList.Count(); i++)
                 {
-                    // if the currTimeSeries's key existed in the list, update its value and stop iteration
-                    if (allCurrTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
+                    // if the currTimeSeries's key, currCode, existed in the list, update its value and stop iteration
+                    if (targetMemoTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
                     {
-                        allCurrTimeSeriesList[i] = targetCurrTimeSeries;
+                        targetMemoTimeSeriesList[i] = targetCurrTimeSeries;
                         break;
                     }
                 }
                 
                 // add the new currCode's timeSeries to memo if the currCode of that timeRange is not existed yet
-                if (i == allCurrTimeSeriesList.Count())
-                    allCurrTimeSeriesList.Add(targetCurrTimeSeries);
+                if (i == targetMemoTimeSeriesList.Count())
+                    targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
             }
             else
                 // the new value that assign to allCurrTimeSeriesList is equivalent as store to memo object (RangeByCurrTimeSeriesLists[timeSeriesRange])
-                allCurrTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
+                targetMemoTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
         }
         else
         {
             List<Dictionary<string, RateTimeSeriesResponse>> tempList = new() { targetCurrTimeSeries };
-            RangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
+            MemoRangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
         }
         return targetCurrTimeSeries;
     }
