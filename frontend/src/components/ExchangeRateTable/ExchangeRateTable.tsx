@@ -84,7 +84,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
     const visibleRows = useMemo(
         () =>
             currLists !== null
-                ? stableSort(currLists, getComparator(order, orderBy)).slice(
+                ? stableSort(currLists, getComparator(order, orderBy, currLists[0])).slice(
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage,
                 )

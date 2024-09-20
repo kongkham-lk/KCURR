@@ -1,8 +1,8 @@
 import { type CurrList, type Order } from "../lib/types";
 
-export function getComparator(order: Order, orderBy: string): (a: CurrList, b: CurrList) => number {
+export function getComparator(order: Order, orderBy: string, currList: CurrList): (a: CurrList, b: CurrList) => number {
     // Type guard to check if orderBy is a valid key of CurrList
-    if (orderBy in ({} as CurrList)) {
+    if (Object.keys(currList).includes(orderBy)) {
         // Now, we are certain that orderBy is a keyof CurrList
         const orderByField: keyof CurrList = orderBy as keyof CurrList;
         return order === 'desc'
