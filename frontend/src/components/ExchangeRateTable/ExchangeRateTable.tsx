@@ -368,8 +368,6 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const isDefaultCurr = currList.targetCurr === currCodeArray[0];
 
-                                    console.log(currList, typeof currList.latestRate);
-
                                     return (
                                         <>
                                             <TableRow
@@ -436,7 +434,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                         ...commonStyle.colorInherit
                                                                     }}
                                                                 >
-                                                                    {currList.latestRate === undefined ? 0 : (index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate)}
+                                                                    {currList.latestRate === undefined ? "" : (index !== 0 ? currList.latestRate.toFixed(isDisplaySM ? 2 : 4) : currList.latestRate)}
                                                                 </TableCell>
                                                                 {/* Currency change in percent */}
                                                                 {isDisplaySM ? "" :
@@ -444,7 +442,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                                                                         align="right"
                                                                         sx={{ ...styleTableCell(currList, isDisplaySM), ...getTargetProps(isDisplaySM).width }}
                                                                     >
-                                                                        {currList.change === "NaN" ? "Currenctly Not Avalable" : getDisplayList(currList)}
+                                                                        {currList.change === "NaN" || currList.change === undefined ? "Currenctly Not Avalable" : getDisplayList(currList)}
                                                                     </TableCell>
                                                                 }
                                                                 {/* Chart Cell */}
