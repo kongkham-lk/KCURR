@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createCurrLists } from '../util/createCurrLists';
 import { retrieveExchangeRates } from '../util/apiClient';
-import { getCurrListsFromCookie } from './userController';
+import { getCurrListsFromCookie, saveCurrListsToCookie } from './userController';
 import { type Preference, type CurrCodeMapExchangeRates, type CurrList, type InitialCurrListsApi } from '../lib/types';
 
 export default function useInitialCurrListsApiGetter(defaultCurr: string, currCodeArray: string[], dayRange: string,
@@ -44,6 +44,7 @@ export default function useInitialCurrListsApiGetter(defaultCurr: string, currCo
                             }
                             setInitialCurrExchangeRates(currExchangeRates);
                             setInitialCurrLists(currLists);
+                            saveCurrListsToCookie(userId, currLists);
                             setIsReady(true);
                         } catch (e: any) {
                             console.log(e.stack);
@@ -58,6 +59,7 @@ export default function useInitialCurrListsApiGetter(defaultCurr: string, currCo
                             if (savedCurrLists !== null) {
                                 // console.log("setInitialCurrLists!!!")
                                 setInitialCurrLists(savedCurrLists);
+                                saveCurrListsToCookie(userId, savedCurrLists);
                             }
                         }
                     }
