@@ -174,7 +174,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         
         console.log(currLists, newCurrLists);
         setCurrLists(newCurrLists);
-        saveCurrListsToCookie(userId, newCurrLists);
+        await saveCurrListsToCookie(userId, newCurrLists);
     }
 
     const handleRequestSort = (event: any, property: string): void => {
@@ -219,7 +219,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
 
     // Refetch new default currency rate from api
     const handleUpdateDefaultCurrLiveRate = async (currCodeArray: string[]) => {
-        // console.log("Fetching latest exchange rate from API!!!")
+        console.log("Fetching latest exchange rate from API!!!")
         const newCurrLists: CurrList[] = [];
         const initialValue = { baseCurr: currCodeArray[0] };
         const newDefaultCurrExchangeRates = await retrieveExchangeRates(initialValue); // Update exchange rate from API
@@ -232,7 +232,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
 
         setDefaultCurrExchangeRates(newDefaultCurrExchangeRates);
         setCurrLists(newCurrLists);
-        saveCurrListsToCookie(userId, newCurrLists);
+        await saveCurrListsToCookie(userId, newCurrLists);
         handleDisplayLatestFetchTimeUpdate();
     };
 
@@ -255,13 +255,13 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         setNewCurrCode(e.value);
     };
 
-    const handleDelete = (targetCurr: string) => {
+    const handleDelete = async (targetCurr: string) => {
         if (targetCurr === currCodeArray[0]) {
             // console.log("Attempting to delete default currency row, Exit!!!");
             return;
         }
 
-        // console.log("Delete an item to list: ", targetCurr);
+        console.log("Delete an item to list: ", targetCurr);
         const newCurrLists = [...currLists];
         const newCurrCodeArray = [...currCodeArray];
 
@@ -274,7 +274,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
         }
         
         setCurrLists(newCurrLists);
-        saveCurrListsToCookie(userId, newCurrLists);
+        await saveCurrListsToCookie(userId, newCurrLists);
         setCurrCodeArray(newCurrCodeArray);
         handleCurrCodeArrayCookieUpdate(newCurrCodeArray);
     }
@@ -370,7 +370,7 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                             <TableBody sx={sxStyle.TableBody}>
                                 {visibleRows.map((currList: CurrList, index: number) => {
                                     const targetCurrCode = currList.targetCurr;
-                                    const currencyRateData = {
+                                    const currencyRateData = { // for TransitionAppendChart's props
                                         baseCurr: currCodeArray[0],
                                         targetCurr: currList.targetCurr,
                                         amount: 0,
