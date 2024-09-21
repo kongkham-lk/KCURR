@@ -115,9 +115,20 @@ export default function ExchangeRateTable(props: ExchangeRateTableProps) {
                 }
                 
                 // if cookie return null, that's mean this is first visited KCURR user, DO NOT update anything
-                if (newCurrLists !== null)
-                    setCurrLists(newCurrLists);
+                if (newCurrLists !== null) {
+                    let foundInvalidCurrList = false;
+                    // cross checking if each currList's change is NaN
+                    for (let i = 1; i < currLists.length; i++) {
+                        if (currLists[i].change === "NaN") {
+                            currLists[i] = await createCurrLists(defaultCurrCode, currLists[i].targetCurr, defaultCurrExchangeRates, timeSeriesRangeLength, isChartFeatureEnable);
+                            foundInvalidCurrList = true;
+                        }
+                    }
+                    if (foundInvalidCurrList)
+                        await saveCurrListsToCookie(userId, newCurrLists);
 
+                    setCurrLists(newCurrLists);
+                }
                 setIsInitialLoad(false);
             }
         }
