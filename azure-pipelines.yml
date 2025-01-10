@@ -4,7 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+  branches:
+    include:
+      - main # Trigger on changes to the main branch
 
 pool:
   vmImage: ubuntu-latest
@@ -20,3 +22,10 @@ steps:
     npm run build
   workingDirectory: $(System.DefaultWorkingDirectory)/frontend
   displayName: 'npm install and build'
+
+# Deploy to Azure Static Web Apps (or similar)
+- task: AzureStaticWebApp@0
+  inputs:
+    app_location: 'frontend/dist' # Path to built frontend
+    azure_static_web_apps_api_token: $(STATIC_WEB_APP_TOKEN) # Add token in pipeline variables
+  displayName: 'Deploy Frontend'
