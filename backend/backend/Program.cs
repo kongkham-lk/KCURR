@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Set up the base URLs for development and production environments
 string[] devBaseURL = { "http://localhost:3000" };
-string[] prodBaseURL = { "https://kcurr.onrender.com", "https://kcurr-dev.onrender.com", "https://kongkham-lk.github.io/KCURR/" };
+string[] prodBaseURL = { "https://kcurr.onrender.com", "https://kcurr-dev.onrender.com", "https://kongkham-lk.github.io" };
 string[] allowedOrigins;
 
 // Determind which baseURl should be used base on the environments
