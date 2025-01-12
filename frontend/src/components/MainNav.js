@@ -46,6 +46,7 @@ export default function MainNav(props) {
     }
 
     const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
+    appendBasePath = currentUrl.pathname.toLowerCase().includes("kcurr") ? "/KCURR" : "";
 
     return (
         <Box
@@ -72,7 +73,7 @@ export default function MainNav(props) {
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
                             const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
-                                || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
+                                || (currentUrl.pathname !== appendBasePath + "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
                                 <Link
                                     id="navPage"
@@ -128,13 +129,13 @@ export default function MainNav(props) {
         </Box>
     );
 };
-
-const mainLogo = { label: 'KCURR', link: "/" }
+const appendBasePath = "";
+const mainLogo = { label: 'KCURR', link: appendBasePath + "/" }
 const navItems = [
-    { label: 'Dashboard', link: "/" },
-    { label: 'Convertor', link: "/Convertor" },
-    { label: 'Chart', link: "/Chart" },
-    { label: 'Financial News', link: "/News" },
+    { label: 'Dashboard', link: appendBasePath + "/" },
+    { label: 'Convertor', link: appendBasePath + "/Convertor" },
+    { label: 'Chart', link: appendBasePath + "/Chart" },
+    { label: 'Financial News', link: appendBasePath + "/News" },
 ];
 
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
