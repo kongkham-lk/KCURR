@@ -129,7 +129,8 @@ export default function MainNav(props) {
         </Box>
     );
 };
-const appendBasePath = "";
+
+var appendBasePath = "";
 const mainLogo = { label: 'KCURR', link: appendBasePath + "/" }
 const navItems = [
     { label: 'Dashboard', link: appendBasePath + "/" },
