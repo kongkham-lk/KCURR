@@ -49,7 +49,7 @@ jobs:
 
     defaults: 
       run:
-         working-directory: ./backend 
+         working-directory: ./backend/backend
 
     steps:
       - uses: actions/checkout@v4
