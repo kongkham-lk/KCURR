@@ -12,7 +12,7 @@ on:
 # 2. Change these variables for your configuration:
 env:
   AZURE_FUNCTIONAPP_NAME: 'kcurr'   # set this to your function app name on Azure
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'       # set this to the path to your function app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './backend/backend'       # set this to the path to your function app project, defaults to the repository root
   DOTNET_VERSION: '7.0'                   # set this to the dotnet version to use (e.g. '2.1.x', '3.1.x', '5.0.x')
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
 
     defaults: 
       run:
-         working-directory: ./backend/backend
+        working-directory: ./backend/backend
          
     environment: dev
     steps:
@@ -33,29 +33,27 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: 'Resolve Project Dependencies Using Dotnet'
-      shell: pwsh
+    - name: 'Restore and Build Project'
       run: |
-        pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        dotnet restore
         dotnet build --configuration Release --output ./output
-        popd
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+        package: './output'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
     # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
     - name: Export environment variables for App Service
       run: |
-          echo "CloudMersiveApiKey=${{ secrets.CLOUDMERSIVE_API_KEY }}" >> $GITHUB_ENV
-          echo "CurrencyApiApiKey=${{ secrets.CURRENCY_API_API_KEY }}" >> $GITHUB_ENV
-          echo "CurrencyBeaconApiKey0=${{ secrets.CURRENCY_BEACON_API_KEY_0 }}" >> $GITHUB_ENV
-          echo "CurrencyBeaconApiKey1=${{ secrets.CURRENCY_BEACON_API_KEY_1 }}" >> $GITHUB_ENV
-          echo "CurrencyBeaconApiKey2=${{ secrets.CURRENCY_BEACON_API_KEY_2 }}" >> $GITHUB_ENV
-          echo "RapidApiApiKey0=${{ secrets.RAPID_API_API_KEY_0 }}" >> $GITHUB_ENV
-          echo "RapidApiApiKey1=${{ secrets.RAPID_API_API_KEY_1 }}" >> $GITHUB_ENV
-          echo "RapidApiApiKey2=${{ secrets.RAPID_API_API_KEY_2 }}" >> $GITHUB_ENV
+        echo "CloudMersiveApiKey=${{ secrets.CLOUDMERSIVE_API_KEY }}" >> $GITHUB_ENV
+        echo "CurrencyApiApiKey=${{ secrets.CURRENCY_API_API_KEY }}" >> $GITHUB_ENV
+        echo "CurrencyBeaconApiKey0=${{ secrets.CURRENCY_BEACON_API_KEY_0 }}" >> $GITHUB_ENV
+        echo "CurrencyBeaconApiKey1=${{ secrets.CURRENCY_BEACON_API_KEY_1 }}" >> $GITHUB_ENV
+        echo "CurrencyBeaconApiKey2=${{ secrets.CURRENCY_BEACON_API_KEY_2 }}" >> $GITHUB_ENV
+        echo "RapidApiApiKey0=${{ secrets.RAPID_API_API_KEY_0 }}" >> $GITHUB_ENV
+        echo "RapidApiApiKey1=${{ secrets.RAPID_API_API_KEY_1 }}" >> $GITHUB_ENV
+        echo "RapidApiApiKey2=${{ secrets.RAPID_API_API_KEY_2 }}" >> $GITHUB_ENV
