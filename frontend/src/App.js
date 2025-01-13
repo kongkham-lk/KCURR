@@ -34,7 +34,9 @@ export default function App() {
     const [newsListsRes, setNewsListsRes] = useState({});
     const appendBasePath = currentPath.includes("github") ? "/KCURR" : "";
 
-    
+    console.log("CurrentPath :");
+    console.log(currentPath);
+    console.log(currentPath.includes("github"));
 
     // Initialized userPreference
     useEffect(() => {

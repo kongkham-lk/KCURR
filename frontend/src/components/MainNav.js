@@ -48,6 +48,11 @@ export default function MainNav(props) {
     const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
     appendBasePath = currentUrl.pathname.toLowerCase().includes("github") ? "/KCURR" : "";
 
+
+    console.log("Main Nav's CurrentPath :");
+    console.log(currentUrl.pathname.toLowerCase());
+    console.log(currentUrl.pathname.toLowerCase().includes("github"));
+
     return (
         <Box
             display='flex'
