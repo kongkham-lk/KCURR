@@ -46,12 +46,6 @@ export default function MainNav(props) {
     }
 
     const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
-    appendBasePath = currentUrl.pathname.toLowerCase().includes("github") ? "/KCURR" : "";
-
-
-    console.log("Main Nav's CurrentPath :");
-    console.log(currentUrl.pathname.toLowerCase());
-    console.log(currentUrl.pathname.toLowerCase().includes("github"));
 
     return (
         <Box
@@ -135,7 +129,7 @@ export default function MainNav(props) {
     );
 };
 
-var appendBasePath = "";
+const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
 const mainLogo = { label: 'KCURR', link: appendBasePath + "/" }
 const navItems = [
     { label: 'Dashboard', link: appendBasePath + "/" },
