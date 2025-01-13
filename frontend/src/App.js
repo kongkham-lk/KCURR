@@ -34,6 +34,8 @@ export default function App() {
     const [newsListsRes, setNewsListsRes] = useState({});
     const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
 
+    console.log("currentUrl :\n", currentUrl);
+
     // Initialized userPreference
     useEffect(() => {
         async function fetchPreference() {
