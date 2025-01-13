@@ -47,18 +47,21 @@ jobs:
         exit 1
         fi
 
-    - name: 'Log Current Directory'
+    - name: 'Log Current Directory and Output Path'
       run: |
         echo "Current directory: $PWD"
         echo "Listing all files in current directory recursively:"
         ls -laR
+        echo "Verifying absolute path for output directory:"
+        OUTPUT_PATH=$(realpath ./output)
+        echo "Absolute path to output directory: $OUTPUT_PATH"
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: './output'
+        package: ${{ github.workspace }}/backend/backend/output
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
     # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
