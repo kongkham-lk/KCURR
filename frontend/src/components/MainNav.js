@@ -46,7 +46,7 @@ export default function MainNav(props) {
     }
 
     const targetBaseColor = getTargetBaseColor(isOutLineTheme, isLightTheme);
-    appendBasePath = currentUrl.pathname.toLowerCase().includes("github.io") ? "/KCURR" : "";
+    appendBasePath = currentUrl.pathname.toLowerCase().includes("github") ? "/KCURR" : "";
 
     return (
         <Box
