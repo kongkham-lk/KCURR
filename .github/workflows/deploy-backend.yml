@@ -1,7 +1,9 @@
-name: Build and deploy ASP.Net Core app to an Azure Web App
+name: Deploy KCURR Backend to Azure Function App
 
 on:
-  [push]
+  push:
+    branches:
+      - main # Adjust branch name to your default branch
 
 # CONFIGURATION
 # For help, go to https://github.com/Azure/Actions
@@ -18,14 +20,10 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
-    defaults: 
-      run:
-        working-directory: ./backend/backend
          
     environment: dev
     steps:
-    - name: 'Checkout Code'
+    - name: 'Checkout GitHub Action'
       uses: actions/checkout@v3
 
     - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
@@ -33,34 +31,23 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: 'Restore and Build Function App'
+    - name: 'Restore and Build Project'
+      shell: bash
       run: |
-        echo "Restoring and building the function app..."
+        echo "Restoring and building the project..."
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         dotnet restore
         dotnet build --configuration Release --output ./output
-        echo "Build completed. Checking output directory..."
-        if [ -d "./output" ]; then
-        echo "Output directory created at: $(realpath ./output)"
+        echo "Build completed. Output directory contains:"
         ls -la ./output
-        else
-        echo "ERROR: Output directory was not created."
-        exit 1
-        fi
+        popd
 
-    - name: Package the Function App
-      run: |
-        echo "Packaging function app as a ZIP file..."
-        cd ./output
-        zip -r ../functionapp.zip .
-        cd ..
-        echo "ZIP package created: $(realpath functionapp.zip)"
-        ls -la functionapp.zip
-
-    - name: Deploy to Azure Function App
+    - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
+      id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: './backend/backend/functionapp.zip'
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
     # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
