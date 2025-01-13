@@ -32,7 +32,7 @@ export default function App() {
     const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
     const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
     const [newsListsRes, setNewsListsRes] = useState({});
-    const appendBasePath = currentPath.includes("kcurr") ? "/KCURR" : "";
+    const appendBasePath = currentPath.includes("github.io") ? "/KCURR" : "";
 
     // Initialized userPreference
     useEffect(() => {
