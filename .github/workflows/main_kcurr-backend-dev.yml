@@ -58,3 +58,15 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_77F1BB19E5794403B01EB34DFEC0176E }}
+
+      # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
+      - name: Export environment variables for App Service
+        run: |
+          echo "CloudMersiveApiKey=${{ secrets.CLOUDMERSIVE_API_KEY }}" >> $GITHUB_ENV
+          echo "CurrencyApiApiKey=${{ secrets.CURRENCY_API_API_KEY }}" >> $GITHUB_ENV
+          echo "CurrencyBeaconApiKey0=${{ secrets.CURRENCY_BEACON_API_KEY_0 }}" >> $GITHUB_ENV
+          echo "CurrencyBeaconApiKey1=${{ secrets.CURRENCY_BEACON_API_KEY_1 }}" >> $GITHUB_ENV
+          echo "CurrencyBeaconApiKey2=${{ secrets.CURRENCY_BEACON_API_KEY_2 }}" >> $GITHUB_ENV
+          echo "RapidApiApiKey0=${{ secrets.RAPID_API_API_KEY_0 }}" >> $GITHUB_ENV
+          echo "RapidApiApiKey1=${{ secrets.RAPID_API_API_KEY_1 }}" >> $GITHUB_ENV
+          echo "RapidApiApiKey2=${{ secrets.RAPID_API_API_KEY_2 }}" >> $GITHUB_ENV
