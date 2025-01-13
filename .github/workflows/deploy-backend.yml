@@ -35,17 +35,17 @@ jobs:
 
     - name: 'Restore and Build Project'
       run: |
-        echo "Starting dotnet restore and build in directory: $PWD"
+        Write-Output "Starting dotnet restore and build in directory: $PWD"
         dotnet restore
         dotnet build --configuration Release --output ./output
-        echo "Build completed. Checking output directory..."
-        if [ -d "./output" ]; then
-        echo "Output directory created at: $(realpath ./output)"
-        ls -la ./output
-        else
-        echo "ERROR: Output directory was not created."
-        exit 1
-        fi
+        Write-Output "Build completed. Checking output directory..."
+        if (Test-Path "./output") {
+            Write-Output "Output directory created at: $(Resolve-Path ./output)"
+            Get-ChildItem ./output
+        } else {
+            Write-Error "ERROR: Output directory was not created."
+            exit 1
+        }
 
     - name: 'Log Current Directory'
       run: |
