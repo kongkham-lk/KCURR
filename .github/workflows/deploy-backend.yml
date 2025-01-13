@@ -17,7 +17,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     defaults: 
       run:
@@ -35,23 +35,23 @@ jobs:
 
     - name: 'Restore and Build Project'
       run: |
-        Write-Output "Starting dotnet restore and build in directory: $PWD"
+        echo "Starting dotnet restore and build in directory: $PWD"
         dotnet restore
         dotnet build --configuration Release --output ./output
-        Write-Output "Build completed. Checking output directory..."
-        if (Test-Path "./output") {
-            Write-Output "Output directory created at: $(Resolve-Path ./output)"
-            Get-ChildItem ./output
-        } else {
-            Write-Error "ERROR: Output directory was not created."
-            exit 1
-        }
+        echo "Build completed. Checking output directory..."
+        if [ -d "./output" ]; then
+        echo "Output directory created at: $(realpath ./output)"
+        ls -la ./output
+        else
+        echo "ERROR: Output directory was not created."
+        exit 1
+        fi
 
     - name: 'Log Current Directory'
       run: |
         echo "Current directory: $PWD"
-        echo "Listing all files in current directory:"
-        ls -la
+        echo "Listing all files in current directory recursively:"
+        ls -laR
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
