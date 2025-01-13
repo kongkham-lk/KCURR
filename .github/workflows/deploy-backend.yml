@@ -25,7 +25,7 @@ jobs:
          
     environment: dev
     steps:
-    - name: 'Checkout GitHub Action'
+    - name: 'Checkout Code'
       uses: actions/checkout@v3
 
     - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
@@ -33,9 +33,9 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: 'Restore and Build Project'
+    - name: 'Restore and Build Function App'
       run: |
-        echo "Starting dotnet restore and build in directory: $PWD"
+        echo "Restoring and building the function app..."
         dotnet restore
         dotnet build --configuration Release --output ./output
         echo "Build completed. Checking output directory..."
@@ -47,21 +47,20 @@ jobs:
         exit 1
         fi
 
-    - name: 'Log Current Directory and Output Path'
+    - name: Package the Function App
       run: |
-        echo "Current directory: $PWD"
-        echo "Listing all files in current directory recursively:"
-        ls -laR
-        echo "Verifying absolute path for output directory:"
-        OUTPUT_PATH=$(realpath ./output)
-        echo "Absolute path to output directory: $OUTPUT_PATH"
+        echo "Packaging function app as a ZIP file..."
+        cd ./output
+        zip -r ../functionapp.zip .
+        cd ..
+        echo "ZIP package created: $(realpath functionapp.zip)"
+        ls -la functionapp.zip
 
-    - name: 'Run Azure Functions Action'
+    - name: Deploy to Azure Function App
       uses: Azure/functions-action@v1
-      id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: ${{ github.workspace }}/backend/backend/output
+        package: './backend/backend/functionapp.zip'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
     # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
