@@ -91,38 +91,36 @@ export default function App() {
                     <div className="App" >
                         <MainNav {...attr.navBar} />
                         <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
-                            <HashRouter>
-                                <Routes>
-                                    <Route exact path={appendBasePath + "/"} element={
-                                        <>
-                                            <Item key="Convertor" {...MuiProps} sx={sxStyle}>
-                                                {isReady ? <Convertor {...attr.curr} /> : <Loading />}
-                                            </Item>
-                                            <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
-                                                {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
-                                            </Item>
-                                            <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                                {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
-                                            </Item>
-                                        </>
-                                    } ></Route>
-                                    <Route exact path={appendBasePath + "/Convertor"} element={
+                            <Routes>
+                                <Route exact path={appendBasePath + "/"} element={
+                                    <>
                                         <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                             {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                         </Item>
-                                    } ></Route>
-                                    <Route exact path={appendBasePath + "/Chart"} element={
                                         <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                             {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                         </Item>
-                                    } ></Route>
-                                    <Route exact path={appendBasePath + "/News"} element={
                                         <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
-                                            <FinancialNews filter="true" {...attr.news} />
+                                            {isReady ? <FinancialNews {...attr.news} /> : <Loading />}
                                         </Item>
-                                    } ></Route>
-                                </Routes>
-                            </HashRouter>
+                                    </>
+                                } ></Route>
+                                <Route exact path={appendBasePath + "/Convertor"} element={
+                                    <Item key="Convertor" {...MuiProps} sx={sxStyle}>
+                                        {isReady ? <Convertor {...attr.curr} /> : <Loading />}
+                                    </Item>
+                                } ></Route>
+                                <Route exact path={appendBasePath + "/Chart"} element={
+                                    <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
+                                        {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
+                                    </Item>
+                                } ></Route>
+                                <Route exact path={appendBasePath + "/News"} element={
+                                    <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
+                                        <FinancialNews filter="true" {...attr.news} />
+                                    </Item>
+                                } ></Route>
+                            </Routes>
                         </Box>
                         <Footer {...attr.navBar} />
                     </div >
