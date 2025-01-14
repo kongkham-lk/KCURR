@@ -72,7 +72,7 @@ export default function MainNav(props) {
                     <Box sx={sxStyle.BoxSub}>
                         {navItems.map((item) => {
                             const isCurrentPage = (item.link.substring(item.link.indexOf("/") - 1) === currentUrl.pathname) // when current url is at homePage, '/' 
-                                || (currentUrl.pathname !== appendBasePath + "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
+                                || (currentUrl.pathname !== "/" && item.link.substring(item.link.indexOf("/")).includes(currentUrl.pathname.substring(1)));
                             return (
                                 <Link
                                     id="navPage"
@@ -129,13 +129,13 @@ export default function MainNav(props) {
     );
 };
 
-const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
-const mainLogo = { label: 'KCURR', link: appendBasePath + "/" }
+// const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
+const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
-    { label: 'Dashboard', link: appendBasePath + "/" },
-    { label: 'Convertor', link: appendBasePath + "/Convertor" },
-    { label: 'Chart', link: appendBasePath + "/Chart" },
-    { label: 'Financial News', link: appendBasePath + "/News" },
+    { label: 'Dashboard', link: "/" },
+    { label: 'Convertor', link: "/Convertor" },
+    { label: 'Chart', link: "/Chart" },
+    { label: 'Financial News', link: "/News" },
 ];
 
 const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpdate, userPreference }) => {
