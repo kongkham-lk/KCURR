@@ -32,6 +32,9 @@ export default function App() {
     const isChartFeatureEnable = currentPath.includes("convert") || currentPath.includes("chart"); // If yes, Enable live rate's display chart feature and retrieve timeSeries instead of exchangeRates
     const { initialCurrLists, initialCurrExchangeRates, isReady: isCurrListReady } = useInitialCurrListsGetter(null, null, null, isChartFeatureEnable, userPreference, userId); // retrieved initial exchange rate table list
     const [newsListsRes, setNewsListsRes] = useState({});
+    // const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
+
+    // console.log("currentUrl :\n", currentUrl);
 
     // Initialized userPreference
     useEffect(() => {
@@ -89,7 +92,7 @@ export default function App() {
                         <MainNav {...attr.navBar} />
                         <Box sx={{ minHeight: isDisplaySM ? '48vh' : '63vh', pt: isDisplaySM ? 7.5 : 8.5, pb: 0.5, backgroundColor: (theme) => theme.palette.mode === "light" ? "white" : "#272727" }}>
                             <Routes>
-                                <Route exact path="/" element={
+                                <Route exact path={"/"} element={
                                     <>
                                         <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                             {isReady ? <Convertor {...attr.curr} /> : <Loading />}
@@ -102,17 +105,17 @@ export default function App() {
                                         </Item>
                                     </>
                                 } ></Route>
-                                <Route exact path="/Convertor" element={
+                                <Route exact path={"/Convertor"} element={
                                     <Item key="Convertor" {...MuiProps} sx={sxStyle}>
                                         {isReady ? <Convertor {...attr.curr} /> : <Loading />}
                                     </Item>
                                 } ></Route>
-                                <Route exact path="/Chart" element={
+                                <Route exact path={"/Chart"} element={
                                     <Item key="ExchangeRateTable" {...MuiProps} sx={sxStyle}>
                                         {isReady ? <ExchangeRateTable {...attr.curr} {...attr.chart} /> : <Loading />}
                                     </Item>
                                 } ></Route>
-                                <Route exact path="/News" element={
+                                <Route exact path={"/News"} element={
                                     <Item key="FinancialNews" {...MuiProps} sx={sxStyle}>
                                         <FinancialNews filter="true" {...attr.news} />
                                     </Item>

@@ -129,6 +129,7 @@ export default function MainNav(props) {
     );
 };
 
+// const appendBasePath = window.location.href.includes("github") ? "/KCURR" : "";
 const mainLogo = { label: 'KCURR', link: "/" }
 const navItems = [
     { label: 'Dashboard', link: "/" },
