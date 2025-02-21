@@ -19,6 +19,7 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import { getBaseColor, getTargetBaseColor, getThemeOptions } from '../util/globalVariable';
+import { colors } from '@mui/material';
 
 export default function MainNav(props) {
     const { isDisplayMD, isOutLineTheme, userId, userPreference, onThemeUpdate, currentUrl } = props;
@@ -190,9 +191,9 @@ const PopupSideBar = ({ navItems, handleDrawerToggle, isOutLineTheme, onThemeUpd
                 </Box>
                 {navItems.map((item) => (
                     <ListItem key={item.label} disablePadding>
-                        <ListItemButton sx={sxStyle.ListItemButtonPopupSideBar} href={item.link} >
+                        <Link style={sxStyle.link} to={item.link} >
                             <ListItemText primary={item.label} />
-                        </ListItemButton>
+                        </Link>
                     </ListItem>
                 ))}
             </List>
@@ -262,7 +263,8 @@ const sxStyle = {
     themeSetter: { justifyContent: 'center', marginTop: '2px', marginRight: '-10px' },
     bringToTop: { zIndex: (theme) => theme.zIndex.drawer + 1 },
     FillAllWidth: { width: commonStyles.prop.fillAvailSpace },
-    NonMargin: { margin: '0px' }
+    NonMargin: { margin: '0px' },
+    link: {color: 'inherit', textDecoration: 'none', width: '100%', margin: '0px 5%', padding: '2% 5%', borderBottom: '1px solid rgb(170, 170, 170, 0.35)'}
 }
 
 const style = {
