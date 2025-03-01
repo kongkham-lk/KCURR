@@ -5,10 +5,10 @@ import './index.css';
 import App from './App';
 import axios from 'axios';
 
-// Preventing Render Web services from spin down due to inactivity
 const url = `https://kcurr-backend-dev.onrender.com/`;
-const interval = 300000; // Interval in milliseconds (300 seconds or 5 mins)
+const interval = 60000; // Interval in milliseconds (60 seconds or 1 mins)
 
+// Preventing Render Web services from spin down due to inactivity
 const reloadWebsite = () => {
   axios.get(url)
     .then(response => {
