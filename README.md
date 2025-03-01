@@ -1,5 +1,5 @@
 # KCURR
-- currency web application
+Real-time Currency Web Application
 
 ## Links:
 - https://kcurr.onrender.com/
