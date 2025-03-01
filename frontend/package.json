@@ -58,6 +58,5 @@
   },
   "devDependencies": {
     "http-proxy-middleware": "^2.0.6"
-  },
-  "homepage": "https://kongkham-lk.github.io/KCURR"
+  }
 }
