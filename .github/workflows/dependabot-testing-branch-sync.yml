@@ -1,0 +1,25 @@
+name: Sync development to dependabot-testing
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Merge development into dependabot-testing
+        run: |
+          git fetch
+          git checkout dependabot-testing
+          git merge origin/development --no-edit
+          git push origin dependabot-testing
