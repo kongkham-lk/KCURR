@@ -10,11 +10,11 @@ updates:
     directory: "./frontend"
     schedule:
       interval: "weekly"
-    target-branch: "dependabot-testing"
+    target-branch: "KCR-DependabotTesting"
 
   # For backend NuGet packages (ASP.NET Core ecosystem)
   - package-ecosystem: "nuget"
     directory: "./backend"
     schedule:
       interval: "weekly"
-    target-branch: "dependabot-testing"
+    target-branch: "KCR-DependabotTesting"
