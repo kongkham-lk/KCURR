@@ -7,7 +7,7 @@ namespace backend.Tests;
 
 public class CurrencyBeaconApiClientTest
 {
-    CurrencyBeaconApiClient test = new CurrencyBeaconApiClient();
+    private CurrencyBeaconApiClient _test = new CurrencyBeaconApiClient();
     
     [Theory]
     [InlineData(new string[]{"Canadian Dollar", "Thai Baht", "Lao Kip"}, new string[]{"CAD", "THB", "KIP"}, new string[]{"C", "T", "K"})]
@@ -33,7 +33,7 @@ public class CurrencyBeaconApiClientTest
         exact = new CurrCountriesResponse(tempCode, countryCurrName, display, tempSymbol, "flagcode");
         
         //Act
-        Dictionary<string, CurrCountriesResponse> actual = test.TransformedCurrCountriesResData(testRes);
+        Dictionary<string, CurrCountriesResponse> actual = _test.TransformedCurrCountriesResData(testRes);
 
         Assert.True(actual.Count == testRes.Length);
         Assert.True(actual.ContainsKey(exact.CurrCode));
@@ -47,8 +47,8 @@ public class CurrencyBeaconApiClientTest
     {
         CurrencyBeaconCurrCountriesApiResponseResponse[] testRes = new CurrencyBeaconCurrCountriesApiResponseResponse[0];
         
-        Assert.Throws<ArgumentException>("Curr Countries Response", () => test.TransformedCurrCountriesResData(null));
-        Assert.Throws<ArgumentException>("Curr Countries Response", () => test.TransformedCurrCountriesResData(testRes));
+        Assert.Throws<ArgumentException>("Curr Countries Response", () => _test.TransformedCurrCountriesResData(null));
+        Assert.Throws<ArgumentException>("Curr Countries Response", () => _test.TransformedCurrCountriesResData(testRes));
     }
     
     [Theory]
@@ -80,7 +80,7 @@ public class CurrencyBeaconApiClientTest
             testRes[i].Response = dayByCurr;
         }
 
-        SortedList<string, double> actual = test.TransformedTimeSeriesResToDictionary(testRes, targetCurr);
+        SortedList<string, double> actual = _test.TransformedTimeSeriesResToDictionary(testRes, targetCurr);
         
         Assert.True(expected.SequenceEqual(actual));
     }
@@ -108,9 +108,9 @@ public class CurrencyBeaconApiClientTest
             testRes[i].Response = dayByCurr;
         }
         
-        Assert.Throws<ArgumentNullException>("Target Curr", () => test.TransformedTimeSeriesResToDictionary(testRes, ""));
-        Assert.Throws<ArgumentNullException>("Target Curr", () => test.TransformedTimeSeriesResToDictionary(testRes, null));
-        Assert.Throws<ArgumentNullException>("Time Series Response's Response", () => test.TransformedTimeSeriesResToDictionary(new CurrencyBeaconTimeSeriesApiResponse[dayDates.Length] , targetCurr));
-        Assert.Throws<ArgumentNullException>("Time Series Responses", () => test.TransformedTimeSeriesResToDictionary(null , targetCurr));
+        Assert.Throws<ArgumentNullException>("Target Curr", () => _test.TransformedTimeSeriesResToDictionary(testRes, ""));
+        Assert.Throws<ArgumentNullException>("Target Curr", () => _test.TransformedTimeSeriesResToDictionary(testRes, null));
+        Assert.Throws<ArgumentNullException>("Time Series Response's Response", () => _test.TransformedTimeSeriesResToDictionary(new CurrencyBeaconTimeSeriesApiResponse[dayDates.Length] , targetCurr));
+        Assert.Throws<ArgumentNullException>("Time Series Responses", () => _test.TransformedTimeSeriesResToDictionary(null , targetCurr));
     }
 }
