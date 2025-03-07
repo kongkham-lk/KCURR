@@ -14,9 +14,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     private readonly IWebHostEnvironment _env;
     private readonly bool _isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-    public CurrencyBeaconApiClient()
-    {
-    }
+    public CurrencyBeaconApiClient() { } // for testing class
     
     public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger, IWebHostEnvironment env)
     {
@@ -155,7 +153,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     {
         if (rateTimeSeriesApiResponses == null || !rateTimeSeriesApiResponses.Any()) 
             throw new ArgumentNullException("Time Series Responses", "Time Series Api Response Cannot be Empty!");
-        else if (rateTimeSeriesApiResponses.Any(r => r == null))
+        else if (!rateTimeSeriesApiResponses.Any(r => r != null))
             throw new ArgumentNullException("Time Series Response's Response", "Time Series Api Response Cannot be Empty!");
         else if (targetCurr == null || !targetCurr.Any())
             throw new ArgumentNullException("Target Curr", "Target Currency Cannot be Empty!");
@@ -164,15 +162,12 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
 
         foreach (var rateTimeSeriesApiResponse in rateTimeSeriesApiResponses)
         {
-            if (rateTimeSeriesApiResponse != null) // only get the Response if not null
+            var dateByRateLists = rateTimeSeriesApiResponse.Response;
+            foreach (var dateByRateList in dateByRateLists)
             {
-                var dateByRateLists = rateTimeSeriesApiResponse.Response;
-                foreach (var dateByRateList in dateByRateLists)
-                {
-                    var date = dateByRateList.Key;
-                    var rate = dateByRateList.Value[targetCurr];
-                    unsortedList.Add(date, rate);
-                }
+                var date = dateByRateList.Key;
+                var rate = dateByRateList.Value[targetCurr];
+                unsortedList.Add(date, rate);
             }
         }
 

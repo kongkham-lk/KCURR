@@ -33,7 +33,6 @@ public class CurrencyBeaconApiClientTest
         exact = new CurrCountriesResponse(tempCode, countryCurrName, display, tempSymbol, "flagcode");
         
         //Act
-        CurrencyBeaconApiClient test = new CurrencyBeaconApiClient();
         Dictionary<string, CurrCountriesResponse> actual = test.TransformedCurrCountriesResData(testRes);
 
         Assert.True(actual.Count == testRes.Length);
