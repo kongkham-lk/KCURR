@@ -78,6 +78,7 @@ public class CurrService
         if (!isNewUpdateRequest && MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
             targetCurrTimeSeries = RetrievedExistedTimeSeries(timeSeriesRange, targetCurr);
+            _logger.LogInformation("Fetch saved Time Series!!!");
             
             // fetch new timeSerie object when it is not existed
             if (targetCurrTimeSeries != null)

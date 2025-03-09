@@ -32,6 +32,7 @@ export async function retrieveExchangeRates(defaultCurr: DefaultCurrWrapper): Pr
 }
 
 export async function retrieveExchangeRatesTimeSeries(baseCurr: string, targetCurr: string, timeSeriesRange: string | null, isNewUpdateRequest: boolean): Promise<CurrCodeMapTimeSerie> {
+    console.log(">>> Fetch new timeseries, isNewUpdateRequest: ", isNewUpdateRequest)
     const resExchangeRatesTimeSeries = await axios.post(`${baseURL}:${port}/curr/rate-timeSeries`, { baseCurr, targetCurr, timeSeriesRange, isNewUpdateRequest });
     return resExchangeRatesTimeSeries.data;
 }
