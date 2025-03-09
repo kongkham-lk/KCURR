@@ -73,27 +73,31 @@ public class CurrService
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange, bool isNewUpdateRequest)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
+        
+        _logger.LogInformation("Fetch saved Time Series!!!");
+        targetCurrTimeSeries = FetchExistedTimeSeries(timeSeriesRange, targetCurr, isNewUpdateRequest);
 
-        // return the prev retrieved timeSeries object when not require to update the current stored timeSeries object
-        if (!isNewUpdateRequest && MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        if (targetCurrTimeSeries == null) // fetch new time series update
         {
-            _logger.LogInformation("Fetch saved Time Series!!!");
-            targetCurrTimeSeries = FetchExistedTimeSeries(timeSeriesRange, targetCurr);
-            
-            // fetch new timeSerie object when it is not existed
-            if (targetCurrTimeSeries != null)
-                return targetCurrTimeSeries;
+            targetCurrTimeSeries = await FetchNewTimeSeriesUpdate(baseCurr, targetCurr, timeSeriesRange);
+            UpdateMemoRangeByCurrTimeSeriesLists(timeSeriesRange, targetCurrTimeSeries);
         }
 
-        targetCurrTimeSeries = await FetchNewTimeSeriesUpdate(baseCurr, targetCurr, timeSeriesRange);
-        UpdateMemoRangeByCurrTimeSeriesLists(timeSeriesRange, targetCurrTimeSeries);
-        
         return targetCurrTimeSeries;
     }
 
-    private Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr)
+    private Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr, bool isNewUpdateRequest)
     {
-        List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
+        // return the prev retrieved timeSeries object if not require any new update of timeSeries object
+        if (isNewUpdateRequest || !MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+            return null;
+            
+        List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
+        
+        // in case the key is exist but store nothing as its value
+        if (allCurrTimeSeriesList is null || !allCurrTimeSeriesList.Any())
+            return null;
+        
         return allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
     }
 
@@ -128,7 +132,8 @@ public class CurrService
             if (targetMemoTimeSeriesList == null || !targetMemoTimeSeriesList.Any())
             {
                 // the new value that assign to allCurrTimeSeriesList is equivalent as store to memo object (RangeByCurrTimeSeriesLists[timeSeriesRange])
-                targetMemoTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
+                targetMemoTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>();
+                targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
                 MemoRangeByCurrTimeSeriesLists[timeSeriesRange] = targetMemoTimeSeriesList;
             }
             else
