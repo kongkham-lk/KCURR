@@ -77,14 +77,28 @@ public class CurrService
         // return the prev retrieved timeSeries object when not require to update the current stored timeSeries object
         if (!isNewUpdateRequest && MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
-            targetCurrTimeSeries = RetrievedExistedTimeSeries(timeSeriesRange, targetCurr);
             _logger.LogInformation("Fetch saved Time Series!!!");
+            targetCurrTimeSeries = FetchExistedTimeSeries(timeSeriesRange, targetCurr);
             
             // fetch new timeSerie object when it is not existed
             if (targetCurrTimeSeries != null)
                 return targetCurrTimeSeries;
         }
+
+        targetCurrTimeSeries = await FetchNewTimeSeriesUpdate(baseCurr, targetCurr, timeSeriesRange);
+        UpdateMemoRangeByCurrTimeSeriesLists(timeSeriesRange, targetCurrTimeSeries);
         
+        return targetCurrTimeSeries;
+    }
+
+    private Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr)
+    {
+        List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
+        return allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
+    }
+
+    private async Task<Dictionary<string, RateTimeSeriesResponse>> FetchNewTimeSeriesUpdate(string baseCurr, string targetCurr, string timeSeriesRange)
+    {
         foreach (var apiClientElement in _exchangeRateApiClients)
         {
             try
@@ -100,8 +114,12 @@ public class CurrService
 
         IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
-        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+        return targetCurrTimeSeries;
+    }
 
+    private void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
+    {
         // Added new currTimeSeries to memo list if not existed yet, else if contain then
         if (MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
@@ -136,13 +154,6 @@ public class CurrService
             List<Dictionary<string, RateTimeSeriesResponse>> tempList = new() { targetCurrTimeSeries };
             MemoRangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
         }
-        return targetCurrTimeSeries;
-    }
-
-    private Dictionary<string, RateTimeSeriesResponse> RetrievedExistedTimeSeries(string timeSeriesRange, string targetCurr)
-    {
-        List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
-        return allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
     }
 
     private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> response)
