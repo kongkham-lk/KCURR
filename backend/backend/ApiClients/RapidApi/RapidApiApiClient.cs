@@ -12,6 +12,8 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     private  string _rapidApiApiKey;
     private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
+    public RapidApiApiClient() { } // for testing class
+    
     public RapidApiApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {
         _httpClient = httpClient;
@@ -65,7 +67,7 @@ public class RapidApiApiClient : IFinancialNewsApiClient
         }
     }
 
-    private FinancialNewsResponse[] TransformJsonData(RapidApiApiResponse rapidApiResponse)
+    public FinancialNewsResponse[] TransformJsonData(RapidApiApiResponse rapidApiResponse)
     {
         var newsResLists = rapidApiResponse.News;
         var newsLists = new FinancialNewsResponse[newsResLists.Length];
@@ -91,18 +93,18 @@ public class RapidApiApiClient : IFinancialNewsApiClient
         return newsLists;
     }
 
-    private DateTime GetActualDateTime(long newsPublishTimeRes)
+    public DateTime GetActualDateTime(long newsPublishTimeRes)
     {
         return DateTimeOffset.FromUnixTimeSeconds(newsPublishTimeRes).UtcDateTime;
     }
 
-    private int GetDiffTimeBetweenCurrentAndPublishTime(DateTime publishTime)
+    public int GetDiffTimeBetweenCurrentAndPublishTime(DateTime publishTime)
     {
         DateTime utcNow = DateTime.UtcNow;
         return utcNow.Subtract(publishTime).Hours;
     }
 
-    private string FormatDateTime(DateTime newsPublishTime)
+    public string FormatDateTime(DateTime newsPublishTime)
     {
         return newsPublishTime.ToString("ddd, MMM dd, yyyy HH:mm", CultureInfo.InvariantCulture);
     }
