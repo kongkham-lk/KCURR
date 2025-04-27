@@ -1,9 +1,8 @@
-using backend;
-using Xunit;
 using backend.ApiClients.CurrencyBeacon;
 using backend.Models;
+using Xunit;
 
-namespace backend.Tests;
+namespace backend.Tests.ApiClientsTest;
 
 public class CurrencyBeaconApiClientTest
 {
