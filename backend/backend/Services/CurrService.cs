@@ -122,7 +122,7 @@ public class CurrService
         return targetCurrTimeSeries;
     }
 
-    private void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
+    private async Task UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
     {
         // Added new currTimeSeries to memo list if not existed yet, else if contain then
         if (MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
@@ -145,7 +145,7 @@ public class CurrService
                     if (targetMemoTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
                     {
                         targetMemoTimeSeriesList[i] = targetCurrTimeSeries;
-                        break;
+                        return;
                     }
                 }
 
