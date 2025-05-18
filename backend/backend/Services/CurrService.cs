@@ -76,6 +76,10 @@ public class CurrService
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
         
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        targetCurr = targetCurr.Any() ? targetCurr : "USD";
+        baseCurr = targetCurr.Any() ? baseCurr : "CAD";
+        
         _logger.LogInformation("Fetch saved Time Series!!!");
         targetCurrTimeSeries = FetchExistedTimeSeries(timeSeriesRange, targetCurr, isNewUpdateRequest);
 
@@ -93,7 +97,10 @@ public class CurrService
         // return the prev retrieved timeSeries object if not require any new update of timeSeries object
         if (isNewUpdateRequest || !MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
             return null;
-            
+
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        targetCurr = targetCurr.Any() ? targetCurr : "CAD";
+        
         List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
         
         // in case the key is exist but store nothing as its value
@@ -103,7 +110,7 @@ public class CurrService
         return allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
     }
 
-    private async Task<Dictionary<string, RateTimeSeriesResponse>> FetchNewTimeSeriesUpdate(string baseCurr, string targetCurr, string timeSeriesRange)
+    public async Task<Dictionary<string, RateTimeSeriesResponse>> FetchNewTimeSeriesUpdate(string baseCurr, string targetCurr, string timeSeriesRange)
     {
         foreach (var apiClientElement in _exchangeRateApiClients)
         {
@@ -126,8 +133,8 @@ public class CurrService
 
     public void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
     {
-        if (targetCurrTimeSeries is null)
-            throw new ArgumentException("Time Range Should Not Be Empty or Null!", "Time range response");
+        // if (targetCurrTimeSeries is null)
+        //     throw new ArgumentException("Time Range Should Not Be Empty or Null!", "Time range response");
 
         timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
         
