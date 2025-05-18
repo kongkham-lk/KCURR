@@ -12,8 +12,10 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     private string _currencyBeaconApiKey;
     private readonly ILogger<CurrencyBeaconApiClient> _logger;
     private readonly IWebHostEnvironment _env;
-    private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+    private readonly bool _isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
+    public CurrencyBeaconApiClient() { } // for testing class
+    
     public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger, IWebHostEnvironment env)
     {
         _httpClient = httpClient;
@@ -26,7 +28,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     public async Task<Dictionary<string, double>> GetLatestExchangeRates(string baseCurr)
     {
         CurrencyBeaconExchangeRateApiResponse exchangeRateApiResponse;
-        if (isDevelopment)
+        if (_isDevelopment)
         {
             string relativePath = "/Latest-USD.json";
             exchangeRateApiResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconExchangeRateApiResponse>(relativePath);
@@ -43,7 +45,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     public async Task<Dictionary<string, double>> GetHistoricalExchangeRates(string baseCurr)
     {
         CurrencyBeaconExchangeRateApiResponse currMapRatesResponse;
-        if (isDevelopment)
+        if (_isDevelopment)
         {
             string relativePath = "/Historical-USD.json";
             currMapRatesResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconExchangeRateApiResponse>(relativePath);
@@ -61,7 +63,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     public async Task<Dictionary<string, CurrCountriesResponse>> GetCurrCountries(bool getAnotherApiKey)
     {
         CurrencyBeaconCurrCountriesApiResponse currCountriesResponse;
-        if (isDevelopment)
+        if (_isDevelopment)
         {
             string relativePath = "/Currencies-Countries.json";
             currCountriesResponse = await JsonSeedFilesReader.ReadCurrFromJson<CurrencyBeaconCurrCountriesApiResponse>(relativePath);
@@ -74,8 +76,15 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
             string url = "https://api.currencybeacon.com/v1/currencies?api_key=" + _currencyBeaconApiKey;
             currCountriesResponse = await _httpClient.GetFromJsonAsync<CurrencyBeaconCurrCountriesApiResponse>(url);
         }
-        Dictionary<string, CurrCountriesResponse> currCountries = TransformedCurrCountriesResData(currCountriesResponse);
-        return currCountries;
+
+        if (currCountriesResponse != null)
+        {
+            CurrencyBeaconCurrCountriesApiResponseResponse[] currCountriesResponseResponse = currCountriesResponse.Response;
+            Dictionary<string, CurrCountriesResponse> currCountries = TransformedCurrCountriesResData(currCountriesResponseResponse);
+            return currCountries;
+        }
+
+        return null;
     }
 
     public async Task<SortedList<string, double>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange)
@@ -83,7 +92,7 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         _logger.LogInformation($"Requesting for new TimeSeries object of: {baseCurr} to {targetCurr}");
         CurrencyBeaconTimeSeriesApiResponse[] rateTimeSeriesApiResponseList = new CurrencyBeaconTimeSeriesApiResponse[2];
         string[] pathToJSON = new string[2];
-        if (isDevelopment)
+        if (_isDevelopment)
         {
             pathToJSON[0] = "/Timeseries-USD_THB-6m_a.json";
             pathToJSON[1] = "/Timeseries-USD_THB-6m_b.json";
@@ -112,32 +121,43 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
         return DateByTimeSeriesDetail;
     }
 
-    private Dictionary<string, CurrCountriesResponse> TransformedCurrCountriesResData(CurrencyBeaconCurrCountriesApiResponse currCountriesRes)
+    public Dictionary<string, CurrCountriesResponse> TransformedCurrCountriesResData(CurrencyBeaconCurrCountriesApiResponseResponse[] currCountriesRes)
     {
-        CurrencyBeaconCurrCountriesApiResponseResponse[] data = currCountriesRes.Response;
+        // CurrencyBeaconCurrCountriesApiResponseResponse[] currCountriesRes = currCountriesRes.Response;
         Dictionary<string, CurrCountriesResponse> currCountries = new Dictionary<string, CurrCountriesResponse>();
 
-        if (data != null)
+        if (currCountriesRes != null && currCountriesRes.Any())
         {
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < currCountriesRes.Length; i++)
             {
-                CurrencyBeaconCurrCountriesApiResponseResponse currCountryDetail = data[i];
+                CurrencyBeaconCurrCountriesApiResponseResponse currCountryDetail = currCountriesRes[i];
                 string key = currCountryDetail.CurrCode;
                 string currCode = key;
                 string countryCurrName = currCountryDetail.CurrNameWithCountryName;
                 string display = currCode + " - " + countryCurrName;
                 string currSymbol = currCountryDetail.CurrSymbol;
-                string flagCode = currCode.Substring(0, 2);
+                string flagCode = currCode.Any() ? currCode.Substring(0, 2) : "";
                 CurrCountriesResponse val = new CurrCountriesResponse(currCode, countryCurrName, display, currSymbol, flagCode);
                 currCountries[key] = val;
             }
+        }
+        else
+        {
+            throw new ArgumentException("Curr Countries Response is Empty!", "Curr Countries Response");
         }
 
         return currCountries;
     }
 
-    private SortedList<string, double> TransformedTimeSeriesResToDictionary(CurrencyBeaconTimeSeriesApiResponse[] rateTimeSeriesApiResponses, string targetCurr)
+    public SortedList<string, double> TransformedTimeSeriesResToDictionary(CurrencyBeaconTimeSeriesApiResponse[] rateTimeSeriesApiResponses, string targetCurr)
     {
+        if (rateTimeSeriesApiResponses == null || !rateTimeSeriesApiResponses.Any()) 
+            throw new ArgumentNullException("Time Series Responses", "Time Series Api Response Cannot be Empty!");
+        else if (!rateTimeSeriesApiResponses.Any(r => r != null))
+            throw new ArgumentNullException("Time Series Response's Response", "Time Series Api Response Cannot be Empty!");
+        else if (targetCurr == null || !targetCurr.Any())
+            throw new ArgumentNullException("Target Curr", "Target Currency Cannot be Empty!");
+        
         Dictionary<string, double> unsortedList = new Dictionary<string, double>();
 
         foreach (var rateTimeSeriesApiResponse in rateTimeSeriesApiResponses)

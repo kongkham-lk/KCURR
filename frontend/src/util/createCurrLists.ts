@@ -13,6 +13,7 @@ export async function createCurrLists(baseCurr: string, targetCurr: string, defa
         
         // only grab default curr's exchange rate if it is not featureDisplay, else defaultCurrExchangeRates is null
         if (defaultCurrExchangeRates !== null && !isFeatureDisplay) {
+            console.log(">>> Fetch only Rate!!!");
             const latestRates: CurrCodeMapExchangeRates = defaultCurrExchangeRates[0];
             const histRates: CurrCodeMapExchangeRates = defaultCurrExchangeRates[1];
             const dayRangeIndicator = [getDayRangeDate(1), getDayRangeDate(0)]; // needed when the live rate table use exchange rate data instead of timeSeries
@@ -28,6 +29,7 @@ export async function createCurrLists(baseCurr: string, targetCurr: string, defa
             };
         } else { // Only request for timeSeries for each visible currency row when display chart feature is on
             try {
+                console.log(">>> Fetch the whole time series!!!");
                 timeSeries = await sendTimeSeriesReq(baseCurr, targetCurr, timeSeriesRange);
                 latestRate = timeSeries.changingRates[timeSeries.changingRates.length - 1]; // accessing by index as originally timeSeries only consist 1 targetCurr
                 histRate = timeSeries.changingRates[0];
