@@ -6,7 +6,7 @@ import App from './App';
 import axios from 'axios';
 
 const url = `https://kcurr-backend-dev.onrender.com/`;
-const interval = 60000; // Interval in milliseconds (60 seconds or 1 mins)
+const interval = 15000; // Interval in milliseconds (15 seconds or 1 mins)
 
 // Preventing Render Web services from spin down due to inactivity
 const reloadWebsite = () => {
