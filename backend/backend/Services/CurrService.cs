@@ -13,6 +13,8 @@ public class CurrService
     private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
     private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> MemoRangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
 
+    public CurrService() { } // for testing class
+    
     public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
         _exchangeRateApiClients = exchangeRateApiClients.ToList();
@@ -86,7 +88,7 @@ public class CurrService
         return targetCurrTimeSeries;
     }
 
-    private Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr, bool isNewUpdateRequest)
+    public Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr, bool isNewUpdateRequest)
     {
         // return the prev retrieved timeSeries object if not require any new update of timeSeries object
         if (isNewUpdateRequest || !MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
@@ -122,8 +124,13 @@ public class CurrService
         return targetCurrTimeSeries;
     }
 
-    private async Task UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
+    public void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
     {
+        if (targetCurrTimeSeries is null)
+            throw new ArgumentException("Time Range Should Not Be Empty or Null!", "Time range response");
+
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        
         // Added new currTimeSeries to memo list if not existed yet, else if contain then
         if (MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
