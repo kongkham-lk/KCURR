@@ -11,8 +11,6 @@ public class RapidApiApiClient : IFinancialNewsApiClient
     private readonly ApiKeysProvider _apiKeysProvider;
     private  string _rapidApiApiKey;
     private readonly bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-
-    public RapidApiApiClient() { } // for testing class
     
     public RapidApiApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider)
     {

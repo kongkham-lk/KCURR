@@ -6,7 +6,7 @@ namespace backend.Tests.ApiClientsTest;
 
 public class CurrencyBeaconApiClientTest
 {
-    private CurrencyBeaconApiClient _test = new CurrencyBeaconApiClient();
+    private CurrencyBeaconApiClient _test = new CurrencyBeaconApiClient(null, null,null, null);
     
     [Theory]
     [InlineData(new string[]{"Canadian Dollar", "Thai Baht", "Lao Kip"}, new string[]{"CAD", "THB", "KIP"}, new string[]{"C", "T", "K"})]
