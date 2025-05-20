@@ -15,8 +15,7 @@ public class CurrService
     
     public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
-        if (exchangeRateApiClients is not null)
-            _exchangeRateApiClients = exchangeRateApiClients.ToList();
+        _exchangeRateApiClients = exchangeRateApiClients is null ? new List<IExchangeRateApiClient>() : exchangeRateApiClients.ToList();
         _logger = logger;
         _env = env;
     }
