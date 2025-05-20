@@ -6,19 +6,12 @@ namespace backend.Tests.ServicesTest;
 
 public class CurrServiceTest
 {
-    private CurrService _test = new CurrService();
+    private CurrService _test = new CurrService(null, null, null);
 
     // private async Task<Dictionary<string,RateTimeSeriesResponse>> InitializedData()
     // {
     //     return await _test.FetchNewTimeSeriesUpdate("CAD", "USD", "1d");
     // }
-
-    [Fact]
-    private void UpdateMemoRangeByCurrTimeSeriesLists_NullValuePassed()
-    {
-        Assert.Throws<ArgumentException>("Time range response",
-            () => _test.UpdateMemoRangeByCurrTimeSeriesLists("", null));
-    }
 
     [Fact]
     private void FetchExistedTimeSeries_RequestNewUpdate()

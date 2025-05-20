@@ -6,7 +6,7 @@ namespace backend.Tests.ApiClientsTest;
 
 public class RapidApiApiClientTest
 {
-    private RapidApiApiClient _test = new RapidApiApiClient();
+    private RapidApiApiClient _test = new RapidApiApiClient(null, null);
     
     [Theory]
     [InlineData("news header", "publisher", "www.google.com", 1718471554, "www.google.com")]

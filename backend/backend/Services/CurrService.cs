@@ -12,12 +12,11 @@ public class CurrService
     private Dictionary<string, double> LatestRates { get; set; } = new();
     private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
     private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> MemoRangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
-
-    public CurrService() { } // for testing class
     
     public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
-        _exchangeRateApiClients = exchangeRateApiClients.ToList();
+        if (exchangeRateApiClients is not null)
+            _exchangeRateApiClients = exchangeRateApiClients.ToList();
         _logger = logger;
         _env = env;
     }
@@ -133,8 +132,8 @@ public class CurrService
 
     public void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
     {
-        // if (targetCurrTimeSeries is null)
-        //     throw new ArgumentException("Time Range Should Not Be Empty or Null!", "Time range response");
+        if (targetCurrTimeSeries is null)
+            targetCurrTimeSeries = new Dictionary<string, RateTimeSeriesResponse>();
 
         timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
         

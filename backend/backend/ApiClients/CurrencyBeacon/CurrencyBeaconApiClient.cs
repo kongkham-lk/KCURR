@@ -13,8 +13,6 @@ public class CurrencyBeaconApiClient : IExchangeRateApiClient
     private readonly ILogger<CurrencyBeaconApiClient> _logger;
     private readonly IWebHostEnvironment _env;
     private readonly bool _isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-
-    public CurrencyBeaconApiClient() { } // for testing class
     
     public CurrencyBeaconApiClient(HttpClient httpClient, ApiKeysProvider apiKeysProvider, ILogger<CurrencyBeaconApiClient> logger, IWebHostEnvironment env)
     {
