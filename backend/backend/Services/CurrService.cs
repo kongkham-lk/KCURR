@@ -11,11 +11,11 @@ public class CurrService
     private int TotalRetryApiKey { get; set; } = 3;
     private Dictionary<string, double> LatestRates { get; set; } = new();
     private SortedList<string, double> LatestTimeSeriesUpdate { get; set; } = null; // the longest timeSeries Object for each new update request from frontend
-    private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> RangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
-
+    private Dictionary<string, List<Dictionary<string, RateTimeSeriesResponse>>> MemoRangeByCurrTimeSeriesLists { get; set; } = new(); // memo the different range of timeSeries object
+    
     public CurrService(IEnumerable<IExchangeRateApiClient> exchangeRateApiClients, ILogger<CurrService> logger, IWebHostEnvironment env)
     {
-        _exchangeRateApiClients = exchangeRateApiClients.ToList();
+        _exchangeRateApiClients = exchangeRateApiClients is null ? new List<IExchangeRateApiClient>() : exchangeRateApiClients.ToList();
         _logger = logger;
         _env = env;
     }
@@ -73,22 +73,48 @@ public class CurrService
     public async Task<Dictionary<string, RateTimeSeriesResponse>> GetExchangeRatesTimeSeries(string baseCurr, string targetCurr, string timeSeriesRange, bool isNewUpdateRequest)
     {
         Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries;
+        
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        targetCurr = targetCurr.Any() ? targetCurr : "USD";
+        baseCurr = targetCurr.Any() ? baseCurr : "CAD";
+        
+        _logger.LogInformation("Fetch saved Time Series!!!");
+        targetCurrTimeSeries = FetchExistedTimeSeries(timeSeriesRange, targetCurr, isNewUpdateRequest);
 
-        if (!isNewUpdateRequest && RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+        if (targetCurrTimeSeries == null) // fetch new time series update
         {
-            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists.FirstOrDefault(t => t.Key.Equals(timeSeriesRange)).Value;
-            targetCurrTimeSeries = allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
-
-            if (targetCurrTimeSeries != null)
-                return targetCurrTimeSeries;
+            targetCurrTimeSeries = await FetchNewTimeSeriesUpdate(baseCurr, targetCurr, timeSeriesRange);
+            UpdateMemoRangeByCurrTimeSeriesLists(timeSeriesRange, targetCurrTimeSeries);
         }
 
+        return targetCurrTimeSeries;
+    }
+
+    public Dictionary<string, RateTimeSeriesResponse> FetchExistedTimeSeries(string timeSeriesRange, string targetCurr, bool isNewUpdateRequest)
+    {
+        // return the prev retrieved timeSeries object if not require any new update of timeSeries object
+        if (isNewUpdateRequest || !MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+            return null;
+
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        targetCurr = targetCurr.Any() ? targetCurr : "CAD";
+        
+        List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
+        
+        // in case the key is exist but store nothing as its value
+        if (allCurrTimeSeriesList is null || !allCurrTimeSeriesList.Any())
+            return null;
+        
+        return allCurrTimeSeriesList.FirstOrDefault(t => t.Keys.Equals(targetCurr));
+    }
+
+    public async Task<Dictionary<string, RateTimeSeriesResponse>> FetchNewTimeSeriesUpdate(string baseCurr, string targetCurr, string timeSeriesRange)
+    {
         foreach (var apiClientElement in _exchangeRateApiClients)
         {
             try
             {
-                if (isNewUpdateRequest) // only retrieve timeSeries once every new update request from frontend
-                    LatestTimeSeriesUpdate = await apiClientElement.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
+                LatestTimeSeriesUpdate = await apiClientElement.GetExchangeRatesTimeSeries(baseCurr, targetCurr, timeSeriesRange);
             }
             catch (Exception e)
             {
@@ -99,38 +125,52 @@ public class CurrService
 
         IWebHostEnvironment? tempEnv = _env.IsDevelopment() ? _env : null;
         TimeseriesTransformer timeseriesTransformer = new TimeseriesTransformer(_exchangeRateApiClients, tempEnv);
-        targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+        Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries = timeseriesTransformer.TransformedData(LatestTimeSeriesUpdate, targetCurr, timeSeriesRange);
+        return targetCurrTimeSeries;
+    }
 
-        // Added new currTimeSeries to memo list
-        if (RangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
+    public void UpdateMemoRangeByCurrTimeSeriesLists(string timeSeriesRange, Dictionary<string, RateTimeSeriesResponse> targetCurrTimeSeries)
+    {
+        if (targetCurrTimeSeries is null)
+            targetCurrTimeSeries = new Dictionary<string, RateTimeSeriesResponse>();
+
+        timeSeriesRange = timeSeriesRange.Any() ? timeSeriesRange : "1d";
+        
+        // Added new currTimeSeries to memo list if not existed yet, else if contain then
+        if (MemoRangeByCurrTimeSeriesLists.ContainsKey(timeSeriesRange))
         {
-            List<Dictionary<string, RateTimeSeriesResponse>> allCurrTimeSeriesList = RangeByCurrTimeSeriesLists[timeSeriesRange];
-            if (allCurrTimeSeriesList != null && allCurrTimeSeriesList.Any())
+            // get all the curr code's timeSerie object bases on the same time range
+            List<Dictionary<string, RateTimeSeriesResponse>> targetMemoTimeSeriesList = MemoRangeByCurrTimeSeriesLists[timeSeriesRange];
+            if (targetMemoTimeSeriesList == null || !targetMemoTimeSeriesList.Any())
             {
-                if (isNewUpdateRequest)
-                {
-                    for (int i = 0; i < allCurrTimeSeriesList.Count(); i++)
-                    {
-                        // if the currTimeSeries's key existed in the list, update its value and stop iteration
-                        if (allCurrTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
-                        {
-                            allCurrTimeSeriesList[i] = targetCurrTimeSeries;
-                            break;
-                        }
-                    }
-                }
-                else
-                    allCurrTimeSeriesList.Add(targetCurrTimeSeries);
+                // the new value that assign to allCurrTimeSeriesList is equivalent as store to memo object (RangeByCurrTimeSeriesLists[timeSeriesRange])
+                targetMemoTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>();
+                targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
+                MemoRangeByCurrTimeSeriesLists[timeSeriesRange] = targetMemoTimeSeriesList;
             }
             else
-                allCurrTimeSeriesList = new List<Dictionary<string, RateTimeSeriesResponse>>() { targetCurrTimeSeries };
+            {
+                int i;
+                for (i = 0; i < targetMemoTimeSeriesList.Count(); i++)
+                {
+                    // if the currTimeSeries's key, currCode, existed in the list, update its value and stop iteration
+                    if (targetMemoTimeSeriesList[i].Keys.Equals(targetCurrTimeSeries.Keys))
+                    {
+                        targetMemoTimeSeriesList[i] = targetCurrTimeSeries;
+                        return;
+                    }
+                }
+
+                // add the new currCode's timeSeries to memo if the currCode of that timeRange is not existed yet
+                if (i == targetMemoTimeSeriesList.Count())
+                    targetMemoTimeSeriesList.Add(targetCurrTimeSeries);
+            }
         }
         else
         {
             List<Dictionary<string, RateTimeSeriesResponse>> tempList = new() { targetCurrTimeSeries };
-            RangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
+            MemoRangeByCurrTimeSeriesLists.Add(timeSeriesRange, tempList);
         }
-        return targetCurrTimeSeries;
     }
 
     private async Task<Dictionary<string, CurrCountriesResponse>> RetryToGetCurrCountries(IExchangeRateApiClient apiClientElement, Dictionary<string, CurrCountriesResponse> response)
